@@ -4,9 +4,9 @@
   "description": "Restaurant to order and find delicious food",
   "main": "index.js",
   "scripts": {
-    "server": "npm run dev --prefix server",
-    "client": "npm run start --prefix client",
-    "start": "concurrently \"npm run server\" \"npm run client\""
+    "backend": "npm run dev --prefix backend",
+    "frontend": "npm run start --prefix frontend",
+    "start": "concurrently \"npm run backend\" \"npm run frontend\""
   },
   "repository": {
     "type": "git",
