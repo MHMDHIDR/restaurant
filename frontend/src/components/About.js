@@ -1,0 +1,37 @@
+import { useState, useEffect } from 'react'
+import useAxios from '../hooks/useAxios'
+import abstractText from '../functions/abstractText'
+
+const About = () => {
+  const [data, setData] = useState('')
+
+  const { response } = useAxios({
+    method: 'get',
+    url: '/settings'
+  })
+
+  useEffect(() => {
+    if (response !== null) {
+      setData(response)
+    }
+  }, [response])
+
+  return (
+    <section id='about' className='py-12 my-8 about'>
+      <div className='container mx-auto'>
+        <h2 className='mx-0 mt-4 mb-12 text-2xl md:text-3xl text-center'>عن المطعم</h2>
+        <p
+          className={`max-w-6xl mx-auto ${
+            data?.appDesc?.length > 75 ? 'text-justify' : 'text-center'
+          }`}
+        >
+          {data
+            ? abstractText(data.appDesc)
+            : 'أطلب ألذ الأطعمة والمشروبات الطازجة من مطعمنا العالمي'}
+        </p>
+      </div>
+    </section>
+  )
+}
+
+export default About

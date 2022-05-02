@@ -1,0 +1,234 @@
+import { useState, useEffect } from 'react'
+import useAxios from '../../hooks/useAxios'
+import { Link, useParams } from 'react-router-dom'
+import Axios from 'axios'
+
+import useDocumentTitle from '../../hooks/useDocumentTitle'
+import useEventListener from '../../hooks/useEventListener'
+
+import Modal from '../../components/Modal/Modal'
+import { Success, Error, Loading } from '../../components/Icons/Status'
+import { LoadingSpinner } from '../../components/Loading'
+import Pagination from '../../components/Pagination'
+
+import abstractText from '../../functions/abstractText'
+import { removeSlug } from '../../functions/slug'
+import goTo from '../../functions/goTo'
+import { createLocaleDateString } from '../../functions/convertDate'
+
+const DashboardMenu = () => {
+  useDocumentTitle('Menu')
+
+  let { pageNum } = useParams()
+
+  const pageNumber = !pageNum || pageNum < 1 || isNaN(pageNum) ? 1 : parseInt(pageNum)
+  const itemsPerPage = 5
+
+  const [delFoodId, setDelFoodId] = useState()
+  const [delFoodName, setDelFoodName] = useState('')
+  const [delFoodImg, setDelFoodImg] = useState()
+  const [deleteFoodStatus, setDeleteFoodStatus] = useState()
+  const [data, setData] = useState('')
+
+  const modalLoading = document.querySelector('#modal')
+  const BASE_URL =
+    process.env.NODE_ENV === 'development'
+      ? process.env.REACT_APP_API_LOCAL_URL
+      : process.env.REACT_APP_API_URL
+
+  const { ...response } = useAxios({
+    method: 'get',
+    url: `/foods/${pageNumber}/${itemsPerPage}`
+  })
+
+  useEffect(() => {
+    if (response.response !== null) {
+      setData(response.response)
+    }
+  }, [response.response])
+
+  useEventListener('click', e => {
+    if (e.target.id === 'deleteFood') {
+      setDelFoodId(e.target.dataset.id)
+      setDelFoodName(removeSlug(e.target.dataset.name))
+      setDelFoodImg(e.target.dataset.imgname)
+      modalLoading.classList.remove('hidden')
+    }
+
+    if (e.target.id === 'cancel') {
+      modalLoading.classList.add('hidden')
+    } else if (e.target.id === 'confirm') {
+      handleDeleteFood(delFoodId, delFoodImg)
+    }
+  })
+
+  const handleDeleteFood = async (foodId, foodImg) => {
+    //using FormData to send constructed data
+    const data = new FormData()
+    data.append('prevFoodImgName', foodImg)
+
+    try {
+      //You need to name the body {data} so it can be recognized in (.delete) method
+      const response = await Axios.delete(`${BASE_URL}/foods/${foodId}`, { data })
+
+      const { foodDeleted } = response.data
+
+      setDeleteFoodStatus(foodDeleted)
+      //Remove waiting modal
+      setTimeout(() => {
+        modalLoading.classList.add('hidden')
+      }, 300)
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  return (
+    <>
+      {deleteFoodStatus === 1 ? (
+        <Modal
+          status={Success}
+          msg={`تم حذف ${delFoodName} بنجاح 😄 الرجاء الانتظار ليتم تحويلك لقائمة الوجبات`}
+          redirectLink={goTo('menu')}
+          redirectTime='4000'
+        />
+      ) : deleteFoodStatus === 0 ? (
+        <Modal
+          status={Error}
+          msg={`حدث خطأ ما أثناء حذف ${delFoodName}!`}
+          redirectLink={goTo('menu')}
+          redirectTime='4000'
+        />
+      ) : null}
+
+      <section className='py-12 my-8 dashboard'>
+        <div className='container mx-auto'>
+          {/* Confirm Box */}
+          <Modal
+            status={Loading}
+            modalHidden='hidden'
+            classes='text-blue-600 dark:text-blue-400 text-lg'
+            msg={`هل أنت متأكد من حذف ${delFoodName} ؟ لا يمكن التراجع عن هذا القرار`}
+            ctaConfirmBtns={['حذف', 'الغاء']}
+          />
+
+          <h3 className='mx-0 mt-4 mb-12 text-2xl text-center md:text-3xl'>
+            قائمة الوجبات والمشروبات
+          </h3>
+
+          <table className='table w-full text-center'>
+            <thead className='text-white bg-orange-800'>
+              <tr>
+                <th className='px-1 py-2'>صورة</th>
+                <th className='px-1 py-2'>اسم الوجبة</th>
+                <th className='px-1 py-2'>الوصف</th>
+                <th className='px-1 py-2'>السعر</th>
+                <th className='px-1 py-2'>آخر تحديث للوجبة</th>
+                <th className='px-1 py-2'>الاجراء</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {(data ?? data !== undefined) && data?.response?.length > 0 ? (
+                <>
+                  {data?.response?.map(item => (
+                    <tr
+                      key={item._id}
+                      className='transition-colors even:bg-gray-200 odd:bg-gray-300 dark:even:bg-gray-600 dark:odd:bg-gray-700'
+                    >
+                      <td className='px-1 py-2 pr-3'>
+                        <img
+                          loading='lazy'
+                          src={item.foodImgDisplayPath}
+                          alt={item.foodName}
+                          className='object-cover rounded-lg shadow-md w-14 h-14'
+                        />
+                      </td>
+                      <td className='px-1 py-2'>
+                        {abstractText(removeSlug(item.foodName), 25)}
+                      </td>
+                      <td className='px-1 py-2'>
+                        <p>{abstractText(item.foodDesc, 100)}</p>
+                      </td>
+                      <td className='px-1 py-2'>
+                        <span>
+                          <strong className='inline-block m-2 text-xl text-green-700 dark:text-green-400'>
+                            {item.foodPrice}
+                          </strong>
+                          ر.ق
+                        </span>
+                      </td>
+                      <td className='px-1 py-2'>
+                        {createLocaleDateString(item.updatedAt)}
+                      </td>
+                      <td className='px-1 py-2'>
+                        <Link
+                          to={goTo(`edit-food/${item._id}`)}
+                          className='px-4 py-1 text-white bg-green-600 rounded-md hover:bg-green-700'
+                        >
+                          تعديل
+                        </Link>
+                        <button
+                          id='deleteFood'
+                          data-id={item._id}
+                          data-name={item.foodName}
+                          data-imgname={item.foodImgDisplayName}
+                          className='px-4 py-2 m-2 text-white bg-red-600 rounded-md hover:bg-red-700'
+                        >
+                          حذف
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+
+                  <tr>
+                    <td colSpan='100%'>
+                      <Pagination
+                        routeName={`dashboard/menu`}
+                        pageNum={pageNumber}
+                        numberOfPages={data?.numberOfPages}
+                        count={data?.itemsCount}
+                        foodId={data?.response?._id}
+                        itemsPerPage={itemsPerPage}
+                      />
+                    </td>
+                  </tr>
+                </>
+              ) : !data || !data === null || data?.itemsCount === undefined ? (
+                <tr>
+                  <td />
+                  <td />
+                  <td />
+                  <td className='flex justify-center py-10'>
+                    <LoadingSpinner size='10' />
+                  </td>
+                  <td />
+                  <td />
+                </tr>
+              ) : (
+                <tr>
+                  <td />
+                  <td />
+                  <td />
+                  <td className='flex flex-col px-1 py-2'>
+                    <p className='my-2 md:text-2xl text-red-600 dark:text-red-400 font-[600] py-2 px-1'>
+                      عفواً، لم يتم العثور على أي وجبات
+                    </p>
+                    <Link
+                      to={goTo('add-food')}
+                      className='min-w-[7rem] bg-blue-500 hover:bg-blue-600 text-white py-1.5 px-6 rounded-md'
+                    >
+                      إضافة وجبة
+                    </Link>
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </>
+  )
+}
+
+export default DashboardMenu

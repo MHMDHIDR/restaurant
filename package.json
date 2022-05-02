@@ -1,0 +1,31 @@
+{
+  "name": "restaurant",
+  "version": "1.0.0",
+  "description": "Restaurant to order and find delicious food",
+  "main": "index.js",
+  "scripts": {
+    "server": "npm run dev --prefix server",
+    "client": "npm run start --prefix client",
+    "start": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MHMDHIDR/restaurant.git"
+  },
+  "keywords": [
+    "Restaurant",
+    "order",
+    "online",
+    "delicious",
+    "food"
+  ],
+  "author": "Mohammed Hayder",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MHMDHIDR/restaurant/issues"
+  },
+  "homepage": "https://github.com/MHMDHIDR/restaurant#readme",
+  "devDependencies": {
+    "concurrently": "^7.1.0"
+  }
+}
