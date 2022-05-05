@@ -8,7 +8,7 @@ export const LoadingPage = () => (
 
 export const LoadingSpinner = ({ color = 'white', size = '6' }) => (
   <svg
-    className={`fill-${color} animate-spin h-${size} w-${size}`}
+    className={`fill-${color} animate-spin h-${size} w-${size} inline-block`}
     xmlns='http://www.w3.org/2000/svg'
     fill='none'
     viewBox='0 0 24 24'
@@ -34,7 +34,8 @@ export const LoadingCard = () => (
     <div className='w-48 h-48 mx-auto mt-4 rounded-md rounded-bl-lg bg-neutral-100 animate-pulse sm:mt-0 sm:mx-0'></div>
     <div className='p-5 mr-0 sm:-mr-10 md:-mr-20 lg:-mr-40 xl:-mr-60 2xl:-mr-[22rem]'>
       <h3 className='my-2 font-bold text-center select-none ltr'>
-        <LoadingSpinner /> Loading Items...
+        <LoadingSpinner />
+        &nbsp; Loading Items...
       </h3>
       <div className='h-6 mb-4 rounded-sm bg-neutral-100 animate-pulse'></div>
       <div className='grid grid-cols-4 gap-4'>
