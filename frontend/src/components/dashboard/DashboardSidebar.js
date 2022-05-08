@@ -43,7 +43,10 @@ const DashboardSidebar = () => {
         </svg>
       </label>
       {/* overlay full inset-0 */}
-      <div className='absolute inset-0 z-10 transition-opacity duration-500 bg-black opacity-0 pointer-events-none peer-checked:opacity-100 peer-checked:bg-opacity-80 peer-checked:pointer-events-auto'></div>
+      <div
+        className='fixed inset-0 z-10 transition-opacity duration-500 bg-black opacity-0 pointer-events-none peer-checked:opacity-100 peer-checked:bg-opacity-80 peer-checked:pointer-events-auto'
+        onClick={menuToggler}
+      />
 
       <ul
         className='fixed z-10 flex flex-col w-56 h-full overflow-x-hidden overflow-y-auto transition-all translate-x-full bg-orange-800 shadow-inner dashboard__sidebar pt-36 sm:pt-20 peer-checked:translate-x-0'

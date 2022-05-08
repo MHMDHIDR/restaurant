@@ -32,7 +32,7 @@ const Nav = () => {
   const { items } = useContext(CartContext)
 
   return (
-    <div className='nav fixed inset-0 bottom-auto z-[11] w-full ltr transition-transform duration-300'>
+    <div className='fixed inset-0 bottom-auto z-50 w-full transition-transform duration-300 nav ltr'>
       <nav
         className='flex flex-wrap items-center justify-between px-5 xl:px-10 lg:px-20 py-1
           bg-gray-300 bg-opacity-90 dark:bg-neutral-900 dark:bg-opacity-90

@@ -3,9 +3,11 @@ import { Link, Outlet } from 'react-router-dom'
 
 import useAxios from '../../hooks/useAxios'
 import useDocumentTitle from '../../hooks/useDocumentTitle'
+import useEventListener from '../../hooks/useEventListener'
 
 import goTo from '../../functions/goTo'
 import logoutUser from '../../functions/logoutUser'
+import menuToggler from '../../functions/menuToggler'
 
 import DashboardNav from '../../components/dashboard/DashboardNav'
 import DashboardSidebar from '../../components/dashboard/DashboardSidebar'
@@ -30,6 +32,8 @@ const DashboardHome = () => {
 
   useDocumentTitle('Home')
   document.body.classList.add('dashboard')
+
+  useEventListener('keydown', e => e.key === 'Escape' && menuToggler())
 
   return !USER_ID || userStatus === 'block' ? (
     logoutUser(USER_ID)
