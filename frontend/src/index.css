@@ -51,7 +51,7 @@
   }
 
   .quantity-btn {
-    @apply px-5 py-1 bg-gray-300 rounded-lg dark:text-white dark:bg-gray-700;
+    @apply px-5 py-1 bg-gray-300 rounded-lg dark:text-white dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-700;
   }
 
   /* Dashboard Styles */

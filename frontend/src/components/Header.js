@@ -23,7 +23,9 @@ const Header = () => {
     <header
       id='hero'
       className='relative bg-fixed bg-center bg-cover'
-      style={{ backgroundImage: `url("/assets/img/header-bg-1.webp")` }}
+      style={{
+        backgroundImage: `url("/assets/img/header-bg-1.webp")`
+      }}
     >
       <Nav />
 
