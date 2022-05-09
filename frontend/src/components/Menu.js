@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense, lazy } from 'react'
 import useAxios from '../hooks/useAxios'
 
 import { LoadingCard } from './Loading'
-import EmblaCarousel from './Embla/EmblaCarousel'
+const EmblaCarousel = lazy(() => import('./Embla/EmblaCarousel'))
 
 const Menu = () => {
   const SLIDES_IN_MENU = 8
@@ -43,19 +43,21 @@ const Menu = () => {
   return (
     <section id='menu' className='py-12 my-8 menu'>
       <div className='container relative mx-auto'>
-        <h2 className='mx-0 mt-4 mb-12 text-2xl md:text-3xl text-center'>القائمة</h2>
+        <h2 className='mx-0 mt-4 mb-12 text-2xl text-center md:text-3xl'>القائمة</h2>
         <div className='w-11/12 mx-auto overflow-hidden'>
-          {food?.length > 0 ? (
-            <div className='max-w-5xl mx-auto transition-transform translate-x-0 select-none'>
-              <EmblaCarousel slides={slides} media={media} />
-            </div>
-          ) : !food || !food === null || food?.itemsCount === undefined ? (
-            <LoadingCard />
-          ) : (
-            <span className='inline-block w-full my-2 text-lg font-bold text-center text-red-500'>
-              عفواً! لم يتم العثور على وجبات 😥
-            </span>
-          )}
+          <Suspense fallback={<LoadingCard />}>
+            {food?.length > 0 ? (
+              <div className='max-w-5xl mx-auto transition-transform translate-x-0 select-none'>
+                <EmblaCarousel slides={slides} media={media} />
+              </div>
+            ) : !food || !food === null || food?.itemsCount === undefined ? (
+              <LoadingCard />
+            ) : (
+              <span className='inline-block w-full my-2 text-lg font-bold text-center text-red-500'>
+                عفواً! لم يتم العثور على وجبات 😥
+              </span>
+            )}
+          </Suspense>
         </div>
       </div>
     </section>

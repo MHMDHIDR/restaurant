@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense, lazy } from 'react'
 import { Link } from 'react-router-dom'
 // import Axios from 'axios'
 
@@ -7,9 +7,10 @@ import useAxios from '../hooks/useAxios'
 
 import goTo from '../functions/goTo'
 
-import Header from '../components/Header'
-import Footer from '../components/Footer'
 import { LoadingCard } from '../components/Loading'
+
+const Header = lazy(() => import('../components/Header'))
+const Footer = lazy(() => import('../components/Footer'))
 
 const Categories = () => {
   useDocumentTitle('Categories')
@@ -86,7 +87,9 @@ const Categories = () => {
 
   return (
     <>
-      <Header />
+      <Suspense fallback={<LoadingCard />}>
+        <Header />
+      </Suspense>
       <section className='py-20 my-40'>
         <div className='container mx-auto'>
           <h3 className='mx-0 mt-4 mb-12 text-2xl text-center md:text-3xl'>
@@ -135,7 +138,9 @@ const Categories = () => {
           )}
         </div>
       </section>
-      <Footer />
+      <Suspense fallback={<LoadingCard />}>
+        <Footer />
+      </Suspense>
     </>
   )
 }

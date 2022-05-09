@@ -133,10 +133,10 @@ const OrderFood = () => {
               </p>
               <div className='flex gap-3'>
                 <Link
-                  to='/'
+                  to='/view'
                   className='px-3 py-1 text-orange-800 transition-colors bg-orange-100 border border-orange-700 rounded hover:bg-orange-200'
                 >
-                  العودة للصفحة الرئيسية
+                  تصفح الوجبات
                 </Link>
                 <Link
                   to='/categories'
