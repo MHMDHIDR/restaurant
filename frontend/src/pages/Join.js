@@ -92,7 +92,7 @@ const Login = () => {
         <div className='container mx-auto'>
           <Notification sendStatus={regStatus} sendStatusMsg={errMsg} />
           <h3
-            className='mx-0 mt-4 mb-12 text-2xl md:text-3xl text-center'
+            className='mx-0 mt-4 mb-12 text-2xl text-center md:text-3xl'
             data-section='login'
           >
             تسجيل حساب جديد للوحة التحكم

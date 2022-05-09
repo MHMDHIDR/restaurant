@@ -91,7 +91,7 @@
 [tooltip]::before {
   --bottom: 1.75rem;
   --duration: 300ms;
-  @apply absolute transition-opacity ease-in-out opacity-0 pointer-events-none min-w-fit;
+  @apply absolute transition-all ease-in-out scale-50 opacity-0 pointer-events-none min-w-fit;
 }
 
 [tooltip]::after {
@@ -108,7 +108,7 @@
 
 [tooltip]:hover::after,
 [tooltip]:hover::before {
-  @apply opacity-100;
+  @apply scale-100 opacity-100;
 }
 
 html.dark body {
