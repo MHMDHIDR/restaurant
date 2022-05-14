@@ -1,9 +1,7 @@
 import { useContext, useState, useRef } from 'react'
 import Axios from 'axios'
 import { Link } from 'react-router-dom'
-
 import { CartContext } from '../../Contexts/CartContext'
-
 import useDocumentTitle from '../../hooks/useDocumentTitle'
 
 import { validPhone } from '../../functions/validForm'
@@ -48,7 +46,7 @@ const OrderFood = () => {
 
   const { items } = useContext(CartContext)
 
-  const handleOrder = async e => {
+  const handleCollectOrder = async e => {
     e.preventDefault()
 
     //using FormData to send constructed data
@@ -64,27 +62,31 @@ const OrderFood = () => {
       personNameErr.current.textContent === '' &&
       personPhoneErr.current.textContent === ''
     ) {
-      try {
-        //show waiting modal
-        modalLoading.classList.remove('hidden')
-        setLoading(true)
-
-        const response = await Axios.post(`${BASE_URL}/orders`, formData)
-        const { orderAdded, message } = response.data
-
-        setOrderFoodStatus(orderAdded)
-        setResponseMsg(message)
-        //Remove waiting modal
-        setTimeout(() => {
-          modalLoading.classList.add('hidden')
-        }, 300)
-      } catch (err) {
-        console.error(err)
-      } finally {
-        setLoading(false)
-      }
+      handleSaveOrder(formData)
     } else {
       formErr.current.textContent = 'الرجاء إدخال البيانات المطلوبة بشكل صحيح'
+    }
+  }
+
+  const handleSaveOrder = async formData => {
+    try {
+      //show waiting modal
+      modalLoading.classList.remove('hidden')
+      setLoading(true)
+
+      const response = await Axios.post(`${BASE_URL}/orders`, formData)
+      const { orderAdded, message } = response.data
+
+      setOrderFoodStatus(orderAdded)
+      setResponseMsg(message)
+      //Remove waiting modal
+      setTimeout(() => {
+        modalLoading.classList.add('hidden')
+      }, 300)
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -151,7 +153,7 @@ const OrderFood = () => {
           )}
 
           {items.length > 0 && (
-            <form method='POST' onSubmit={handleOrder}>
+            <form method='POST' onSubmit={handleCollectOrder}>
               <h2 className='mb-10 text-lg'>يرجى إضافة تفاصيل الطلب</h2>
 
               <label htmlFor='name' className='form__group'>
@@ -247,6 +249,10 @@ const OrderFood = () => {
               </span>
 
               <div className='flex flex-col items-center justify-evenly'>
+                <span className='my-10 text-2xl'>
+                  اضفط على إحدى وسائل الدفع المتاحة أدناه وذلك لاتمام طلبك
+                </span>
+
                 <button
                   className={`w-full py-2 text-white text-lg uppercase bg-green-800 hover:bg-green-700 rounded-lg scale-100 transition-all flex justify-center items-center gap-3${
                     loading && loading ? ' scale-105 cursor-progress' : ''
@@ -265,7 +271,7 @@ const OrderFood = () => {
                       جارِ الطلب...
                     </>
                   ) : (
-                    'أطلب'
+                    'إتمام الطلب'
                   )}
                 </button>
               </div>

@@ -32,7 +32,7 @@ const CartItems = ({ setGrandPrice }) => {
           </span>
           <div className='flex gap-2 select-none justify-evenly'>
             <button
-              className='quantity-btn'
+              className='quantity-btn number-hover'
               onClick={
                 //Increment items quantity
                 () => {
@@ -49,7 +49,7 @@ const CartItems = ({ setGrandPrice }) => {
               +
             </button>
             <button
-              className='quantity-btn'
+              className='quantity-btn number-hover'
               //Decrement items quantity
               onClick={() => {
                 if (item.cQuantity > 1) {
@@ -72,7 +72,7 @@ const CartItems = ({ setGrandPrice }) => {
         </span>
         <button
           className='relative rtl m-2 min-w-[7.5rem] text-white py-1.5 px-6 rounded-lg bg-red-800 hover:bg-red-700'
-          onClick={() => removeFromCart(item.cItemId)}
+          onClick={() => removeFromCart(item.cItemId, item.cHeading)}
         >
           <span className='py-0.5 px-1 pr-1.5 bg-gray-100 rounded-md absolute right-1 top-1 pointer-events-none'>
             ❌

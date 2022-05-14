@@ -27,5 +27,9 @@
   "homepage": "https://github.com/MHMDHIDR/restaurant#readme",
   "devDependencies": {
     "concurrently": "^7.1.0"
+  },
+  "dependencies": {
+    "@paypal/react-paypal-js": "^7.6.2",
+    "react-redux": "^8.0.1"
   }
 }

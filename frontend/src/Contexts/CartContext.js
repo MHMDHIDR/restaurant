@@ -1,5 +1,4 @@
 import { useState, createContext } from 'react'
-
 export const CartContext = createContext()
 
 const CartContextProvider = ({ children }) => {
@@ -10,8 +9,9 @@ const CartContextProvider = ({ children }) => {
     setItems([...items, { cItemId, cHeading, cImg, cPrice, cDesc, cQuantity: 1 }])
   }
 
-  const removeFromCart = cItemId => {
-    setItems(items.filter(item => item.cItemId !== cItemId))
+  const removeFromCart = (cItemId, cHeading) => {
+    window.confirm(`هل أنت متأكد من حذف (${cHeading}) من سلة الطلبات؟`) &&
+      setItems(items.filter(item => item.cItemId !== cItemId))
   }
 
   return (

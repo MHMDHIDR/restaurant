@@ -1,4 +1,4 @@
-import { Suspense, lazy } from 'react'
+import { Suspense, lazy, useEffect } from 'react'
 
 import ThemeContextProvider from './Contexts/ThemeContext'
 import CartContextProvider from './Contexts/CartContext'
@@ -28,6 +28,17 @@ const DashboardAppSettings = lazy(() => import('./pages/dashboard/DashboardAppSe
 const DashboardUsers = lazy(() => import('./pages/dashboard/DashboardUsers'))
 
 const App = () => {
+  useEffect(() => {
+    //display loading page while data is loading
+    // const unloadCallback = event => {
+    //   event.preventDefault()
+    //   event.returnValue = ''
+    //   return ''
+    // }
+    // window.addEventListener('beforeunload', unloadCallback)
+    // return () => window.removeEventListener('beforeunload', unloadCallback)
+  }, [])
+
   return (
     <ThemeContextProvider>
       <CartContextProvider>

@@ -19,7 +19,7 @@ const Card = ({
   const handleCart = () => {
     const item = items.find(item => item.cItemId === cItemId)
     if (item) {
-      removeFromCart(cItemId)
+      removeFromCart(cItemId, cHeading.props.children)
     } else {
       addToCart(cItemId, cHeading.props.children, cImg, cPrice, cDesc)
     }
