@@ -46,7 +46,8 @@
   .form__input:focus ~ .form__label,
   .form__input ~ .form__label.active,
   .form__group.notvalid > .form__label,
-  .form__input:valid ~ .form__label {
+  .form__input:valid ~ .form__label,
+  .focused ~ .form__label {
     @apply text-sm opacity-100 -translate-y-7 md:-translate-y-8 sm:text-base md:text-xl;
   }
 

@@ -9,13 +9,22 @@ const CartContextProvider = ({ children }) => {
     setItems([...items, { cItemId, cHeading, cImg, cPrice, cDesc, cQuantity: 1 }])
   }
 
+  //remove items from card
   const removeFromCart = (cItemId, cHeading) => {
-    window.confirm(`هل أنت متأكد من حذف (${cHeading}) من سلة الطلبات؟`) &&
+    if (window.confirm(`هل أنت متأكد من حذف (${cHeading}) من سلة الطلبات؟`)) {
       setItems(items.filter(item => item.cItemId !== cItemId))
+    }
   }
 
   return (
-    <CartContext.Provider value={{ items, setItems, addToCart, removeFromCart }}>
+    <CartContext.Provider
+      value={{
+        items,
+        setItems,
+        addToCart,
+        removeFromCart
+      }}
+    >
       {children}
     </CartContext.Provider>
   )
