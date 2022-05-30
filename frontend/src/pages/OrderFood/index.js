@@ -1,14 +1,20 @@
 import { useContext, useState, useRef } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
+// import Axios from 'axios'
+import { PayPalButtons } from '@paypal/react-paypal-js'
+
 import { CartContext } from '../../Contexts/CartContext'
+import { ThemeContext } from '../../Contexts/ThemeContext'
 
 import useDocumentTitle from '../../hooks/useDocumentTitle'
 
 import { validPhone } from '../../functions/validForm'
 
+import Modal from '../../components/Modal/Modal'
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 import CartItems from './CartItems'
+import { Success } from '../../components/Icons/Status'
 
 //orderFood
 const OrderFood = () => {
@@ -17,22 +23,29 @@ const OrderFood = () => {
   //global variables
   const MIN_CHARACTERS = 1
   const MAX_CHARACTERS = 100
+  // const BASE_URL =
+  //   process.env.NODE_ENV === 'development'
+  //     ? process.env.REACT_APP_API_LOCAL_URL
+  //     : process.env.REACT_APP_API_URL
 
   const { items } = useContext(CartContext)
+  const { isDark } = useContext(ThemeContext)
 
   //Form States
   const [personName, setPersonName] = useState('')
   const [personPhone, setPersonPhone] = useState('')
   const [personNotes, setPersonNotes] = useState('')
+  const [msg, setMsg] = useState('')
+  // const [orderFoodStatus, setOrderFoodStatus] = useState('')
+  // const [responseMsg, setResponseMsg] = useState('')
   const [grandPrice, setGrandPrice] = useState('')
+  const [isVisisblePaypal, setIsVisisblePaypal] = useState(false)
 
   //Declaring Referenced Element
   const personNameErr = useRef(null)
   const personPhoneErr = useRef(null)
   const formErr = useRef(null)
   const grandPriceRef = useRef(null)
-
-  const navigate = useNavigate()
 
   const handleCollectOrder = async e => {
     e.preventDefault()
@@ -54,37 +67,58 @@ const OrderFood = () => {
     ) {
       // if payment is successful, we'll send the data to the server
       // handleSaveOrder(formData)
+      setIsVisisblePaypal(true)
     } else {
       formErr.current.textContent = 'الرجاء إدخال البيانات المطلوبة بشكل صحيح'
     }
   }
 
-  //  const handleSaveOrder = async formData => {
-  //    try {
-  //      //show waiting modal
-  //      modalLoading.classList.remove('hidden')
-  //      setLoading(true)
+  // const handleSaveOrder = async formData => {
+  //   try {
+  //     const response = await Axios.post(`${BASE_URL}/orders`, formData)
+  //     const { orderAdded, message } = response.data
 
-  //      const response = await Axios.post(`${BASE_URL}/orders`, formData)
-  //      const { orderAdded, message } = response.data
+  //     setOrderFoodStatus(orderAdded)
+  //     setResponseMsg(message)
+  //   } catch (err) {
+  //     console.error(err)
+  //   }
+  // }
 
-  //      setOrderFoodStatus(orderAdded)
-  //      setResponseMsg(message)
-  //      //Remove waiting modal
-  //      setTimeout(() => {
-  //        modalLoading.classList.add('hidden')
-  //      }, 300)
-  //    } catch (err) {
-  //      console.error(err)
-  //    } finally {
-  //      setLoading(false)
-  //    }
-  //  }
+  const [paidFor, setPaidFor] = useState(false)
+  const [error, setError] = useState(null)
+
+  const handleApprove = orderId => {
+    // Call backend function to fulfill order
+
+    // if response is success
+    setPaidFor(true)
+    // Refresh user's account or subscription status
+  }
+
+  if (paidFor) {
+    // Display success message, modal or redirect user to success page
+    setMsg('شكراً لشراءك من مطعمنا، سيتم التواصل معك في اقرب وقت')
+  }
+
+  if (error) {
+    // Display error message, modal or redirect user to error page
+    alert(error)
+  }
 
   return (
     <>
       <Header />
       <section id='orderFood' className='py-12 my-8'>
+        {msg && (
+          <Modal
+            status={Success}
+            msg={msg}
+            btnText='إعادة الذهاب إلى الصفحة الرئيسية'
+            btnLink='/'
+            classes='hidden'
+          />
+        )}
         <div className='container mx-auto text-center'>
           {items.length > 0 ? (
             <>
@@ -99,7 +133,6 @@ const OrderFood = () => {
                   تصفح وجبات أخرى
                 </Link>
                 <h2 className='mb-10 text-2xl'>يرجى إضافة تفاصيل الطلب</h2>
-
                 <label htmlFor='name' className='form__group'>
                   <input
                     className='relative form__input'
@@ -130,7 +163,6 @@ const OrderFood = () => {
                     ref={personNameErr}
                   ></span>
                 </label>
-
                 <label htmlFor='phoneNumber' className='form__group'>
                   <input
                     className='form__input'
@@ -163,7 +195,6 @@ const OrderFood = () => {
                     ref={personPhoneErr}
                   ></span>
                 </label>
-
                 <label htmlFor='message' className='form__group'>
                   <textarea
                     className='form__input'
@@ -178,12 +209,10 @@ const OrderFood = () => {
                     تستطيع وضع ملاحظات أو اضافات للشيف لإضافتها لك في طلبك &nbsp;😄
                   </span>
                 </label>
-
                 <p
                   className='block text-2xl my-4 text-red-600 dark:text-red-400 font-[600] pt-2 px-1'
                   ref={formErr}
                 ></p>
-
                 <span className='inline-block px-3 py-1 my-4 text-xl text-green-800 bg-green-300 border border-green-800 rounded-md select-none'>
                   السعر الاجمالي:&nbsp;
                   <strong ref={grandPriceRef}>
@@ -191,7 +220,70 @@ const OrderFood = () => {
                   </strong>
                   &nbsp;ر.ق
                 </span>
+                <h1 className='my-2 mb-10 text-2xl'>السداد بواسطة</h1>
 
+                {isVisisblePaypal && (
+                  <PayPalButtons
+                    style={{
+                      color: isDark ? 'silver' : 'black',
+                      label: 'checkout',
+                      height: 48,
+                      shape: 'pill'
+                    }}
+                    onClick={(data, actions) => {
+                      // Validate on button click, client or server side
+                      const hasAlreadyBoughtItem = false
+
+                      if (hasAlreadyBoughtItem) {
+                        setError(
+                          'You already bought this item. Go to your account to view your list of items.'
+                        )
+                        return actions.reject()
+                      } else {
+                        return actions.resolve()
+                      }
+                    }}
+                    createOrder={(data, actions) => {
+                      return actions.order.create({
+                        purchase_units: [
+                          {
+                            description: personNotes,
+                            amount: {
+                              value: items.reduce(
+                                (acc, product) => acc + product.cPrice,
+                                0
+                              )
+                            },
+                            items: items.map(item => ({
+                              name: item.cName,
+                              quantity: item.cQuantity,
+                              category: 'foods, drinks',
+                              unit_amount: {
+                                currency_code: 'USD',
+                                value: item.cPrice
+                              }
+                            })),
+                            shipping: {
+                              name: personName,
+                              phone: personPhone,
+                              method: 'NO_SHIPPING'
+                            }
+                          }
+                        ]
+                      })
+                    }}
+                    onApprove={async (data, actions) => {
+                      await actions.order.capture()
+                      handleApprove(data.orderID)
+                    }}
+                    onCancel={() => {
+                      // Display cancel message, modal or redirect user to cancel page or back to cart
+                    }}
+                    onError={err => {
+                      setError(err)
+                    }}
+                  />
+                )}
                 {/* show button fter payment object is returned from paypal */}
                 <div className='flex flex-col items-center justify-evenly'>
                   <button

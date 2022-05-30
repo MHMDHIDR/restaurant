@@ -45,7 +45,7 @@ const App = () => {
       <CartContextProvider>
         <PayPalScriptProvider
           options={{
-            'client-id': process.env.REACT_APP_PAYPAL_OPTIONS_CLIENT_ID
+            'client-id': process.env.REACT_APP_PAYPAL_CLIENT_ID
           }}
         >
           <Router>
