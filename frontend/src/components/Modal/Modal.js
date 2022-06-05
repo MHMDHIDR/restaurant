@@ -4,7 +4,7 @@ const Modal = ({
   msg = '',
   status = 'Loading',
   modalHidden = '',
-  classes = msg.length > 130 ? 'text-justify' : 'text-center',
+  classes = msg.length > 130 ? 'text-center' : 'text-justify',
   redirectLink,
   redirectTime = 2500,
   btnName = '',
@@ -17,7 +17,7 @@ const Modal = ({
   }
 
   if (!modalHidden.includes('hidden')) {
-    // if hidden property is there then add overflow-hidden
+    // if hidden property is there then add overflow-hidden to body
     document.body.classList.add('overflow-hidden')
   }
 
@@ -38,8 +38,8 @@ const Modal = ({
           aria-modal='true'
         >
           <div className='flex justify-center'>{status}</div>
-          <pre className={`py-8 ${classes} whitespace-pre-line`} dir='auto'>
-            <p>{msg}</p>
+          <pre className='py-8 leading-9 whitespace-pre-line' dir='auto'>
+            <p className={classes}>{msg}</p>
           </pre>
           {btnName && btnLink ? (
             <a
