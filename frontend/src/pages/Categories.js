@@ -23,6 +23,7 @@ const Categories = () => {
   // const [categoryListItems, setCategoryListItems] = useState([])
   const [foodImgs, setFoodImgs] = useState('')
   const [drinkImgs, setDrinkImgs] = useState('')
+  const [sweetsImgs, setSweetsImgs] = useState('')
   const ITEMS_COUNT = 0 // if items count is == 0 then it will fetch everything in food category
 
   //fetching categories
@@ -39,6 +40,11 @@ const Categories = () => {
   const drinks = useAxios({
     method: 'get',
     url: `/foods/1/${ITEMS_COUNT}?category=drinks`
+  })
+
+  const sweets = useAxios({
+    method: 'get',
+    url: `/foods/1/${ITEMS_COUNT}?category=sweets`
   })
 
   // const ItemsByCategories = categories?.response?.CategoryList.map(async category => {
@@ -70,15 +76,24 @@ const Categories = () => {
   // ItemsByCategories?.map(item => item.then(({ data }) => console.log(data)))
 
   useEffect(() => {
-    if (foods?.response !== null && drinks?.response !== null) {
+    if (
+      foods?.response !== null &&
+      sweets?.response !== null &&
+      drinks?.response !== null
+    ) {
       setFoodImgs(foods?.response?.response)
+      setSweetsImgs(sweets?.response?.response)
       setDrinkImgs(drinks?.response?.response)
     }
-  }, [foods?.response, drinks?.response])
+  }, [foods?.response, drinks?.response, sweets?.response])
 
   const getRandomFoodImg = () => {
     const randomIndex = Math.floor(Math.random() * foodImgs?.length)
     return foodImgs?.[randomIndex]?.foodImgDisplayPath
+  }
+  const getSweetsDrinkImg = () => {
+    const randomIndex = Math.floor(Math.random() * sweetsImgs?.length)
+    return sweetsImgs?.[randomIndex]?.foodImgDisplayPath
   }
   const getRandomDrinkImg = () => {
     const randomIndex = Math.floor(Math.random() * drinkImgs?.length)
@@ -132,6 +147,18 @@ const Categories = () => {
               >
                 <h3 className='flex items-center justify-center h-full text-sm font-bold text-white bg-gray-800 md:text-base 2xl:text-xl bg-opacity-80'>
                   المشروبات
+                </h3>
+              </Link>
+
+              <Link
+                to={goTo('../view/sweets/')}
+                className='block overflow-hidden transition-transform duration-300 bg-cover w-72 h-72 rounded-2xl hover:-translate-y-2'
+                style={{
+                  backgroundImage: `url("${getSweetsDrinkImg()}")`
+                }}
+              >
+                <h3 className='flex items-center justify-center h-full text-sm font-bold text-white bg-gray-800 md:text-base 2xl:text-xl bg-opacity-80'>
+                  الحلويات
                 </h3>
               </Link>
             </div>
