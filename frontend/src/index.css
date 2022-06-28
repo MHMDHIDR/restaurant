@@ -48,7 +48,11 @@
   .form__group.notvalid > .form__label,
   .form__input:valid ~ .form__label,
   .focused ~ .form__label {
-    @apply text-sm opacity-100 -translate-y-7 md:-translate-y-8 sm:text-base md:text-xl;
+    @apply text-sm opacity-100 sm:text-base md:text-xl -translate-y-7 md:-translate-y-8;
+  }
+
+  .form__input.tags:valid ~ .form__label {
+    @apply top-4;
   }
 
   .quantity-btn {
@@ -120,7 +124,7 @@ html.dark body {
   @apply text-gray-100 bg-gray-800;
 }
 textarea {
-  @apply resize-y min-h-[10rem] max-h-96 pt-6;
+  @apply resize-y min-h-[10rem] max-h-96 pt-2;
 }
 /* clear search default styles */
 input[type='search']::-ms-clear,

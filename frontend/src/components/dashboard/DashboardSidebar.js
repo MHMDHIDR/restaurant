@@ -19,7 +19,7 @@ const DashboardSidebar = () => {
       />
       <label
         htmlFor='menuToggler'
-        tooltip='Sidebar Menu'
+        tooltip='القائمة'
         className={`block z-20 w-10 h-10 transition-all translate-x-0 bg-orange-700 border-2 border-r-0 border-gray-800 cursor-pointer hover:bg-orange-800 dark:border-white translate-y-36 sm:translate-y-24 peer-checked:-translate-x-56 ${
           top < 100 &&
           `after:content-[attr(tooltip)] after:bottom-[calc(var(--top)*2)] after:mt-2

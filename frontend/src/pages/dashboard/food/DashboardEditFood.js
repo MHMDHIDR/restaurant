@@ -1,6 +1,8 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useContext } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import Axios from 'axios'
+
+import { FoodToppingsContext } from '../../../Contexts/FoodToppingsContext'
 
 import useDocumentTitle from '../../../hooks/useDocumentTitle'
 import useEventListener from '../../../hooks/useEventListener'
@@ -9,6 +11,7 @@ import useAxios from '../../../hooks/useAxios'
 import Modal from '../../../components/Modal/Modal'
 import { Success, Error, Loading } from '../../../components/Icons/Status'
 import { LoadingCard } from '../../../components/Loading'
+import AddTags from '../../../components/AddTags'
 
 import { removeSlug, createSlug } from '../../../functions/slug'
 import goTo from '../../../functions/goTo'
@@ -33,6 +36,9 @@ const EditFood = () => {
   const [preview, setPreview] = useState()
 
   const [updatedFoodStatus, setUpdatedFoodStatus] = useState()
+
+  //Contexts
+  const { tags, setTags } = useContext(FoodToppingsContext)
 
   //Form errors messages
   const ImgErr = useRef(null)
@@ -114,45 +120,51 @@ const EditFood = () => {
   }, [foodFile])
 
   const handleUpdateFood = async e => {
-    e.preventDefault()
-
-    //initial form values if no value was updated taking it from [0] index
-    const currentFoodId = data?._id
-    const currentFoodName = data?.foodName
-    const currentFoodPrice = data?.foodPrice
-    const currentCategory = data?.category
-    const currentFoodDesc = data?.foodDesc
-    const prevFoodImgPath = data?.foodImgDisplayPath
-    const prevFoodImgName = data?.foodImgDisplayName
-
-    //using FormData to send constructed data
-    const formData = new FormData()
-    formData.append('foodId', currentFoodId)
-    formData.append('foodName', foodName || currentFoodName)
-    formData.append('foodPrice', foodPrice || currentFoodPrice)
-    formData.append('category', category[0] || currentCategory)
-    formData.append('foodDesc', foodDesc || currentFoodDesc)
-    formData.append('foodImg', foodFile)
-    formData.append('prevFoodImgPath', prevFoodImgPath)
-    formData.append('prevFoodImgName', prevFoodImgName)
-
-    if (
-      ImgErr.current.textContent === '' &&
-      foodNameErr.current.textContent === '' &&
-      priceErr.current.textContent === '' &&
-      descErr.current.textContent === ''
-    ) {
-      try {
-        const response = await Axios.patch(`${BASE_URL}/foods/${currentFoodId}`, formData)
-
-        const { foodUpdated } = response.data
-        setUpdatedFoodStatus(foodUpdated)
-      } catch (err) {
-        console.error(err)
-      }
+    if (e.key === 'Enter') {
+      e.preventDefault()
     } else {
-      formMsg.current.textContent =
-        'الرجاء إضافة البيانات بشكل صحيح لتستطيع تحديث البيانات 😃'
+      //initial form values if no value was updated taking it from [0] index
+      const currentFoodId = data?._id
+      const currentFoodName = data?.foodName
+      const currentFoodPrice = data?.foodPrice
+      const currentCategory = data?.category
+      const currentFoodDesc = data?.foodDesc
+      const prevFoodImgPath = data?.foodImgDisplayPath
+      const prevFoodImgName = data?.foodImgDisplayName
+
+      //using FormData to send constructed data
+      const formData = new FormData()
+      formData.append('foodId', currentFoodId)
+      formData.append('foodName', foodName || currentFoodName)
+      formData.append('foodPrice', foodPrice || currentFoodPrice)
+      formData.append('category', category[0] || currentCategory)
+      formData.append('foodDesc', foodDesc || currentFoodDesc)
+      formData.append('foodToppings', JSON.stringify(tags))
+      formData.append('foodImg', foodFile)
+      formData.append('prevFoodImgPath', prevFoodImgPath)
+      formData.append('prevFoodImgName', prevFoodImgName)
+
+      if (
+        ImgErr.current.textContent === '' &&
+        foodNameErr.current.textContent === '' &&
+        priceErr.current.textContent === '' &&
+        descErr.current.textContent === ''
+      ) {
+        try {
+          const response = await Axios.patch(
+            `${BASE_URL}/foods/${currentFoodId}`,
+            formData
+          )
+
+          const { foodUpdated } = response.data
+          setUpdatedFoodStatus(foodUpdated)
+        } catch (err) {
+          console.error(err)
+        }
+      } else {
+        formMsg.current.textContent =
+          'الرجاء إضافة البيانات بشكل صحيح لتستطيع تحديث البيانات 😃'
+      }
     }
   }
 
@@ -177,6 +189,10 @@ const EditFood = () => {
     }
   }
 
+  useEffect(() => {
+    data && setTags(data?.foodToppings)
+  }, [data, setTags])
+
   return (
     <>
       {updatedFoodStatus === 1 ? (
@@ -185,8 +201,8 @@ const EditFood = () => {
           msg={`تم تحديث بيانات ${removeSlug(
             data?.foodName
           )} بنجاح   😄   الرجاء الانتظار ليتم تحويلك لقائمة الوجبات والمشروبات`}
-          redirectLink={goTo('menu')}
-          redirectTime='3500'
+          // redirectLink={goTo('menu')}
+          // redirectTime='3500'
         />
       ) : updatedFoodStatus === 0 ? (
         <Modal status={Error} msg='حدث خطأ ما أثناء تحديث بيانات الوجبة!' />
@@ -224,12 +240,7 @@ const EditFood = () => {
           <div className='dashboard__food__form edit'>
             <div className='food'>
               {data && data !== undefined ? (
-                <form
-                  key={data?._id}
-                  className='form'
-                  encType='multipart/form-data'
-                  onSubmit={handleUpdateFood}
-                >
+                <form key={data?._id} className='form' encType='multipart/form-data'>
                   <label className='flex flex-wrap items-center justify-center gap-4 mb-8 sm:justify-between'>
                     <img
                       loading='lazy'
@@ -359,6 +370,13 @@ const EditFood = () => {
                     ></span>
                   </label>
 
+                  <label htmlFor='foodToppings' className='form__group'>
+                    <AddTags />
+                    <span className='form__label'>
+                      الرجاء ادخال الإضافات الخاصة بالوجبة والضغط على زر Enter (اختياري)
+                    </span>
+                  </label>
+
                   <div
                     className='my-14 inline-block md:text-2xl text-red-600 dark:text-red-400 font-[600] py-2 px-1'
                     ref={formMsg}
@@ -367,8 +385,8 @@ const EditFood = () => {
                   <div className='flex items-center justify-evenly'>
                     <button
                       id='updateFood'
-                      type='submit'
                       className='min-w-[7rem] bg-green-600 hover:bg-green-700 text-white py-1.5 px-6 rounded-md'
+                      onClick={handleUpdateFood}
                     >
                       تحديث
                     </button>

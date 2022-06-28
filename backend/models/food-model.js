@@ -6,6 +6,11 @@ const reqString = {
   required: true
 }
 
+const reqArray = {
+  type: Array,
+  required: true
+}
+
 const reqDate = {
   type: Date,
   default: Date.now,
@@ -20,6 +25,7 @@ const FoodSchema = new mongoose.Schema(
     foodPrice: reqString,
     category: reqString,
     foodDesc: reqString,
+    foodToppings: reqArray,
     createdAt: reqDate,
     updatedAt: reqDate
   },
