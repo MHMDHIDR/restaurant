@@ -1,12 +1,15 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useContext } from 'react'
 import { Link } from 'react-router-dom'
 import Axios from 'axios'
+
+import { FoodToppingsContext } from '../../../Contexts/FoodToppingsContext'
 
 import useDocumentTitle from '../../../hooks/useDocumentTitle'
 import useAxios from '../../../hooks/useAxios'
 
 import Modal from '../../../components/Modal/Modal'
 import { Success, Error, Loading } from '../../../components/Icons/Status'
+import AddTags from '../../../components/AddTags'
 
 import { createSlug } from '../../../functions/slug'
 import goTo from '../../../functions/goTo'
@@ -26,6 +29,9 @@ const AddFood = () => {
   const [addFoodStatus, setAddFoodStatus] = useState()
   const [addFoodMessage, setAddFoodMessage] = useState()
   const [categoryList, setCategoryList] = useState([])
+
+  //Contexts
+  const { tags } = useContext(FoodToppingsContext)
 
   //Form errors messages
   const ImgErr = useRef(null)
@@ -92,6 +98,7 @@ const AddFood = () => {
     formData.append('foodPrice', foodPrice)
     formData.append('category', category[0])
     formData.append('foodDesc', foodDesc)
+    formData.append('foodToppings', JSON.stringify(tags))
     formData.append('foodImg', foodFile)
 
     if (
@@ -285,6 +292,13 @@ const AddFood = () => {
                     className='inline-block md:text-lg text-red-600 dark:text-red-400 font-[600] pt-2 px-1'
                     ref={descErr}
                   ></span>
+                </label>
+
+                <label htmlFor='foodToppings' className='form__group'>
+                  <AddTags />
+                  <span className='form__label'>
+                    الرجاء ادخال الإضافات الخاصة بالوجبة والضغط على زر Enter (اختياري)
+                  </span>
                 </label>
 
                 <div
