@@ -1,5 +1,6 @@
-export const Thumb = ({ selected, onClick, imgSrc }) => (
+export const Thumb = ({ selected, onClick, imgSrc, alt }) => (
   <div
+    title={alt}
     className={`relative pr-4 last-of-type:pr-0 ${
       selected ? 'opacity-100' : 'opacity-20'
     } transition-opacity duration-300`}
@@ -13,7 +14,7 @@ export const Thumb = ({ selected, onClick, imgSrc }) => (
         loading='lazy'
         className={`absolute top-0 bottom-0 -left-[10000%] -right-[10000%] m-auto min-w-[1000%] min-h-[1000%] max-w-none scale-[0.1]`}
         src={imgSrc}
-        alt='Delecious Food'
+        alt={alt}
       />
     </button>
   </div>

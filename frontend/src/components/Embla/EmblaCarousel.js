@@ -114,6 +114,7 @@ const EmblaCarousel = ({ slides, media }) => {
                 onClick={() => onThumbClick(index)}
                 selected={index === selectedIndex}
                 imgSrc={mediaByIndex(index)}
+                alt={removeSlug(nameByIndex(index))}
                 key={index}
               />
             ))}

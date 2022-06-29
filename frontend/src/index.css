@@ -106,13 +106,13 @@
 [tooltip]::after {
   /* tooltip box */
   content: attr(tooltip);
-  @apply right-0 z-20 w-min max-w-min min-w-[calc(100%+5rem)] text-center p-2 duration-[var(--duration)] text-sm text-white bg-gray-800 dark:bg-gray-300 dark:text-black dark:border-2 dark:border-gray-800 shadow-lg bottom-[calc(var(--bottom)*1.65)] rounded-md;
+  @apply right-0 z-50 w-min max-w-min min-w-[calc(100%+5rem)] text-center p-2 duration-[var(--duration)] text-sm text-white bg-gray-800 dark:bg-gray-300 dark:text-black dark:border-2 dark:border-gray-800 shadow-lg bottom-[calc(var(--bottom)*1.65)] rounded-md;
 }
 
 [tooltip]::before {
   /* tooltip tringle */
   content: '';
-  @apply z-30 mx-auto border-[.7em] duration-[var(--duration)] border-transparent border-t-gray-800 dark:border-t-gray-300 bottom-[var(--bottom)] -translate-x-1/2 left-[10%] lg:left-1/2;
+  @apply z-50 mx-auto border-[.7em] duration-[var(--duration)] border-transparent border-t-gray-800 dark:border-t-gray-300 bottom-[var(--bottom)] -translate-x-1/2 left-[10%] lg:left-1/2;
 }
 
 [tooltip]:hover::after,

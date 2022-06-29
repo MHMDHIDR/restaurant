@@ -50,7 +50,7 @@ const Card = ({
           ) : null}
           <p className='py-8 break-all'>{cDesc}</p>
           {cToppings && cToppings.length ? (
-            <div className='flex gap-6'>
+            <div className='flex flex-wrap justify-center gap-6'>
               <span>الإضافات:</span>
               {cToppings.map(topping => (
                 <div className='flex items-center gap-1.5' key={topping}>
@@ -61,7 +61,7 @@ const Card = ({
                     className='w-6 h-6 cursor-pointer peer'
                   />
                   <label
-                    className='px-2 text-xs text-center border rounded cursor-pointer select-none md:text-base peer-checked:bg-green-300 peer-checked:border-green-800'
+                    className='px-2 text-xs text-center border rounded cursor-pointer select-none md:text-base peer-checked:bg-orange-300 peer-checked:border-orange-800'
                     htmlFor={topping}
                   >
                     {removeSlug(topping)}
@@ -87,13 +87,14 @@ const Card = ({
         </div>
         <div
           style={{ '--cardImgSize': '17rem' }}
+          title={removeSlug(cImgAlt)}
           className='min-w-[var(--cardImgSize)] max-w-[calc(var(--cardImgSize))] overflow-hidden transition-colors bg-gray-100 border border-gray-400 rounded-lg dark:bg-gray-600 min-h-[var(--cardImgSize)] max-h-[calc(var(--cardImgSize))]'
         >
           {cImg ? (
             <img
               loading='lazy'
               src={cImg}
-              alt={cImgAlt}
+              alt={removeSlug(cImgAlt)}
               className='min-w-[var(--cardImgSize)] min-h-[var(--cardImgSize)] p-2 object-cover rounded-xl aspect-video'
               height='320'
               width='320'

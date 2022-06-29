@@ -4,13 +4,15 @@ export const CartContext = createContext()
 const CartContextProvider = ({ children }) => {
   const [items, setItems] = useState([])
 
-  //add items to card add the details like: cHeading, cImg, cPrice, cDesc, cToppings, cQuantity: 1
-  const addToCart = (cItemId, cHeading, cImg, cPrice, cDesc, cToppings) => {
+  //add items to card add the details like: cHeading, cImg, cPrice, cDesc, cSelectedToppings, cQuantity: 1
+  const addToCart = (cItemId, cHeading, cImg, cPrice, cDesc, cSelectedToppings) => {
     setItems([
       ...items,
-      { cItemId, cHeading, cImg, cPrice, cDesc, cToppings, cQuantity: 1 }
+      { cItemId, cHeading, cImg, cPrice, cDesc, cSelectedToppings, cQuantity: 1 }
     ])
   }
+
+  console.log(items)
 
   //remove items from card
   const removeFromCart = (cItemId, cHeading) => {
