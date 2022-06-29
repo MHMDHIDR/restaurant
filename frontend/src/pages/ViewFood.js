@@ -80,6 +80,7 @@ const ViewFood = () => {
                     }
                     cPrice={item.foodPrice}
                     cDesc={abstractText(item.foodDesc, 120)}
+                    cToppings={item?.foodToppings}
                     cImg={item.foodImgDisplayPath}
                     cImgAlt={item.foodName}
                     cCtaLabel={
@@ -135,6 +136,7 @@ const ViewFood = () => {
                   }
                   cPrice={data?.response?.foodPrice}
                   cDesc={data?.response?.foodDesc}
+                  cToppings={data?.response?.foodToppings}
                   cImg={data?.response?.foodImgDisplayPath}
                   cImgAlt={data?.response?.foodName}
                   cCtaLabel={

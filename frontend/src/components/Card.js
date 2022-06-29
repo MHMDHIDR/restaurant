@@ -1,13 +1,18 @@
 import { Link } from 'react-router-dom'
-import Logo from './Icons/Logo'
 import { useContext } from 'react'
+
 import { CartContext } from '../Contexts/CartContext'
+
+import { removeSlug } from '../functions/slug'
+
+import Logo from './Icons/Logo'
 
 const Card = ({
   cTitle,
   cItemId,
   cHeading,
   cDesc,
+  cToppings,
   cCtaLabel,
   cCtaLink,
   cImg = '',
@@ -21,7 +26,7 @@ const Card = ({
     if (item) {
       removeFromCart(cItemId, cHeading.props.children)
     } else {
-      addToCart(cItemId, cHeading.props.children, cImg, cPrice, cDesc)
+      addToCart(cItemId, cHeading.props.children, cImg, cPrice, cDesc, cToppings)
     }
   }
 
@@ -44,6 +49,27 @@ const Card = ({
             </span>
           ) : null}
           <p className='py-8 break-all'>{cDesc}</p>
+          {cToppings ? (
+            <div className='flex gap-6'>
+              <span>الإضافات:</span>
+              {cToppings.map(topping => (
+                <div className='flex items-center gap-1.5' key={topping}>
+                  <input
+                    type='checkbox'
+                    id={topping}
+                    value={topping}
+                    className='w-6 h-6 cursor-pointer peer'
+                  />
+                  <label
+                    className='px-2 text-xs text-center border rounded cursor-pointer select-none md:text-base peer-checked:bg-green-300 peer-checked:border-green-800'
+                    htmlFor={topping}
+                  >
+                    {removeSlug(topping)}
+                  </label>
+                </div>
+              ))}
+            </div>
+          ) : null}
           {cCtaLabel ? (
             <div className='flex justify-evenly gap-3 flex-wrap grow-[0.5] text-center bg-transparent'>
               {cCtaLink ? (
