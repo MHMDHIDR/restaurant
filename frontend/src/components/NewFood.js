@@ -15,7 +15,7 @@ const NewFood = () => {
 
   const { ...response } = useAxios({
     method: 'get',
-    url: '/foods/1/3?category=foods'
+    url: '/foods/1/7?category=foods'
   })
 
   useEffect(() => {
@@ -44,6 +44,7 @@ const NewFood = () => {
                 }
                 cPrice={item.foodPrice}
                 cDesc={abstractText(item.foodDesc, 100)}
+                cToppings={item?.foodToppings}
                 cImg={item.foodImgDisplayPath}
                 cImgAlt={item.foodName}
                 cCtaLabel={

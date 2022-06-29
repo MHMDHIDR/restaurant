@@ -49,7 +49,7 @@ const Card = ({
             </span>
           ) : null}
           <p className='py-8 break-all'>{cDesc}</p>
-          {cToppings ? (
+          {cToppings && cToppings.length ? (
             <div className='flex gap-6'>
               <span>الإضافات:</span>
               {cToppings.map(topping => (
