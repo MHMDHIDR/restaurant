@@ -12,8 +12,6 @@ const CartContextProvider = ({ children }) => {
     ])
   }
 
-  console.log(items)
-
   //remove items from card
   const removeFromCart = (cItemId, cHeading) => {
     if (window.confirm(`هل أنت متأكد من حذف (${cHeading}) من سلة الطلبات؟`)) {

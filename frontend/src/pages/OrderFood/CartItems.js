@@ -1,5 +1,6 @@
 import { useContext } from 'react'
 import { CartContext } from '../../Contexts/CartContext'
+import { FoodToppingsContext } from '../../Contexts/FoodToppingsContext'
 
 import { removeSlug } from '../../functions/slug'
 
@@ -7,6 +8,7 @@ import Divider from '../../components/Divider'
 
 const CartItems = ({ setGrandPrice }) => {
   const { items, setItems, removeFromCart } = useContext(CartContext)
+  const { saveSelectedTags } = useContext(FoodToppingsContext)
 
   const MAX_QUANTITY = 100
 
@@ -24,8 +26,27 @@ const CartItems = ({ setGrandPrice }) => {
             className='object-cover w-32 h-32 p-1 mx-auto border border-gray-400 dark:border-gray-300 rounded-xl'
           />
           <div className='flex flex-col gap-2 space-y-3 select-none'>
-            <h2 className='text-2xl text-center'>{removeSlug(item?.cHeading)}</h2>
-            <p className='2xl:text-lg'>{item?.cDesc}</p>
+            <h2 className='text-xl text-center'>{removeSlug(item?.cHeading)}</h2>
+            <p className='text-lg'>{item?.cDesc}</p>
+          </div>
+          <div className='flex flex-col gap-2 space-y-3 text-xl select-none'>
+            <h2 className='text-right ltr'>:الإضافات</h2>
+            {item?.cSelectedToppings.map(topping => (
+              <div className='flex items-center gap-1.5' key={topping}>
+                <input
+                  type='checkbox'
+                  id={topping}
+                  value={topping}
+                  className='w-6 h-6 cursor-pointer peer'
+                />
+                <label
+                  className='px-2 text-base text-center border rounded cursor-pointer select-none peer-checked:bg-orange-300 peer-checked:border-orange-800'
+                  htmlFor={topping}
+                >
+                  {removeSlug(topping)}
+                </label>
+              </div>
+            ))}
           </div>
           <div className='flex items-center justify-center gap-3 space-y-1 select-none lg:flex-col'>
             <h4 className='text-lg'>الكمية:</h4>
