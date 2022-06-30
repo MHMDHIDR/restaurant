@@ -50,7 +50,7 @@ const Footer = () => {
                 : 'أطلب ألذ الأطعمة والمشروبات الطازجة من مطعمنا العالمي'}
             </p>
           </div>
-          <div className='flex flex-wrap w-full gap-14 sm:w-auto justify-evenly'>
+          <div className='flex flex-wrap flex-1 w-full gap-14 sm:w-auto justify-evenly'>
             <div>
               <h3 className='mb-3 text-lg font-bold'>وجبات مقترحة لك</h3>
               <ul className='space-y-2'>

@@ -19,7 +19,7 @@ const FoodToppingsContextProvider = ({ children }) => {
   }
 
   const saveSelectedTags = (id, tags) => {
-    setSelectedTags([...selectedTags, { itemId: id, tags }])
+    setSelectedTags([...selectedTags, { id, tags }])
   }
 
   const removeSelectedTags = id => {
@@ -28,7 +28,15 @@ const FoodToppingsContextProvider = ({ children }) => {
 
   return (
     <FoodToppingsContext.Provider
-      value={{ tags, removeTags, addTag, setTags, saveSelectedTags, removeSelectedTags }}
+      value={{
+        addTag,
+        removeTags,
+        tags,
+        setTags,
+        saveSelectedTags,
+        removeSelectedTags,
+        selectedTags
+      }}
     >
       {children}
     </FoodToppingsContext.Provider>

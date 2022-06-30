@@ -26,7 +26,7 @@ const Card = ({
     if (item) {
       removeFromCart(cItemId, cHeading.props.children)
     } else {
-      addToCart(cItemId, cHeading.props.children, cImg, cPrice, cDesc, cToppings)
+      addToCart(cItemId, cHeading.props.children, cImg, cPrice, cDesc)
     }
   }
 
@@ -52,22 +52,6 @@ const Card = ({
           {cToppings && cToppings.length ? (
             <div className='flex flex-wrap justify-center gap-6'>
               <span>الإضافات:</span>
-              {cToppings.map(topping => (
-                <div className='flex items-center gap-1.5' key={topping}>
-                  <input
-                    type='checkbox'
-                    id={topping}
-                    value={topping}
-                    className='w-6 h-6 cursor-pointer peer'
-                  />
-                  <label
-                    className='px-2 text-xs text-center border rounded cursor-pointer select-none md:text-base peer-checked:bg-orange-300 peer-checked:border-orange-800'
-                    htmlFor={topping}
-                  >
-                    {removeSlug(topping)}
-                  </label>
-                </div>
-              ))}
             </div>
           ) : null}
           {cCtaLabel ? (

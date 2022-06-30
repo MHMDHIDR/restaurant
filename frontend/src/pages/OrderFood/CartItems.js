@@ -1,6 +1,5 @@
 import { useContext } from 'react'
 import { CartContext } from '../../Contexts/CartContext'
-import { FoodToppingsContext } from '../../Contexts/FoodToppingsContext'
 
 import { removeSlug } from '../../functions/slug'
 
@@ -8,7 +7,6 @@ import Divider from '../../components/Divider'
 
 const CartItems = ({ setGrandPrice }) => {
   const { items, setItems, removeFromCart } = useContext(CartContext)
-  const { saveSelectedTags } = useContext(FoodToppingsContext)
 
   const MAX_QUANTITY = 100
 
@@ -16,7 +14,9 @@ const CartItems = ({ setGrandPrice }) => {
     items?.length > 0 &&
     items.map(item => (
       <div key={item.cItemId}>
-        <div className='grid items-center grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-5'>
+        <div
+          className={`grid items-center grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-6`}
+        >
           <img
             loading='lazy'
             src={item?.cImg}
@@ -31,22 +31,27 @@ const CartItems = ({ setGrandPrice }) => {
           </div>
           <div className='flex flex-col gap-2 space-y-3 text-xl select-none'>
             <h2 className='text-right ltr'>:الإضافات</h2>
-            {item?.cSelectedToppings.map(topping => (
-              <div className='flex items-center gap-1.5' key={topping}>
+            {/* {item?.cSelectedToppings.map((topping, idx) => (
+              <div className='flex items-center gap-1.5' key={idx}>
                 <input
                   type='checkbox'
-                  id={topping}
+                  id={createSlug(topping.name)}
                   value={topping}
                   className='w-6 h-6 cursor-pointer peer'
+                  onChange={e =>
+                    e.target.checked
+                      ? console.log(e.target.value + 'is checked :D')
+                      : console.log(e.target.value + 'unchecked')
+                  }
                 />
                 <label
                   className='px-2 text-base text-center border rounded cursor-pointer select-none peer-checked:bg-orange-300 peer-checked:border-orange-800'
                   htmlFor={topping}
                 >
-                  {removeSlug(topping)}
+                  {removeSlug(topping.name)}
                 </label>
               </div>
-            ))}
+            ))} */}
           </div>
           <div className='flex items-center justify-center gap-3 space-y-1 select-none lg:flex-col'>
             <h4 className='text-lg'>الكمية:</h4>
@@ -101,7 +106,7 @@ const CartItems = ({ setGrandPrice }) => {
               ❌
             </span>
             &nbsp;&nbsp;
-            <span className='mr-4 text-center pointer-events-none'>إحذف من السلة</span>
+            <span className='mr-4 text-sm pointer-events-none'>إحذف من السلة</span>
           </button>
         </div>
         <Divider />

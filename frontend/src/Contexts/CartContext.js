@@ -4,11 +4,19 @@ export const CartContext = createContext()
 const CartContextProvider = ({ children }) => {
   const [items, setItems] = useState([])
 
-  //add items to card add the details like: cHeading, cImg, cPrice, cDesc, cSelectedToppings, cQuantity: 1
-  const addToCart = (cItemId, cHeading, cImg, cPrice, cDesc, cSelectedToppings) => {
+  //add items to card add the details like: cHeading, cImg, cPrice, cDesc, cQuantity: 1
+  const addToCart = (cItemId, cHeading, cImg, cPrice, cDesc) => {
     setItems([
       ...items,
-      { cItemId, cHeading, cImg, cPrice, cDesc, cSelectedToppings, cQuantity: 1 }
+      {
+        cItemId,
+        cHeading,
+        cImg,
+        cPrice,
+        cDesc,
+        cQuantity: 1
+        //: selectedTags.filter(item => item.id === cItemId)
+      }
     ])
   }
 
@@ -18,6 +26,9 @@ const CartContextProvider = ({ children }) => {
       setItems(items.filter(item => item.cItemId !== cItemId))
     }
   }
+
+  //This takes the selected tags from the food toppings context and adds them to the specific item in the cart
+  // console.log('selectedTags=> ', selectedTags)
 
   return (
     <CartContext.Provider
