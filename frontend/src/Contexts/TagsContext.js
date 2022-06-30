@@ -1,8 +1,8 @@
 import { useState, createContext } from 'react'
 
-export const FoodToppingsContext = createContext()
+export const TagsContext = createContext()
 
-const FoodToppingsContextProvider = ({ children }) => {
+const TagsContextProvider = ({ children }) => {
   const [tags, setTags] = useState([])
   const [selectedTags, setSelectedTags] = useState([])
 
@@ -27,7 +27,7 @@ const FoodToppingsContextProvider = ({ children }) => {
   }
 
   return (
-    <FoodToppingsContext.Provider
+    <TagsContext.Provider
       value={{
         addTag,
         removeTags,
@@ -39,8 +39,8 @@ const FoodToppingsContextProvider = ({ children }) => {
       }}
     >
       {children}
-    </FoodToppingsContext.Provider>
+    </TagsContext.Provider>
   )
 }
 
-export default FoodToppingsContextProvider
+export default TagsContextProvider

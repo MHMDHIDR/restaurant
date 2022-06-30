@@ -26,9 +26,11 @@ const Card = ({
     if (item) {
       removeFromCart(cItemId, cHeading.props.children)
     } else {
-      addToCart(cItemId, cHeading.props.children, cImg, cPrice, cDesc)
+      addToCart(cItemId, cHeading.props.children, cImg, cPrice, cDesc, cToppings)
     }
   }
+
+  let itemPrice = cPrice
 
   return (
     <div className='mb-32'>
@@ -44,14 +46,39 @@ const Card = ({
             </h3>
           ) : null}
           {cPrice ? (
-            <span className='px-3 py-1 text-green-800 bg-green-300 rounded-xl bg-opacity-80'>
+            <span className='px-3 py-1 text-xl text-green-800 bg-green-300 rounded-xl bg-opacity-80'>
               {cPrice + ' ر.ق'}
             </span>
           ) : null}
           <p className='py-8 break-all'>{cDesc}</p>
           {cToppings && cToppings.length ? (
-            <div className='flex flex-wrap justify-center gap-6'>
+            <div className='flex flex-col flex-wrap items-start gap-4'>
               <span>الإضافات:</span>
+              {cToppings.map(({ name, price }, idx) => {
+                const cToppingId = cItemId + idx
+                return (
+                  <div className='flex items-center' key={cToppingId}>
+                    <input
+                      type='checkbox'
+                      id={cToppingId}
+                      value={name}
+                      className='cursor-pointer min-w-[1.5rem] min-h-[1.5rem]'
+                    />
+                    <label
+                      htmlFor={cToppingId}
+                      className='cursor-pointer p-1.5 text-base rounded-md select-none'
+                    >
+                      {name}
+                    </label>
+                    <label
+                      htmlFor={cToppingId}
+                      className='px-3 py-1 mr-2 -ml-2 text-base text-green-800 bg-green-300 rounded-md cursor-pointer bg-opacity-80 min-w-fit'
+                    >
+                      {price + ' ر.ق'}
+                    </label>
+                  </div>
+                )
+              })}
             </div>
           ) : null}
           {cCtaLabel ? (

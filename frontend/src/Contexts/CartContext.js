@@ -4,8 +4,8 @@ export const CartContext = createContext()
 const CartContextProvider = ({ children }) => {
   const [items, setItems] = useState([])
 
-  //add items to card add the details like: cHeading, cImg, cPrice, cDesc, cQuantity: 1
-  const addToCart = (cItemId, cHeading, cImg, cPrice, cDesc) => {
+  //add items to card add the details like: cHeading, cImg, cPrice, cDesc, cToppings, cQuantity: 1
+  const addToCart = (cItemId, cHeading, cImg, cPrice, cDesc, cToppings) => {
     setItems([
       ...items,
       {
@@ -14,6 +14,7 @@ const CartContextProvider = ({ children }) => {
         cImg,
         cPrice,
         cDesc,
+        cToppings,
         cQuantity: 1
         //: selectedTags.filter(item => item.id === cItemId)
       }

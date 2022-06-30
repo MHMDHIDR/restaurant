@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useContext } from 'react'
 import { Link } from 'react-router-dom'
 import Axios from 'axios'
 
-import { FoodToppingsContext } from '../../../Contexts/FoodToppingsContext'
+import { TagsContext } from '../../../Contexts/TagsContext'
 
 import useDocumentTitle from '../../../hooks/useDocumentTitle'
 import useAxios from '../../../hooks/useAxios'
@@ -31,7 +31,7 @@ const AddFood = () => {
   const [categoryList, setCategoryList] = useState([])
 
   //Contexts
-  const { tags } = useContext(FoodToppingsContext)
+  const { tags } = useContext(TagsContext)
 
   //Form errors messages
   const ImgErr = useRef(null)

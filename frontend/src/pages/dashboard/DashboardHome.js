@@ -13,6 +13,8 @@ import DashboardNav from '../../components/dashboard/DashboardNav'
 import DashboardSidebar from '../../components/dashboard/DashboardSidebar'
 
 const DashboardHome = () => {
+  useDocumentTitle('Home')
+
   //getting user id from local storage
   const USER_ID = 'user' in localStorage && JSON.parse(localStorage.getItem('user'))._id
 
@@ -30,7 +32,6 @@ const DashboardHome = () => {
     }
   }, [response.response])
 
-  useDocumentTitle('Home')
   document.body.classList.add('dashboard')
 
   useEventListener('keydown', e => e.key === 'Escape' && menuToggler())

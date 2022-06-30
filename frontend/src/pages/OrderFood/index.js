@@ -103,10 +103,14 @@ const OrderFood = () => {
               <form method='POST' onSubmit={handleCollectOrder}>
                 <Link
                   to='/view'
-                  className='block p-2 mx-auto my-10 text-xl transition-colors bg-orange-200 rounded-md w-fit hover:bg-orange-300 dark:text-orange-900'
+                  className='relative pr-10 block p-2 mx-auto my-10 text-xl text-gray-900 bg-orange-400 border group border-orange-700 hover:bg-orange-500 transition-colors rounded-md w-[20rem] lg:w-[25rem]'
                 >
+                  <span className='absolute inline-flex justify-center pt-3.5 ml-3 transition-all bg-white border border-orange-700 rounded-full -top-1.5 w-14 h-14 group-hover:right-2 right-6'>
+                    🛒
+                  </span>
                   تصفح وجبات أخرى
                 </Link>
+
                 <h2 className='mb-10 text-2xl'>يرجى إضافة تفاصيل الطلب</h2>
                 <label htmlFor='name' className='form__group'>
                   <input

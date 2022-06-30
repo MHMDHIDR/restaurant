@@ -15,7 +15,7 @@ const CartItems = ({ setGrandPrice }) => {
     items.map(item => (
       <div key={item.cItemId}>
         <div
-          className={`grid items-center grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-6`}
+          className={`grid items-center grid-cols-2 gap-x-20 md:grid-cols-2 lg:grid-cols-4`}
         >
           <img
             loading='lazy'
@@ -26,35 +26,100 @@ const CartItems = ({ setGrandPrice }) => {
             className='object-cover w-32 h-32 p-1 mx-auto border border-gray-400 dark:border-gray-300 rounded-xl'
           />
           <div className='flex flex-col gap-2 space-y-3 select-none'>
-            <h2 className='text-xl text-center'>{removeSlug(item?.cHeading)}</h2>
-            <p className='text-lg'>{item?.cDesc}</p>
+            <h2 className='text-xl font-semibold text-center underline underline-offset-8'>
+              {removeSlug(item?.cHeading)}
+            </h2>
+            <p>{item?.cDesc}</p>
           </div>
-          <div className='flex flex-col gap-2 space-y-3 text-xl select-none'>
-            <h2 className='text-right ltr'>:الإضافات</h2>
-            {/* {item?.cSelectedToppings.map((topping, idx) => (
-              <div className='flex items-center gap-1.5' key={idx}>
-                <input
-                  type='checkbox'
-                  id={createSlug(topping.name)}
-                  value={topping}
-                  className='w-6 h-6 cursor-pointer peer'
-                  onChange={e =>
-                    e.target.checked
-                      ? console.log(e.target.value + 'is checked :D')
-                      : console.log(e.target.value + 'unchecked')
-                  }
-                />
-                <label
-                  className='px-2 text-base text-center border rounded cursor-pointer select-none peer-checked:bg-orange-300 peer-checked:border-orange-800'
-                  htmlFor={topping}
-                >
-                  {removeSlug(topping.name)}
-                </label>
+          {item?.cToppings?.length > 0 && (
+            <>
+              <div className='flex flex-col items-center gap-2 space-y-3 text-xl select-none md:items-start'>
+                <h2 className='text-center ltr'>الإضافات</h2>
+                {item?.cToppings?.map(({ name, price }, idx) => {
+                  const cToppingId = item.cItemId + idx
+                  return (
+                    <div className='flex items-center' key={cToppingId}>
+                      <input
+                        type='checkbox'
+                        id={cToppingId}
+                        value={name}
+                        className='cursor-pointer min-w-[1.5rem] min-h-[1.5rem]'
+                      />
+                      <label
+                        htmlFor={cToppingId}
+                        className='cursor-pointer p-1.5 text-base rounded-md select-none'
+                      >
+                        {name}
+                      </label>
+                      <label
+                        htmlFor={cToppingId}
+                        className='px-3 py-1 mr-2 -ml-2 text-base text-green-800 bg-green-300 rounded-md cursor-pointer bg-opacity-80 min-w-fit'
+                      >
+                        {price + ' ر.ق'}
+                      </label>
+                    </div>
+                  )
+                })}
               </div>
-            ))} */}
-          </div>
-          <div className='flex items-center justify-center gap-3 space-y-1 select-none lg:flex-col'>
-            <h4 className='text-lg'>الكمية:</h4>
+              <div className='flex flex-col items-center gap-2 space-y-3 text-xl select-none md:items-start'>
+                <h2 className='text-center ltr'>كمية الإضافات</h2>
+                {item?.cToppings?.map(({ name, price }, idx) => {
+                  const cToppingId = item.cItemId + idx
+                  return (
+                    <div
+                      key={cToppingId}
+                      className='flex gap-2 select-none justify-evenly'
+                    >
+                      <button
+                        className='quantity-btn number-hover'
+                        onClick={
+                          //onClick function to increase the quantity of topping to the specific item in the cart
+                          () => {
+                            if (item.cQuantity < MAX_QUANTITY) {
+                              setItems(
+                                items.map(item => {
+                                  if (item.cItemId === item.cItemId) {
+                                    item.cQuantity++
+                                  }
+                                  return item
+                                })
+                              )
+                            }
+                          }
+                        }
+                      >
+                        +
+                      </button>
+                      <span className='order-1 text-lg font-bold quantity-btn lg:-order-none'>
+                        {item.cQuantity}
+                      </span>
+                      <button
+                        className='quantity-btn number-hover'
+                        //onClick function to Decrement the quantity of topping to the specific item in the cart
+                        onClick={() => {
+                          if (item.cQuantity > 1) {
+                            setItems(
+                              items.map(item => {
+                                if (item.cItemId === item.cItemId) {
+                                  item.cQuantity--
+                                }
+                                return item
+                              })
+                            )
+                          }
+                        }}
+                      >
+                        -
+                      </button>
+                    </div>
+                  )
+                })}
+              </div>
+            </>
+          )}
+
+          <div className='flex items-center justify-center space-y-1 select-none lg:flex-col'>
+            <h2 className='text-xl text-center ltr'>الكمية</h2>
             <span className='order-1 text-lg font-bold quantity-btn lg:-order-none'>
               {item.cQuantity}
             </span>
@@ -94,8 +159,11 @@ const CartItems = ({ setGrandPrice }) => {
             </div>
           </div>
           <span className='p-1 mx-auto text-sm text-green-800 bg-green-300 border border-green-800 rounded-md select-none w-fit'>
-            السعر :&nbsp;
-            <strong>{item?.cPrice * item.cQuantity}</strong>
+            <span>
+              سعر الوجبة مع حساب الإضافات والكمية للإضافات والوجبة :&nbsp;
+              <br />
+            </span>
+            <strong className='text-lg'>{item?.cPrice * item.cQuantity}</strong>
             &nbsp;ر.ق
           </span>
           <button

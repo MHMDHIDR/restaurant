@@ -1,8 +1,8 @@
 import { useContext } from 'react'
-import { FoodToppingsContext } from '../Contexts/FoodToppingsContext'
+import { TagsContext } from '../Contexts/TagsContext'
 
-const AddTags = () => {
-  const { tags, removeTags, addTag } = useContext(FoodToppingsContext)
+const AddTags = ({ inputId }) => {
+  const { tags, removeTags, addTag } = useContext(TagsContext)
 
   return (
     <>
@@ -27,7 +27,7 @@ const AddTags = () => {
       </ul>
       <input
         type='text'
-        id='foodToppings'
+        id={inputId}
         className='form__input tags'
         onKeyDown={e => {
           if (e.target.value.trim() !== '') {

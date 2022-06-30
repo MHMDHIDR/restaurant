@@ -9,7 +9,7 @@ import { Success, Error, Loading } from '../../components/Icons/Status'
 import { LoadingSpinner } from '../../components/Loading'
 
 const About = () => {
-  useDocumentTitle('About Tag Line')
+  useDocumentTitle('App Settings')
 
   //Description Form States
   const [appDesc, setAppDesc] = useState('')
@@ -200,7 +200,7 @@ const About = () => {
               ></span>
             </label>
 
-            <div className='mx-0 mt-4 mb-12 text-center'>
+            <div className='mx-0 mt-4 mb-6 text-center'>
               <h3 className='mb-10 text-lg'>تصنيفات الوجبات</h3>
               <div className='flex justify-evenly'>
                 <span>اسم التصنيف بالانجليزي</span>

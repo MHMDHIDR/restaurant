@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useContext } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import Axios from 'axios'
 
-import { FoodToppingsContext } from '../../../Contexts/FoodToppingsContext'
+// import { TagsContext } from '../../../Contexts/TagsContext'
 
 import useDocumentTitle from '../../../hooks/useDocumentTitle'
 import useEventListener from '../../../hooks/useEventListener'
@@ -25,6 +25,7 @@ const EditFood = () => {
   const [deleteFoodStatus, setDeleteFoodStatus] = useState()
   const [data, setData] = useState('')
   const [categoryList, setCategoryList] = useState([])
+  const [toppings, setToppings] = useState({})
 
   //Form States
   const [foodName, setFoodName] = useState('')
@@ -38,7 +39,7 @@ const EditFood = () => {
   const [updatedFoodStatus, setUpdatedFoodStatus] = useState()
 
   //Contexts
-  const { tags, setTags } = useContext(FoodToppingsContext)
+  // const { tags, setTags } = useContext(TagsContext)
 
   //Form errors messages
   const ImgErr = useRef(null)
@@ -70,6 +71,7 @@ const EditFood = () => {
     if (foodData?.response?.response !== null && categories?.response !== null) {
       setData(foodData?.response?.response)
       setCategoryList(categories?.response?.CategoryList)
+      setToppings(foodData?.response?.response?.foodToppings)
     }
   }, [foodData?.response?.response, categories?.response])
 
@@ -121,6 +123,7 @@ const EditFood = () => {
 
   const handleUpdateFood = async e => {
     if (e.key === 'Enter') {
+      //don't submit the form if Enter is pressed
       e.preventDefault()
     } else {
       //initial form values if no value was updated taking it from [0] index
@@ -139,7 +142,7 @@ const EditFood = () => {
       formData.append('foodPrice', foodPrice || currentFoodPrice)
       formData.append('category', category[0] || currentCategory)
       formData.append('foodDesc', foodDesc || currentFoodDesc)
-      formData.append('foodToppings', JSON.stringify(tags))
+      // formData.append('foodToppings', JSON.stringify(tags))
       formData.append('foodImg', foodFile)
       formData.append('prevFoodImgPath', prevFoodImgPath)
       formData.append('prevFoodImgName', prevFoodImgName)
@@ -189,9 +192,29 @@ const EditFood = () => {
     }
   }
 
-  useEffect(() => {
-    data && setTags(data?.foodToppings)
-  }, [data, setTags])
+  // handle input change
+  const handleInputChange = (e, index, otherValue) => {
+    const { name, value } = e.target
+    const list = [...toppings]
+    list[index] = name === 'categoryValue' ? [otherValue, value] : [value, otherValue]
+
+    setToppings(list)
+  }
+
+  // handle click event of the Add button
+  const handleAddClick = () => {
+    setToppings([...toppings, { name: '', price: 1 }])
+  }
+
+  const handleRemoveClick = index => {
+    const list = [...toppings]
+    list.splice(index, 1)
+    setToppings(list)
+  }
+
+  // useEffect(() => {
+  //   data && setTags(data?.foodToppings)
+  // }, [data, setTags])
 
   return (
     <>
@@ -370,12 +393,71 @@ const EditFood = () => {
                     ></span>
                   </label>
 
-                  <label htmlFor='foodToppings' className='form__group'>
-                    <AddTags />
+                  <label htmlFor='foodTags' className='form__group'>
+                    <AddTags inputId='foodTags' />
                     <span className='form__label'>
-                      الرجاء ادخال الإضافات الخاصة بالوجبة والضغط على زر Enter (اختياري)
+                      علامات تصنيفية تساعد في عملية البحث عن الوجبة (Tags) - هذا الحقل
+                      اختياري
                     </span>
                   </label>
+
+                  <div className='mx-0 mt-4 mb-6 text-center'>
+                    <h3 className='mb-10 text-xl'>الإضافات - Toppings</h3>
+                    <div className='flex justify-around'>
+                      <span className='text-xl'>الإضافة</span>
+                      <span className='text-xl'>السعر (ر.ق)</span>
+                    </div>
+                  </div>
+                  {toppings?.map(({ name, price }, idx) => (
+                    <label className='mb-4 space-y-2' key={idx}>
+                      <div className='flex gap-4 justify-evenly'>
+                        <input
+                          type='text'
+                          id='toppingName'
+                          min='5'
+                          max='500'
+                          onChange={e => handleInputChange(e, idx, name)}
+                          className='w-2/4 p-3 text-xl text-gray-700 bg-transparent border-2 border-gray-500 border-solid rounded-lg outline-none focus-within:border-orange-500 dark:focus-within:border-gray-400 dark:text-gray-200'
+                          dir='auto'
+                          name='ToppingName'
+                          defaultValue={name}
+                          required
+                        />
+                        <input
+                          type='number'
+                          id='toppingPrice'
+                          min='1'
+                          max='500'
+                          onChange={e => handleInputChange(e, idx, price)}
+                          className='w-2/4 p-3 text-xl text-gray-700 bg-transparent border-2 border-gray-500 border-solid rounded-lg outline-none focus-within:border-orange-500 dark:focus-within:border-gray-400 dark:text-gray-200 rtl'
+                          dir='auto'
+                          name='ToppingPrice'
+                          defaultValue={price}
+                          required
+                        />
+                      </div>
+                      <div className='flex gap-4 pb-6'>
+                        {toppings.length !== 1 && (
+                          <button
+                            tooltip='حذف الإضافة'
+                            className='px-5 py-2 text-white transition-colors bg-red-500 rounded-lg w-fit hover:bg-red-600'
+                            onClick={() => handleRemoveClick(idx)}
+                          >
+                            -
+                          </button>
+                        )}
+                        {toppings.length - 1 === idx && (
+                          <button
+                            tooltip='إضافة جديدة'
+                            className='px-5 py-2 text-white transition-colors bg-blue-500 rounded-lg w-fit hover:bg-blue-600'
+                            onClick={handleAddClick}
+                          >
+                            +
+                          </button>
+                        )}
+                      </div>
+                    </label>
+                  ))}
 
                   <div
                     className='my-14 inline-block md:text-2xl text-red-600 dark:text-red-400 font-[600] py-2 px-1'

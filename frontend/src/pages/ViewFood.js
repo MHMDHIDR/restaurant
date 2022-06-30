@@ -66,7 +66,7 @@ const ViewFood = () => {
           </h2>
 
           {data ?? data !== undefined ? (
-            // if data.length gives a numner that means there are Multiple food items
+            // if data.length gives a number that means there are Multiple food items
             data?.response?.length > 0 ? (
               <Suspense fallback={<LoadingCard />}>
                 {data?.response?.map(item => (
@@ -80,6 +80,7 @@ const ViewFood = () => {
                     }
                     cPrice={item.foodPrice}
                     cDesc={abstractText(item.foodDesc, 120)}
+                    cToppings={item.foodToppings}
                     cImg={item.foodImgDisplayPath}
                     cImgAlt={item.foodName}
                     cCtaLabel={
@@ -135,10 +136,7 @@ const ViewFood = () => {
                   }
                   cPrice={data?.response?.foodPrice}
                   cDesc={data?.response?.foodDesc}
-                  cToppings={data?.response?.foodToppings?.map(topping => ({
-                    name: topping,
-                    checked: false
-                  }))}
+                  cToppings={data?.response?.foodToppings}
                   cImg={data?.response?.foodImgDisplayPath}
                   cImgAlt={data?.response?.foodName}
                   cCtaLabel={
