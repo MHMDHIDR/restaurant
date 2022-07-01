@@ -52,27 +52,27 @@ const CartItems = ({ setGrandPrice }) => {
             <div className='flex flex-col items-center justify-around gap-y-10 xl:gap-x-5 sm:flex-row'>
               <div className='flex flex-col gap-2 text-lg select-none md:items-start'>
                 <h2 className='text-center ltr'>الإضافات</h2>
-                {item?.cToppings?.map(({ name, price }, idx) => {
+                {item?.cToppings?.map(({ ToppingName, ToppingPrice }, idx) => {
                   const cToppingId = item.cItemId + idx
                   return (
                     <div className='flex items-center' key={cToppingId}>
                       <input
                         type='checkbox'
                         id={cToppingId}
-                        value={name}
+                        value={ToppingName}
                         className='cursor-pointer min-w-[1.5rem] min-h-[1.5rem]'
                       />
                       <label
                         htmlFor={cToppingId}
                         className='cursor-pointer p-1.5 text-base rounded-md select-none'
                       >
-                        {name}
+                        {ToppingName}
                       </label>
                       <label
                         htmlFor={cToppingId}
                         className='px-3 py-1 mr-2 -ml-2 text-base text-green-800 bg-green-300 rounded-md cursor-pointer bg-opacity-80 min-w-fit'
                       >
-                        {price + ' ر.ق'}
+                        {ToppingPrice + ' ر.ق'}
                       </label>
                     </div>
                   )
@@ -81,7 +81,7 @@ const CartItems = ({ setGrandPrice }) => {
 
               <div className='flex flex-col gap-2 text-lg select-none md:items-start'>
                 <h2 className='text-center ltr'>كمية الإضافات</h2>
-                {item?.cToppings?.map(({ name, price }, idx) => {
+                {item?.cToppings?.map((topping, idx) => {
                   const cToppingId = item.cItemId + idx
                   return (
                     <div key={cToppingId} className='flex gap-1 select-none'>
@@ -93,7 +93,7 @@ const CartItems = ({ setGrandPrice }) => {
                             if (item.cQuantity < MAX_QUANTITY) {
                               setItems(
                                 items.map(item => {
-                                  if (item.cItemId === item.cItemId) {
+                                  if (item.cItemId === cToppingId.slice(0, -1)) {
                                     item.cQuantity++
                                   }
                                   return item
@@ -115,7 +115,7 @@ const CartItems = ({ setGrandPrice }) => {
                           if (item.cQuantity > 1) {
                             setItems(
                               items.map(item => {
-                                if (item.cItemId === item.cItemId) {
+                                if (item.cItemId === cToppingId.slice(0, -1)) {
                                   item.cQuantity--
                                 }
                                 return item

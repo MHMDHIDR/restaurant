@@ -121,8 +121,6 @@ const EditFood = () => {
     }
   }, [foodFile])
 
-  console.log(toppings)
-
   const handleUpdateFood = async e => {
     if (e.key === 'Enter') {
       //don't submit the form if Enter is pressed

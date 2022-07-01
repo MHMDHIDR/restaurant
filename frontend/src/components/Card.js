@@ -30,8 +30,6 @@ const Card = ({
     }
   }
 
-  let itemPrice = cPrice
-
   return (
     <div className='mb-32'>
       {cTitle ? <h2 className='text-center card__title'>{cTitle}</h2> : ''}
@@ -54,27 +52,27 @@ const Card = ({
           {cToppings && cToppings.length ? (
             <div className='flex flex-col flex-wrap items-start gap-4'>
               <span>الإضافات:</span>
-              {cToppings.map(({ name, price }, idx) => {
+              {cToppings.map(({ ToppingName, ToppingPrice }, idx) => {
                 const cToppingId = cItemId + idx
                 return (
                   <div className='flex items-center' key={cToppingId}>
                     <input
                       type='checkbox'
                       id={cToppingId}
-                      value={name}
+                      value={ToppingName}
                       className='cursor-pointer min-w-[1.5rem] min-h-[1.5rem]'
                     />
                     <label
                       htmlFor={cToppingId}
                       className='cursor-pointer p-1.5 text-base rounded-md select-none'
                     >
-                      {name}
+                      {ToppingName}
                     </label>
                     <label
                       htmlFor={cToppingId}
                       className='px-3 py-1 mr-2 -ml-2 text-base text-green-800 bg-green-300 rounded-md cursor-pointer bg-opacity-80 min-w-fit'
                     >
-                      {price + ' ر.ق'}
+                      {ToppingPrice + ' ر.ق'}
                     </label>
                   </div>
                 )
