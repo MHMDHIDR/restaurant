@@ -33,10 +33,15 @@ const CartItems = ({ setGrandPrice }) => {
             className='object-cover w-32 h-32 p-1 mx-auto border border-gray-400 min-w-fit min-h-fit aspect-square dark:border-gray-300 rounded-xl'
           />
 
+          {/* ====== TESTING ====== */}
+          {console.log(item?.cToppings.length)}
+          {/* ====== TESTING ====== */}
+
           {/* Product Details */}
           <div
-            className={`flex flex-col gap-2 space-y-3 select-none
-            
+            className={`
+            flex flex-col gap-2 space-y-3 select-none
+            ${item?.cToppings?.length === 0 && 'xl:col-start-2 xl:col-end-4'}
           `}
           >
             <h2 className='text-lg font-semibold text-center underline underline-offset-8'>
@@ -47,7 +52,7 @@ const CartItems = ({ setGrandPrice }) => {
 
           {/* Product Toppings and it's Quantity */}
           {item?.cToppings?.length > 0 && (
-            <div className='flex flex-col items-center justify-evenly sm:flex-row'>
+            <div className='flex flex-col items-center gap-y-10 justify-evenly sm:flex-row'>
               <div className='flex flex-col gap-2 text-lg select-none md:items-start'>
                 <h2 className='text-center ltr'>الإضافات</h2>
                 {item?.cToppings?.map(({ name, price }, idx) => {
@@ -132,7 +137,15 @@ const CartItems = ({ setGrandPrice }) => {
           )}
 
           {/* Product Quantity */}
-          <div className='flex items-center justify-center space-y-1 select-none lg:flex-col'>
+          <div
+            className={`
+              flex items-center justify-center space-y-1 select-none lg:flex-col
+              ${
+                item?.cToppings?.length === 0 &&
+                'lg:col-start-2 lg:col-end-4 xl:col-start-auto xl:col-end-auto'
+              }
+            `}
+          >
             <h2 className='text-lg text-center ltr'>عدد الوجبات</h2>
             <span className='order-1 text-lg font-bold quantity-btn lg:-order-none'>
               {item.cQuantity}
@@ -174,7 +187,12 @@ const CartItems = ({ setGrandPrice }) => {
           </div>
 
           {/* Product Price */}
-          <span className='p-3 mx-auto text-sm text-green-800 bg-green-300 border border-green-800 rounded-md select-none w-fit'>
+          <span
+            className={`
+            p-3 mx-auto text-sm text-green-800 bg-green-300 border border-green-800 rounded-md select-none w-fit
+            ${item?.cToppings?.length === 0 && 'lg:row-start-3 lg:row-end-4'}
+          `}
+          >
             <span>سعر الوجبة مع حساب الإضافات والكمية للإضافات والوجبة :&nbsp;</span>
             <strong className='text-lg'>{item?.cPrice * item.cQuantity}</strong>
             &nbsp;ر.ق
@@ -182,7 +200,11 @@ const CartItems = ({ setGrandPrice }) => {
 
           {/* Product Remove from Cart Button */}
           <button
-            className='relative rtl m-2 min-w-[7.5rem] text-white py-1.5 px-6 rounded-lg bg-red-800 hover:bg-red-700'
+            className={`
+              relative rtl m-2 min-w-[7.5rem] text-white py-1.5 px-6 rounded-lg bg-red-800 hover:bg-red-700
+              xl:col-start-3 xl:col-end-5
+              ${item?.cToppings?.length === 0 && 'lg:row-start-3 lg:row-end-4'}
+            `}
             onClick={() => removeFromCart(item.cItemId, item.cHeading)}
           >
             <span className='py-0.5 px-1 pr-1.5 bg-gray-100 rounded-md absolute right-1 top-1 pointer-events-none'>
