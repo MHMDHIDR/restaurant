@@ -6,8 +6,9 @@ const AWS = require('aws-sdk')
 const s3 = new AWS.S3()
 
 const addFood = asyncHandler(async (req, res) => {
-  const { foodName, foodPrice, category, foodDesc, foodToppings } = req.body
+  const { foodName, foodPrice, category, foodDesc, foodToppings, foodTags } = req.body
   const toppings = JSON.parse(foodToppings)
+  const tags = JSON.parse(foodTags)
   const { foodImg } = req.files
   const foodImgName = uuidv4() + foodImg.name.split('.')[0] + '.webp'
 
@@ -20,7 +21,8 @@ const addFood = asyncHandler(async (req, res) => {
     foodPrice,
     category,
     foodDesc,
-    foodToppings: toppings
+    foodToppings: toppings,
+    foodTags: tags
   })
 
   sharp(foodImg.data)
@@ -114,11 +116,13 @@ const updateFood = asyncHandler(async (req, res) => {
     foodPrice,
     foodDesc,
     foodToppings,
+    foodTags,
     category,
     prevFoodImgPath,
     prevFoodImgName
   } = req.body
   const toppings = JSON.parse(foodToppings)
+  const tags = JSON.parse(foodTags)
   const { foodId } = req.params
   const updatedAt = Date.now()
 
@@ -176,6 +180,7 @@ const updateFood = asyncHandler(async (req, res) => {
               category,
               foodDesc,
               foodToppings: toppings,
+              foodTags: tags,
               updatedAt
             })
             res.json({
@@ -204,6 +209,7 @@ const updateFood = asyncHandler(async (req, res) => {
       category,
       foodDesc,
       foodToppings: toppings,
+      foodTags: tags,
       updatedAt
     })
     res.json({

@@ -21,6 +21,7 @@ const CartItems = ({ setGrandPrice }) => {
             xl:grid-cols-3
             2xl:grid-cols-4
             gap-y-10
+            gap-x-5
           `}
         >
           {/* Product Image */}
@@ -32,10 +33,6 @@ const CartItems = ({ setGrandPrice }) => {
             height='128'
             className='object-cover w-32 h-32 p-1 mx-auto border border-gray-400 min-w-fit min-h-fit aspect-square dark:border-gray-300 rounded-xl'
           />
-
-          {/* ====== TESTING ====== */}
-          {console.log(item?.cToppings.length)}
-          {/* ====== TESTING ====== */}
 
           {/* Product Details */}
           <div
@@ -52,7 +49,7 @@ const CartItems = ({ setGrandPrice }) => {
 
           {/* Product Toppings and it's Quantity */}
           {item?.cToppings?.length > 0 && (
-            <div className='flex flex-col items-center gap-y-10 justify-evenly sm:flex-row'>
+            <div className='flex flex-col items-center justify-around gap-y-10 xl:gap-x-5 sm:flex-row'>
               <div className='flex flex-col gap-2 text-lg select-none md:items-start'>
                 <h2 className='text-center ltr'>الإضافات</h2>
                 {item?.cToppings?.map(({ name, price }, idx) => {
@@ -139,7 +136,7 @@ const CartItems = ({ setGrandPrice }) => {
           {/* Product Quantity */}
           <div
             className={`
-              flex items-center justify-center space-y-1 select-none lg:flex-col
+              flex items-center justify-center space-y-1 select-none flex-col
               ${
                 item?.cToppings?.length === 0 &&
                 'lg:col-start-2 lg:col-end-4 xl:col-start-auto xl:col-end-auto'
@@ -147,9 +144,7 @@ const CartItems = ({ setGrandPrice }) => {
             `}
           >
             <h2 className='text-lg text-center ltr'>عدد الوجبات</h2>
-            <span className='order-1 text-lg font-bold quantity-btn lg:-order-none'>
-              {item.cQuantity}
-            </span>
+            <span className='text-lg font-bold quantity-btn'>{item.cQuantity}</span>
             <div className='flex gap-2 select-none justify-evenly'>
               <button
                 className='quantity-btn number-hover'
@@ -190,6 +185,7 @@ const CartItems = ({ setGrandPrice }) => {
           <span
             className={`
             p-3 mx-auto text-sm text-green-800 bg-green-300 border border-green-800 rounded-md select-none w-fit
+            xl:col-start-1 xl:col-end-3
             ${item?.cToppings?.length === 0 && 'lg:row-start-3 lg:row-end-4'}
           `}
           >

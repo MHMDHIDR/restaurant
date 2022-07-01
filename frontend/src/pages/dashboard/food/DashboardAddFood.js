@@ -29,6 +29,7 @@ const AddFood = () => {
   const [addFoodStatus, setAddFoodStatus] = useState()
   const [addFoodMessage, setAddFoodMessage] = useState()
   const [categoryList, setCategoryList] = useState([])
+  const [toppings, setToppings] = useState([{}])
 
   //Contexts
   const { tags } = useContext(TagsContext)
@@ -98,7 +99,8 @@ const AddFood = () => {
     formData.append('foodPrice', foodPrice)
     formData.append('category', category[0])
     formData.append('foodDesc', foodDesc)
-    formData.append('foodToppings', JSON.stringify(tags))
+    formData.append('foodToppings', JSON.stringify(toppings))
+    formData.append('foodTags', JSON.stringify(tags))
     formData.append('foodImg', foodFile)
 
     if (
@@ -127,6 +129,23 @@ const AddFood = () => {
       formMsg.current.textContent =
         'الرجاء إضافة بيانات الوجبة بصورة صحيحة لتستطيع إضافتها 😃'
     }
+  }
+
+  const handleInputChange = (e, index) => {
+    const { name, value } = e.target
+    const newToppings = [...toppings]
+    newToppings[index][name] = value
+    setToppings(newToppings)
+  }
+
+  const handleAddClick = () => {
+    setToppings([...toppings, {}])
+  }
+
+  const handleRemoveClick = index => {
+    const list = [...toppings]
+    list.splice(index, 1)
+    setToppings(list)
   }
 
   return (
@@ -294,12 +313,73 @@ const AddFood = () => {
                   ></span>
                 </label>
 
-                <label htmlFor='foodToppings' className='form__group'>
-                  <AddTags />
+                <label htmlFor='foodTags' className='form__group'>
+                  <AddTags inputId='foodTags' />
                   <span className='form__label'>
-                    الرجاء ادخال الإضافات الخاصة بالوجبة والضغط على زر Enter (اختياري)
+                    علامات تصنيفية تساعد في عملية البحث عن الوجبة (Tags) - هذا الحقل
+                    اختياري
                   </span>
                 </label>
+
+                <div className='mx-0 mt-4 mb-6 text-center'>
+                  <h3 className='mb-10 text-xl'>الإضافات - Toppings (اختياري)</h3>
+                  <div className='flex justify-around'>
+                    <span className='text-xl'>الإضافة</span>
+                    <span className='text-xl'>السعر (ر.ق)</span>
+                  </div>
+                </div>
+                {toppings?.map(({ ToppingName, ToppingPrice }, idx) => (
+                  <label className='block space-y-2' key={idx}>
+                    <div className='flex gap-4 justify-evenly'>
+                      <input
+                        type='text'
+                        id='toppingName'
+                        min='5'
+                        max='500'
+                        className='w-2/4 p-3 text-xl text-gray-700 bg-transparent border-2 border-gray-500 border-solid rounded-lg outline-none focus-within:border-orange-500 dark:focus-within:border-gray-400 dark:text-gray-200'
+                        dir='auto'
+                        name='ToppingName'
+                        defaultValue={ToppingName}
+                        onChange={e => handleInputChange(e, idx)}
+                        required
+                      />
+                      <input
+                        type='number'
+                        id='toppingPrice'
+                        min='1'
+                        max='500'
+                        className='w-2/4 p-3 text-xl text-gray-700 bg-transparent border-2 border-gray-500 border-solid rounded-lg outline-none focus-within:border-orange-500 dark:focus-within:border-gray-400 dark:text-gray-200 rtl'
+                        dir='auto'
+                        name='ToppingPrice'
+                        defaultValue={ToppingPrice}
+                        onChange={e => handleInputChange(e, idx)}
+                        required
+                      />
+                    </div>
+                    <div className='flex gap-4 pb-6'>
+                      {toppings.length !== 1 && (
+                        <button
+                          type='button'
+                          tooltip='حذف الإضافة'
+                          className='px-5 py-2 text-white transition-colors bg-red-500 rounded-lg w-fit hover:bg-red-600'
+                          onClick={() => handleRemoveClick(idx)}
+                        >
+                          -
+                        </button>
+                      )}
+                      {toppings.length - 1 === idx && (
+                        <button
+                          type='button'
+                          tooltip='إضافة جديدة'
+                          className='px-5 py-2 text-white transition-colors bg-blue-500 rounded-lg w-fit hover:bg-blue-600'
+                          onClick={handleAddClick}
+                        >
+                          +
+                        </button>
+                      )}
+                    </div>
+                  </label>
+                ))}
 
                 <div
                   className='my-14 inline-block md:text-2xl text-red-600 dark:text-red-400 font-[600] py-2 px-1'

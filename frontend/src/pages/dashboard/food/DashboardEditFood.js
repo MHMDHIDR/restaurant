@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useContext } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import Axios from 'axios'
 
-// import { TagsContext } from '../../../Contexts/TagsContext'
+import { TagsContext } from '../../../Contexts/TagsContext'
 
 import useDocumentTitle from '../../../hooks/useDocumentTitle'
 import useEventListener from '../../../hooks/useEventListener'
@@ -25,7 +25,7 @@ const EditFood = () => {
   const [deleteFoodStatus, setDeleteFoodStatus] = useState()
   const [data, setData] = useState('')
   const [categoryList, setCategoryList] = useState([])
-  const [toppings, setToppings] = useState({})
+  const [toppings, setToppings] = useState([{}])
 
   //Form States
   const [foodName, setFoodName] = useState('')
@@ -39,7 +39,7 @@ const EditFood = () => {
   const [updatedFoodStatus, setUpdatedFoodStatus] = useState()
 
   //Contexts
-  // const { tags, setTags } = useContext(TagsContext)
+  const { tags, setTags } = useContext(TagsContext)
 
   //Form errors messages
   const ImgErr = useRef(null)
@@ -121,6 +121,8 @@ const EditFood = () => {
     }
   }, [foodFile])
 
+  console.log(toppings)
+
   const handleUpdateFood = async e => {
     if (e.key === 'Enter') {
       //don't submit the form if Enter is pressed
@@ -142,7 +144,8 @@ const EditFood = () => {
       formData.append('foodPrice', foodPrice || currentFoodPrice)
       formData.append('category', category[0] || currentCategory)
       formData.append('foodDesc', foodDesc || currentFoodDesc)
-      // formData.append('foodToppings', JSON.stringify(tags))
+      formData.append('foodToppings', JSON.stringify(toppings))
+      formData.append('foodTags', JSON.stringify(tags))
       formData.append('foodImg', foodFile)
       formData.append('prevFoodImgPath', prevFoodImgPath)
       formData.append('prevFoodImgName', prevFoodImgName)
@@ -192,18 +195,15 @@ const EditFood = () => {
     }
   }
 
-  // handle input change
-  const handleInputChange = (e, index, otherValue) => {
+  const handleInputChange = (e, index) => {
     const { name, value } = e.target
-    const list = [...toppings]
-    list[index] = name === 'categoryValue' ? [otherValue, value] : [value, otherValue]
-
-    setToppings(list)
+    const newToppings = [...toppings]
+    newToppings[index][name] = value
+    setToppings(newToppings)
   }
 
-  // handle click event of the Add button
   const handleAddClick = () => {
-    setToppings([...toppings, { name: '', price: 1 }])
+    setToppings([...toppings, {}])
   }
 
   const handleRemoveClick = index => {
@@ -212,9 +212,9 @@ const EditFood = () => {
     setToppings(list)
   }
 
-  // useEffect(() => {
-  //   data && setTags(data?.foodToppings)
-  // }, [data, setTags])
+  useEffect(() => {
+    data && setTags(data?.foodTags)
+  }, [data, setTags])
 
   return (
     <>
@@ -394,7 +394,7 @@ const EditFood = () => {
                   </label>
 
                   <label htmlFor='foodTags' className='form__group'>
-                    <AddTags inputId='foodTags' />
+                    <AddTags inputId='foodTags' storedTags={data?.foodTags} />
                     <span className='form__label'>
                       علامات تصنيفية تساعد في عملية البحث عن الوجبة (Tags) - هذا الحقل
                       اختياري
@@ -402,25 +402,25 @@ const EditFood = () => {
                   </label>
 
                   <div className='mx-0 mt-4 mb-6 text-center'>
-                    <h3 className='mb-10 text-xl'>الإضافات - Toppings</h3>
+                    <h3 className='mb-10 text-xl'>الإضافات - Toppings (اختياري)</h3>
                     <div className='flex justify-around'>
                       <span className='text-xl'>الإضافة</span>
                       <span className='text-xl'>السعر (ر.ق)</span>
                     </div>
                   </div>
-                  {toppings?.map(({ name, price }, idx) => (
-                    <label className='mb-4 space-y-2' key={idx}>
+                  {toppings?.map(({ ToppingName, ToppingPrice }, idx) => (
+                    <label className='block space-y-2' key={idx}>
                       <div className='flex gap-4 justify-evenly'>
                         <input
                           type='text'
                           id='toppingName'
                           min='5'
                           max='500'
-                          onChange={e => handleInputChange(e, idx, name)}
                           className='w-2/4 p-3 text-xl text-gray-700 bg-transparent border-2 border-gray-500 border-solid rounded-lg outline-none focus-within:border-orange-500 dark:focus-within:border-gray-400 dark:text-gray-200'
                           dir='auto'
                           name='ToppingName'
-                          defaultValue={name}
+                          defaultValue={ToppingName}
+                          onChange={e => handleInputChange(e, idx)}
                           required
                         />
                         <input
@@ -428,11 +428,11 @@ const EditFood = () => {
                           id='toppingPrice'
                           min='1'
                           max='500'
-                          onChange={e => handleInputChange(e, idx, price)}
                           className='w-2/4 p-3 text-xl text-gray-700 bg-transparent border-2 border-gray-500 border-solid rounded-lg outline-none focus-within:border-orange-500 dark:focus-within:border-gray-400 dark:text-gray-200 rtl'
                           dir='auto'
                           name='ToppingPrice'
-                          defaultValue={price}
+                          defaultValue={ToppingPrice}
+                          onChange={e => handleInputChange(e, idx)}
                           required
                         />
                       </div>

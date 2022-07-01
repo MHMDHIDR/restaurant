@@ -238,6 +238,7 @@ const About = () => {
                 <div className='flex gap-4 pb-6'>
                   {categoryList.length !== 1 && (
                     <button
+                      type='button'
                       className='px-5 py-2 text-white transition-colors bg-red-500 rounded-lg w-fit hover:bg-red-600'
                       onClick={() => handleRemoveClick(idx)}
                     >
@@ -246,6 +247,7 @@ const About = () => {
                   )}
                   {categoryList.length - 1 === idx && (
                     <button
+                      type='button'
                       className='px-5 py-2 text-white transition-colors bg-blue-500 rounded-lg w-fit hover:bg-blue-600'
                       onClick={handleAddClick}
                     >
@@ -264,7 +266,7 @@ const About = () => {
             <div className='flex items-center justify-evenly'>
               <button
                 type='submit'
-                className='m-2 min-w-[7rem] bg-blue-600 hover:bg-blue-700 text-white py-1.5 px-6 rounded-md'
+                className='m-2 min-w-[7rem] bg-green-600 hover:bg-green-700 text-white py-1.5 px-6 rounded-md'
               >
                 {loading && loading ? (
                   <>
