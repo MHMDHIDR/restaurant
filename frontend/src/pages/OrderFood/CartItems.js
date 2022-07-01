@@ -15,25 +15,40 @@ const CartItems = ({ setGrandPrice }) => {
     items.map(item => (
       <div key={item.cItemId}>
         <div
-          className={`grid items-center grid-cols-2 gap-x-20 md:grid-cols-2 lg:grid-cols-4`}
+          className={`grid items-center
+            grid-cols-1
+            lg:grid-cols-2
+            xl:grid-cols-3
+            2xl:grid-cols-4
+            gap-y-10
+          `}
         >
+          {/* Product Image */}
           <img
             loading='lazy'
             src={item?.cImg}
             alt={removeSlug(item?.cHeading)}
             width='128'
             height='128'
-            className='object-cover w-32 h-32 p-1 mx-auto border border-gray-400 dark:border-gray-300 rounded-xl'
+            className='object-cover w-32 h-32 p-1 mx-auto border border-gray-400 min-w-fit min-h-fit aspect-square dark:border-gray-300 rounded-xl'
           />
-          <div className='flex flex-col gap-2 space-y-3 select-none'>
-            <h2 className='text-xl font-semibold text-center underline underline-offset-8'>
+
+          {/* Product Details */}
+          <div
+            className={`flex flex-col gap-2 space-y-3 select-none
+            
+          `}
+          >
+            <h2 className='text-lg font-semibold text-center underline underline-offset-8'>
               {removeSlug(item?.cHeading)}
             </h2>
             <p>{item?.cDesc}</p>
           </div>
+
+          {/* Product Toppings and it's Quantity */}
           {item?.cToppings?.length > 0 && (
-            <>
-              <div className='flex flex-col items-center gap-2 space-y-3 text-xl select-none md:items-start'>
+            <div className='flex flex-col items-center justify-evenly sm:flex-row'>
+              <div className='flex flex-col gap-2 text-lg select-none md:items-start'>
                 <h2 className='text-center ltr'>الإضافات</h2>
                 {item?.cToppings?.map(({ name, price }, idx) => {
                   const cToppingId = item.cItemId + idx
@@ -61,15 +76,13 @@ const CartItems = ({ setGrandPrice }) => {
                   )
                 })}
               </div>
-              <div className='flex flex-col items-center gap-2 space-y-3 text-xl select-none md:items-start'>
+
+              <div className='flex flex-col gap-2 text-lg select-none md:items-start'>
                 <h2 className='text-center ltr'>كمية الإضافات</h2>
                 {item?.cToppings?.map(({ name, price }, idx) => {
                   const cToppingId = item.cItemId + idx
                   return (
-                    <div
-                      key={cToppingId}
-                      className='flex gap-2 select-none justify-evenly'
-                    >
+                    <div key={cToppingId} className='flex gap-1 select-none'>
                       <button
                         className='quantity-btn number-hover'
                         onClick={
@@ -115,11 +128,12 @@ const CartItems = ({ setGrandPrice }) => {
                   )
                 })}
               </div>
-            </>
+            </div>
           )}
 
+          {/* Product Quantity */}
           <div className='flex items-center justify-center space-y-1 select-none lg:flex-col'>
-            <h2 className='text-xl text-center ltr'>الكمية</h2>
+            <h2 className='text-lg text-center ltr'>عدد الوجبات</h2>
             <span className='order-1 text-lg font-bold quantity-btn lg:-order-none'>
               {item.cQuantity}
             </span>
@@ -158,14 +172,15 @@ const CartItems = ({ setGrandPrice }) => {
               </button>
             </div>
           </div>
-          <span className='p-1 mx-auto text-sm text-green-800 bg-green-300 border border-green-800 rounded-md select-none w-fit'>
-            <span>
-              سعر الوجبة مع حساب الإضافات والكمية للإضافات والوجبة :&nbsp;
-              <br />
-            </span>
+
+          {/* Product Price */}
+          <span className='p-3 mx-auto text-sm text-green-800 bg-green-300 border border-green-800 rounded-md select-none w-fit'>
+            <span>سعر الوجبة مع حساب الإضافات والكمية للإضافات والوجبة :&nbsp;</span>
             <strong className='text-lg'>{item?.cPrice * item.cQuantity}</strong>
             &nbsp;ر.ق
           </span>
+
+          {/* Product Remove from Cart Button */}
           <button
             className='relative rtl m-2 min-w-[7.5rem] text-white py-1.5 px-6 rounded-lg bg-red-800 hover:bg-red-700'
             onClick={() => removeFromCart(item.cItemId, item.cHeading)}
