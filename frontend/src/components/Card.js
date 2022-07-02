@@ -44,16 +44,18 @@ const Card = ({
             </h3>
           ) : null}
           {cPrice ? (
-            <span className='px-3 py-1 text-xl text-green-800 bg-green-300 rounded-xl bg-opacity-80'>
+            <span className='px-3 py-1 text-xl text-green-800 bg-green-300 rounded-xl bg-opacity-80 rtl'>
               {cPrice + ' ر.ق'}
             </span>
           ) : null}
           <p className='py-8 break-all'>{cDesc}</p>
-          {cToppings && cToppings.length ? (
-            <div className='flex flex-col flex-wrap items-start gap-4'>
+          {typeof cToppings[0].ToppingName === 'string' && (
+            // if this item has toppings and it's a string
+            <div className='flex flex-col flex-wrap items-start gap-4 rtl'>
               <span>الإضافات:</span>
               {cToppings.map(({ ToppingName, ToppingPrice }, idx) => {
                 const cToppingId = cItemId + idx
+
                 return (
                   <div className='flex items-center' key={cToppingId}>
                     <input
@@ -78,7 +80,7 @@ const Card = ({
                 )
               })}
             </div>
-          ) : null}
+          )}
           {cCtaLabel ? (
             <div className='flex justify-evenly gap-3 flex-wrap grow-[0.5] text-center bg-transparent'>
               {cCtaLink ? (
