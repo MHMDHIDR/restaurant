@@ -1,5 +1,6 @@
 import { useContext } from 'react'
 import { CartContext } from '../../Contexts/CartContext'
+import { ToppingsContext } from '../../Contexts/ToppingsContext'
 
 import { removeSlug } from '../../functions/slug'
 
@@ -7,25 +8,25 @@ import Divider from '../../components/Divider'
 
 const CartItems = ({ setGrandPrice }) => {
   const { items, setItems, removeFromCart } = useContext(CartContext)
-
+  const { handleToppingChecked, checkedToppings } = useContext(ToppingsContext)
   const MAX_QUANTITY = 100
 
   return (
     items?.length > 0 &&
     items.map(item => {
-      const hasToppings = typeof item?.cToppings[0].ToppingName === 'string'
+      const hasToppings = typeof item?.cToppings[0].toppingName === 'string'
 
       return (
         <div key={item.cItemId}>
           <div
             className={`grid items-center
-            grid-cols-1
-            lg:grid-cols-2
-            xl:grid-cols-3
-            2xl:grid-cols-4
-            gap-y-10
-            gap-x-5
-          `}
+              grid-cols-1
+              lg:grid-cols-2
+              xl:grid-cols-3
+              2xl:grid-cols-4
+              gap-y-10
+              gap-x-5
+            `}
           >
             {/* Product Image */}
             <img
@@ -55,49 +56,52 @@ const CartItems = ({ setGrandPrice }) => {
               <div className='flex flex-col items-center justify-around gap-y-10 xl:gap-x-5 sm:flex-row'>
                 <div className='flex flex-col gap-2 text-lg select-none md:items-start'>
                   <h2 className='text-center ltr'>الإضافات</h2>
-                  {item?.cToppings?.map(({ ToppingName, ToppingPrice }, idx) => {
-                    const cToppingId = item.cItemId + idx
-                    return (
-                      <div className='flex items-center' key={cToppingId}>
+                  {item?.cToppings?.map(
+                    ({ toppingId, toppingName, toppingPrice, toppingQuantity }) => (
+                      <div className='flex items-center' key={toppingId}>
                         <input
                           type='checkbox'
-                          id={cToppingId}
-                          value={ToppingName}
+                          id={toppingId}
+                          value={toppingName}
                           className='cursor-pointer min-w-[1.5rem] min-h-[1.5rem]'
+                          onChange={() => handleToppingChecked(toppingId, toppingPrice)}
+                          defaultChecked={checkedToppings.find(topping => {
+                            return topping.toppingId === toppingId
+                          })}
                         />
                         <label
-                          htmlFor={cToppingId}
+                          htmlFor={toppingId}
                           className='cursor-pointer p-1.5 text-base rounded-md select-none'
                         >
-                          {ToppingName}
+                          {toppingName}
                         </label>
                         <label
-                          htmlFor={cToppingId}
+                          htmlFor={toppingId}
                           className='px-3 py-1 mr-2 -ml-2 text-base text-green-800 bg-green-300 rounded-md cursor-pointer bg-opacity-80 min-w-fit'
                         >
-                          {ToppingPrice + ' ر.ق'}
+                          {toppingPrice * toppingQuantity + ' ر.ق'}
                         </label>
                       </div>
                     )
-                  })}
+                  )}
                 </div>
 
-                <div className='flex flex-col gap-2 text-lg select-none md:items-start'>
+                <div className='flex flex-col items-center gap-2 text-lg select-none'>
                   <h2 className='text-center ltr'>كمية الإضافات</h2>
                   {item?.cToppings?.map((topping, idx) => {
-                    const cToppingId = item.cItemId + idx
+                    const toppingId = item.cItemId + idx
                     return (
-                      <div key={cToppingId} className='flex gap-1 select-none'>
+                      <div key={toppingId} className='flex gap-1 select-none'>
                         <button
                           className='quantity-btn number-hover'
                           onClick={
                             //onClick function to increase the quantity of topping to the specific item in the cart
                             () => {
-                              if (item.cQuantity < MAX_QUANTITY) {
+                              if (topping.toppingQuantity < MAX_QUANTITY) {
                                 setItems(
                                   items.map(item => {
-                                    if (item.cItemId === cToppingId.slice(0, -1)) {
-                                      item.cQuantity++
+                                    if (item.cItemId === toppingId.slice(0, -1)) {
+                                      topping.toppingQuantity++
                                     }
                                     return item
                                   })
@@ -109,17 +113,17 @@ const CartItems = ({ setGrandPrice }) => {
                           +
                         </button>
                         <span className='order-1 text-lg font-bold quantity-btn lg:-order-none'>
-                          {item.cQuantity}
+                          {topping.toppingQuantity}
                         </span>
                         <button
                           className='quantity-btn number-hover'
                           //onClick function to Decrement the quantity of topping to the specific item in the cart
                           onClick={() => {
-                            if (item.cQuantity > 1) {
+                            if (topping.toppingQuantity > 1) {
                               setItems(
                                 items.map(item => {
-                                  if (item.cItemId === cToppingId.slice(0, -1)) {
-                                    item.cQuantity--
+                                  if (item.cItemId === toppingId.slice(0, -1)) {
+                                    topping.toppingQuantity--
                                   }
                                   return item
                                 })
@@ -195,7 +199,13 @@ const CartItems = ({ setGrandPrice }) => {
               `}
             >
               <span>سعر الوجبة مع حساب الإضافات والكمية للإضافات والوجبة :&nbsp;</span>
-              <strong className='text-lg'>{item?.cPrice * item.cQuantity}</strong>
+              <strong className='text-lg'>
+                {item.cToppings?.reduce(
+                  (acc, curr) => acc + curr.toppingPrice * curr.toppingQuantity,
+                  0
+                ) +
+                  item.cPrice * item.cQuantity}
+              </strong>
               &nbsp;ر.ق
             </span>
 

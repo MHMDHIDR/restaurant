@@ -406,7 +406,7 @@ const EditFood = () => {
                       <span className='text-xl'>السعر (ر.ق)</span>
                     </div>
                   </div>
-                  {toppings?.map(({ ToppingName, ToppingPrice }, idx) => (
+                  {toppings?.map(({ toppingName, toppingPrice }, idx) => (
                     <label className='block space-y-2' key={idx}>
                       <div className='flex gap-4 justify-evenly'>
                         <input
@@ -416,8 +416,8 @@ const EditFood = () => {
                           max='500'
                           className='w-2/4 p-3 text-xl text-gray-700 bg-transparent border-2 border-gray-500 border-solid rounded-lg outline-none focus-within:border-orange-500 dark:focus-within:border-gray-400 dark:text-gray-200'
                           dir='auto'
-                          name='ToppingName'
-                          defaultValue={ToppingName}
+                          name='toppingName'
+                          defaultValue={toppingName}
                           onChange={e => handleInputChange(e, idx)}
                           required
                         />
@@ -428,8 +428,8 @@ const EditFood = () => {
                           max='500'
                           className='w-2/4 p-3 text-xl text-gray-700 bg-transparent border-2 border-gray-500 border-solid rounded-lg outline-none focus-within:border-orange-500 dark:focus-within:border-gray-400 dark:text-gray-200 rtl'
                           dir='auto'
-                          name='ToppingPrice'
-                          defaultValue={ToppingPrice}
+                          name='toppingPrice'
+                          defaultValue={toppingPrice}
                           onChange={e => handleInputChange(e, idx)}
                           required
                         />

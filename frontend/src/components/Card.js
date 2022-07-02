@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { useContext } from 'react'
 
 import { CartContext } from '../Contexts/CartContext'
+import { ToppingsContext } from '../Contexts/ToppingsContext'
 
 import { removeSlug } from '../functions/slug'
 
@@ -20,6 +21,7 @@ const Card = ({
   cPrice
 }) => {
   const { items, addToCart, removeFromCart } = useContext(CartContext)
+  const { handleToppingChecked, checkedToppings } = useContext(ToppingsContext)
 
   const handleCart = () => {
     const item = items.find(item => item.cItemId === cItemId)
@@ -49,32 +51,35 @@ const Card = ({
             </span>
           ) : null}
           <p className='py-8 break-all'>{cDesc}</p>
-          {typeof cToppings[0].ToppingName === 'string' && (
+          {typeof cToppings[0].toppingName === 'string' && (
             // if this item has toppings and it's a string
             <div className='flex flex-col flex-wrap items-start gap-4 rtl'>
               <span>الإضافات:</span>
-              {cToppings.map(({ ToppingName, ToppingPrice }, idx) => {
-                const cToppingId = cItemId + idx
+              {cToppings.map(({ toppingName, toppingPrice }, idx) => {
+                const cToppingId = cItemId + '-' + idx
 
                 return (
                   <div className='flex items-center' key={cToppingId}>
                     <input
                       type='checkbox'
                       id={cToppingId}
-                      value={ToppingName}
                       className='cursor-pointer min-w-[1.5rem] min-h-[1.5rem]'
+                      onChange={() => handleToppingChecked(cToppingId, toppingPrice)}
+                      defaultChecked={checkedToppings.find(
+                        topping => topping.toppingId === cToppingId
+                      )}
                     />
                     <label
                       htmlFor={cToppingId}
                       className='cursor-pointer p-1.5 text-base rounded-md select-none'
                     >
-                      {ToppingName}
+                      {toppingName}
                     </label>
                     <label
                       htmlFor={cToppingId}
                       className='px-3 py-1 mr-2 -ml-2 text-base text-green-800 bg-green-300 rounded-md cursor-pointer bg-opacity-80 min-w-fit'
                     >
-                      {ToppingPrice + ' ر.ق'}
+                      {toppingPrice + ' ر.ق'}
                     </label>
                   </div>
                 )

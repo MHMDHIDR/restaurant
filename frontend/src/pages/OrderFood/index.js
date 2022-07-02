@@ -97,7 +97,7 @@ const OrderFood = () => {
         <div className='container mx-auto text-center'>
           {items.length > 0 ? (
             <>
-              <h2 className='inline-block mb-20 text-3xl font-bold'>الطلبات</h2>
+              <h2 className='inline-block mb-20 text-3xl font-bold'>سلة الطلبات</h2>
               <CartItems setGrandPrice={setGrandPrice} />
 
               <form method='POST' onSubmit={handleCollectOrder}>
