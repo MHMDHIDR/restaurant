@@ -199,7 +199,10 @@ const CartItems = ({ setGrandPrice }) => {
               `}
             >
               <span>سعر الوجبة مع حساب الإضافات والكمية للإضافات والوجبة :&nbsp;</span>
-              <strong className='text-lg'>{}</strong>
+              <strong className='text-lg'>
+                {item.cPrice * item.cQuantity +
+                  checkedToppings.reduce((acc, curr) => acc + curr.toppingPrice, 0)}
+              </strong>
               &nbsp;ر.ق
             </span>
 

@@ -38,7 +38,7 @@ const CartContextProvider = ({ children }) => {
     }
   }
 
-  console.log(items)
+  console.log(...items)
 
   return (
     <CartContext.Provider
