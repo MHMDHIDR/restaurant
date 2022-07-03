@@ -23,6 +23,8 @@ const ToppingsContextProvider = ({ children }) => {
     setCheckedToppings(checkedToppings.filter(topping => topping.toppingId !== toppingId))
   }
 
+  console.log(checkedToppings)
+
   return (
     <ToppingsContext.Provider
       value={{
