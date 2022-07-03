@@ -79,14 +79,15 @@ const CartItems = ({ setGrandPrice }) => {
                           htmlFor={toppingId}
                           className='px-3 py-1 mr-2 -ml-2 text-base text-green-800 bg-green-300 rounded-md cursor-pointer bg-opacity-80 min-w-fit'
                         >
-                          {toppingPrice * toppingQuantity + ' ر.ق'}
+                          {toppingPrice + ' ر.ق'}
+                          {/* {toppingPrice * toppingQuantity + ' ر.ق'} */}
                         </label>
                       </div>
                     )
                   )}
                 </div>
 
-                <div className='flex flex-col items-center gap-2 text-lg select-none'>
+                {/* <div className='flex flex-col items-center gap-2 text-lg select-none'>
                   <h2 className='text-center ltr'>كمية الإضافات</h2>
                   {item?.cToppings?.map((topping, idx) => {
                     const toppingId = item.cItemId + idx
@@ -136,7 +137,7 @@ const CartItems = ({ setGrandPrice }) => {
                       </div>
                     )
                   })}
-                </div>
+                </div> */}
               </div>
             )}
 
@@ -198,10 +199,13 @@ const CartItems = ({ setGrandPrice }) => {
                 ${!hasToppings && 'xl:row-start-2 xl:row-end-3'}
               `}
             >
-              <span>سعر الوجبة مع حساب الإضافات والكمية للإضافات والوجبة :&nbsp;</span>
+              {/* <span>سعر الوجبة مع حساب الإضافات والكمية للإضافات والوجبة :&nbsp;</span> */}
+              <span>السعر مع الإضافات :&nbsp;</span>
               <strong className='text-lg'>
-                {item.cPrice * item.cQuantity +
-                  checkedToppings.reduce((acc, curr) => acc + curr.toppingPrice, 0)}
+                {
+                  item.cPrice * item.cQuantity
+                  // checkedToppings.reduce((acc, curr) => acc + curr.toppingPrice, 0)
+                }
               </strong>
               &nbsp;ر.ق
             </span>
