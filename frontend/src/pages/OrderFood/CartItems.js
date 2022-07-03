@@ -199,16 +199,7 @@ const CartItems = ({ setGrandPrice }) => {
               `}
             >
               <span>سعر الوجبة مع حساب الإضافات والكمية للإضافات والوجبة :&nbsp;</span>
-              <strong className='text-lg'>
-                {/* slice(0, -2) === item.cItemId */}
-                {
-                  //get the total price of the item including the toppings saved in checkedToppings array with its toppingPrice
-                  //the equation is: totalPrice = item.cPrice * item.cQuantity + checkedToppings.reduce((acc, curr) => acc + curr.toppingPrice, 0)
-                  item.cPrice * item.cQuantity +
-                    //checked Toppings Prices * item.cToppings.toppingQuantity
-                    checkedToppings.reduce((acc, curr) => acc + curr.toppingPrice, 0)
-                }
-              </strong>
+              <strong className='text-lg'>{}</strong>
               &nbsp;ر.ق
             </span>
 
