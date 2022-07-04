@@ -26,7 +26,11 @@ const Card = ({
   const handleCart = () => {
     const item = items.find(item => item.cItemId === cItemId)
     if (item) {
-      removeFromCart(cItemId, cHeading.props.children)
+      if (
+        window.confirm(`هل أنت متأكد من حذف (${cHeading.props.children}) من سلة الطلبات؟`)
+      ) {
+        removeFromCart(cItemId)
+      }
     } else {
       addToCart(cItemId, cHeading.props.children, cImg, cPrice, cDesc, cToppings)
     }

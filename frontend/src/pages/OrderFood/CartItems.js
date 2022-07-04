@@ -216,7 +216,13 @@ const CartItems = ({ setGrandPrice }) => {
               relative rtl m-2 min-w-[7.5rem] text-white py-1.5 px-6 rounded-lg bg-red-800 hover:bg-red-700
               xl:col-start-3 xl:col-end-5
             `}
-              onClick={() => removeFromCart(item.cItemId, item.cHeading)}
+              onClick={() => {
+                if (
+                  window.confirm(`هل أنت متأكد من حذف (${item.cHeading}) من سلة الطلبات؟`)
+                ) {
+                  removeFromCart(item.cItemId)
+                }
+              }}
             >
               <span className='py-0.5 px-1 pr-1.5 bg-gray-100 rounded-md absolute right-1 top-1 pointer-events-none'>
                 ❌

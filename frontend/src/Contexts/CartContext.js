@@ -29,13 +29,11 @@ const CartContextProvider = ({ children }) => {
   }
 
   //remove items from card
-  const removeFromCart = (cItemId, cHeading) => {
-    if (window.confirm(`هل أنت متأكد من حذف (${cHeading}) من سلة الطلبات؟`)) {
-      setItems(items.filter(item => item.cItemId !== cItemId))
-      setCheckedToppings(
-        checkedToppings.filter(topping => topping.toppingId.slice(0, -2) !== cItemId)
-      )
-    }
+  const removeFromCart = cItemId => {
+    setItems(items.filter(item => item.cItemId !== cItemId))
+    setCheckedToppings(
+      checkedToppings.filter(topping => topping.toppingId.slice(0, -2) !== cItemId)
+    )
   }
 
   return (

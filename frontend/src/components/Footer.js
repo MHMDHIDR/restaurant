@@ -35,7 +35,7 @@ const Footer = () => {
     <footer className='text-white bg-orange-700 footer'>
       <div className='container mx-auto'>
         <div className='flex flex-col flex-wrap items-center justify-around gap-6 py-4 pb-20 sm:flex-row'>
-          <div className='flex items-center flex-1'>
+          <div className='flex flex-wrap items-center justify-center flex-1 sm:flex-nowrap'>
             <Link
               aria-label='App Logo'
               title='App Logo'
@@ -44,7 +44,7 @@ const Footer = () => {
             >
               <Logo width='10 md:w-14' height='10 md:h-14' />
             </Link>
-            <p className='w-full mr-4'>
+            <p className='w-full mr-4 leading-10'>
               {settings
                 ? settings.appDesc
                 : 'أطلب ألذ الأطعمة والمشروبات الطازجة من مطعمنا العالمي'}
