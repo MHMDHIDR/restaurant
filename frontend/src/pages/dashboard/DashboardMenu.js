@@ -136,19 +136,19 @@ const DashboardMenu = () => {
                       key={item._id}
                       className='transition-colors even:bg-gray-200 odd:bg-gray-300 dark:even:bg-gray-600 dark:odd:bg-gray-700'
                     >
-                      <td className='px-1 py-2 pr-3'>
+                      <td className='px-1 py-2 pr-3 min-w-[5rem]'>
                         <img
                           loading='lazy'
-                          src={item.foodImgDisplayPath}
+                          src={item.foodImgs[0]?.foodImgDisplayPath}
                           alt={item.foodName}
-                          className='object-cover rounded-lg shadow-md w-14 h-14'
+                          className='object-cover rounded-lg shadow-md h-14 w-14'
                         />
                       </td>
                       <td className='px-1 py-2'>
-                        {abstractText(removeSlug(item.foodName), 25)}
+                        {abstractText(removeSlug(item.foodName), 10)}
                       </td>
                       <td className='px-1 py-2'>
-                        <p>{abstractText(item.foodDesc, 100)}</p>
+                        <p>{abstractText(item.foodDesc, 10)}</p>
                       </td>
                       <td className='px-1 py-2'>
                         <span>

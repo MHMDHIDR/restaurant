@@ -9,9 +9,10 @@ import useEventListener from '../../../hooks/useEventListener'
 import useAxios from '../../../hooks/useAxios'
 
 import Modal from '../../../components/Modal/Modal'
+import EmblaCarousel from '../../../components/Embla/EmblaCarousel'
 import { Success, Error, Loading } from '../../../components/Icons/Status'
-import { LoadingCard } from '../../../components/Loading'
 import AddTags from '../../../components/AddTags'
+import { LoadingCard } from '../../../components/Loading'
 
 import { removeSlug, createSlug } from '../../../functions/slug'
 import goTo from '../../../functions/goTo'
@@ -75,6 +76,17 @@ const EditFood = () => {
     }
   }, [foodData?.response?.response, categories?.response])
 
+  const slides = data && Object.keys(data?.foodImgs)
+  let media = []
+
+  data &&
+    data?.foodImgs.map(({ foodImgDisplayPath }) =>
+      media.push({
+        foodName: data?.foodName,
+        foodImg: foodImgDisplayPath
+      })
+    )
+
   useEventListener('click', e => {
     if (e.target.id === 'deleteFood') {
       setDelFoodId(e.target.dataset.id)
@@ -132,7 +144,7 @@ const EditFood = () => {
       const currentFoodPrice = data?.foodPrice
       const currentCategory = data?.category
       const currentFoodDesc = data?.foodDesc
-      const prevFoodImgPath = data?.foodImgDisplayPath
+      const prevFoodImgPath = data?.foodImgs[0]?.foodImgDisplayPath
       const prevFoodImgName = data?.foodImgDisplayName
 
       //using FormData to send constructed data
@@ -262,26 +274,27 @@ const EditFood = () => {
             <div className='food'>
               {data && data !== undefined ? (
                 <form key={data?._id} className='form' encType='multipart/form-data'>
-                  <label className='flex flex-wrap items-center justify-center gap-4 mb-8 sm:justify-between'>
-                    <img
-                      loading='lazy'
-                      src={preview === null ? data?.foodImgDisplayPath : preview}
-                      alt={data?.foodName}
-                      className='object-cover p-1 border border-gray-400 w-28 h-28 dark:border-gray-300 rounded-xl'
-                    />
+                  {/* Food Multiple Images */}
+                  <div className='flex flex-col items-center justify-center w-full gap-8 my-8'>
+                    <EmblaCarousel slides={slides} media={media} smallView={true} />
                     <input
                       type='file'
                       name='foodImg'
                       id='foodImg'
-                      className='grow-[.7] cursor-pointer text-lg text-white p-3 rounded-xl bg-orange-800 hover:bg-orange-700 transition-colors'
+                      className='hidden grow-[.7] cursor-pointer text-lg text-white p-3 rounded-xl bg-orange-800 hover:bg-orange-700 transition-colors'
                       accept='image/*'
                       onChange={updateFoodImg}
+                      multiple
                     />
                     <span
                       className='inline-block md:text-lg text-red-600 dark:text-red-400 font-[600] pt-2 px-1'
                       ref={ImgErr}
                     ></span>
-                  </label>
+                    <p className='w-full md:text-lg text-red-600 dark:text-red-400 font-[600] pb-10 px-1'>
+                      اسحب الشاشة يمين أو يسار في المربع الأبيض للتنقل بين الصور، أو اضغط
+                      على صورة لرفع صورة مكانها
+                    </p>
+                  </div>
 
                   <label htmlFor='foodName' className='form__group'>
                     <input

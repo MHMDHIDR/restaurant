@@ -10,7 +10,7 @@ const {
 } = require(`${__dirname}/../controllers/foods.js`)
 
 // ? means optional parameter (must be here for other requests to work)
-router.get('/:page/:limit/:itemId?', paginatedResults(FoodsModel), getFood)
+router.get('/:page/:limit/:itemId?/:order?', paginatedResults(FoodsModel), getFood)
 router.post('/', addFood)
 router.delete('/:foodId', deleteFood)
 router.patch('/:foodId', updateFood)

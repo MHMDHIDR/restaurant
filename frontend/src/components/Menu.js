@@ -5,12 +5,12 @@ import { LoadingCard } from './Loading'
 const EmblaCarousel = lazy(() => import('./Embla/EmblaCarousel'))
 
 const Menu = () => {
-  const SLIDES_IN_MENU = 8
+  const SLIDES_IN_MENU = 10
   const [food, setFood] = useState('')
 
   const { ...response } = useAxios({
     method: 'get',
-    url: `/foods/0/0?category=foods`
+    url: `/foods/0/0?category=foods&order=1`
   })
 
   useEffect(() => {
@@ -19,7 +19,11 @@ const Menu = () => {
     }
   }, [response.response])
 
-  //if the SLIDES_IN_MENU const is bigger than how many food items are in the database, then the number of slides will be the number of food items in the database else it will be the number of SLIDES_IN_MENU const
+  /**
+   * if the SLIDES_IN_MENU const is bigger than how many food items are in the database, then the number
+   * of slides will be the number of food items in the database else it will be the number of SLIDES_IN_MENU const
+   */
+
   const SlidesCount =
     SLIDES_IN_MENU > response.response?.itemsCount
       ? response.response?.itemsCount
@@ -31,12 +35,12 @@ const Menu = () => {
 
   //push food images to media array
   food &&
-    food.map(food =>
+    food.map(({ _id, foodImgs, foodName, foodPrice }) =>
       media.push({
-        foodId: food._id,
-        foodImg: food.foodImgDisplayPath,
-        foodName: food.foodName,
-        foodPrice: food.foodPrice
+        _id,
+        foodImg: foodImgs[0].foodImgDisplayPath,
+        foodName,
+        foodPrice
       })
     )
 
@@ -48,7 +52,7 @@ const Menu = () => {
           <Suspense fallback={<LoadingCard />}>
             {food?.length > 0 ? (
               <div className='max-w-5xl mx-auto transition-transform translate-x-0 select-none'>
-                <EmblaCarousel slides={slides} media={media} />
+                <EmblaCarousel slides={slides} media={media} smallView={false} />
               </div>
             ) : !food || !food === null || food?.itemsCount === undefined ? (
               <LoadingCard />

@@ -81,7 +81,7 @@ const ViewFood = () => {
                     cPrice={item.foodPrice}
                     cDesc={abstractText(item.foodDesc, 120)}
                     cToppings={item.foodToppings}
-                    cImg={item.foodImgDisplayPath}
+                    cImg={item.foodImgs[0]?.foodImgDisplayPath}
                     cImgAlt={item.foodName}
                     cCtaLabel={
                       //add to cart button, if item is already in cart then disable the button
@@ -137,7 +137,7 @@ const ViewFood = () => {
                   cPrice={data?.response?.foodPrice}
                   cDesc={data?.response?.foodDesc}
                   cToppings={data?.response?.foodToppings}
-                  cImg={data?.response?.foodImgDisplayPath}
+                  cImg={data?.response?.foodImgs[0]?.foodImgDisplayPath}
                   cImgAlt={data?.response?.foodName}
                   cCtaLabel={
                     //add to cart button, if item is already in cart then disable the button

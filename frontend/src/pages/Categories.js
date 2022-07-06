@@ -89,15 +89,15 @@ const Categories = () => {
 
   const getRandomFoodImg = () => {
     const randomIndex = Math.floor(Math.random() * foodImgs?.length)
-    return foodImgs?.[randomIndex]?.foodImgDisplayPath
+    return foodImgs?.[randomIndex]?.foodImgs[0]?.foodImgDisplayPath
   }
   const getSweetsDrinkImg = () => {
     const randomIndex = Math.floor(Math.random() * sweetsImgs?.length)
-    return sweetsImgs?.[randomIndex]?.foodImgDisplayPath
+    return sweetsImgs?.[randomIndex]?.foodImgs[0]?.foodImgDisplayPath
   }
   const getRandomDrinkImg = () => {
     const randomIndex = Math.floor(Math.random() * drinkImgs?.length)
-    return drinkImgs?.[randomIndex]?.foodImgDisplayPath
+    return drinkImgs?.[randomIndex]?.foodImgs[0]?.foodImgDisplayPath
   }
 
   return (

@@ -33,8 +33,7 @@ const reqDate = {
 
 const FoodSchema = new mongoose.Schema(
   {
-    foodImgDisplayPath: reqString,
-    foodImgDisplayName: reqString,
+    foodImgs: normalArray,
     foodName: reqString,
     foodPrice: reqString,
     category: reqString,

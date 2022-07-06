@@ -8,24 +8,27 @@ import { removeSlug } from '../functions/slug'
 
 const Search = () => {
   const [search, setSearch] = useState('')
-  const [data, setData] = useState('')
+  let [searchData, setSearchData] = useState([])
 
-  const { ...response } = useAxios({
+  const response = useAxios({
     method: 'get',
     url: '/foods/1/0'
   })
 
   useEffect(() => {
     if (response.response !== null) {
-      setData(response.response.response)
+      response.response?.response?.map(data =>
+        setSearchData(prevState => [
+          ...prevState,
+          {
+            foodId: data._id,
+            foodImg: data.foodImgs[0].foodImgDisplayPath,
+            foodName: data.foodName
+          }
+        ])
+      )
     }
   }, [response.response])
-
-  let searchable = {}
-
-  //looping through results, and adding food names to searchable object[key] = value
-  data && data.map(food => (searchable[food._id] = food.foodName))
-  const foodItems = Object.entries(searchable)
 
   const searchWrapper = document.querySelector('.search__wrapper')
 
@@ -75,21 +78,27 @@ const Search = () => {
         </svg>
       </button>
 
-      <div className='absolute w-[inherit] bg-neutral-200 dark:bg-neutral-300 opacity-0 pointer-events-none search__wrapper'>
-        <ul className='overflow-y-auto rtl:text-right ltr:text-left max-h-60 ltr'>
-          {search.trim()
-            ? foodItems
-                ?.filter(food => food[1].includes(search))
-                ?.map((item, idx) => (
-                  <Link
-                    key={idx}
-                    to={`/view/item/${item[0]}`}
-                    className={`w-full p-4 transition-colors font-[600] text-orange-600 dark:text-orange-700 text-xl hover:cursor-pointer hover:bg-gray-300 dark:hover:bg-neutral-400 inline-block border-b border-b-gray-300 dark:border-b-gray-400`}
-                  >
-                    {removeSlug(item[1])}
-                  </Link>
-                ))
-            : ''}
+      <div className='absolute w-[inherit] bg-neutral-200 dark:bg-neutral-300 opacity-0 pointer-events-none search__wrapper rtl'>
+        <ul className='overflow-y-auto rtl:text-right max-h-60'>
+          {search.trim() &&
+            searchData
+              ?.filter(({ foodName }) => foodName.includes(search))
+              .map(({ foodId, foodImg, foodName }, idx) => (
+                <Link
+                  key={idx}
+                  to={`/view/item/${foodId}`}
+                  className={`w-full flex px-4 py-2 justify-start items-center gap-x-5 transition-colors font-[600] text-orange-600 dark:text-orange-700 text-xl hover:cursor-pointer hover:bg-gray-300 dark:hover:bg-neutral-400 border-b border-b-gray-300 dark:border-b-gray-400`}
+                >
+                  {/* food img */}
+                  <img
+                    loading='lazy'
+                    src={foodImg}
+                    alt={foodName}
+                    className={`object-cover rounded-lg shadow-md w-14 h-14`}
+                  />
+                  <p>{removeSlug(foodName)}</p>
+                </Link>
+              ))}
         </ul>
       </div>
     </form>
