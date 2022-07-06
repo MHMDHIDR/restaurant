@@ -37,6 +37,8 @@ const EditFood = () => {
   const [foodFile, setFoodFile] = useState()
   const [preview, setPreview] = useState()
 
+  if (preview !== null) console.log(preview)
+
   const [updatedFoodStatus, setUpdatedFoodStatus] = useState()
 
   //Contexts
