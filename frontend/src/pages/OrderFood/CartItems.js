@@ -52,7 +52,7 @@ const CartItems = ({ setGrandPrice }) => {
             </div>
 
             {/* Product Toppings and it's Quantity */}
-            {item?.cToppings?.length > 1 && (
+            {item?.cToppings?.length > 0 && (
               <div className='flex flex-col items-center justify-around gap-y-10 xl:gap-x-5 sm:flex-row'>
                 <div className='flex flex-col gap-2 text-lg select-none md:items-start'>
                   <h2 className='text-center ltr'>الإضافات</h2>

@@ -37,7 +37,7 @@ const EditFood = () => {
   const [foodFile, setFoodFile] = useState()
   const [preview, setPreview] = useState()
 
-  if (preview !== null) console.log(preview)
+  if (preview) console.log(preview)
 
   const [updatedFoodStatus, setUpdatedFoodStatus] = useState()
 
@@ -181,7 +181,18 @@ const EditFood = () => {
       formData.append('foodPrice', foodPrice || currentFoodPrice)
       formData.append('category', category[0] || currentCategory)
       formData.append('foodDesc', foodDesc || currentFoodDesc)
-      formData.append('foodToppings', JSON.stringify(toppings))
+      toppings[0].toppingName === ''
+        ? formData.append(
+            'foodToppings',
+            JSON.stringify([
+              {
+                toppingName: {},
+                toppingPrice: {}
+              }
+            ])
+          )
+        : typeof toppings[0].toppingName === 'string' &&
+          formData.append('foodToppings', JSON.stringify(toppings))
       formData.append('foodTags', JSON.stringify(tags))
       formData.append('foodImg', foodFile)
       formData.append('prevFoodImgPath', prevFoodImgPath)
@@ -285,7 +296,7 @@ const EditFood = () => {
               {data && data !== undefined ? (
                 <form key={data?._id} className='form' encType='multipart/form-data'>
                   {/* Food Multiple Images */}
-                  <div className='flex flex-col items-center justify-center w-full gap-8 my-8'>
+                  <div className='flex flex-col items-center justify-center w-full gap-4 my-8'>
                     <EmblaCarousel slides={slides} media={media} smallView={true} />
                     <input
                       type='file'
@@ -301,8 +312,8 @@ const EditFood = () => {
                       ref={ImgErr}
                     ></span>
                     <p className='w-full md:text-lg text-red-600 dark:text-red-400 font-[600] pb-10 px-1'>
-                      اسحب الشاشة يمين أو يسار في المربع الأبيض للتنقل بين الصور، أو اضغط
-                      على صورة لرفع صورة مكانها
+                      اسحب الشاشة يمين أو يسار داخل المربع الأبيض للتنقل بين الصور، أو
+                      اضغط على صورة لرفع صورة مكانها
                     </p>
                   </div>
 
@@ -440,9 +451,10 @@ const EditFood = () => {
                           className='w-2/4 p-3 text-xl text-gray-700 bg-transparent border-2 border-gray-500 border-solid rounded-lg outline-none focus-within:border-orange-500 dark:focus-within:border-gray-400 dark:text-gray-200'
                           dir='auto'
                           name='toppingName'
-                          defaultValue={toppingName}
+                          defaultValue={
+                            typeof toppingName === 'string' ? toppingName : ''
+                          }
                           onChange={e => handleInputChange(e, idx)}
-                          required
                         />
                         <input
                           type='number'
@@ -452,9 +464,10 @@ const EditFood = () => {
                           className='w-2/4 p-3 text-xl text-gray-700 bg-transparent border-2 border-gray-500 border-solid rounded-lg outline-none focus-within:border-orange-500 dark:focus-within:border-gray-400 dark:text-gray-200 rtl'
                           dir='auto'
                           name='toppingPrice'
-                          defaultValue={toppingPrice}
+                          defaultValue={
+                            typeof toppingPrice === 'string' ? toppingPrice : ''
+                          }
                           onChange={e => handleInputChange(e, idx)}
-                          required
                         />
                       </div>
                       <div className='flex gap-4 pb-6'>

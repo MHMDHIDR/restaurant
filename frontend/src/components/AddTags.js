@@ -11,7 +11,7 @@ const AddTags = ({ inputId }) => {
         {tags.map((tag, index) => (
           <li
             key={index}
-            className='flex items-center justify-center w-auto h-8 mt-0 mb-2 ml-2 text-lg tracking-widest text-white bg-orange-800 rounded group hover:cursor-pointer'
+            className='flex items-center justify-center py-1 mt-0 mb-2 ml-2 tracking-widest text-white bg-orange-700 rounded select-none hover:bg-orange-800 group hover:cursor-pointer'
             onClick={() => removeTags(index)}
           >
             <span className='flex items-center gap-2 mx-2 whitespace-nowrap'>

@@ -22,7 +22,7 @@ const DashboardMenu = () => {
   let { pageNum } = useParams()
 
   const pageNumber = !pageNum || pageNum < 1 || isNaN(pageNum) ? 1 : parseInt(pageNum)
-  const itemsPerPage = 5
+  const itemsPerPage = 10
 
   const [delFoodId, setDelFoodId] = useState()
   const [delFoodName, setDelFoodName] = useState('')
@@ -145,10 +145,16 @@ const DashboardMenu = () => {
                         />
                       </td>
                       <td className='px-1 py-2'>
-                        {abstractText(removeSlug(item.foodName), 10)}
+                        {window.innerWidth < 1360
+                          ? abstractText(removeSlug(item.foodName), 10)
+                          : removeSlug(item.foodName)}
                       </td>
                       <td className='px-1 py-2'>
-                        <p>{abstractText(item.foodDesc, 10)}</p>
+                        <p>
+                          {window.innerWidth < 1200
+                            ? abstractText(item.foodDesc, 20)
+                            : item.foodDesc}
+                        </p>
                       </td>
                       <td className='px-1 py-2'>
                         <span>

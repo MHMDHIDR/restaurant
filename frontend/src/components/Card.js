@@ -3,6 +3,7 @@ import { useContext } from 'react'
 
 import { CartContext } from '../Contexts/CartContext'
 import { ToppingsContext } from '../Contexts/ToppingsContext'
+import TagIcon from '../components/Icons/TagIcon'
 
 import { removeSlug } from '../functions/slug'
 
@@ -13,6 +14,7 @@ const Card = ({
   cItemId,
   cHeading,
   cDesc,
+  cTags,
   cToppings,
   cCtaLabel,
   cCtaLink,
@@ -55,6 +57,21 @@ const Card = ({
             </span>
           ) : null}
           <p className='py-8 break-all'>{cDesc}</p>
+          {cTags && cTags.length > 0 && (
+            <ul className='flex flex-wrap overflow-x-scroll'>
+              {cTags.map((tag, index) => (
+                <li
+                  key={index}
+                  className='flex items-center justify-center py-1 mb-2 ml-2 tracking-widest text-white transition-colors bg-orange-700 rounded select-none hover:bg-orange-800 group hover:cursor-pointer'
+                >
+                  <span className='flex items-center gap-2 mx-2 whitespace-nowrap'>
+                    <TagIcon />
+                    {tag}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
           {typeof cToppings[0].toppingName === 'string' && (
             // if this item has toppings and it's a string
             <div className='flex flex-col flex-wrap items-start gap-4 rtl'>

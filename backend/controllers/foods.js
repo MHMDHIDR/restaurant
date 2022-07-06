@@ -7,7 +7,7 @@ const s3 = new AWS.S3()
 
 const addFood = asyncHandler(async (req, res) => {
   const { foodName, foodPrice, category, foodDesc, foodToppings, foodTags } = req.body
-  const toppings = JSON.parse(foodToppings)
+  const toppings = foodToppings && JSON.parse(foodToppings)
   const tags = JSON.parse(foodTags)
   const { foodImg } = req.files
   const foodImgName = uuidv4() + foodImg.name.split('.')[0] + '.webp'
@@ -121,7 +121,8 @@ const updateFood = asyncHandler(async (req, res) => {
     prevFoodImgPath,
     prevFoodImgName
   } = req.body
-  const toppings = JSON.parse(foodToppings)
+
+  const toppings = foodToppings && JSON.parse(foodToppings)
   const tags = JSON.parse(foodTags)
   const { foodId } = req.params
   const updatedAt = Date.now()

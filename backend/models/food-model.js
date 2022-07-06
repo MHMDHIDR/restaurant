@@ -6,12 +6,15 @@ const reqString = {
   required: true
 }
 
-const reqNumber = {
-  type: Number,
-  required: true
+const typeString = {
+  type: String
 }
 
-const normalArray = {
+const typeNumber = {
+  type: Number
+}
+
+const typeArray = {
   type: Array
 }
 
@@ -19,8 +22,8 @@ const foodToppingsType = {
   type: Object,
   default: [
     {
-      toppingName: reqString,
-      toppingPrice: reqNumber
+      toppingName: typeString,
+      toppingPrice: typeNumber
     }
   ]
 }
@@ -33,13 +36,13 @@ const reqDate = {
 
 const FoodSchema = new mongoose.Schema(
   {
-    foodImgs: normalArray,
+    foodImgs: typeArray,
     foodName: reqString,
     foodPrice: reqString,
     category: reqString,
     foodDesc: reqString,
     foodToppings: foodToppingsType,
-    foodTags: normalArray,
+    foodTags: typeArray,
     createdAt: reqDate,
     updatedAt: reqDate
   },

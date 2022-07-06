@@ -78,7 +78,7 @@ const Nav = () => {
           id='menu'
         >
           <ul
-            className='absolute flex flex-col items-center w-full py-5 mx-auto mt-3 text-gray-800 border border-orange-300 rounded-lg shadow-lg 2xl:gap-12 space-y-7 sm:space-y-10 sm:py-8 sm:mt-8 bg-gradient-to-tr from-orange-300 to-orange-400 rtl xl:static xl:justify-between xl:flex-row xl:space-y-0 xl:bg-none xl:space-x-4 lg:space-x-10 xl:py-0 xl:mt-0 xl:border-none xl:shadow-none'
+            className='absolute flex flex-col items-center w-full py-5 mx-auto mt-3 text-gray-800 border border-orange-300 rounded-lg shadow-lg  2xl:gap-12 space-y-7 sm:space-y-10 sm:py-8 sm:mt-8 bg-gradient-to-tr from-orange-300 to-orange-400 rtl xl:static xl:justify-between xl:flex-row xl:space-y-0 xl:bg-none xl:space-x-4 xl:py-0 xl:mt-0 xl:border-none xl:shadow-none'
             id='menu'
           >
             <li>

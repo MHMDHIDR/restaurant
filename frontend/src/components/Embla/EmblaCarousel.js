@@ -57,8 +57,8 @@ const EmblaCarousel = ({ slides, media, smallView = false }) => {
       {/* Big Menu View */}
       <div
         className={`
-          ${smallView ? 'w-60 mx-auto' : 'w-full'}
-          relative p-1.5 rounded-xl cursor-grab bg-center border-gray-500 dark:border-gray-100
+          ${smallView ? 'w-60 mx-auto border-gray-500 dark:border-gray-100' : 'w-full'}
+          relative p-1.5 rounded-xl cursor-grab bg-center
           before:absolute overflow-hidden before:inset-0
           before:bg-gray-100 before:dark:bg-gray-600 border
           before:bg-opacity-[.85] before:dark:bg-opacity-[.85]

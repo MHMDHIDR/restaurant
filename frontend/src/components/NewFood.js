@@ -44,6 +44,7 @@ const NewFood = () => {
                 }
                 cPrice={item.foodPrice}
                 cDesc={abstractText(item.foodDesc, 100)}
+                cTags={item?.foodTags}
                 cToppings={item.foodToppings}
                 cImg={item.foodImgs[0]?.foodImgDisplayPath}
                 cImgAlt={item.foodName}
