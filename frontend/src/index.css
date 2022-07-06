@@ -4,18 +4,18 @@
 
 @layer utilities {
   ::-webkit-scrollbar {
-    @apply w-1;
+    @apply w-1 h-1;
   }
-  ::-webkit-scrollbar-thumb {
-    @apply bg-orange-700;
-  }
+
   ::-webkit-scrollbar-thumb:hover {
     @apply bg-orange-600;
   }
 
+  ::-webkit-scrollbar-thumb,
   ::-webkit-scrollbar-track {
-    @apply bg-neutral-800;
+    @apply bg-transparent;
   }
+
   ::-webkit-scrollbar-track:hover,
   ::-webkit-scrollbar-track:active {
     @apply bg-neutral-700;

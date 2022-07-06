@@ -95,6 +95,10 @@ const EditFood = () => {
       modalLoading.classList.remove('hidden')
     }
 
+    if (e.target.id === 'deleteFoodImg') {
+      handleDeleteFoodImg(e.target.dataset.imgId)
+    }
+
     if (e.target.id === 'cancel') {
       modalLoading.classList.add('hidden')
     } else if (e.target.id === 'confirm') {
@@ -132,6 +136,27 @@ const EditFood = () => {
       setPreview(null)
     }
   }, [foodFile])
+
+  const handleInputChange = (e, index) => {
+    const { name, value } = e.target
+    const newToppings = [...toppings]
+    newToppings[index][name] = value
+    setToppings(newToppings)
+  }
+
+  const handleAddClick = () => {
+    setToppings([...toppings, {}])
+  }
+
+  const handleRemoveClick = index => {
+    const list = [...toppings]
+    list.splice(index, 1)
+    setToppings(list)
+  }
+
+  useEffect(() => {
+    data && setTags(data?.foodTags)
+  }, [data, setTags])
 
   const handleUpdateFood = async e => {
     if (e.key === 'Enter') {
@@ -205,26 +230,9 @@ const EditFood = () => {
     }
   }
 
-  const handleInputChange = (e, index) => {
-    const { name, value } = e.target
-    const newToppings = [...toppings]
-    newToppings[index][name] = value
-    setToppings(newToppings)
+  const handleDeleteFoodImg = imgId => {
+    console.log(imgId)
   }
-
-  const handleAddClick = () => {
-    setToppings([...toppings, {}])
-  }
-
-  const handleRemoveClick = index => {
-    const list = [...toppings]
-    list.splice(index, 1)
-    setToppings(list)
-  }
-
-  useEffect(() => {
-    data && setTags(data?.foodTags)
-  }, [data, setTags])
 
   return (
     <>

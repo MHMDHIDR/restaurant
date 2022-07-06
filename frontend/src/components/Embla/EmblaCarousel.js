@@ -58,8 +58,9 @@ const EmblaCarousel = ({ slides, media, smallView = false }) => {
       <div
         className={`
           ${smallView ? 'w-60 mx-auto' : 'w-full'}
-          relative p-1.5 rounded-xl cursor-grab bg-center
-          before:absolute overflow-hidden before:bg-gray-100 before:dark:bg-gray-600 before:inset-0
+          relative p-1.5 rounded-xl cursor-grab bg-center border-gray-500 dark:border-gray-100
+          before:absolute overflow-hidden before:inset-0
+          before:bg-gray-100 before:dark:bg-gray-600 border
           before:bg-opacity-[.85] before:dark:bg-opacity-[.85]
           before:rounded-xl before:transition-colors
         `}
@@ -87,14 +88,12 @@ const EmblaCarousel = ({ slides, media, smallView = false }) => {
                       استبدال الصورة
                     </label>
                     <button
-                      id='deleteFood'
+                      id='deleteFoodImg'
                       type='button'
-                      // data-id={data?._id}
-                      // data-name={data?.foodName}
-                      // data-imgname={data?.foodImgDisplayName}
+                      data-img-id={index}
                       className='min-w-fit bg-red-600 hover:bg-red-700 text-white py-1.5 px-6 rounded-md'
                     >
-                      حذف
+                      حذف الصورة
                     </button>
                   </div>
                 </div>

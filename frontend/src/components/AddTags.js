@@ -7,14 +7,14 @@ const AddTags = ({ inputId }) => {
 
   return (
     <>
-      <ul className='flex flex-wrap mt-6'>
+      <ul className='flex flex-wrap mt-6 overflow-x-scroll'>
         {tags.map((tag, index) => (
           <li
             key={index}
             className='flex items-center justify-center w-auto h-8 mt-0 mb-2 ml-2 text-lg tracking-widest text-white bg-orange-800 rounded group hover:cursor-pointer'
             onClick={() => removeTags(index)}
           >
-            <span className='flex items-center gap-2 mx-2'>
+            <span className='flex items-center gap-2 mx-2 whitespace-nowrap'>
               <TagIcon />
               {tag}
             </span>
