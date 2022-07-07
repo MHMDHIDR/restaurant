@@ -122,9 +122,11 @@ const updateFood = asyncHandler(async (req, res) => {
     prevFoodImgName
   } = req.body
 
-  const toppings = foodToppings && JSON.parse(foodToppings)
-  const tags = JSON.parse(foodTags)
-  const { foodId } = req.params
+  const toppings = foodToppings && foodToppings
+  // const toppings = foodToppings && JSON.parse(foodToppings)
+  const tags = foodTags && foodTags
+  // const tags = JSON.parse(foodTags)
+  const { foodId, imgId } = req.params
   const updatedAt = Date.now()
 
   const { foodImg } = req.files || ''
@@ -184,6 +186,7 @@ const updateFood = asyncHandler(async (req, res) => {
               foodTags: tags,
               updatedAt
             })
+
             res.json({
               message: 'Food Updated Successfully',
               foodUpdated: 1
@@ -204,19 +207,90 @@ const updateFood = asyncHandler(async (req, res) => {
         })
       })
   } else {
-    await FoodsModel.findByIdAndUpdate(foodId, {
-      foodName,
-      foodPrice,
-      category,
-      foodDesc,
-      foodToppings: toppings,
-      foodTags: tags,
-      updatedAt
-    })
-    res.json({
-      message: 'Food Updated Successfully',
-      foodUpdated: 1
-    })
+    if (imgId) {
+      //delete the old image from s3 bucket
+      const params = {
+        Bucket: process.env.AWS_BUCKET_NAME,
+        Key: prevFoodImgName
+      }
+
+      try {
+        await FoodsModel.findOneAndUpdate(
+          { _id: foodId },
+          [
+            {
+              $set: {
+                foodImgs: {
+                  $reduce: {
+                    input: '$foodImgs',
+                    initialValue: [],
+                    in: {
+                      $concatArrays: [
+                        '$$value',
+                        [
+                          {
+                            $mergeObjects: [
+                              { data: '$$this' },
+                              { inx: { $size: '$$value' } }
+                            ]
+                          }
+                        ]
+                      ]
+                    }
+                  }
+                }
+              }
+            },
+            {
+              $set: {
+                foodImgs: {
+                  $filter: {
+                    input: '$foodImgs',
+                    cond: { $ne: ['$$this.inx', parseInt(imgId)] }
+                  }
+                }
+              }
+            },
+            { $set: { foodImgs: { $map: { input: '$foodImgs', in: '$$this.data' } } } }
+          ],
+          { new: true }
+        )
+
+        await s3.deleteObject(params).promise() //delete the image from the s3 bucket
+
+        res.json({
+          message: 'Food image deleted successfully',
+          ImgDeleted: 1
+        })
+      } catch (error) {
+        res.json({
+          message: `Sorry! Something went wrong, check the error => 😥: \n ${error}`,
+          ImgDeleted: 0
+        })
+      }
+    } else {
+      try {
+        await FoodsModel.findByIdAndUpdate(foodId, {
+          foodName,
+          foodPrice,
+          category,
+          foodDesc,
+          foodToppings: toppings,
+          foodTags: tags,
+          updatedAt
+        })
+
+        res.json({
+          message: 'Food Updated Successfully',
+          foodUpdated: 1
+        })
+      } catch (error) {
+        res.json({
+          message: `Sorry! Something went wrong, check the error => 😥: \n ${error}`,
+          foodUpdated: 0
+        })
+      }
+    }
   }
 })
 

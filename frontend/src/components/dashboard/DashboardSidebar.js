@@ -49,7 +49,7 @@ const DashboardSidebar = () => {
       />
 
       <ul
-        className='fixed z-10 flex flex-col w-56 h-full overflow-x-hidden overflow-y-auto transition-all translate-x-full bg-orange-800 shadow-inner dashboard__sidebar pt-36 sm:pt-20 peer-checked:translate-x-0'
+        className='fixed z-10 flex flex-col w-56 h-full pt-24 overflow-x-hidden overflow-y-auto transition-all translate-x-full bg-orange-800 shadow-inner dashboard__sidebar sm:pt-20 peer-checked:translate-x-0'
         id='menu'
       >
         <li className='hover:bg-orange-700'>

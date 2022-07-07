@@ -156,7 +156,7 @@ const DashboardMenu = () => {
                             : item.foodDesc}
                         </p>
                       </td>
-                      <td className='px-1 py-2'>
+                      <td className='px-1 py-2 min-w-[4.5rem]'>
                         <span>
                           <strong className='inline-block m-2 text-xl text-green-700 dark:text-green-400'>
                             {item.foodPrice}
@@ -164,10 +164,10 @@ const DashboardMenu = () => {
                           ر.ق
                         </span>
                       </td>
-                      <td className='px-1 py-2'>
+                      <td className='px-1 py-2 min-w-[10rem]'>
                         {createLocaleDateString(item.updatedAt)}
                       </td>
-                      <td className='px-1 py-2'>
+                      <td className='px-1 py-2 min-w-[10rem]'>
                         <Link
                           to={goTo(`edit-food/${item._id}`)}
                           className='px-4 py-1 text-white bg-green-600 rounded-md hover:bg-green-700'

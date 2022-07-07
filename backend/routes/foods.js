@@ -13,6 +13,6 @@ const {
 router.get('/:page/:limit/:itemId?/:order?', paginatedResults(FoodsModel), getFood)
 router.post('/', addFood)
 router.delete('/:foodId', deleteFood)
-router.patch('/:foodId', updateFood)
+router.patch('/:foodId/:imgId?', updateFood)
 
 module.exports = router

@@ -17,6 +17,7 @@ const EmblaCarousel = ({ slides, media, smallView = false }) => {
     selectedClass: '',
     dragFree: true
   })
+
   const scrollPrev = useCallback(() => embla && embla.scrollPrev(), [embla])
   const scrollNext = useCallback(() => embla && embla.scrollNext(), [embla])
   const scrollTo = useCallback(index => embla && embla.scrollTo(index), [embla])
@@ -48,8 +49,11 @@ const EmblaCarousel = ({ slides, media, smallView = false }) => {
   //get food id, image, name, price from the array of object
   const IdByIndex = index => media[index % media.length]._id
   const priceByIndex = index => media[index % media.length].foodPrice
-  const mediaByIndex = index => media[index % media.length].foodImg
   const nameByIndex = index => media[index % media.length].foodName
+  const mediaByIndex = index => media[index % media.length].foodImgDisplayPath
+  const mediaNameByIndex = index => media[index % media.length].foodImgDisplayName
+  // const imgIdNameByIndex = index => media[index % media.length]._id
+
   const HEADER_BG_IMG = 'assets/img/header-bg.png' // or using data.heroBg
 
   return (
@@ -91,6 +95,8 @@ const EmblaCarousel = ({ slides, media, smallView = false }) => {
                       id='deleteFoodImg'
                       type='button'
                       data-img-id={index}
+                      data-name={nameByIndex(index)}
+                      data-img-name={mediaNameByIndex(index)}
                       className='min-w-fit bg-red-600 hover:bg-red-700 text-white py-1.5 px-6 rounded-md'
                     >
                       حذف الصورة
