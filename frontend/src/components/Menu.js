@@ -34,15 +34,16 @@ const Menu = () => {
   let media = []
 
   //push food images to media array
+
   food &&
-    food.map(({ _id, foodImgs, foodName, foodPrice }) =>
+    food.map(({ _id, foodImgs, foodName, foodPrice }) => {
       media.push({
         _id,
         foodImgDisplayPath: foodImgs[0].foodImgDisplayPath,
         foodName,
         foodPrice
       })
-    )
+    })
 
   return (
     <section id='menu' className='py-12 my-8 menu'>
@@ -52,7 +53,7 @@ const Menu = () => {
           <Suspense fallback={<LoadingCard />}>
             {food?.length > 0 ? (
               <div className='max-w-5xl mx-auto transition-transform translate-x-0 select-none'>
-                <EmblaCarousel slides={slides} media={media} smallView={false} />
+                <EmblaCarousel slides={slides} media={media} />
               </div>
             ) : !food || !food === null || food?.itemsCount === undefined ? (
               <LoadingCard />

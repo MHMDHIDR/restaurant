@@ -9,7 +9,6 @@ import useEventListener from '../../../hooks/useEventListener'
 import useAxios from '../../../hooks/useAxios'
 
 import Modal from '../../../components/Modal/Modal'
-import EmblaCarousel from '../../../components/Embla/EmblaCarousel'
 import { Success, Error, Loading } from '../../../components/Icons/Status'
 import AddTags from '../../../components/AddTags'
 import { LoadingCard } from '../../../components/Loading'
@@ -24,9 +23,6 @@ const EditFood = () => {
   const [delFoodName, setDelFoodName] = useState()
   const [delFoodImg, setDelFoodImg] = useState()
   const [deleteFoodStatus, setDeleteFoodStatus] = useState()
-  const [deleteImgStatus, setDeleteImgStatus] = useState()
-  const [delFoodMsg, setDelFoodMsg] = useState()
-  const [action, setAction] = useState()
   const [data, setData] = useState('')
   const [categoryList, setCategoryList] = useState([])
   const [toppings, setToppings] = useState([{}])
@@ -39,8 +35,6 @@ const EditFood = () => {
 
   const [foodFile, setFoodFile] = useState()
   const [preview, setPreview] = useState()
-
-  if (preview) console.log(preview)
 
   const [updatedFoodStatus, setUpdatedFoodStatus] = useState()
 
@@ -80,89 +74,6 @@ const EditFood = () => {
       setToppings(foodData?.response?.response?.foodToppings)
     }
   }, [foodData?.response?.response, categories?.response])
-
-  const slides = data && Object.keys(data?.foodImgs)
-  let media = []
-
-  data &&
-    data?.foodImgs.map(({ foodImgDisplayPath, foodImgDisplayName }) =>
-      media.push({
-        foodName: data?.foodName,
-        foodImgDisplayPath,
-        foodImgDisplayName
-      })
-    )
-
-  useEventListener('click', e => {
-    const btnId = e.target.id
-
-    if (btnId === 'deleteFood') {
-      setAction({
-        type: 'deleteFood'
-      })
-      setDelFoodId(e.target.dataset.id)
-      setDelFoodImg(e.target.dataset.imgname)
-      setDelFoodName(e.target.dataset.name)
-      setDelFoodMsg(
-        `هل أنت متأكد من حذف ${removeSlug(
-          e.target.dataset.name
-        )} ؟ لا يمكن التراجع عن هذا القرار`
-      )
-      modalLoading.classList.remove('hidden')
-    }
-
-    if (btnId === 'deleteFoodImg') {
-      setAction({
-        type: 'deleteFoodImg',
-        imgId: e.target.dataset.imgId,
-        imgName: e.target.dataset.imgName
-      })
-      setDelFoodMsg(
-        `هل أنت متأكد من حذف صورة الـ ${removeSlug(
-          e.target.dataset.name
-        )} ؟ لا يمكن التراجع عن هذا القرار`
-      )
-      modalLoading.classList.remove('hidden')
-    }
-
-    if (btnId === 'cancel') {
-      modalLoading.classList.add('hidden')
-    } else if (btnId === 'confirm') {
-      action.type === 'deleteFood' && handleDeleteFood(delFoodId, delFoodImg)
-      action.type === 'deleteFoodImg' && handleDeleteItemImg(data?._id)
-    }
-  })
-
-  const updateFoodImg = e => {
-    const file = e.target.files[0]
-
-    if (file) {
-      const fileType = file.type.split('/')[0]
-      if (fileType === 'image') setFoodFile(file)
-
-      const fileSizeToMB = file.size / 1000000
-      const MAX_FILE_SIZE = 1 //mb
-
-      if (fileSizeToMB > MAX_FILE_SIZE) {
-        ImgErr.current.textContent = `حجم الصورة لا يمكن أن يزيد عن ${MAX_FILE_SIZE} MB`
-      } else {
-        ImgErr.current.textContent = ''
-      }
-    }
-  }
-
-  useEffect(() => {
-    // if there's an image
-    if (foodFile) {
-      const reader = new FileReader()
-
-      reader.onloadend = () => setPreview(reader.result)
-
-      reader.readAsDataURL(foodFile)
-    } else {
-      setPreview(null)
-    }
-  }, [foodFile])
 
   const handleInputChange = (e, index) => {
     const { name, value } = e.target
@@ -220,7 +131,7 @@ const EditFood = () => {
         : typeof toppings[0].toppingName === 'string' &&
           formData.append('foodToppings', JSON.stringify(toppings))
       formData.append('foodTags', JSON.stringify(tags))
-      formData.append('foodImg', foodFile)
+      // formData.append('foodImg', foodFile)
       formData.append('prevFoodImgPath', prevFoodImgPath)
       formData.append('prevFoodImgName', prevFoodImgName)
 
@@ -269,28 +180,51 @@ const EditFood = () => {
     }
   }
 
-  const handleDeleteItemImg = async (
-    foodId,
-    imgId = action.imgId,
-    prevFoodImgName = action.imgName
-  ) => {
-    const formData = new FormData()
-    formData.append('prevFoodImgName', prevFoodImgName)
+  useEventListener('click', e => {
+    if (e.target.id === 'deleteFood') {
+      setDelFoodId(e.target.dataset.id)
+      setDelFoodName(removeSlug(e.target.dataset.name))
+      setDelFoodImg(e.target.dataset.imgname)
+      modalLoading.classList.remove('hidden')
+    }
 
-    try {
-      const response = await Axios.patch(`${BASE_URL}/foods/${foodId}/${imgId}`, formData)
+    if (e.target.id === 'cancel') {
+      modalLoading.classList.add('hidden')
+    } else if (e.target.id === 'confirm') {
+      handleDeleteFood(delFoodId, delFoodImg)
+    }
+  })
 
-      const { ImgDeleted } = response.data
+  const updateFoodImg = e => {
+    const file = e.target.files[0]
 
-      setDeleteImgStatus(ImgDeleted)
-      //Remove waiting modal
-      setTimeout(() => {
-        modalLoading.classList.add('hidden')
-      }, 300)
-    } catch (err) {
-      console.error(err)
+    if (file) {
+      const fileType = file.type.split('/')[0]
+      if (fileType === 'image') setFoodFile(file)
+
+      const fileSizeToMB = file.size / 1000000
+      const MAX_FILE_SIZE = 1 //mb
+
+      if (fileSizeToMB > MAX_FILE_SIZE) {
+        ImgErr.current.textContent = `حجم الصورة لا يمكن أن يزيد عن ${MAX_FILE_SIZE} MB`
+      } else {
+        ImgErr.current.textContent = ''
+      }
     }
   }
+
+  useEffect(() => {
+    // if there's an image
+    if (foodFile) {
+      const reader = new FileReader()
+
+      reader.onloadend = () => setPreview(reader.result)
+
+      reader.readAsDataURL(foodFile)
+    } else {
+      setPreview(null)
+    }
+  }, [foodFile])
 
   return (
     <>
@@ -300,8 +234,8 @@ const EditFood = () => {
           msg={`تم تحديث بيانات ${removeSlug(
             data?.foodName
           )} بنجاح   😄   الرجاء الانتظار ليتم تحويلك لقائمة الوجبات والمشروبات`}
-          // redirectLink={goTo('menu')}
-          // redirectTime='3500'
+          redirectLink={goTo('menu')}
+          redirectTime='3500'
         />
       ) : updatedFoodStatus === 0 ? (
         <Modal status={Error} msg='حدث خطأ ما أثناء تحديث بيانات الوجبة!' />
@@ -309,29 +243,15 @@ const EditFood = () => {
         <Modal
           status={Success}
           msg={`تم حذف ${delFoodName} بنجاح 😄 الرجاء الانتظار ليتم تحويلك لقائمة الوجبات`}
-          // redirectLink={goTo('menu')}
-          // redirectTime='3500'
+          redirectLink={goTo('menu')}
+          redirectTime='3500'
         />
       ) : deleteFoodStatus === 0 ? (
         <Modal
           status={Error}
           msg={`حدث خطأ ما أثناء حذف ${delFoodName}!`}
-          // redirectLink={goTo('menu')}
-          // redirectTime='3500'
-        />
-      ) : deleteImgStatus === 1 ? (
-        <Modal
-          status={Success}
-          msg={`تم حذف الصورة بنجاح 😄 الرجاء الانتظار ليتم تحويلك لقائمة الوجبات`}
-          // redirectLink={goTo('menu')}
-          // redirectTime='3500'
-        />
-      ) : deleteImgStatus === 0 ? (
-        <Modal
-          status={Error}
-          msg={`حدث خطأ ما أثناء حذف الصورة!`}
-          // redirectLink={goTo('menu')}
-          // redirectTime='3500'
+          redirectLink={goTo('menu')}
+          redirectTime='3500'
         />
       ) : null}
 
@@ -342,7 +262,7 @@ const EditFood = () => {
             status={Loading}
             modalHidden='hidden'
             classes='text-blue-600 dark:text-blue-400 text-lg'
-            msg={delFoodMsg}
+            msg={`هل أنت متأكد من حذف ${delFoodName} ؟ لا يمكن التراجع عن هذا القرار`}
             ctaConfirmBtns={['حذف', 'الغاء']}
           />
 
@@ -354,27 +274,28 @@ const EditFood = () => {
             <div className='food'>
               {data && data !== undefined ? (
                 <form key={data?._id} className='form' encType='multipart/form-data'>
-                  {/* Food Multiple Images */}
-                  <div className='flex flex-col items-center justify-center w-full gap-4 my-8'>
-                    <EmblaCarousel slides={slides} media={media} smallView={true} />
+                  <label className='flex flex-wrap items-center justify-center gap-4 mb-8 sm:justify-between'>
+                    <img
+                      loading='lazy'
+                      src={
+                        preview === null ? data?.foodImgs[0].foodImgDisplayPath : preview
+                      }
+                      alt={data?.foodName}
+                      className='object-cover p-1 border border-gray-400 w-28 h-28 dark:border-gray-300 rounded-xl'
+                    />
                     <input
                       type='file'
                       name='foodImg'
                       id='foodImg'
-                      className='hidden grow-[.7] cursor-pointer text-lg text-white p-3 rounded-xl bg-orange-800 hover:bg-orange-700 transition-colors'
+                      className='grow-[.7] cursor-pointer text-lg text-white p-3 rounded-xl bg-orange-800 hover:bg-orange-700 transition-colors'
                       accept='image/*'
                       onChange={updateFoodImg}
-                      multiple
                     />
                     <span
                       className='inline-block md:text-lg text-red-600 dark:text-red-400 font-[600] pt-2 px-1'
                       ref={ImgErr}
                     ></span>
-                    <p className='w-full md:text-lg text-red-600 dark:text-red-400 font-[600] pb-10 px-1'>
-                      اسحب الشاشة يمين أو يسار داخل المربع الأبيض للتنقل بين الصور، أو
-                      اضغط على صورة لرفع صورة مكانها
-                    </p>
-                  </div>
+                  </label>
 
                   <label htmlFor='foodName' className='form__group'>
                     <input
