@@ -34,16 +34,15 @@ const Menu = () => {
   let media = []
 
   //push food images to media array
-
   food &&
-    food.map(({ _id, foodImgs, foodName, foodPrice }) => {
+    food.map(({ _id, foodImgs, foodName, foodPrice }) =>
       media.push({
         _id,
         foodImgDisplayPath: foodImgs[0].foodImgDisplayPath,
         foodName,
         foodPrice
       })
-    })
+    )
 
   return (
     <section id='menu' className='py-12 my-8 menu'>
