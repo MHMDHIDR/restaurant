@@ -1,7 +1,7 @@
 {
   "name": "restaurant",
   "version": "1.0.0",
-  "description": "Restaurant to order and find delicious food",
+  "description": "Restaurant To Find and Order delicious Foods, Drinks, and Sweets",
   "main": "index.js",
   "scripts": {
     "backend": "npm run dev --prefix backend",
@@ -17,7 +17,9 @@
     "order",
     "online",
     "delicious",
-    "food"
+    "food",
+    "drinks",
+    "sweets"
   ],
   "author": "Mohammed Hayder",
   "license": "ISC",
@@ -27,9 +29,5 @@
   "homepage": "https://github.com/MHMDHIDR/restaurant#readme",
   "devDependencies": {
     "concurrently": "^7.1.0"
-  },
-  "dependencies": {
-    "@paypal/react-paypal-js": "^7.6.2",
-    "react-redux": "^8.0.1"
   }
 }

@@ -122,10 +122,8 @@ const updateFood = asyncHandler(async (req, res) => {
     prevFoodImgName
   } = req.body
 
-  const toppings = foodToppings && foodToppings
-  // const toppings = foodToppings && JSON.parse(foodToppings)
-  const tags = foodTags && foodTags
-  // const tags = JSON.parse(foodTags)
+  const toppings = foodToppings && JSON.parse(foodToppings)
+  const tags = JSON.parse(foodTags)
   const { foodId, imgId } = req.params
   const updatedAt = Date.now()
 

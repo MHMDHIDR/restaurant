@@ -201,7 +201,6 @@ const OrderFood = () => {
                 </span>
                 <h1 className='my-2 mb-10 text-2xl'>السداد بواسطة</h1>
 
-                {/* show button fter payment object is returned from paypal */}
                 <div className='flex flex-col items-center justify-evenly'>
                   <button
                     to='/checkout'

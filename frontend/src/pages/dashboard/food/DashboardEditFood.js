@@ -234,8 +234,8 @@ const EditFood = () => {
           msg={`تم تحديث بيانات ${removeSlug(
             data?.foodName
           )} بنجاح   😄   الرجاء الانتظار ليتم تحويلك لقائمة الوجبات والمشروبات`}
-          redirectLink={goTo('menu')}
-          redirectTime='3500'
+          //   redirectLink={goTo('menu')}
+          //   redirectTime='3500'
         />
       ) : updatedFoodStatus === 0 ? (
         <Modal status={Error} msg='حدث خطأ ما أثناء تحديث بيانات الوجبة!' />
@@ -243,15 +243,15 @@ const EditFood = () => {
         <Modal
           status={Success}
           msg={`تم حذف ${delFoodName} بنجاح 😄 الرجاء الانتظار ليتم تحويلك لقائمة الوجبات`}
-          redirectLink={goTo('menu')}
-          redirectTime='3500'
+          // redirectLink={goTo('menu')}
+          // redirectTime='3500'
         />
       ) : deleteFoodStatus === 0 ? (
         <Modal
           status={Error}
           msg={`حدث خطأ ما أثناء حذف ${delFoodName}!`}
-          redirectLink={goTo('menu')}
-          redirectTime='3500'
+          // redirectLink={goTo('menu')}
+          // redirectTime='3500'
         />
       ) : null}
 
@@ -274,11 +274,11 @@ const EditFood = () => {
             <div className='food'>
               {data && data !== undefined ? (
                 <form key={data?._id} className='form' encType='multipart/form-data'>
-                  <label className='flex flex-wrap items-center justify-center gap-4 mb-8 sm:justify-between'>
+                  <label className='flex flex-col items-center justify-center gap-4 mb-8 sm:justify-between'>
                     <img
                       loading='lazy'
                       src={
-                        preview === null ? data?.foodImgs[0].foodImgDisplayPath : preview
+                        preview === null ? data?.foodImgs[0]?.foodImgDisplayPath : preview
                       }
                       alt={data?.foodName}
                       className='object-cover p-1 border border-gray-400 w-28 h-28 dark:border-gray-300 rounded-xl'
@@ -287,9 +287,10 @@ const EditFood = () => {
                       type='file'
                       name='foodImg'
                       id='foodImg'
-                      className='grow-[.7] cursor-pointer text-lg text-white p-3 rounded-xl bg-orange-800 hover:bg-orange-700 transition-colors'
+                      className='p-3 text-lg text-white transition-colors bg-orange-800 cursor-pointer rounded-xl hover:bg-orange-700'
                       accept='image/*'
                       onChange={updateFoodImg}
+                      multiple
                     />
                     <span
                       className='inline-block md:text-lg text-red-600 dark:text-red-400 font-[600] pt-2 px-1'

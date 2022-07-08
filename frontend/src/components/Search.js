@@ -21,9 +21,9 @@ const Search = () => {
         setSearchData(prevState => [
           ...prevState,
           {
-            foodId: data._id,
-            foodImg: data.foodImgs[0].foodImgDisplayPath,
-            foodName: data.foodName
+            foodId: data?._id,
+            foodImg: data?.foodImgs[0]?.foodImgDisplayPath,
+            foodName: data?.foodName
           }
         ])
       )
