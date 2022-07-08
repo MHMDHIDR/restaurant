@@ -4,11 +4,15 @@
 
 @layer utilities {
   ::-webkit-scrollbar {
-    @apply w-1 h-1;
+    @apply w-1 h-1.5;
   }
 
   ::-webkit-scrollbar-thumb:hover {
     @apply bg-orange-600;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply rounded-lg;
   }
 
   ::-webkit-scrollbar-thumb,
