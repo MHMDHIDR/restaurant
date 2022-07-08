@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import Axios from 'axios'
 
 import { TagsContext } from '../../../Contexts/TagsContext'
+import { FileUploadContext } from '../../../Contexts/FileUploadContext'
 
 import useDocumentTitle from '../../../hooks/useDocumentTitle'
 import useEventListener from '../../../hooks/useEventListener'
@@ -12,7 +13,7 @@ import Modal from '../../../components/Modal/Modal'
 import { Success, Error, Loading } from '../../../components/Icons/Status'
 import AddTags from '../../../components/AddTags'
 import { LoadingCard } from '../../../components/Loading'
-import ImageUpload from '../../../components/ImageUpload'
+import FileUpload from '../../../components/FileUpload'
 
 import { removeSlug, createSlug } from '../../../functions/slug'
 import goTo from '../../../functions/goTo'
@@ -38,6 +39,7 @@ const EditFood = () => {
 
   //Contexts
   const { tags, setTags } = useContext(TagsContext)
+  const { file } = useContext(FileUploadContext)
 
   //Form errors messages
   const ImgErr = useRef(null)
@@ -64,6 +66,7 @@ const EditFood = () => {
     method: 'get',
     url: '/settings'
   })
+  console.log(file)
 
   useEffect(() => {
     if (foodData?.response?.response !== null && categories?.response !== null) {
@@ -107,7 +110,7 @@ const EditFood = () => {
       const currentCategory = data?.category
       const currentFoodDesc = data?.foodDesc
       const prevFoodImgPath = data?.foodImgs[0]?.foodImgDisplayPath
-      const prevFoodImgName = data?.foodImgDisplayName
+      const prevFoodImgName = data?.foodImgs[0]?.foodImgDisplayName
 
       //using FormData to send constructed data
       const formData = new FormData()
@@ -129,7 +132,7 @@ const EditFood = () => {
         : typeof toppings[0].toppingName === 'string' &&
           formData.append('foodToppings', JSON.stringify(toppings))
       formData.append('foodTags', JSON.stringify(tags))
-      // formData.append('foodImg', foodFile)
+      formData.append('foodImg', ...file)
       formData.append('prevFoodImgPath', prevFoodImgPath)
       formData.append('prevFoodImgName', prevFoodImgName)
 
@@ -242,7 +245,7 @@ const EditFood = () => {
               {data && data !== undefined ? (
                 <form key={data?._id} className='form' encType='multipart/form-data'>
                   <div className='flex flex-col items-center justify-center gap-4 mb-8 sm:justify-between'>
-                    <ImageUpload
+                    <FileUpload
                       data={{
                         defaultImg: data?.foodImgs[0]?.foodImgDisplayPath,
                         foodName: data?.foodName
@@ -411,6 +414,7 @@ const EditFood = () => {
                       <div className='flex gap-4 pb-6'>
                         {toppings.length !== 1 && (
                           <button
+                            type='button'
                             tooltip='حذف الإضافة'
                             className='px-5 py-2 text-white transition-colors bg-red-500 rounded-lg w-fit hover:bg-red-600'
                             onClick={() => handleRemoveClick(idx)}
@@ -420,6 +424,7 @@ const EditFood = () => {
                         )}
                         {toppings.length - 1 === idx && (
                           <button
+                            type='button'
                             tooltip='إضافة جديدة'
                             className='px-5 py-2 text-white transition-colors bg-blue-500 rounded-lg w-fit hover:bg-blue-600'
                             onClick={handleAddClick}

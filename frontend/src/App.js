@@ -3,6 +3,7 @@ import ThemeContextProvider from './Contexts/ThemeContext'
 import CartContextProvider from './Contexts/CartContext'
 import TagsContextProvider from './Contexts/TagsContext'
 import ToppingsContextProvider from './Contexts/ToppingsContext'
+import FileUploadContextProvider from './Contexts/FileUploadContext'
 
 //components
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
@@ -29,51 +30,53 @@ const DashboardAppSettings = lazy(() => import('./pages/dashboard/DashboardAppSe
 const DashboardUsers = lazy(() => import('./pages/dashboard/DashboardUsers'))
 
 const App = () => (
-  <ThemeContextProvider>
-    <ToppingsContextProvider>
-      <CartContextProvider>
-        <TagsContextProvider>
-          <Router>
-            <Suspense fallback={<LoadingPage />}>
-              <Routes>
-                <Route path='/' element={<Home />} />
-                <Route path='categories' element={<Categories />} />
+  <FileUploadContextProvider>
+    <ThemeContextProvider>
+      <ToppingsContextProvider>
+        <CartContextProvider>
+          <TagsContextProvider>
+            <Router>
+              <Suspense fallback={<LoadingPage />}>
+                <Routes>
+                  <Route path='/' element={<Home />} />
+                  <Route path='categories' element={<Categories />} />
 
-                <Route path='order-food' element={<OrderFood />} />
+                  <Route path='order-food' element={<OrderFood />} />
 
-                {/* View All Food */}
-                <Route path='view' element={<ViewFood />} />
-                <Route path='view/:pageNum' element={<ViewFood />} />
-                {/* multiple item */}
-                <Route path='view/:category/:pageNum' element={<ViewFood />} />
-                {/* single item */}
-                <Route path='view/item/:foodId' element={<ViewFood />} />
+                  {/* View All Food */}
+                  <Route path='view' element={<ViewFood />} />
+                  <Route path='view/:pageNum' element={<ViewFood />} />
+                  {/* multiple item */}
+                  <Route path='view/:category/:pageNum' element={<ViewFood />} />
+                  {/* single item */}
+                  <Route path='view/item/:foodId' element={<ViewFood />} />
 
-                {/* authentication */}
-                <Route path='join' element={<Join />} />
-                <Route path='login' element={<Login />} />
+                  {/* authentication */}
+                  <Route path='join' element={<Join />} />
+                  <Route path='login' element={<Login />} />
 
-                {/* dashboard */}
-                <Route path='dashboard' element={<DashboardHome />}>
-                  {/* Food */}
-                  <Route path='orders' element={<DashboardOrders />} />
-                  <Route path='orders/:pageNum' element={<DashboardOrders />} />
-                  <Route path='menu' element={<DashboardMenu />} />
-                  <Route path='menu/:pageNum' element={<DashboardMenu />} />
-                  <Route path='add-food' element={<DashboardAddFood />} />
-                  <Route path='edit-food/:foodId' element={<DashboardEditFood />} />
-                  <Route path='settings' element={<DashboardAppSettings />} />
-                  <Route path='users' element={<DashboardUsers />} />
-                  <Route path='users/:pageNum' element={<DashboardUsers />} />
-                </Route>
-                <Route path='*' element={<ModalNotFound />} />
-              </Routes>
-            </Suspense>
-          </Router>
-        </TagsContextProvider>
-      </CartContextProvider>
-    </ToppingsContextProvider>
-  </ThemeContextProvider>
+                  {/* dashboard */}
+                  <Route path='dashboard' element={<DashboardHome />}>
+                    {/* Food */}
+                    <Route path='orders' element={<DashboardOrders />} />
+                    <Route path='orders/:pageNum' element={<DashboardOrders />} />
+                    <Route path='menu' element={<DashboardMenu />} />
+                    <Route path='menu/:pageNum' element={<DashboardMenu />} />
+                    <Route path='add-food' element={<DashboardAddFood />} />
+                    <Route path='edit-food/:foodId' element={<DashboardEditFood />} />
+                    <Route path='settings' element={<DashboardAppSettings />} />
+                    <Route path='users' element={<DashboardUsers />} />
+                    <Route path='users/:pageNum' element={<DashboardUsers />} />
+                  </Route>
+                  <Route path='*' element={<ModalNotFound />} />
+                </Routes>
+              </Suspense>
+            </Router>
+          </TagsContextProvider>
+        </CartContextProvider>
+      </ToppingsContextProvider>
+    </ThemeContextProvider>
+  </FileUploadContextProvider>
 )
 
 export default App

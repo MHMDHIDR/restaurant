@@ -3,6 +3,7 @@ const { v4: uuidv4 } = require('uuid')
 const asyncHandler = require('express-async-handler')
 const sharp = require('sharp')
 const AWS = require('aws-sdk')
+const { parseFile } = require('aws-sdk/lib/shared-ini/ini-loader')
 const s3 = new AWS.S3()
 
 const addFood = asyncHandler(async (req, res) => {
@@ -147,63 +148,66 @@ const updateFood = asyncHandler(async (req, res) => {
         })
         return
       }
-    })
 
-    //upload the new image to s3 bucket
-    sharp(foodImg.data)
-      .rotate()
-      .resize(600)
-      .jpeg({ mozjpeg: true, quality: 50 })
-      .toBuffer()
-      .then(newWebpImg => {
-        //changing the old jpg image buffer to new webp buffer
-        foodImg.data = newWebpImg
+      //if no error in deleting old image, then upload the new image to s3 bucket
+      sharp(foodImg.data)
+        .rotate()
+        .resize(600)
+        .jpeg({ mozjpeg: true, quality: 50 })
+        .toBuffer()
+        .then(newWebpImg => {
+          //changing the old jpg image buffer to new webp buffer
+          foodImg.data = newWebpImg
 
-        const params = {
-          Bucket: process.env.AWS_BUCKET_NAME,
-          Key: foodImgName,
-          Body: newWebpImg,
-          ContentType: 'image/webp'
-        } //uploading the new webp image to s3 bucket, self executing function
-        ;(async () => {
-          try {
-            const { Location } = await s3.upload(params).promise()
+          const params = {
+            Bucket: process.env.AWS_BUCKET_NAME,
+            Key: foodImgName,
+            Body: newWebpImg,
+            ContentType: 'image/webp'
+          } //uploading the new webp image to s3 bucket, self executing function
+          ;(async () => {
+            try {
+              const { Location } = await s3.upload(params).promise()
 
-            //saving the new image path to the database
-            foodImgDisplayPath = Location
-            foodImgDisplayName = Location.split('.com/')[1]
+              //saving the new image path to the database
+              foodImgDisplayPath = Location
+              foodImgDisplayName = Location.split('.com/')[1]
 
-            await FoodsModel.findByIdAndUpdate(foodId, {
-              foodImgDisplayPath,
-              foodImgDisplayName,
-              foodName,
-              foodPrice,
-              category,
-              foodDesc,
-              foodToppings: toppings,
-              foodTags: tags,
-              updatedAt
-            })
+              await FoodsModel.findByIdAndUpdate(foodId, {
+                // Update foodImgs array, set foodImgDisplayPath, foodImgDisplayName
+                foodImgs: {
+                  foodImgDisplayName,
+                  foodImgDisplayPath
+                },
+                foodName,
+                foodPrice,
+                category,
+                foodDesc,
+                foodToppings: toppings,
+                foodTags: tags,
+                updatedAt
+              })
 
-            res.json({
-              message: 'Food Updated Successfully',
-              foodUpdated: 1
-            })
-          } catch (error) {
-            res.json({
-              message: error,
-              foodUpdated: 0
-            })
-            return
-          }
-        })()
-      })
-      .catch(err => {
-        res.json({
-          message: `Sorry! Something went wrong, check the error => 😥: \n ${err}`,
-          foodUpdated: 0
+              res.json({
+                message: 'Food Updated Successfully',
+                foodUpdated: 1
+              })
+            } catch (error) {
+              res.json({
+                message: error,
+                foodUpdated: 0
+              })
+              return
+            }
+          })()
         })
-      })
+        .catch(err => {
+          res.json({
+            message: `Sorry! Something went wrong, check the error => 😥: \n ${err}`,
+            foodUpdated: 0
+          })
+        })
+    })
   } else {
     if (imgId) {
       //delete the old image from s3 bucket
