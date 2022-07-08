@@ -12,6 +12,7 @@ import Modal from '../../../components/Modal/Modal'
 import { Success, Error, Loading } from '../../../components/Icons/Status'
 import AddTags from '../../../components/AddTags'
 import { LoadingCard } from '../../../components/Loading'
+import ImageUpload from '../../../components/ImageUpload'
 
 import { removeSlug, createSlug } from '../../../functions/slug'
 import goTo from '../../../functions/goTo'
@@ -32,9 +33,6 @@ const EditFood = () => {
   const [foodPrice, setFoodPrice] = useState('')
   const [category, setCategory] = useState([])
   const [foodDesc, setFoodDesc] = useState('')
-
-  const [foodFile, setFoodFile] = useState([])
-  const [foodFileURLs, setFoodFileURLs] = useState([])
 
   const [updatedFoodStatus, setUpdatedFoodStatus] = useState()
 
@@ -195,22 +193,6 @@ const EditFood = () => {
     }
   })
 
-  const onFileChange = e => {
-    setFoodFile([...e.target.files])
-  }
-
-  useEffect(() => {
-    if (foodFile.length < 1) return
-
-    const newFileUrls = []
-    foodFile.forEach(file => {
-      if (Math.ceil(file.size / 1000000) < 2) {
-        newFileUrls.push(URL.createObjectURL(file))
-      }
-      setFoodFileURLs(newFileUrls)
-    })
-  }, [foodFile])
-
   return (
     <>
       {updatedFoodStatus === 1 ? (
@@ -260,41 +242,13 @@ const EditFood = () => {
               {data && data !== undefined ? (
                 <form key={data?._id} className='form' encType='multipart/form-data'>
                   <label className='flex flex-col items-center justify-center gap-4 mb-8 sm:justify-between'>
-                    {
-                      //will use foodFileURLs to update the image and Upload them to the server
-                      console.log(foodFileURLs)
-                    }
-
-                    <div className='flex flex-wrap p-10 justify-center overflow-y-scroll bg-gray-100 rounded-lg cursor-pointer w-[30rem] gap-6'>
-                      {foodFileURLs.length === 0 ? (
-                        <img
-                          loading='lazy'
-                          src={data?.foodImgs[0]?.foodImgDisplayPath}
-                          alt={data?.foodName}
-                          className='object-cover p-1 border border-gray-400 w-28 min-h-fit h-28 dark:border-gray-300 rounded-xl'
-                        />
-                      ) : (
-                        foodFileURLs.map((fileURL, idx) => (
-                          <img
-                            key={idx}
-                            loading='lazy'
-                            src={fileURL}
-                            alt={data?.foodName}
-                            className='object-cover p-1 border border-gray-400 w-28 min-h-fit h-28 dark:border-gray-300 rounded-xl'
-                          />
-                        ))
-                      )}
-                    </div>
-
-                    <input
-                      type='file'
-                      name='foodImg'
-                      id='foodImg'
-                      className='p-3 text-lg text-white transition-colors bg-orange-800 cursor-pointer rounded-xl hover:bg-orange-700'
-                      accept='image/*'
-                      onChange={onFileChange}
-                      multiple
+                    <ImageUpload
+                      data={{
+                        defaultImg: data?.foodImgs[0]?.foodImgDisplayPath,
+                        foodName: data?.foodName
+                      }}
                     />
+
                     <span
                       className='inline-block md:text-lg text-red-600 dark:text-red-400 font-[600] pt-2 px-1'
                       ref={ImgErr}
