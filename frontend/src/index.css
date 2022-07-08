@@ -32,7 +32,7 @@
   }
 
   .form__group {
-    @apply relative block w-full p-4 mx-auto mb-8 transition-all border-2 border-gray-400 border-solid rounded-lg last:border-none focus-within:border-orange-500 dark:focus-within:border-orange-400;
+    @apply relative block w-full px-4 py-2 mx-auto mb-8 transition-all border-2 border-gray-400 border-solid rounded-lg last:border-none focus-within:border-orange-500 dark:focus-within:border-orange-400;
   }
 
   .form__input {

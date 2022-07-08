@@ -33,8 +33,8 @@ const EditFood = () => {
   const [category, setCategory] = useState([])
   const [foodDesc, setFoodDesc] = useState('')
 
-  const [foodFile, setFoodFile] = useState()
-  const [preview, setPreview] = useState()
+  const [foodFile, setFoodFile] = useState([])
+  const [foodFileURLs, setFoodFileURLs] = useState([])
 
   const [updatedFoodStatus, setUpdatedFoodStatus] = useState()
 
@@ -195,35 +195,20 @@ const EditFood = () => {
     }
   })
 
-  const updateFoodImg = e => {
-    const file = e.target.files[0]
-
-    if (file) {
-      const fileType = file.type.split('/')[0]
-      if (fileType === 'image') setFoodFile(file)
-
-      const fileSizeToMB = file.size / 1000000
-      const MAX_FILE_SIZE = 1 //mb
-
-      if (fileSizeToMB > MAX_FILE_SIZE) {
-        ImgErr.current.textContent = `حجم الصورة لا يمكن أن يزيد عن ${MAX_FILE_SIZE} MB`
-      } else {
-        ImgErr.current.textContent = ''
-      }
-    }
+  const onFileChange = e => {
+    setFoodFile([...e.target.files])
   }
 
   useEffect(() => {
-    // if there's an image
-    if (foodFile) {
-      const reader = new FileReader()
+    if (foodFile.length < 1) return
 
-      reader.onloadend = () => setPreview(reader.result)
-
-      reader.readAsDataURL(foodFile)
-    } else {
-      setPreview(null)
-    }
+    const newFileUrls = []
+    foodFile.forEach(file => {
+      if (Math.ceil(file.size / 1000000) < 2) {
+        newFileUrls.push(URL.createObjectURL(file))
+      }
+      setFoodFileURLs(newFileUrls)
+    })
   }, [foodFile])
 
   return (
@@ -275,21 +260,39 @@ const EditFood = () => {
               {data && data !== undefined ? (
                 <form key={data?._id} className='form' encType='multipart/form-data'>
                   <label className='flex flex-col items-center justify-center gap-4 mb-8 sm:justify-between'>
-                    <img
-                      loading='lazy'
-                      src={
-                        preview === null ? data?.foodImgs[0]?.foodImgDisplayPath : preview
-                      }
-                      alt={data?.foodName}
-                      className='object-cover p-1 border border-gray-400 w-28 h-28 dark:border-gray-300 rounded-xl'
-                    />
+                    {
+                      //will use foodFileURLs to update the image and Upload them to the server
+                      console.log(foodFileURLs)
+                    }
+
+                    <div className='flex flex-wrap p-10 justify-center overflow-y-scroll bg-gray-100 rounded-lg cursor-pointer w-[30rem] gap-6'>
+                      {foodFileURLs.length === 0 ? (
+                        <img
+                          loading='lazy'
+                          src={data?.foodImgs[0]?.foodImgDisplayPath}
+                          alt={data?.foodName}
+                          className='object-cover p-1 border border-gray-400 w-28 min-h-fit h-28 dark:border-gray-300 rounded-xl'
+                        />
+                      ) : (
+                        foodFileURLs.map((fileURL, idx) => (
+                          <img
+                            key={idx}
+                            loading='lazy'
+                            src={fileURL}
+                            alt={data?.foodName}
+                            className='object-cover p-1 border border-gray-400 w-28 min-h-fit h-28 dark:border-gray-300 rounded-xl'
+                          />
+                        ))
+                      )}
+                    </div>
+
                     <input
                       type='file'
                       name='foodImg'
                       id='foodImg'
                       className='p-3 text-lg text-white transition-colors bg-orange-800 cursor-pointer rounded-xl hover:bg-orange-700'
                       accept='image/*'
-                      onChange={updateFoodImg}
+                      onChange={onFileChange}
                       multiple
                     />
                     <span
