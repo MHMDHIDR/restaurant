@@ -24,7 +24,7 @@ const ImageUpload = ({ data }) => {
     <>
       {console.log(foodFileURLs)}
 
-      <div className='flex flex-wrap p-10 justify-center overflow-y-scroll bg-gray-100 rounded-lg cursor-pointer w-[30rem] gap-6'>
+      <div className='flex flex-wrap py-4 justify-center overflow-y-scroll bg-gray-100 rounded-lg cursor-pointer w-[30rem] gap-6'>
         {foodFileURLs.length === 0 ? (
           <img
             loading='lazy'
@@ -34,13 +34,24 @@ const ImageUpload = ({ data }) => {
           />
         ) : (
           foodFileURLs.map((fileURL, idx) => (
-            <img
-              key={idx}
-              loading='lazy'
-              src={fileURL}
-              alt={data?.foodName}
-              className='object-cover p-1 border border-gray-400 w-28 min-h-fit h-28 dark:border-gray-300 rounded-xl'
-            />
+            <div key={idx} className={`flex flex-col gap-y-3`}>
+              <img
+                loading='lazy'
+                src={fileURL}
+                alt={data?.foodName}
+                className='object-cover p-1 border border-gray-400 w-28 min-h-fit h-28 dark:border-gray-300 rounded-xl'
+              />
+              {/* delete image button */}
+              <button
+                type='button'
+                className='py-2 text-white transition-colors bg-red-500 rounded-full hover:bg-red-700'
+                onClick={() => {
+                  setFoodFileURLs(foodFileURLs.filter(url => url !== fileURL))
+                }}
+              >
+                حذف
+              </button>
+            </div>
           ))
         )}
       </div>

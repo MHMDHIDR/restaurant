@@ -241,7 +241,7 @@ const EditFood = () => {
             <div className='food'>
               {data && data !== undefined ? (
                 <form key={data?._id} className='form' encType='multipart/form-data'>
-                  <label className='flex flex-col items-center justify-center gap-4 mb-8 sm:justify-between'>
+                  <div className='flex flex-col items-center justify-center gap-4 mb-8 sm:justify-between'>
                     <ImageUpload
                       data={{
                         defaultImg: data?.foodImgs[0]?.foodImgDisplayPath,
@@ -253,7 +253,7 @@ const EditFood = () => {
                       className='inline-block md:text-lg text-red-600 dark:text-red-400 font-[600] pt-2 px-1'
                       ref={ImgErr}
                     ></span>
-                  </label>
+                  </div>
 
                   <label htmlFor='foodName' className='form__group'>
                     <input
