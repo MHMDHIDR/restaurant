@@ -188,7 +188,7 @@ const AddFood = () => {
                         ? 'https://source.unsplash.com/random?food'
                         : preview
                     }
-                    alt='food' //change with food image name
+                    alt={foodFile ? foodFile.name : 'food, drink, sweet'}
                     className='object-cover p-1 border border-gray-400 w-28 h-28 dark:border-gray-300 rounded-xl'
                   />
                   <input

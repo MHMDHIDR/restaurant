@@ -3,7 +3,6 @@ const { v4: uuidv4 } = require('uuid')
 const asyncHandler = require('express-async-handler')
 const sharp = require('sharp')
 const AWS = require('aws-sdk')
-const { parseFile } = require('aws-sdk/lib/shared-ini/ini-loader')
 const s3 = new AWS.S3()
 
 const addFood = asyncHandler(async (req, res) => {
@@ -112,16 +111,8 @@ const deleteFood = asyncHandler(async (req, res) => {
 })
 
 const updateFood = asyncHandler(async (req, res) => {
-  const {
-    foodName,
-    foodPrice,
-    foodDesc,
-    foodToppings,
-    foodTags,
-    category,
-    prevFoodImgPath,
-    prevFoodImgName
-  } = req.body
+  const { foodName, foodPrice, foodDesc, foodToppings, foodTags, category } = req.body
+  let { prevFoodImgPathsAndNames } = req.body
 
   const toppings = foodToppings && JSON.parse(foodToppings)
   const tags = JSON.parse(foodTags)
@@ -129,11 +120,15 @@ const updateFood = asyncHandler(async (req, res) => {
   const updatedAt = Date.now()
 
   const { foodImg } = req.files || ''
-  const foodImgName = uuidv4() + foodImg?.name.split('.')[0] + '.webp' || ''
-  let foodImgDisplayPath = prevFoodImgPath
-  let foodImgDisplayName = prevFoodImgName
+  console.log(foodImg)
+  prevFoodImgPathsAndNames = JSON.parse(prevFoodImgPathsAndNames)
+  // console.log(prevFoodImgPathsAndNames[0])
 
-  //if the user has uploaded a new image
+  const foodImgName = uuidv4() + foodImg?.name.split('.')[0] + '.webp' || ''
+  let foodImgDisplayPath = prevFoodImgPaths
+  let foodImgDisplayName = prevFoodImgNames
+
+  // if the user has uploaded a new image
   if (foodImg) {
     //delete the old image from s3 bucket
     const params = {

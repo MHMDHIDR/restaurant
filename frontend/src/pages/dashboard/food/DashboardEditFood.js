@@ -66,7 +66,6 @@ const EditFood = () => {
     method: 'get',
     url: '/settings'
   })
-  console.log(file)
 
   useEffect(() => {
     if (foodData?.response?.response !== null && categories?.response !== null) {
@@ -109,8 +108,14 @@ const EditFood = () => {
       const currentFoodPrice = data?.foodPrice
       const currentCategory = data?.category
       const currentFoodDesc = data?.foodDesc
-      const prevFoodImgPath = data?.foodImgs[0]?.foodImgDisplayPath
-      const prevFoodImgName = data?.foodImgs[0]?.foodImgDisplayName
+      const prevFoodImgPathsAndNames = [
+        ...data?.foodImgs.map(({ foodImgDisplayPath, foodImgDisplayName }) => {
+          return {
+            foodImgDisplayPath,
+            foodImgDisplayName
+          }
+        })
+      ]
 
       //using FormData to send constructed data
       const formData = new FormData()
@@ -132,9 +137,11 @@ const EditFood = () => {
         : typeof toppings[0].toppingName === 'string' &&
           formData.append('foodToppings', JSON.stringify(toppings))
       formData.append('foodTags', JSON.stringify(tags))
-      formData.append('foodImg', ...file)
-      formData.append('prevFoodImgPath', prevFoodImgPath)
-      formData.append('prevFoodImgName', prevFoodImgName)
+      file.map(foodImg => formData.append('foodImg', foodImg))
+      formData.append(
+        'prevFoodImgPathsAndNames',
+        JSON.stringify(prevFoodImgPathsAndNames)
+      )
 
       if (
         ImgErr.current.textContent === '' &&
