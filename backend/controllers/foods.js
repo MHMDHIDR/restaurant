@@ -112,7 +112,7 @@ const deleteFood = asyncHandler(async (req, res) => {
 
 const updateFood = asyncHandler(async (req, res) => {
   const { foodName, foodPrice, foodDesc, foodToppings, foodTags, category } = req.body
-  let { prevFoodImgPathsAndNames } = req.body
+  const prevFoodImgPathsAndNames = JSON.parse(req.body.prevFoodImgPathsAndNames)
 
   const toppings = foodToppings && JSON.parse(foodToppings)
   const tags = JSON.parse(foodTags)
@@ -120,9 +120,7 @@ const updateFood = asyncHandler(async (req, res) => {
   const updatedAt = Date.now()
 
   const { foodImg } = req.files || ''
-  console.log(foodImg)
-  prevFoodImgPathsAndNames = JSON.parse(prevFoodImgPathsAndNames)
-  // console.log(prevFoodImgPathsAndNames[0])
+  console.log(prevFoodImgPathsAndNames)
 
   const foodImgName = uuidv4() + foodImg?.name.split('.')[0] + '.webp' || ''
   let foodImgDisplayPath = prevFoodImgPaths
