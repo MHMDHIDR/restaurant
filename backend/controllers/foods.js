@@ -9,65 +9,68 @@ const addFood = asyncHandler(async (req, res) => {
   const { foodName, foodPrice, category, foodDesc, foodToppings, foodTags } = req.body
   const toppings = foodToppings && JSON.parse(foodToppings)
   const tags = JSON.parse(foodTags)
+
   const { foodImg } = req.files
-  const foodImgName = uuidv4() + foodImg.name.split('.')[0] + '.webp'
+  const foodImgs = foodImg && Array.isArray(foodImg) ? foodImg : [foodImg]
+  const foodImgNames = foodImgs?.map(img => uuidv4() + img.name.split('.')[0] + '.webp')
 
   let foodImgDisplayPath, foodImgDisplayName
 
-  const foods = new FoodsModel({
-    foodImgDisplayPath,
-    foodImgDisplayName,
-    foodName,
-    foodPrice,
-    category,
-    foodDesc,
-    foodToppings: toppings,
-    foodTags: tags
-  })
+  foodImgs.map((img, index) => {
+    sharp(img.data)
+      .resize(600)
+      .jpeg({ mozjpeg: true, quality: 50 })
+      .toBuffer()
+      .then(newWebpImg => {
+        //changing the old jpg image buffer to new webp buffer
+        img.data = newWebpImg
 
-  sharp(foodImg.data)
-    .rotate()
-    .resize(600)
-    .jpeg({ mozjpeg: true, quality: 50 })
-    .toBuffer()
-    .then(newWebpImg => {
-      //changing the old jpg image buffer to new webp buffer
-      foodImg.data = newWebpImg
+        const params = {
+          Bucket: process.env.AWS_BUCKET_NAME,
+          Key: foodImgNames[index],
+          Body: newWebpImg,
+          ContentType: 'image/webp'
+        } //uploading the new webp image to s3 bucket, self executing function
+        ;(async () => {
+          try {
+            const { Location } = await s3.upload(params).promise()
 
-      const params = {
-        Bucket: process.env.AWS_BUCKET_NAME,
-        Key: foodImgName,
-        Body: newWebpImg,
-        ContentType: 'image/webp'
-      } //uploading the new webp image to s3 bucket, self executing function
-      ;(async () => {
-        try {
-          const { Location } = await s3.upload(params).promise()
+            //save food into database
+            await FoodsModel.create({
+              foodName,
+              foodPrice,
+              category,
+              foodDesc,
+              foodToppings: toppings,
+              foodTags: tags,
+              foodImgs: foodImgs.map(img => {
+                return {
+                  foodImgDisplayName: foodImgNames[index],
+                  foodImgDisplayPath: Location
+                }
+              })
+            })
 
-          //saving the new image path to the database
-          foods.foodImgDisplayPath = Location
-          foods.foodImgDisplayName = Location.split('.com/')[1]
-          await foods.save()
-
-          res.json({
-            message: 'Food added successfully',
-            foodAdded: 1
-          })
-        } catch (error) {
-          res.json({
-            message: error,
-            foodAdded: 0
-          })
-          return
-        }
-      })()
-    })
-    .catch(err => {
-      res.json({
-        message: `Sorry! Something went wrong, check the error => 😥: \n ${err}`,
-        foodAdded: 0
+            res.json({
+              message: 'Food added successfully',
+              foodAdded: 1
+            })
+          } catch (error) {
+            res.json({
+              message: error,
+              foodAdded: 0
+            })
+            return
+          }
+        })()
       })
-    })
+      .catch(err => {
+        res.json({
+          message: `Sorry! Something went wrong, check the error => 😥: \n ${err}`,
+          foodAdded: 0
+        })
+      })
+  })
 })
 
 const getFood = asyncHandler(async (req, res) => {
@@ -116,175 +119,129 @@ const updateFood = asyncHandler(async (req, res) => {
 
   const toppings = foodToppings && JSON.parse(foodToppings)
   const tags = JSON.parse(foodTags)
-  const { foodId, imgId } = req.params
+  const { foodId } = req.params
   const updatedAt = Date.now()
 
-  const { foodImg } = req.files || ''
-  console.log(prevFoodImgPathsAndNames)
+  const { foodImg } = req.files
+  const foodImgs = foodImg && Array.isArray(foodImg) ? foodImg : [foodImg]
+  const foodImgNames = foodImgs?.map(img => uuidv4() + img.name.split('.')[0] + '.webp')
 
-  const foodImgName = uuidv4() + foodImg?.name.split('.')[0] + '.webp' || ''
-  let foodImgDisplayPath = prevFoodImgPaths
-  let foodImgDisplayName = prevFoodImgNames
+  let foodImgDisplayPath = prevFoodImgPathsAndNames.map(
+    ({ foodImgDisplayPath }) => foodImgDisplayPath
+  )
+  let foodImgDisplayName = prevFoodImgPathsAndNames.map(
+    ({ foodImgDisplayName }) => foodImgDisplayName
+  )
 
-  // if the user has uploaded a new image
-  if (foodImg) {
-    //delete the old image from s3 bucket
-    const params = {
-      Bucket: process.env.AWS_BUCKET_NAME,
+  //if the user has uploaded a new image
+  if (foodImgs) {
+    //delete the old images from s3 bucket using the prevFoodImgPathsAndNames
+    const Objects = prevFoodImgPathsAndNames.map(({ foodImgDisplayName }) => ({
       Key: foodImgDisplayName
-    }
-    s3.deleteObject(params, (err, data) => {
-      if (err) {
-        res.json({
-          message: err,
-          foodDeleted: 0
-        })
-        return
-      }
+    }))
 
-      //if no error in deleting old image, then upload the new image to s3 bucket
-      sharp(foodImg.data)
-        .rotate()
-        .resize(600)
-        .jpeg({ mozjpeg: true, quality: 50 })
-        .toBuffer()
-        .then(newWebpImg => {
-          //changing the old jpg image buffer to new webp buffer
-          foodImg.data = newWebpImg
-
-          const params = {
-            Bucket: process.env.AWS_BUCKET_NAME,
-            Key: foodImgName,
-            Body: newWebpImg,
-            ContentType: 'image/webp'
-          } //uploading the new webp image to s3 bucket, self executing function
-          ;(async () => {
-            try {
-              const { Location } = await s3.upload(params).promise()
-
-              //saving the new image path to the database
-              foodImgDisplayPath = Location
-              foodImgDisplayName = Location.split('.com/')[1]
-
-              await FoodsModel.findByIdAndUpdate(foodId, {
-                // Update foodImgs array, set foodImgDisplayPath, foodImgDisplayName
-                foodImgs: {
-                  foodImgDisplayName,
-                  foodImgDisplayPath
-                },
-                foodName,
-                foodPrice,
-                category,
-                foodDesc,
-                foodToppings: toppings,
-                foodTags: tags,
-                updatedAt
-              })
-
-              res.json({
-                message: 'Food Updated Successfully',
-                foodUpdated: 1
-              })
-            } catch (error) {
-              res.json({
-                message: error,
-                foodUpdated: 0
-              })
-              return
-            }
-          })()
-        })
-        .catch(err => {
+    s3.deleteObjects(
+      {
+        Bucket: process.env.AWS_BUCKET_NAME,
+        Delete: { Objects }
+      },
+      (error, data) => {
+        if (error) {
           res.json({
-            message: `Sorry! Something went wrong, check the error => 😥: \n ${err}`,
+            message: error,
             foodUpdated: 0
           })
+          return
+        }
+
+        //if no error in deleting old image, then upload the new image to s3 bucket by using the new foodImgs sharp
+        foodImgs.map((img, index) => {
+          sharp(img.data)
+            .resize(600)
+            .jpeg({ mozjpeg: true, quality: 50 })
+            .toBuffer()
+            .then(newWebpImg => {
+              //changing the old jpg image buffer to new webp buffer
+              img.data = newWebpImg
+
+              const params = {
+                Bucket: process.env.AWS_BUCKET_NAME,
+                Key: foodImgNames[index],
+                Body: newWebpImg,
+                ContentType: 'image/webp'
+              } //uploading the new webp image to s3 bucket, self executing function
+              ;(async () => {
+                try {
+                  const { Location } = await s3.upload(params).promise()
+
+                  //saving the new image path to the database
+                  foodImgDisplayPath.push(Location)
+                  foodImgDisplayName.push(Location.split('.com/')[1])
+                  if (index === foodImgs.length - 1) {
+                    await FoodsModel.findByIdAndUpdate(
+                      foodId,
+                      {
+                        foodImgs: foodImgs.map((img, index) => ({
+                          foodImgDisplayName: foodImgDisplayName[index],
+                          foodImgDisplayPath: foodImgDisplayPath[index]
+                        })),
+                        foodName,
+                        foodPrice,
+                        category,
+                        foodDesc,
+                        foodToppings: toppings,
+                        foodTags: tags,
+                        updatedAt
+                      },
+                      { new: true }
+                    )
+                    res.json({
+                      message: 'Food Updated Successfully',
+                      foodUpdated: 1
+                    })
+                  }
+                } catch (error) {
+                  console.log(error)
+                  res.json({
+                    message: error,
+                    foodUpdated: 0
+                  })
+                  return
+                }
+              })()
+            })
+            .catch(err => {
+              console.log(err)
+              res.json({
+                message: `Sorry! Something went wrong, check the error => 😥: \n ${err}`,
+                foodUpdated: 0
+              })
+            })
         })
-    })
+      }
+    )
+    //==========================================================
   } else {
-    if (imgId) {
-      //delete the old image from s3 bucket
-      const params = {
-        Bucket: process.env.AWS_BUCKET_NAME,
-        Key: prevFoodImgName
-      }
+    try {
+      await FoodsModel.findByIdAndUpdate(foodId, {
+        foodName,
+        foodPrice,
+        category,
+        foodDesc,
+        foodToppings: toppings,
+        foodTags: tags,
+        updatedAt
+      })
 
-      try {
-        await FoodsModel.findOneAndUpdate(
-          { _id: foodId },
-          [
-            {
-              $set: {
-                foodImgs: {
-                  $reduce: {
-                    input: '$foodImgs',
-                    initialValue: [],
-                    in: {
-                      $concatArrays: [
-                        '$$value',
-                        [
-                          {
-                            $mergeObjects: [
-                              { data: '$$this' },
-                              { inx: { $size: '$$value' } }
-                            ]
-                          }
-                        ]
-                      ]
-                    }
-                  }
-                }
-              }
-            },
-            {
-              $set: {
-                foodImgs: {
-                  $filter: {
-                    input: '$foodImgs',
-                    cond: { $ne: ['$$this.inx', parseInt(imgId)] }
-                  }
-                }
-              }
-            },
-            { $set: { foodImgs: { $map: { input: '$foodImgs', in: '$$this.data' } } } }
-          ],
-          { new: true }
-        )
-
-        await s3.deleteObject(params).promise() //delete the image from the s3 bucket
-
-        res.json({
-          message: 'Food image deleted successfully',
-          ImgDeleted: 1
-        })
-      } catch (error) {
-        res.json({
-          message: `Sorry! Something went wrong, check the error => 😥: \n ${error}`,
-          ImgDeleted: 0
-        })
-      }
-    } else {
-      try {
-        await FoodsModel.findByIdAndUpdate(foodId, {
-          foodName,
-          foodPrice,
-          category,
-          foodDesc,
-          foodToppings: toppings,
-          foodTags: tags,
-          updatedAt
-        })
-
-        res.json({
-          message: 'Food Updated Successfully',
-          foodUpdated: 1
-        })
-      } catch (error) {
-        res.json({
-          message: `Sorry! Something went wrong, check the error => 😥: \n ${error}`,
-          foodUpdated: 0
-        })
-      }
+      res.json({
+        message: 'Food Updated Successfully',
+        foodUpdated: 1
+      })
+    } catch (error) {
+      res.json({
+        message: `Sorry! Something went wrong, check the error => 😥: \n ${error}`,
+        foodUpdated: 0
+      })
     }
   }
 })

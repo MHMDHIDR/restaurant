@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import Axios from 'axios'
 
 import { TagsContext } from '../../../Contexts/TagsContext'
+import { FileUploadContext } from '../../../Contexts/FileUploadContext'
 
 import useDocumentTitle from '../../../hooks/useDocumentTitle'
 import useAxios from '../../../hooks/useAxios'
@@ -10,6 +11,7 @@ import useAxios from '../../../hooks/useAxios'
 import Modal from '../../../components/Modal/Modal'
 import { Success, Error, Loading } from '../../../components/Icons/Status'
 import AddTags from '../../../components/AddTags'
+import FileUpload from '../../../components/FileUpload'
 
 import { createSlug } from '../../../functions/slug'
 import goTo from '../../../functions/goTo'
@@ -23,9 +25,6 @@ const AddFood = () => {
   const [category, setCategory] = useState([])
   const [foodDesc, setFoodDesc] = useState('')
 
-  const [foodFile, setFoodFile] = useState('')
-  const [preview, setPreview] = useState()
-
   const [addFoodStatus, setAddFoodStatus] = useState()
   const [addFoodMessage, setAddFoodMessage] = useState()
   const [categoryList, setCategoryList] = useState([])
@@ -33,6 +32,7 @@ const AddFood = () => {
 
   //Contexts
   const { tags } = useContext(TagsContext)
+  const { file } = useContext(FileUploadContext)
 
   //Form errors messages
   const ImgErr = useRef(null)
@@ -59,37 +59,6 @@ const AddFood = () => {
     }
   }, [response])
 
-  const updateFoodImg = e => {
-    const file = e.target.files[0]
-
-    if (file) {
-      const fileType = file.type.split('/')[0]
-      if (fileType === 'image') setFoodFile(file)
-
-      const fileSizeToMB = file.size / 1000000
-      const MAX_FILE_SIZE = 1 //mb
-
-      if (fileSizeToMB > MAX_FILE_SIZE) {
-        ImgErr.current.textContent = `حجم الصورة لا يمكن أن يزيد عن ${MAX_FILE_SIZE} MB`
-      } else {
-        ImgErr.current.textContent = ''
-      }
-    }
-  }
-
-  useEffect(() => {
-    // if there's an image
-    if (foodFile) {
-      const reader = new FileReader()
-
-      reader.onloadend = () => setPreview(reader.result)
-
-      reader.readAsDataURL(foodFile)
-    } else {
-      setPreview(null)
-    }
-  }, [foodFile])
-
   const handleAddFood = async e => {
     e.preventDefault()
 
@@ -101,7 +70,7 @@ const AddFood = () => {
     formData.append('foodDesc', foodDesc)
     formData.append('foodToppings', JSON.stringify(toppings))
     formData.append('foodTags', JSON.stringify(tags))
-    formData.append('foodImg', foodFile)
+    file.map(foodImg => formData.append('foodImg', foodImg))
 
     if (
       ImgErr.current.textContent === '' &&
@@ -154,8 +123,8 @@ const AddFood = () => {
         <Modal
           status={Success}
           msg={`تم إضافة ${category[1]} بنجاح 😄 الرجاء الانتظار ليتم تحويلك لقائمة الوجبات والمشروبات`}
-          redirectLink='menu'
-          redirectTime='3000'
+          // redirectLink='menu'
+          // redirectTime='3000'
         />
       ) : addFoodStatus === 0 ? (
         <Modal status={Error} msg={addFoodMessage} />
@@ -180,31 +149,24 @@ const AddFood = () => {
                 encType='multipart/form-data'
                 onSubmit={handleAddFood}
               >
-                <label className='flex flex-wrap items-center justify-center gap-4 mb-8 sm:justify-between'>
-                  <img
-                    loading='lazy'
-                    src={
-                      preview === null
-                        ? 'https://source.unsplash.com/random?food'
-                        : preview
-                    }
-                    alt={foodFile ? foodFile.name : 'food, drink, sweet'}
-                    className='object-cover p-1 border border-gray-400 w-28 h-28 dark:border-gray-300 rounded-xl'
+                <div className='flex flex-col items-center justify-center gap-4 mb-8 sm:justify-between'>
+                  <FileUpload
+                    data={{
+                      defaultImg: [
+                        {
+                          foodImgDisplayName: 'food',
+                          foodImgDisplayPath: 'https://source.unsplash.com/random?food'
+                        }
+                      ],
+                      foodName: 'Food, Drink, Sweet'
+                    }}
                   />
-                  <input
-                    type='file'
-                    name='foodImg'
-                    id='foodImg'
-                    accept='image/*'
-                    onChange={updateFoodImg}
-                    className='grow-[.7] cursor-pointer text-lg text-white p-3 rounded-xl bg-orange-800 hover:bg-orange-700 transition-colors'
-                    required
-                  />
+
                   <span
                     className='inline-block md:text-lg text-red-600 dark:text-red-400 font-[600] pt-2 px-1'
                     ref={ImgErr}
                   ></span>
-                </label>
+                </div>
 
                 <label htmlFor='foodName' className='form__group'>
                   <input

@@ -1,24 +1,26 @@
 import { useContext } from 'react'
+import { useLocation } from 'react-router-dom'
 import { FileUploadContext } from '../Contexts/FileUploadContext'
 
 const FileUpload = ({ data }) => {
   const { file, fileURLs, onFileRemove, onFileAdd } = useContext(FileUploadContext)
+  let location = useLocation()
 
   return (
     <>
       <div
         className={`flex flex-wrap justify-center gap-x-5 py-3 overflow-y-auto bg-gray-100 rounded-lg cursor-pointer dark:bg-gray-700 w-[30rem]`}
       >
-        {fileURLs.length === 0 ? (
-          <img
-            loading='lazy'
-            src={data?.defaultImg}
-            alt={data?.foodName}
-            className='object-cover p-1 border border-gray-400 w-28 min-h-fit h-28 dark:border-gray-300 rounded-xl'
-          />
-        ) : (
-          <>
-            {fileURLs.map((fileURL, idx) => (
+        {fileURLs.length === 0
+          ? data.defaultImg.map(({ foodImgDisplayName, foodImgDisplayPath }, index) => (
+              <img
+                key={index}
+                src={foodImgDisplayPath}
+                alt={foodImgDisplayName}
+                className='object-cover p-1 border border-gray-400 w-28 min-h-fit h-28 dark:border-gray-300 rounded-xl'
+              />
+            ))
+          : fileURLs.map((fileURL, idx) => (
               <div
                 key={idx}
                 className={`flex items-center flex-col gap-y-3 max-h-44 h-44 place-content-center`}
@@ -38,12 +40,15 @@ const FileUpload = ({ data }) => {
                 </button>
               </div>
             ))}
-            <h3 className='text-xl text-center text-green-500 dark:text-green-400'>
-              لا تنسى الضغط على زر تحديث أسفل الصفحة لتحميل الصور
-            </h3>
-          </>
-        )}
       </div>
+
+      {location.pathname.split('/')[2].includes('edit-food') && (
+        <p className='text-center text-green-700 dark:text-green-400'>
+          عن اختيار صور جديدة فإن الصور القديمة سيتم حذفها، يرجى تحميل الصور القديمة
+          ورفعها مرة أخرى مع الصور الجديدة إن أردت حفظها لا تنسى الضغط على زر تحديث أسفل
+          الصفحة لتحميل الصور
+        </p>
+      )}
 
       <input
         type='file'

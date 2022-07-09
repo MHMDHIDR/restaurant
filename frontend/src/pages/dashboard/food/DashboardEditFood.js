@@ -150,6 +150,8 @@ const EditFood = () => {
         descErr.current.textContent === ''
       ) {
         try {
+          //show waiting modal
+          modalLoading.classList.remove('hidden')
           const response = await Axios.patch(
             `${BASE_URL}/foods/${currentFoodId}`,
             formData
@@ -157,6 +159,10 @@ const EditFood = () => {
 
           const { foodUpdated } = response.data
           setUpdatedFoodStatus(foodUpdated)
+          //Remove waiting modal
+          setTimeout(() => {
+            modalLoading.classList.add('hidden')
+          }, 300)
         } catch (err) {
           console.error(err)
         }
@@ -211,8 +217,8 @@ const EditFood = () => {
           msg={`تم تحديث بيانات ${removeSlug(
             data?.foodName
           )} بنجاح   😄   الرجاء الانتظار ليتم تحويلك لقائمة الوجبات والمشروبات`}
-          //   redirectLink={goTo('menu')}
-          //   redirectTime='3500'
+          redirectLink={goTo('menu')}
+          redirectTime='3500'
         />
       ) : updatedFoodStatus === 0 ? (
         <Modal status={Error} msg='حدث خطأ ما أثناء تحديث بيانات الوجبة!' />
@@ -220,15 +226,15 @@ const EditFood = () => {
         <Modal
           status={Success}
           msg={`تم حذف ${delFoodName} بنجاح 😄 الرجاء الانتظار ليتم تحويلك لقائمة الوجبات`}
-          // redirectLink={goTo('menu')}
-          // redirectTime='3500'
+          redirectLink={goTo('menu')}
+          redirectTime='3500'
         />
       ) : deleteFoodStatus === 0 ? (
         <Modal
           status={Error}
           msg={`حدث خطأ ما أثناء حذف ${delFoodName}!`}
-          // redirectLink={goTo('menu')}
-          // redirectTime='3500'
+          redirectLink={goTo('menu')}
+          redirectTime='3500'
         />
       ) : null}
 
@@ -254,7 +260,7 @@ const EditFood = () => {
                   <div className='flex flex-col items-center justify-center gap-4 mb-8 sm:justify-between'>
                     <FileUpload
                       data={{
-                        defaultImg: data?.foodImgs[0]?.foodImgDisplayPath,
+                        defaultImg: data?.foodImgs,
                         foodName: data?.foodName
                       }}
                     />

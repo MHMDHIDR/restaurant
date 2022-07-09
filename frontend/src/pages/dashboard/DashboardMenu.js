@@ -119,6 +119,7 @@ const DashboardMenu = () => {
           <table className='table w-full text-center'>
             <thead className='text-white bg-orange-800'>
               <tr>
+                <th className='px-1 py-2'>الترتيب</th>
                 <th className='px-1 py-2'>صورة</th>
                 <th className='px-1 py-2'>اسم الوجبة</th>
                 <th className='px-1 py-2'>الوصف</th>
@@ -131,11 +132,12 @@ const DashboardMenu = () => {
             <tbody>
               {(data ?? data !== undefined) && data?.response?.length > 0 ? (
                 <>
-                  {data?.response?.map(item => (
+                  {data?.response?.map((item, idx) => (
                     <tr
                       key={item._id}
                       className='transition-colors even:bg-gray-200 odd:bg-gray-300 dark:even:bg-gray-600 dark:odd:bg-gray-700'
                     >
+                      <td className='px-1 py-2'>{idx + 1}</td>
                       <td className='px-1 py-2 pr-3 min-w-[5rem]'>
                         <img
                           loading='lazy'
@@ -167,7 +169,7 @@ const DashboardMenu = () => {
                       <td className='px-1 py-2 min-w-[10rem]'>
                         {createLocaleDateString(item.updatedAt)}
                       </td>
-                      <td className='px-1 py-2 min-w-[10rem]'>
+                      <td className='px-1 py-2 min-w-[11rem]'>
                         <Link
                           to={goTo(`edit-food/${item._id}`)}
                           className='px-4 py-1 text-white bg-green-600 rounded-md hover:bg-green-700'
