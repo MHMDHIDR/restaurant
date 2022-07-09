@@ -33,7 +33,7 @@ const AddTags = ({ inputId }) => {
         type='text'
         id={inputId}
         className='form__input tags'
-        placeholder='اكتب التصنيفات التي تريد اضافتها'
+        placeholder='اكتب العلامات التصنيفية التي تريد اضافتها'
         onKeyDown={e => {
           if (e.target.value.trim() !== '') {
             addTag(e)

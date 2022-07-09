@@ -123,8 +123,8 @@ const AddFood = () => {
         <Modal
           status={Success}
           msg={`تم إضافة ${category[1]} بنجاح 😄 الرجاء الانتظار ليتم تحويلك لقائمة الوجبات والمشروبات`}
-          // redirectLink='menu'
-          // redirectTime='3000'
+          redirectLink='menu'
+          redirectTime='3000'
         />
       ) : addFoodStatus === 0 ? (
         <Modal status={Error} msg={addFoodMessage} />
@@ -303,7 +303,6 @@ const AddFood = () => {
                         name='toppingName'
                         defaultValue={toppingName}
                         onChange={e => handleInputChange(e, idx)}
-                        required
                       />
                       <input
                         type='number'
@@ -315,7 +314,6 @@ const AddFood = () => {
                         name='toppingPrice'
                         defaultValue={toppingPrice}
                         onChange={e => handleInputChange(e, idx)}
-                        required
                       />
                     </div>
                     <div className='flex gap-4 pb-6'>

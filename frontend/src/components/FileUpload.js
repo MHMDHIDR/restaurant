@@ -58,6 +58,7 @@ const FileUpload = ({ data }) => {
         accept='image/*'
         onChange={onFileAdd}
         multiple
+        required
       />
     </>
   )
