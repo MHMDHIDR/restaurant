@@ -76,7 +76,7 @@ const Card = ({
             // if this item has toppings and it's a string
             <div className='flex flex-col flex-wrap items-start gap-4 rtl'>
               <span>الإضافات:</span>
-              {cToppings.map(({ toppingName, toppingPrice }, idx) => {
+              {cToppings.map(({ toppingName = 'إضافة', toppingPrice = '1' }, idx) => {
                 const cToppingId = cItemId + '-' + idx
 
                 return (

@@ -36,6 +36,8 @@ const EditFood = () => {
   const [foodDesc, setFoodDesc] = useState('')
 
   const [updatedFoodStatus, setUpdatedFoodStatus] = useState()
+  const [loadingMsg, setLoadingMsg] = useState('')
+  const [hasConfirmBtns, setHasConfirmBtn] = useState(false)
 
   //Contexts
   const { tags, setTags } = useContext(TagsContext)
@@ -150,6 +152,7 @@ const EditFood = () => {
         descErr.current.textContent === ''
       ) {
         try {
+          setLoadingMsg(`جار تحديث ${foodName}`)
           //show waiting modal
           modalLoading.classList.remove('hidden')
           const response = await Axios.patch(
@@ -199,6 +202,12 @@ const EditFood = () => {
       setDelFoodId(e.target.dataset.id)
       setDelFoodName(removeSlug(e.target.dataset.name))
       setDelFoodImg(e.target.dataset.imgname)
+      setHasConfirmBtn(true)
+      setLoadingMsg(
+        `هل أنت متأكد من حذف ${removeSlug(
+          e.target.dataset.name
+        )} ؟ لا يمكن التراجع عن هذا القرار`
+      )
       modalLoading.classList.remove('hidden')
     }
 
@@ -245,8 +254,8 @@ const EditFood = () => {
             status={Loading}
             modalHidden='hidden'
             classes='text-blue-600 dark:text-blue-400 text-lg'
-            msg={`هل أنت متأكد من حذف ${delFoodName} ؟ لا يمكن التراجع عن هذا القرار`}
-            ctaConfirmBtns={['حذف', 'الغاء']}
+            msg={loadingMsg}
+            ctaConfirmBtns={hasConfirmBtns && ['حذف', 'الغاء']}
           />
 
           <h3 className='mx-0 mt-4 mb-12 text-2xl text-center md:text-3xl'>

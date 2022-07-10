@@ -122,19 +122,19 @@ const updateFood = asyncHandler(async (req, res) => {
   const { foodId } = req.params
   const updatedAt = Date.now()
 
-  const { foodImg } = req.files
-  const foodImgs = foodImg && Array.isArray(foodImg) ? foodImg : [foodImg]
-  const foodImgNames = foodImgs?.map(img => uuidv4() + img.name.split('.')[0] + '.webp')
-
-  let foodImgDisplayPath = prevFoodImgPathsAndNames.map(
-    ({ foodImgDisplayPath }) => foodImgDisplayPath
-  )
-  let foodImgDisplayName = prevFoodImgPathsAndNames.map(
-    ({ foodImgDisplayName }) => foodImgDisplayName
-  )
-
   //if the user has uploaded a new image
-  if (foodImgs) {
+  if (req.files) {
+    const { foodImg } = req.files
+    const foodImgs = foodImg && Array.isArray(foodImg) ? foodImg : [foodImg]
+    const foodImgNames = foodImgs?.map(img => uuidv4() + img.name.split('.')[0] + '.webp')
+
+    let foodImgDisplayPath = prevFoodImgPathsAndNames.map(
+      ({ foodImgDisplayPath }) => foodImgDisplayPath
+    )
+    let foodImgDisplayName = prevFoodImgPathsAndNames.map(
+      ({ foodImgDisplayName }) => foodImgDisplayName
+    )
+
     //delete the old images from s3 bucket using the prevFoodImgPathsAndNames
     const Objects = prevFoodImgPathsAndNames.map(({ foodImgDisplayName }) => ({
       Key: foodImgDisplayName

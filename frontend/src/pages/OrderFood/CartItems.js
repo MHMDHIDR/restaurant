@@ -57,7 +57,12 @@ const CartItems = ({ setGrandPrice }) => {
                 <div className='flex flex-col gap-2 text-lg select-none md:items-start'>
                   <h2 className='text-center ltr'>الإضافات</h2>
                   {item?.cToppings?.map(
-                    ({ toppingId, toppingName, toppingPrice, toppingQuantity }) => (
+                    ({
+                      toppingId,
+                      toppingName = 'إضافة',
+                      toppingPrice = '1',
+                      toppingQuantity
+                    }) => (
                       <div className='flex items-center' key={toppingId}>
                         <input
                           type='checkbox'
