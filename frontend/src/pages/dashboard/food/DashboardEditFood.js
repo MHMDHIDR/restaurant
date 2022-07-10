@@ -176,17 +176,24 @@ const EditFood = () => {
     }
   }
 
-  const handleDeleteFood = async (foodId, foodImg) => {
-    //using FormData to send constructed data
-    const data = new FormData()
-    data.append('prevFoodImgName', foodImg)
-
+  const handleDeleteFood = async foodId => {
+    const prevFoodImgPathsAndNames = [
+      ...data?.foodImgs.map(({ foodImgDisplayPath, foodImgDisplayName }) => {
+        return {
+          foodImgDisplayPath,
+          foodImgDisplayName
+        }
+      })
+    ]
+    //Using FormData to send constructed data
+    const formData = new FormData()
+    formData.append('prevFoodImgPathsAndNames', JSON.stringify(prevFoodImgPathsAndNames))
     try {
       //You need to name the body {data} so it can be recognized in (.delete) method
-      const response = await Axios.delete(`${BASE_URL}/foods/${foodId}`, { data })
-
+      const response = await Axios.delete(`${BASE_URL}/foods/${foodId}`, {
+        data: formData
+      })
       const { foodDeleted } = response.data
-
       setDeleteFoodStatus(foodDeleted)
       //Remove waiting modal
       setTimeout(() => {
@@ -226,8 +233,8 @@ const EditFood = () => {
           msg={`تم تحديث بيانات ${removeSlug(
             data?.foodName
           )} بنجاح   😄   الرجاء الانتظار ليتم تحويلك لقائمة الوجبات والمشروبات`}
-          redirectLink={goTo('menu')}
-          redirectTime='3500'
+          // redirectLink={goTo('menu')}
+          // redirectTime='3500'
         />
       ) : updatedFoodStatus === 0 ? (
         <Modal status={Error} msg='حدث خطأ ما أثناء تحديث بيانات الوجبة!' />
@@ -235,15 +242,15 @@ const EditFood = () => {
         <Modal
           status={Success}
           msg={`تم حذف ${delFoodName} بنجاح 😄 الرجاء الانتظار ليتم تحويلك لقائمة الوجبات`}
-          redirectLink={goTo('menu')}
-          redirectTime='3500'
+          // redirectLink={goTo('menu')}
+          // redirectTime='3500'
         />
       ) : deleteFoodStatus === 0 ? (
         <Modal
           status={Error}
           msg={`حدث خطأ ما أثناء حذف ${delFoodName}!`}
-          redirectLink={goTo('menu')}
-          redirectTime='3500'
+          // redirectLink={goTo('menu')}
+          // redirectTime='3500'
         />
       ) : null}
 

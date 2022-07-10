@@ -77,40 +77,44 @@ const getFood = asyncHandler(async (req, res) => {
   res.json(res.paginatedResults)
 })
 
-const deleteFood = asyncHandler(async (req, res) => {
-  const { prevFoodImgName } = req.body
+const deleteFood = asyncHandler((req, res) => {
+  const prevFoodImgPathsAndNames = JSON.parse(req.body.prevFoodImgPathsAndNames)
   const { foodId } = req.params
 
-  //delete the old image from s3 bucket
-  const params = {
-    Bucket: process.env.AWS_BUCKET_NAME,
-    Key: prevFoodImgName
-  }
+  //delete the old images from s3 bucket using the prevFoodImgPathsAndNames
+  const Objects = prevFoodImgPathsAndNames.map(({ foodImgDisplayName }) => ({
+    Key: foodImgDisplayName
+  }))
 
-  try {
-    await FoodsModel.findByIdAndDelete(foodId)
-
-    s3.deleteObject(params, (err, data) => {
-      if (err) {
+  s3.deleteObjects(
+    {
+      Bucket: process.env.AWS_BUCKET_NAME,
+      Delete: { Objects }
+    },
+    async (error, data) => {
+      if (error) {
         res.json({
-          message: err,
-          foodDeleted: 0
+          message: error,
+          foodUpdated: 0
         })
         return
       }
 
-      res.json({
-        message: 'Food Deleted Successfully',
-        foodDeleted: 1
-      })
-      return
-    })
-  } catch (error) {
-    res.json({
-      message: `Sorry! Something went wrong, check the error => 😥: \n ${error}`,
-      foodDeleted: 0
-    })
-  }
+      try {
+        await FoodsModel.findByIdAndDelete(foodId)
+
+        res.json({
+          message: 'Food Deleted Successfully',
+          foodDeleted: 1
+        })
+      } catch (error) {
+        res.json({
+          message: `Sorry! Something went wrong, check the error => 😥: \n ${error}`,
+          foodDeleted: 0
+        })
+      }
+    }
+  )
 })
 
 const updateFood = asyncHandler(async (req, res) => {

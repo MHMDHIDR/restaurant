@@ -26,7 +26,7 @@ const DashboardMenu = () => {
 
   const [delFoodId, setDelFoodId] = useState()
   const [delFoodName, setDelFoodName] = useState('')
-  const [delFoodImg, setDelFoodImg] = useState()
+  const [delFoodImgs, setDelFoodImgs] = useState([])
   const [deleteFoodStatus, setDeleteFoodStatus] = useState()
   const [data, setData] = useState('')
 
@@ -51,28 +51,35 @@ const DashboardMenu = () => {
     if (e.target.id === 'deleteFood') {
       setDelFoodId(e.target.dataset.id)
       setDelFoodName(removeSlug(e.target.dataset.name))
-      setDelFoodImg(e.target.dataset.imgname)
+      setDelFoodImgs(JSON.parse(e.target.dataset.imgname))
       modalLoading.classList.remove('hidden')
     }
 
     if (e.target.id === 'cancel') {
       modalLoading.classList.add('hidden')
     } else if (e.target.id === 'confirm') {
-      handleDeleteFood(delFoodId, delFoodImg)
+      handleDeleteFood(delFoodId, delFoodImgs)
     }
   })
 
-  const handleDeleteFood = async (foodId, foodImg) => {
-    //using FormData to send constructed data
-    const data = new FormData()
-    data.append('prevFoodImgName', foodImg)
-
+  const handleDeleteFood = async (foodId, foodImgs) => {
+    const prevFoodImgPathsAndNames = [
+      ...foodImgs.map(({ foodImgDisplayPath, foodImgDisplayName }) => {
+        return {
+          foodImgDisplayPath,
+          foodImgDisplayName
+        }
+      })
+    ]
+    //Using FormData to send constructed data
+    const formData = new FormData()
+    formData.append('prevFoodImgPathsAndNames', JSON.stringify(prevFoodImgPathsAndNames))
     try {
       //You need to name the body {data} so it can be recognized in (.delete) method
-      const response = await Axios.delete(`${BASE_URL}/foods/${foodId}`, { data })
-
+      const response = await Axios.delete(`${BASE_URL}/foods/${foodId}`, {
+        data: formData
+      })
       const { foodDeleted } = response.data
-
       setDeleteFoodStatus(foodDeleted)
       //Remove waiting modal
       setTimeout(() => {
@@ -90,14 +97,14 @@ const DashboardMenu = () => {
           status={Success}
           msg={`تم حذف ${delFoodName} بنجاح 😄 الرجاء الانتظار ليتم تحويلك لقائمة الوجبات`}
           redirectLink={goTo('menu')}
-          redirectTime='4000'
+          redirectTime='3500'
         />
       ) : deleteFoodStatus === 0 ? (
         <Modal
           status={Error}
           msg={`حدث خطأ ما أثناء حذف ${delFoodName}!`}
           redirectLink={goTo('menu')}
-          redirectTime='4000'
+          redirectTime='3500'
         />
       ) : null}
 
@@ -180,7 +187,7 @@ const DashboardMenu = () => {
                           id='deleteFood'
                           data-id={item._id}
                           data-name={item.foodName}
-                          data-imgname={item.foodImgDisplayName}
+                          data-imgname={JSON.stringify(item.foodImgs)}
                           className='px-4 py-2 m-2 text-white bg-red-600 rounded-md hover:bg-red-700'
                         >
                           حذف
