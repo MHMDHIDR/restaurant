@@ -4,8 +4,9 @@ import { CartContext } from '../Contexts/CartContext'
 import ThemeToggler from './ThemeToggler'
 import Logo from './Icons/Logo'
 
-import scrollTo from '../functions/scrollToSection'
 import menuToggler from '../functions/menuToggler'
+
+import MyLink from '../components/MyLink'
 
 import useEventListener from '../hooks/useEventListener'
 
@@ -78,65 +79,25 @@ const Nav = () => {
           id='menu'
         >
           <ul
-            className='absolute flex flex-col items-center w-full py-5 mx-auto mt-3 text-gray-800 border border-orange-300 rounded-lg shadow-lg  2xl:gap-12 space-y-7 sm:space-y-10 sm:py-8 sm:mt-8 bg-gradient-to-tr from-orange-300 to-orange-400 rtl xl:static xl:justify-between xl:flex-row xl:space-y-0 xl:bg-none xl:space-x-4 xl:py-0 xl:mt-0 xl:border-none xl:shadow-none'
+            className='absolute flex flex-col items-center w-full py-5 mx-auto mt-3 text-gray-800 border border-orange-300 rounded-lg shadow-lg gap-x-6 2xl:gap-12 space-y-7 sm:space-y-10 sm:py-8 sm:mt-8 bg-gradient-to-tr from-orange-300 to-orange-400 rtl xl:static xl:justify-between xl:flex-row xl:space-y-0 xl:bg-none xl:space-x-4 xl:py-0 xl:mt-0 xl:border-none xl:shadow-none'
             id='menu'
           >
             <li>
-              <Link
-                to='/'
-                className='underline-hover xl:mx-4 lg:mx-10'
-                data-scroll='menu'
-                onClick={e => {
-                  scrollTo(e)
-                  menuToggler()
-                }}
-              >
-                القائمة
-              </Link>
+              <MyLink to='menu'>القائمة</MyLink>
             </li>
             <li>
-              <Link
-                to='#'
-                className='underline-hover'
-                data-scroll='new'
-                onClick={e => {
-                  scrollTo(e)
-                  menuToggler()
-                }}
-              >
-                جديدنا
-              </Link>
+              <MyLink to='new'>جديدنا</MyLink>
             </li>
             <li>
-              <Link to='/categories' className='underline-hover' onClick={menuToggler}>
+              <Link to='/categories' className='underline-hover'>
                 التصنيفات
               </Link>
             </li>
             <li>
-              <Link
-                to='#'
-                className='underline-hover'
-                data-scroll='about'
-                onClick={e => {
-                  scrollTo(e)
-                  menuToggler()
-                }}
-              >
-                عن المطعم
-              </Link>
+              <MyLink to='about'>عن المطعم</MyLink>
             </li>
             <li>
-              <Link
-                to='/contact'
-                className='px-3 py-0.5 text-white transition-colors bg-green-700 border-2 rounded-lg hover:bg-green-800 xl:border-0 text-sm xl:text-base'
-                data-scroll='contact'
-                onClick={e => {
-                  scrollTo(e)
-                  menuToggler()
-                }}
-              >
-                تواصل معنا
-              </Link>
+              <MyLink to='contact'>تواصل معنا</MyLink>
             </li>
             {'user' in localStorage ? (
               <li className='flex gap-3'>

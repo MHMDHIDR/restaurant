@@ -4,7 +4,7 @@ import { FileUploadContext } from '../Contexts/FileUploadContext'
 
 const FileUpload = ({ data }) => {
   const { file, fileURLs, onFileRemove, onFileAdd } = useContext(FileUploadContext)
-  let location = useLocation()
+  let { pathname } = useLocation()
 
   return (
     <>
@@ -42,7 +42,7 @@ const FileUpload = ({ data }) => {
             ))}
       </div>
 
-      {location.pathname.split('/')[2].includes('edit-food') && (
+      {pathname.split('/')[2].includes('edit-food') && (
         <p className='text-center text-green-700 dark:text-green-400'>
           عن اختيار صور جديدة فإن الصور القديمة سيتم حذفها، يرجى تحميل الصور القديمة
           ورفعها مرة أخرى مع الصور الجديدة إن أردت حفظها لا تنسى الضغط على زر تحديث أسفل

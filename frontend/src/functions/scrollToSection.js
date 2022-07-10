@@ -3,14 +3,12 @@ const ScrollToSection = e => {
 
   if (target.hasAttribute('data-scroll')) {
     e.preventDefault()
-    // check target link if not empty, else set it to .hero
+    //check target link if not empty, else set it to .hero
     const targetLink = target.dataset.scroll !== '' ? target.dataset.scroll : 'hero'
-
     const targetLinkExists = document.getElementsByClassName(targetLink)
-
-    // if targetLink exists in same page scroll, else redirect to homepage then scroll
+    //if targetLink exists in same page scroll, else redirect to homepage then scroll
     if (targetLinkExists.length) {
-      // top position of the Targeted element Class (50 means padding top)
+      //(50 means padding top)
       window.scrollTo({
         top: document.querySelector('.' + targetLink).offsetTop - 50,
         behavior: 'smooth'
