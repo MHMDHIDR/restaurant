@@ -3,7 +3,10 @@ const { v4: uuidv4 } = require('uuid')
 const asyncHandler = require('express-async-handler')
 const sharp = require('sharp')
 const AWS = require('aws-sdk')
-const s3 = new AWS.S3()
+const s3 = new AWS.S3({
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+})
 
 const addFood = asyncHandler(async (req, res) => {
   const { foodName, foodPrice, category, foodDesc, foodToppings, foodTags } = req.body
@@ -14,63 +17,42 @@ const addFood = asyncHandler(async (req, res) => {
   const foodImgs = foodImg && Array.isArray(foodImg) ? foodImg : [foodImg]
   const foodImgNames = foodImgs?.map(img => uuidv4() + img.name.split('.')[0] + '.webp')
 
-  let foodImgDisplayPath, foodImgDisplayName
+  const uploadToS3 = async (img, imgName) => {
+    const params = {
+      Bucket: process.env.AWS_BUCKET_NAME,
+      Key: imgName,
+      Body: img,
+      ContentType: 'image/webp'
+    }
+    const imgUpload = await s3.upload(params).promise()
+    return imgUpload.Location
+  }
 
-  foodImgs.map((img, index) => {
-    sharp(img.data)
-      .resize(600)
-      .jpeg({ mozjpeg: true, quality: 50 })
-      .toBuffer()
-      .then(newWebpImg => {
-        //changing the old jpg image buffer to new webp buffer
-        img.data = newWebpImg
+  const foodImgUrls = await Promise.all(
+    foodImgs.map(async (img, index) => {
+      const foodImgDisplayName = foodImgNames[index]
+      const foodImgDisplayPath = await uploadToS3(img.data, foodImgDisplayName)
+      return { foodImgDisplayName, foodImgDisplayPath }
+    })
+  )
 
-        const params = {
-          Bucket: process.env.AWS_BUCKET_NAME,
-          Key: foodImgNames[index],
-          Body: newWebpImg,
-          ContentType: 'image/webp'
-        } //uploading the new webp image to s3 bucket, self executing function
-        ;(async () => {
-          try {
-            const { Location } = await s3.upload(params).promise()
-
-            //save food into database
-            await FoodsModel.create({
-              foodName,
-              foodPrice,
-              category,
-              foodDesc,
-              foodToppings: toppings,
-              foodTags: tags,
-              foodImgs: foodImgs.map(img => {
-                return {
-                  foodImgDisplayName: foodImgNames[index],
-                  foodImgDisplayPath: Location
-                }
-              })
-            })
-
-            res.json({
-              message: 'Food added successfully',
-              foodAdded: 1
-            })
-            return
-          } catch (error) {
-            res.json({
-              message: error,
-              foodAdded: 0
-            })
-            return
-          }
-        })()
-      })
-      .catch(err => {
-        res.json({
-          message: `Sorry! Something went wrong, check the error => 😥: \n ${err}`,
-          foodAdded: 0
-        })
-      })
+  const food = await FoodsModel.create({
+    foodName,
+    foodPrice,
+    category,
+    foodDesc,
+    foodToppings: toppings,
+    foodTags: tags,
+    foodImgs: foodImgUrls.map(({ foodImgDisplayName, foodImgDisplayPath }) => {
+      return {
+        foodImgDisplayName,
+        foodImgDisplayPath
+      }
+    })
+  })
+  res.status(201).json({
+    foodAdded: 1,
+    message: 'Food added successfully'
   })
 })
 
