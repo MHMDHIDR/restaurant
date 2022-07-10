@@ -31,7 +31,7 @@ const CartItems = ({ setGrandPrice }) => {
             {/* Product Image */}
             <img
               loading='lazy'
-              src={item?.cImg}
+              src={item?.cImg[0].foodImgDisplayPath}
               alt={removeSlug(item?.cHeading)}
               width='128'
               height='128'

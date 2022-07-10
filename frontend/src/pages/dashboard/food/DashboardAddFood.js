@@ -60,43 +60,48 @@ const AddFood = () => {
   }, [response])
 
   const handleAddFood = async e => {
-    e.preventDefault()
-
-    //using FormData to send constructed data
-    const formData = new FormData()
-    formData.append('foodName', foodName)
-    formData.append('foodPrice', foodPrice)
-    formData.append('category', category[0])
-    formData.append('foodDesc', foodDesc)
-    formData.append('foodToppings', JSON.stringify(toppings))
-    formData.append('foodTags', JSON.stringify(tags))
-    file.map(foodImg => formData.append('foodImg', foodImg))
-
-    if (
-      ImgErr.current.textContent === '' &&
-      foodNameErr.current.textContent === '' &&
-      priceErr.current.textContent === '' &&
-      descErr.current.textContent === ''
-    ) {
-      //show waiting modal
-      modalLoading.classList.remove('hidden')
-
-      try {
-        const response = await Axios.post(`${BASE_URL}/foods`, formData)
-
-        const { foodAdded, message } = response.data
-        setAddFoodStatus(foodAdded)
-        setAddFoodMessage(message)
-        //Remove waiting modal
-        setTimeout(() => {
-          modalLoading.classList.add('hidden')
-        }, 300)
-      } catch (err) {
-        formMsg.current.textContent = `عفواً حدث خطأ ما 😥 ${err}`
-      }
+    if (e.key === 'Enter') {
+      //don't submit the form if Enter is pressed
+      e.preventDefault()
     } else {
-      formMsg.current.textContent =
-        'الرجاء إضافة بيانات الوجبة بصورة صحيحة لتستطيع إضافتها 😃'
+      e.preventDefault()
+
+      //using FormData to send constructed data
+      const formData = new FormData()
+      formData.append('foodName', foodName)
+      formData.append('foodPrice', foodPrice)
+      formData.append('category', category[0])
+      formData.append('foodDesc', foodDesc)
+      formData.append('foodToppings', JSON.stringify(toppings))
+      formData.append('foodTags', JSON.stringify(tags))
+      file.map(foodImg => formData.append('foodImg', foodImg))
+
+      if (
+        ImgErr.current.textContent === '' &&
+        foodNameErr.current.textContent === '' &&
+        priceErr.current.textContent === '' &&
+        descErr.current.textContent === ''
+      ) {
+        //show waiting modal
+        modalLoading.classList.remove('hidden')
+
+        try {
+          const response = await Axios.post(`${BASE_URL}/foods`, formData)
+
+          const { foodAdded, message } = response.data
+          setAddFoodStatus(foodAdded)
+          setAddFoodMessage(message)
+          //Remove waiting modal
+          setTimeout(() => {
+            modalLoading.classList.add('hidden')
+          }, 300)
+        } catch (err) {
+          formMsg.current.textContent = `عفواً حدث خطأ ما 😥 ${err}`
+        }
+      } else {
+        formMsg.current.textContent =
+          'الرجاء إضافة بيانات الوجبة بصورة صحيحة لتستطيع إضافتها 😃'
+      }
     }
   }
 

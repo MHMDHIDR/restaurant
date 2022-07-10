@@ -4,13 +4,13 @@ import { useContext } from 'react'
 import { CartContext } from '../Contexts/CartContext'
 import { ToppingsContext } from '../Contexts/ToppingsContext'
 import TagIcon from '../components/Icons/TagIcon'
+import EmblaCarousel from '../components/Embla/EmblaCarousel'
 
 import { removeSlug } from '../functions/slug'
 
 import Logo from './Icons/Logo'
 
 const Card = ({
-  cTitle,
   cItemId,
   cHeading,
   cDesc,
@@ -38,9 +38,20 @@ const Card = ({
     }
   }
 
+  const SlidesCount = cImg.length
+  const slides = Array.from(Array(SlidesCount).keys())
+  let media = []
+  cImg &&
+    cImg.map(({ foodImgDisplayPath }) =>
+      media.push({
+        foodImgDisplayPath,
+        foodId: cItemId,
+        foodName: cHeading.props.children
+      })
+    )
+
   return (
     <div className='mb-32'>
-      {cTitle ? <h2 className='text-center card__title'>{cTitle}</h2> : ''}
       <div className='flex flex-wrap items-center justify-center max-w-xs mx-auto lg:justify-between sm:max-w-full'>
         <div className='flex flex-col flex-wrap items-center justify-center flex-1 order-1 gap-3 sm:px-16'>
           {cHeading ? (
@@ -123,19 +134,12 @@ const Card = ({
           ) : null}
         </div>
         <div
-          style={{ '--cardImgSize': '17rem' }}
+          style={{ '--cardImgSize': '20rem' }}
           title={removeSlug(cImgAlt)}
-          className='min-w-[var(--cardImgSize)] max-w-[calc(var(--cardImgSize))] overflow-hidden transition-colors bg-gray-100 border border-gray-400 rounded-lg dark:bg-gray-600 min-h-[var(--cardImgSize)] max-h-[calc(var(--cardImgSize))]'
+          className='min-w-[var(--cardImgSize)] max-w-[calc(var(--cardImgSize))] overflow-hidden transition-colors bg-gray-100 border border-gray-400 rounded-lg dark:bg-gray-600 min-h-[var(--cardImgSize)] max-h-[calc(var(--cardImgSize)*1.1)]'
         >
           {cImg ? (
-            <img
-              loading='lazy'
-              src={cImg}
-              alt={removeSlug(cImgAlt)}
-              className='min-w-[var(--cardImgSize)] min-h-[var(--cardImgSize)] p-2 object-cover rounded-xl aspect-video'
-              height='320'
-              width='320'
-            />
+            <EmblaCarousel slides={slides} media={media} smallView={true} />
           ) : (
             <Logo width='32 md:w-60' height='32 md:h-60' className='mx-auto my-2' />
           )}

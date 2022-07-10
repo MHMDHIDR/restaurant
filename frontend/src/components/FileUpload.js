@@ -9,7 +9,7 @@ const FileUpload = ({ data }) => {
   return (
     <>
       <div
-        className={`flex flex-wrap justify-center gap-x-5 py-3 overflow-y-auto bg-gray-100 rounded-lg cursor-pointer dark:bg-gray-700 w-[30rem]`}
+        className={`flex flex-wrap justify-center gap-5 py-3 overflow-y-auto bg-gray-100 rounded-lg cursor-pointer dark:bg-gray-700 w-[30rem]`}
       >
         {fileURLs.length === 0
           ? data.defaultImg.map(({ foodImgDisplayName, foodImgDisplayPath }, index) => (

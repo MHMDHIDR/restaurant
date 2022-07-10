@@ -46,7 +46,7 @@ const NewFood = () => {
                 cDesc={abstractText(item.foodDesc, 100)}
                 cTags={item?.foodTags}
                 cToppings={item.foodToppings}
-                cImg={item.foodImgs[0]?.foodImgDisplayPath}
+                cImg={item.foodImgs}
                 cImgAlt={item.foodName}
                 cCtaLabel={
                   //add to cart button, if item is already in cart then disable the button

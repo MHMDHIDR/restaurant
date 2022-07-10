@@ -70,6 +70,7 @@ const ViewFood = () => {
             data?.response?.length > 0 ? (
               <Suspense fallback={<LoadingCard />}>
                 {data?.response?.map(item => (
+                  // View Multiple (Many) food items
                   <Card
                     key={item._id}
                     cItemId={item._id}
@@ -82,7 +83,7 @@ const ViewFood = () => {
                     cDesc={abstractText(item.foodDesc, 120)}
                     cTags={item?.foodTags}
                     cToppings={item.foodToppings}
-                    cImg={item.foodImgs[0]?.foodImgDisplayPath}
+                    cImg={item.foodImgs}
                     cImgAlt={item.foodName}
                     cCtaLabel={
                       //add to cart button, if item is already in cart then disable the button
@@ -139,7 +140,7 @@ const ViewFood = () => {
                   cDesc={data?.response?.foodDesc}
                   cTags={data?.response?.foodTags}
                   cToppings={data?.response?.foodToppings}
-                  cImg={data?.response?.foodImgs[0]?.foodImgDisplayPath}
+                  cImg={data?.response?.foodImgs}
                   cImgAlt={data?.response?.foodName}
                   cCtaLabel={
                     //add to cart button, if item is already in cart then disable the button
