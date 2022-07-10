@@ -55,6 +55,7 @@ const addFood = asyncHandler(async (req, res) => {
               message: 'Food added successfully',
               foodAdded: 1
             })
+            return
           } catch (error) {
             res.json({
               message: error,
@@ -107,11 +108,13 @@ const deleteFood = asyncHandler((req, res) => {
           message: 'Food Deleted Successfully',
           foodDeleted: 1
         })
+        return
       } catch (error) {
         res.json({
           message: `Sorry! Something went wrong, check the error => 😥: \n ${error}`,
           foodDeleted: 0
         })
+        return
       }
     }
   )
@@ -203,9 +206,9 @@ const updateFood = asyncHandler(async (req, res) => {
                       message: 'Food Updated Successfully',
                       foodUpdated: 1
                     })
+                    return
                   }
                 } catch (error) {
-                  console.log(error)
                   res.json({
                     message: error,
                     foodUpdated: 0
@@ -215,7 +218,6 @@ const updateFood = asyncHandler(async (req, res) => {
               })()
             })
             .catch(err => {
-              console.log(err)
               res.json({
                 message: `Sorry! Something went wrong, check the error => 😥: \n ${err}`,
                 foodUpdated: 0
@@ -241,11 +243,13 @@ const updateFood = asyncHandler(async (req, res) => {
         message: 'Food Updated Successfully',
         foodUpdated: 1
       })
+      return
     } catch (error) {
       res.json({
         message: `Sorry! Something went wrong, check the error => 😥: \n ${error}`,
         foodUpdated: 0
       })
+      return
     }
   }
 })

@@ -176,9 +176,9 @@ const EditFood = () => {
     }
   }
 
-  const handleDeleteFood = async foodId => {
+  const handleDeleteFood = async (foodId, foodImgs = data?.foodImgs) => {
     const prevFoodImgPathsAndNames = [
-      ...data?.foodImgs.map(({ foodImgDisplayPath, foodImgDisplayName }) => {
+      ...foodImgs.map(({ foodImgDisplayPath, foodImgDisplayName }) => {
         return {
           foodImgDisplayPath,
           foodImgDisplayName
