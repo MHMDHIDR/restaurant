@@ -24,7 +24,7 @@ const Modal = ({
   return (
     <section
       id='modal'
-      className={`fixed inset-0 p-0 m-0 min-h-screen min-w-screen z-[1000] bg-gray-500 opacity-95 ${
+      className={`fixed inset-0 p-0 m-0 min-h-screen min-w-screen z-[10000] bg-gray-500 opacity-95 ${
         modalHidden.includes('hidden') ? ' hidden' : ''
       } flex items-center`}
     >
