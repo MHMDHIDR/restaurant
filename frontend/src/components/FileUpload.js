@@ -11,42 +11,64 @@ const FileUpload = ({ data }) => {
       <div
         className={`flex flex-wrap justify-center gap-5 py-3 overflow-y-auto bg-gray-100 rounded-lg cursor-pointer dark:bg-gray-700 w-[30rem]`}
       >
-        {fileURLs.length === 0
-          ? data.defaultImg.map(({ foodImgDisplayName, foodImgDisplayPath }, index) => (
+        {fileURLs.length === 0 && data.defaultImg.length === 0 ? (
+          <div
+            className={`flex items-center flex-col gap-y-3 max-h-44 h-44 place-content-center`}
+          >
+            <img
+              src={`https://source.unsplash.com/random?food`}
+              alt={`Delicious Food`}
+              className='object-cover p-1 border border-gray-400 w-28 min-h-fit h-28 dark:border-gray-300 rounded-xl'
+            />
+          </div>
+        ) : data.defaultImg.length > 0 ? (
+          data.defaultImg.map(({ foodImgDisplayName, foodImgDisplayPath }, index) => (
+            <div
+              key={index}
+              className={`flex items-center flex-col gap-y-3 max-h-44 h-44 place-content-center`}
+            >
               <img
-                key={index}
                 src={foodImgDisplayPath}
                 alt={foodImgDisplayName}
                 className='object-cover p-1 border border-gray-400 w-28 min-h-fit h-28 dark:border-gray-300 rounded-xl'
               />
-            ))
-          : fileURLs.map((fileURL, idx) => (
-              <div
-                key={idx}
-                className={`flex items-center flex-col gap-y-3 max-h-44 h-44 place-content-center`}
+              <button
+                type='button'
+                id='deleteImg'
+                className='px-6 py-1 text-white transition-colors bg-red-500 rounded-full hover:bg-red-700'
+                data-img-name={foodImgDisplayName}
               >
-                <img
-                  loading='lazy'
-                  src={fileURL}
-                  alt={data?.foodName}
-                  className={`object-cover p-1 border border-gray-400 max-w-[7rem] min-h-fit h-28 dark:border-gray-300 rounded-xl`}
-                />
-                <button
-                  type='button'
-                  className='px-6 py-1 text-white transition-colors bg-red-500 rounded-full hover:bg-red-700'
-                  onClick={() => onFileRemove(fileURL, file[idx].name)}
-                >
-                  حذف
-                </button>
-              </div>
-            ))}
+                حذف
+              </button>
+            </div>
+          ))
+        ) : (
+          fileURLs.map((fileURL, index) => (
+            <div
+              key={index}
+              className={`flex items-center flex-col gap-y-3 max-h-44 h-44 place-content-center`}
+            >
+              <img
+                loading='lazy'
+                src={fileURL}
+                alt={data?.foodName}
+                className={`object-cover p-1 border border-gray-400 max-w-[7rem] w-28 min-h-fit h-28 dark:border-gray-300 rounded-xl`}
+              />
+              <button
+                type='button'
+                className='px-6 py-1 text-white transition-colors bg-red-500 rounded-full hover:bg-red-700'
+                onClick={() => onFileRemove(fileURL, file[index].name)}
+              >
+                حذف
+              </button>
+            </div>
+          ))
+        )}
       </div>
 
       {pathname.split('/')[2].includes('edit-food') && (
         <p className='text-center text-green-700 dark:text-green-400'>
-          عن اختيار صور جديدة فإن الصور القديمة سيتم حذفها، يرجى تحميل الصور القديمة
-          ورفعها مرة أخرى مع الصور الجديدة إن أردت حفظها لا تنسى الضغط على زر تحديث أسفل
-          الصفحة لتحميل الصور
+          لا تنسى الضغط على زر تحديث أسفل الصفحة لتحميل الصور
         </p>
       )}
 

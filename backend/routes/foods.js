@@ -12,7 +12,7 @@ const {
 // ? means optional parameter (must be here for other requests to work)
 router.get('/:page/:limit/:itemId?/:order?', paginatedResults(FoodsModel), getFood)
 router.post('/', addFood)
-router.delete('/:foodId', deleteFood)
+router.delete('/:foodId/:imgName?', deleteFood)
 router.patch('/:foodId', updateFood)
 
 module.exports = router

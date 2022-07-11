@@ -27,8 +27,6 @@ const DashboardHome = () => {
   const menu = useAxios({ method: 'get', url: `/foods/0/0` })
   const orders = useAxios({ method: 'get', url: `/orders/0/0` })
 
-  console.log(orders)
-
   useEffect(() => {
     if (currentUser?.response !== null || menu.response !== null) {
       setUserStatus(currentUser?.response?.response?.response?.userAccountStatus)

@@ -26,7 +26,6 @@ const DashboardMenu = () => {
 
   const [delFoodId, setDelFoodId] = useState()
   const [delFoodName, setDelFoodName] = useState('')
-  const [delFoodImgs, setDelFoodImgs] = useState([])
   const [deleteFoodStatus, setDeleteFoodStatus] = useState()
   const [data, setData] = useState('')
 
@@ -51,14 +50,13 @@ const DashboardMenu = () => {
     if (e.target.id === 'deleteFood') {
       setDelFoodId(e.target.dataset.id)
       setDelFoodName(removeSlug(e.target.dataset.name))
-      setDelFoodImgs(JSON.parse(e.target.dataset.imgname))
       modalLoading.classList.remove('hidden')
     }
 
     if (e.target.id === 'cancel') {
       modalLoading.classList.add('hidden')
     } else if (e.target.id === 'confirm') {
-      handleDeleteFood(delFoodId, delFoodImgs)
+      handleDeleteFood(delFoodId)
     }
   })
 

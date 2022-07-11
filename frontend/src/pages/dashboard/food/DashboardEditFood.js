@@ -21,13 +21,14 @@ import goTo from '../../../functions/goTo'
 const EditFood = () => {
   useDocumentTitle('Edit Food')
 
-  const [delFoodId, setDelFoodId] = useState()
   const [delFoodName, setDelFoodName] = useState()
+  const [action, setAction] = useState()
   const [delFoodImg, setDelFoodImg] = useState()
-  const [deleteFoodStatus, setDeleteFoodStatus] = useState()
   const [data, setData] = useState('')
   const [categoryList, setCategoryList] = useState([])
   const [toppings, setToppings] = useState([{}])
+  const [deleteFoodStatus, setDeleteFoodStatus] = useState()
+  const [deleteImgStatus, setDeleteImgStatus] = useState()
 
   //Form States
   const [foodName, setFoodName] = useState('')
@@ -160,7 +161,8 @@ const EditFood = () => {
             formData
           )
 
-          const { foodUpdated } = response.data
+          const { foodUpdated, message } = response.data
+          console.log(message)
           setUpdatedFoodStatus(foodUpdated)
           //Remove waiting modal
           setTimeout(() => {
@@ -204,14 +206,36 @@ const EditFood = () => {
     }
   }
 
+  const handleDeleteImg = async (foodId, foodImg) => {
+    try {
+      //You need to name the body {data} so it can be recognized in (.delete) method
+      const response = await Axios.delete(`${BASE_URL}/foods/${foodId}/${foodImg}`)
+      const { ImgDeleted } = response.data
+      setDeleteImgStatus(ImgDeleted)
+      //Remove waiting modal
+      setTimeout(() => {
+        modalLoading.classList.add('hidden')
+      }, 300)
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
   useEventListener('click', e => {
+    if (e.target.id === 'deleteImg') {
+      setAction('deleteImg')
+      setHasConfirmBtn(true)
+      setLoadingMsg(`هل أنت متأكد من حذف الصورة لا يمكن التراجع عن هذا القرار`)
+      setDelFoodImg(e.target.dataset.imgName)
+      modalLoading.classList.remove('hidden')
+    }
+
     if (e.target.id === 'deleteFood') {
-      setDelFoodId(e.target.dataset.id)
+      setAction('deleteFood')
       setDelFoodName(removeSlug(e.target.dataset.name))
-      setDelFoodImg(e.target.dataset.imgname)
       setHasConfirmBtn(true)
       setLoadingMsg(
-        `هل أنت متأكد من حذف ${removeSlug(
+        `هل أنت متأكد من حذف المنتج ${removeSlug(
           e.target.dataset.name
         )} ؟ لا يمكن التراجع عن هذا القرار`
       )
@@ -221,7 +245,9 @@ const EditFood = () => {
     if (e.target.id === 'cancel') {
       modalLoading.classList.add('hidden')
     } else if (e.target.id === 'confirm') {
-      handleDeleteFood(delFoodId, delFoodImg)
+      action === 'deleteImg'
+        ? handleDeleteImg(data?._id, delFoodImg)
+        : handleDeleteFood(data?._id, data?.foodImgs)
     }
   })
 
@@ -233,24 +259,43 @@ const EditFood = () => {
           msg={`تم تحديث بيانات ${removeSlug(
             data?.foodName
           )} بنجاح   😄   الرجاء الانتظار ليتم تحويلك لقائمة الوجبات والمشروبات`}
-          // redirectLink={goTo('menu')}
-          // redirectTime='3500'
+          redirectLink={goTo('menu')}
+          redirectTime='3500'
         />
       ) : updatedFoodStatus === 0 ? (
-        <Modal status={Error} msg='حدث خطأ ما أثناء تحديث بيانات الوجبة!' />
+        <Modal
+          status={Error}
+          msg='حدث خطأ ما أثناء تحديث بيانات الوجبة!'
+          // redirectLink={goTo(`edit-food/${data?._id}`)}
+          // redirectTime='3500'
+        />
+      ) : deleteImgStatus === 1 ? (
+        <Modal
+          status={Success}
+          msg={`تم حذف الصورة بنجاح 😄`}
+          redirectLink={goTo(`edit-food/${data?._id}`)}
+          redirectTime='3500'
+        />
+      ) : deleteImgStatus === 0 ? (
+        <Modal
+          status={Error}
+          msg='حدث خطأ ما أثناء حذف الصورة!'
+          redirectLink={goTo(`edit-food/${data?._id}`)}
+          redirectTime='3500'
+        />
       ) : deleteFoodStatus === 1 ? (
         <Modal
           status={Success}
           msg={`تم حذف ${delFoodName} بنجاح 😄 الرجاء الانتظار ليتم تحويلك لقائمة الوجبات`}
-          // redirectLink={goTo('menu')}
-          // redirectTime='3500'
+          redirectLink={goTo('menu')}
+          redirectTime='3500'
         />
       ) : deleteFoodStatus === 0 ? (
         <Modal
           status={Error}
           msg={`حدث خطأ ما أثناء حذف ${delFoodName}!`}
-          // redirectLink={goTo('menu')}
-          // redirectTime='3500'
+          redirectLink={goTo(`edit-food/${data?._id}`)}
+          redirectTime='3500'
         />
       ) : null}
 
@@ -276,6 +321,7 @@ const EditFood = () => {
                   <div className='flex flex-col items-center justify-center gap-4 mb-8 sm:justify-between'>
                     <FileUpload
                       data={{
+                        foodId: data?._id,
                         defaultImg: data?.foodImgs,
                         foodName: data?.foodName
                       }}
@@ -481,7 +527,6 @@ const EditFood = () => {
                     <button
                       id='deleteFood'
                       type='button'
-                      data-id={data?._id}
                       data-name={data?.foodName}
                       data-imgname={data?.foodImgDisplayName}
                       className='min-w-[7rem] bg-red-600 hover:bg-red-700 text-white py-1.5 px-6 rounded-md'
