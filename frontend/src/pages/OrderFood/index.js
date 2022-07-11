@@ -88,7 +88,7 @@ const OrderFood = () => {
             status={Success}
             msg={responseMsg}
             redirectLink='/view'
-            redirectTime='800000'
+            redirectTime='10000'
             btnName='قائمة الوجبات'
             btnLink='/view'
           />

@@ -19,18 +19,23 @@ const DashboardHome = () => {
   const USER_ID = 'user' in localStorage && JSON.parse(localStorage.getItem('user'))._id
 
   const [userStatus, setUserStatus] = useState('')
+  const [menuCount, setMenuCount] = useState()
+  const [ordersCount, setOrdersCount] = useState()
 
   //if there's food id then fetch with food id, otherwise fetch everything
-  const { ...response } = useAxios({
-    method: 'get',
-    url: `/users/all/1/1/${USER_ID}`
-  })
+  const currentUser = useAxios({ method: 'get', url: `/users/all/1/1/${USER_ID}` })
+  const menu = useAxios({ method: 'get', url: `/foods/0/0` })
+  const orders = useAxios({ method: 'get', url: `/orders/0/0` })
+
+  console.log(orders)
 
   useEffect(() => {
-    if (response.response !== null) {
-      setUserStatus(response?.response?.response?.userAccountStatus)
+    if (currentUser?.response !== null || menu.response !== null) {
+      setUserStatus(currentUser?.response?.response?.response?.userAccountStatus)
+      setMenuCount(menu?.response?.itemsCount)
+      setOrdersCount(orders?.response?.itemsCount)
     }
-  }, [response.response])
+  }, [currentUser?.response, menu.response, orders?.response])
 
   document.body.classList.add('dashboard')
 
@@ -47,7 +52,7 @@ const DashboardHome = () => {
         <div className='flex flex-wrap justify-center gap-4 md:justify-between'>
           <Link
             to={goTo('orders')}
-            className='inline-flex flex-col items-center px-2 py-4 space-y-4 text-white bg-orange-800 hover:bg-orange-700 rounded-xl'
+            className='inline-flex flex-col items-center justify-center p-4 space-y-4 text-white bg-orange-800 hover:bg-orange-700 rounded-xl'
           >
             <img
               loading='lazy'
@@ -56,11 +61,12 @@ const DashboardHome = () => {
               className='w-40 h-24'
             />
             <h3>الطلبات</h3>
+            <span className='text-lg font-bold'>عدد الطلبات {ordersCount}</span>
           </Link>
 
           <Link
             to={goTo('menu')}
-            className='inline-flex flex-col items-center px-2 py-4 space-y-4 text-white bg-orange-800 hover:bg-orange-700 rounded-xl'
+            className='inline-flex flex-col items-center justify-center px-2 py-4 space-y-4 text-white bg-orange-800 hover:bg-orange-700 rounded-xl'
           >
             <img
               loading='lazy'
@@ -69,11 +75,12 @@ const DashboardHome = () => {
               className='w-40 h-24'
             />
             <h3>القائمة</h3>
+            <span className='text-lg font-bold'>عدد الوجبات والمشروبات {menuCount}</span>
           </Link>
 
           <Link
             to={goTo('add-food')}
-            className='inline-flex flex-col items-center px-2 py-4 space-y-4 text-white bg-orange-800 hover:bg-orange-700 rounded-xl'
+            className='inline-flex flex-col items-center justify-center px-2 py-4 space-y-4 text-white bg-orange-800 hover:bg-orange-700 rounded-xl'
           >
             <img
               loading='lazy'

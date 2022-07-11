@@ -23,7 +23,6 @@ const Menu = () => {
    * if the SLIDES_IN_MENU const is bigger than how many food items are in the database, then the number
    * of slides will be the number of food items in the database else it will be the number of SLIDES_IN_MENU const
    */
-
   const SlidesCount =
     SLIDES_IN_MENU > response.response?.itemsCount
       ? response.response?.itemsCount

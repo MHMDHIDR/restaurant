@@ -197,7 +197,7 @@ const OrdersTable = () => {
                           <div className='flex flex-col items-start gap-2'>
                             <img
                               loading='lazy'
-                              src={item.cImg}
+                              src={item.cImg[0].foodImgDisplayPath}
                               alt={item.cHeading}
                               width='50'
                               height='50'
