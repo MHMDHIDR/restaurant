@@ -3,7 +3,7 @@ const paginatedResults = model => {
     const page = parseInt(req.params.page)
     const limit = parseInt(req.params.limit)
     const { itemId } = req.params
-    const { category, order } = req.query
+    const { category, orderDate, createdAt } = req.query
 
     const startIndex = (page - 1) * limit
     const endIndex = page * limit
@@ -32,12 +32,12 @@ const paginatedResults = model => {
             .find({ category })
             .limit(limit)
             .skip(startIndex)
-            .sort({ createdAt: order || -1 })
+            .sort(orderDate ? { orderDate } : { createdAt })
         : await model
             .find()
             .limit(limit)
             .skip(startIndex)
-            .sort({ createdAt: order || -1 })
+            .sort(orderDate ? { orderDate } : { createdAt })
 
       response.itemsCount = category
         ? await model.countDocuments({ category })

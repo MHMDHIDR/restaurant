@@ -35,7 +35,7 @@ const OrdersTable = () => {
 
   const { ...response } = useAxios({
     method: 'get',
-    url: `/orders/${pageNumber}/${itemsPerPage}`
+    url: `/orders/${pageNumber}/${itemsPerPage}?orderDate=-1`
   })
 
   useEffect(() => {

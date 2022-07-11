@@ -40,6 +40,7 @@ const Search = () => {
   const handleSearch = e => {
     e.preventDefault()
     window.location.href = `/view/item/${search}`
+    // window.location.href = `/search/${search}`
   }
 
   return (

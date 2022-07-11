@@ -10,7 +10,7 @@ const Menu = () => {
 
   const { ...response } = useAxios({
     method: 'get',
-    url: `/foods/0/0?category=foods&order=1`
+    url: `/foods/0/0?category=foods&createdAt=1`
   })
 
   useEffect(() => {

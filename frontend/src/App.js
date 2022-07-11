@@ -16,6 +16,7 @@ import { LoadingPage } from './components/Loading'
 const Home = lazy(() => import('./pages/Home'))
 const OrderFood = lazy(() => import('./pages/OrderFood'))
 const ViewFood = lazy(() => import('./pages/ViewFood'))
+const SearchResults = lazy(() => import('./pages/SearchResults'))
 const Categories = lazy(() => import('./pages/Categories'))
 const Join = lazy(() => import('./pages/Join'))
 const Login = lazy(() => import('./pages/Login'))
@@ -40,8 +41,8 @@ const App = () => (
                 <Routes>
                   <Route path='/' element={<Home />} />
                   <Route path='categories' element={<Categories />} />
-
                   <Route path='order-food' element={<OrderFood />} />
+                  <Route path='search/:searchQuery' element={<SearchResults />} />
 
                   {/* View All Food */}
                   <Route path='view' element={<ViewFood />} />

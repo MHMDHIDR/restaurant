@@ -9,7 +9,7 @@ const {
   deleteOrder
 } = require(`${__dirname}/../controllers/orders.js`)
 
-router.get('/:page/:limit/:itemId?', paginatedResults(OrdersModel), getOrders)
+router.get('/:page/:limit/:itemId?/:orderDate?', paginatedResults(OrdersModel), getOrders)
 router.post('/', addOrder)
 router.patch('/:orderId', updateOrder)
 router.delete('/:orderId', deleteOrder)
