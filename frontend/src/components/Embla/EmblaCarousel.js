@@ -57,7 +57,7 @@ const EmblaCarousel = ({ slides, media, smallView = false }) => {
       {/* Big Menu View */}
       <div
         className={`w-full relative p-1 rounded-xl cursor-grab bg-center before:absolute before:bg-gray-100 before:dark:bg-gray-600 before:inset-0 before:bg-opacity-[.85] before:dark:bg-opacity-[.85] before:rounded-xl before:transition-colors ${
-          smallView ? 'h-60' : 'h-auto'
+          smallView ? 'h-[19.3rem]' : 'h-auto'
         }`}
         style={{ backgroundImage: `url(${HEADER_BG_IMG})` }}
       >
@@ -78,9 +78,9 @@ const EmblaCarousel = ({ slides, media, smallView = false }) => {
                   className={`relative overflow-hidden rounded-xl ${
                     smallView
                       ? slides.length > 1 //many images
-                        ? 'h-60'
-                        : 'h-60 sm:h-72 md:h-[19.3rem]'
-                      : 'h-60 sm:h-72 md:h-96'
+                        ? 'h-[19.3rem]'
+                        : 'h-[19.3rem] sm:[19.3rem] md:h-[19.3rem]'
+                      : 'h-[19.3rem] sm:[19.3rem] md:h-96'
                   }`}
                 >
                   <img
