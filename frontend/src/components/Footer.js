@@ -2,9 +2,9 @@ import { Link } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import useAxios from '../hooks/useAxios'
 
-import scrollTo from '../functions/scrollToSection'
 import abstractText from '../functions/abstractText'
 import { removeSlug } from '../functions/slug'
+import MyLink from '../components/MyLink'
 
 import Logo from './Icons/Logo'
 import Backtop from './Icons/Backtop'
@@ -80,16 +80,9 @@ const Footer = () => {
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    to='/'
-                    className='hover:text-gray-700'
-                    data-scroll='new'
-                    onClick={e => {
-                      scrollTo(e)
-                    }}
-                  >
+                  <MyLink to='new' className='hover:text-gray-700'>
                     جديد المطعم
-                  </Link>
+                  </MyLink>
                 </li>
               </ul>
             </div>
