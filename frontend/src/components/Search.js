@@ -79,7 +79,7 @@ const Search = () => {
         </svg>
       </button>
 
-      <div className='absolute w-[inherit] bg-neutral-200 dark:bg-neutral-300 opacity-0 pointer-events-none search__wrapper rtl border-b-2 border-b-orange-400'>
+      <div className='absolute w-[inherit] bg-neutral-200 dark:bg-neutral-300 opacity-0 pointer-events-none search__wrapper rtl border-2 border-b-orange-400 border-r-orange-400 border-l-orange-400 '>
         <ul className='overflow-y-auto rtl:text-right max-h-60'>
           {search.trim() &&
             searchData

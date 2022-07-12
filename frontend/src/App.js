@@ -43,7 +43,9 @@ const App = () => (
                   <Route path='categories' element={<Categories />} />
                   <Route path='order-food' element={<OrderFood />} />
                   <Route path='search' element={<SearchResults />}>
-                    <Route path=':search' element={<SearchResults />} />
+                    <Route path=':search' element={<SearchResults />}>
+                      <Route path=':pageNum' element={<SearchResults />} />
+                    </Route>
                   </Route>
 
                   {/* View All Food */}
