@@ -19,8 +19,8 @@ const CartContextProvider = ({ children }) => {
         cToppings: cToppings.map((topping, toppingIndex) => {
           return {
             toppingId: cItemId + '-' + toppingIndex,
-            ...topping
-            // toppingQuantity: 1
+            ...topping,
+            toppingQuantity: 1
           }
         }),
         cQuantity: 1
