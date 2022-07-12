@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import useAxios from '../hooks/useAxios'
 import useEventListener from '../hooks/useEventListener'
@@ -9,6 +9,7 @@ import { removeSlug } from '../functions/slug'
 const Search = () => {
   const [search, setSearch] = useState('')
   let [searchData, setSearchData] = useState([])
+  const navigate = useNavigate()
 
   const response = useAxios({
     method: 'get',
@@ -39,7 +40,7 @@ const Search = () => {
 
   const handleSearch = e => {
     e.preventDefault()
-    window.location.href = `/view/item/${search}`
+    navigate(`/search/${search}`)
   }
 
   return (
@@ -47,7 +48,7 @@ const Search = () => {
       <input
         type='search'
         id='search'
-        className='text-2xl font-[600] p-5 pl-16 sm:pl-28 w-[inherit] text-black outline-orange-400 outline-offset-2 rtl bg-neutral-200 dark:bg-neutral-300'
+        className='text-2xl font-[600] p-5 pl-16 sm:pl-28 w-[inherit] text-black outline-orange-400 border border-orange-400 outline-offset-2 rtl bg-neutral-200 dark:bg-neutral-300'
         placeholder='ابحث عن طعامك المفضل'
         onChange={e => (e.target.value.trim() ? setSearch(e.target.value.trim()) : '')}
         onKeyUp={e => {
@@ -82,7 +83,7 @@ const Search = () => {
         <ul className='overflow-y-auto rtl:text-right max-h-60'>
           {search.trim() &&
             searchData
-              ?.filter(({ foodName }) => foodName.includes(search))
+              ?.filter(({ foodName }) => removeSlug(foodName).includes(search))
               .map(({ foodId, foodImg, foodName }, idx) => (
                 <Link
                   key={idx}
