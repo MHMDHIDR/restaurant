@@ -1,35 +1,15 @@
-import { useState, useEffect } from 'react'
+import { useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
-import useAxios from '../hooks/useAxios'
+import { SearchContext } from '../Contexts/SearchContext'
+
 import useEventListener from '../hooks/useEventListener'
 
 import { removeSlug } from '../utils/slug'
 
 const Search = () => {
-  const [search, setSearch] = useState('')
-  let [searchData, setSearchData] = useState([])
+  const { setSearch, search, searchResults } = useContext(SearchContext)
   const navigate = useNavigate()
-
-  const response = useAxios({
-    method: 'get',
-    url: '/foods/1/0'
-  })
-
-  useEffect(() => {
-    if (response.response !== null) {
-      response.response?.response?.map(data =>
-        setSearchData(prevState => [
-          ...prevState,
-          {
-            foodId: data?._id,
-            foodImg: data?.foodImgs[0]?.foodImgDisplayPath,
-            foodName: data?.foodName
-          }
-        ])
-      )
-    }
-  }, [response.response])
 
   const searchWrapper = document.querySelector('.search__wrapper')
 
@@ -81,25 +61,23 @@ const Search = () => {
 
       <div className='absolute w-[inherit] bg-neutral-200 dark:bg-neutral-300 opacity-0 pointer-events-none search__wrapper rtl border-2 border-b-orange-400 border-r-orange-400 border-l-orange-400 '>
         <ul className='overflow-y-auto rtl:text-right max-h-60'>
-          {search.trim() &&
-            searchData
-              ?.filter(({ foodName }) => removeSlug(foodName).includes(search))
-              .map(({ foodId, foodImg, foodName }, idx) => (
-                <Link
-                  key={idx}
-                  to={`/view/item/${foodId}`}
-                  className={`w-full flex px-4 py-2 justify-start items-center gap-x-5 transition-colors font-[600] text-orange-600 dark:text-orange-700 text-xl hover:cursor-pointer hover:bg-gray-300 dark:hover:bg-neutral-400 border-b border-b-gray-300 dark:border-b-gray-400`}
-                >
-                  {/* food img */}
-                  <img
-                    loading='lazy'
-                    src={foodImg}
-                    alt={foodName}
-                    className={`object-cover rounded-lg shadow-md w-14 h-14`}
-                  />
-                  <p>{removeSlug(foodName)}</p>
-                </Link>
-              ))}
+          {search &&
+            searchResults?.map(({ _id, foodName, foodImgs }, idx) => (
+              <Link
+                key={idx}
+                to={`/view/item/${_id}`}
+                className={`w-full flex px-4 py-2 justify-start items-center gap-x-5 transition-colors font-[600] text-orange-600 dark:text-orange-700 text-xl hover:cursor-pointer hover:bg-gray-300 dark:hover:bg-neutral-400 border-b border-b-gray-300 dark:border-b-gray-400`}
+              >
+                {/* food img */}
+                <img
+                  loading='lazy'
+                  src={foodImgs[0].foodImgDisplayPath}
+                  alt={foodName}
+                  className={`object-cover rounded-lg shadow-md w-14 h-14`}
+                />
+                <p>{removeSlug(foodName)}</p>
+              </Link>
+            ))}
         </ul>
       </div>
     </form>
