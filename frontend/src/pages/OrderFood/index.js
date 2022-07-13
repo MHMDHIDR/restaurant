@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import Axios from 'axios'
 
 import { CartContext } from '../../Contexts/CartContext'
+import { ToppingsContext } from '../../Contexts/ToppingsContext'
 
 import useDocumentTitle from '../../hooks/useDocumentTitle'
 
@@ -27,6 +28,7 @@ const OrderFood = () => {
       : process.env.REACT_APP_API_URL
 
   const { items } = useContext(CartContext)
+  const { checkedToppings } = useContext(ToppingsContext)
 
   //Form States
   const [personName, setPersonName] = useState('')
@@ -195,7 +197,9 @@ const OrderFood = () => {
                 <span className='inline-block px-3 py-1 my-4 text-xl text-green-800 bg-green-300 border border-green-800 rounded-md select-none'>
                   السعر الاجمالي:&nbsp;
                   <strong ref={grandPriceRef}>
-                    {items.reduce((acc, item) => acc + item.cPrice * item.cQuantity, 0)}
+                    {/* {items.reduce((acc, item) => acc + item.cPrice * item.cQuantity, 0)} */}
+                    {console.log(items)}
+                    {console.log(checkedToppings)}
                   </strong>
                   &nbsp;ر.ق
                 </span>
