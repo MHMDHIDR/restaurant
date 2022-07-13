@@ -1,6 +1,8 @@
-import scrollTo from '../utils/scrollToSection'
+import { useNavigate } from 'react-router-dom'
 
-const ScrollDown = ({ target }) => {
+const ScrollDown = () => {
+  const navigate = useNavigate()
+
   return (
     <div
       className='
@@ -8,11 +10,21 @@ const ScrollDown = ({ target }) => {
         absolute bottom-[3vh] sm:bottom-[4vh] md:bottom-[5.5vh] lg:bottom-[7.5vh] xl:bottom-[10vh]
         z-10
       '
-      data-scroll={target}
       role='button'
-      area-label={`Click to Scroll to ${target} section`}
-      title={target}
-      onClick={e => scrollTo(e)}
+      area-label={`Click to Scroll to down to section`}
+      onClick={e => {
+        const { nextSibling } =
+          e.target.parentElement.parentElement.parentElement.parentElement
+
+        if (nextSibling) {
+          window.scrollTo({
+            top: nextSibling.offsetTop - 50,
+            behavior: 'smooth'
+          })
+        } else {
+          navigate('/')
+        }
+      }}
     >
       <div className='w-5 h-8 border-2 border-gray-300 border-solid pointer-events-none sm:w-6 sm:h-10 rounded-2xl transform-none'>
         <div className='relative w-1 h-2 mx-auto my-2 border-2 border-gray-300 border-solid rounded-full'></div>

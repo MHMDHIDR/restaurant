@@ -53,7 +53,7 @@ const CartItems = ({ setGrandPrice }) => {
 
             {/* Product Toppings and it's Quantity */}
             {typeof item?.cToppings[0].toppingName === 'string' && (
-              <div className='flex flex-col items-center justify-around gap-y-10 xl:gap-x-5 sm:flex-row'>
+              <div className='flex items-center justify-around gap-y-10 xl:gap-x-5 sm:flex-row'>
                 <div className='flex flex-col gap-2 text-lg select-none md:items-start'>
                   <h2 className='text-center ltr'>الإضافات</h2>
                   {item?.cToppings?.map(
