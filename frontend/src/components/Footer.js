@@ -2,8 +2,8 @@ import { Link } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import useAxios from '../hooks/useAxios'
 
-import abstractText from '../functions/abstractText'
-import { removeSlug } from '../functions/slug'
+import abstractText from '../utils/abstractText'
+import { removeSlug } from '../utils/slug'
 import MyLink from '../components/MyLink'
 
 import Logo from './Icons/Logo'

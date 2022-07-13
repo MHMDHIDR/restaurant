@@ -5,9 +5,9 @@ import useAxios from '../../hooks/useAxios'
 import useDocumentTitle from '../../hooks/useDocumentTitle'
 import useEventListener from '../../hooks/useEventListener'
 
-import goTo from '../../functions/goTo'
-import logoutUser from '../../functions/logoutUser'
-import menuToggler from '../../functions/menuToggler'
+import goTo from '../../utils/goTo'
+import logoutUser from '../../utils/logoutUser'
+import menuToggler from '../../utils/menuToggler'
 
 import DashboardNav from '../../components/dashboard/DashboardNav'
 import DashboardSidebar from '../../components/dashboard/DashboardSidebar'
@@ -73,7 +73,7 @@ const DashboardHome = () => {
               className='w-40 h-24'
             />
             <h3>القائمة</h3>
-            <span className='text-lg font-bold'>عدد الوجبات والمشروبات {menuCount}</span>
+            <span className='text-lg font-bold'>عدد الوجبات {menuCount}</span>
           </Link>
 
           <Link

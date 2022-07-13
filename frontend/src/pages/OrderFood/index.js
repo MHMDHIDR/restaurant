@@ -6,7 +6,7 @@ import { CartContext } from '../../Contexts/CartContext'
 
 import useDocumentTitle from '../../hooks/useDocumentTitle'
 
-import { validPhone } from '../../functions/validForm'
+import { validPhone } from '../../utils/validForm'
 
 import Modal from '../../components/Modal/Modal'
 import Header from '../../components/Header'

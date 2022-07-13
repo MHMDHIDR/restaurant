@@ -6,8 +6,8 @@ import Axios from 'axios'
 import useDocumentTitle from '../../hooks/useDocumentTitle'
 import useEventListener from '../../hooks/useEventListener'
 
-import goTo from '../../functions/goTo'
-import logoutUser from '../../functions/logoutUser'
+import goTo from '../../utils/goTo'
+import logoutUser from '../../utils/logoutUser'
 
 import Modal from '../../components/Modal/Modal'
 import { Success, Error, Loading } from '../../components/Icons/Status'
@@ -166,14 +166,14 @@ const DashboardUsers = () => {
 
       <section className='py-12 my-8 dashboard'>
         <div className='container mx-auto'>
-          <h3 className='mx-0 mt-4 mb-12 text-2xl text-center md:text-3xl'>المستخدمين</h3>
+          <h3 className='mx-0 mt-4 mb-12 text-2xl text-center md:text-3xl'>المدراء</h3>
 
           <table className='table w-full text-center'>
             <thead className='text-white bg-orange-800'>
               <tr>
-                <th className='px-1 py-2'>اسم المستخدم</th>
+                <th className='px-1 py-2'>الإســــــــــــــم</th>
                 <th className='px-1 py-2'>البريد الالكتروني</th>
-                <th className='px-1 py-2'>حالة المستخدم</th>
+                <th className='px-1 py-2'>حالة المدير</th>
                 <th className='px-1 py-2'>الاجراء</th>
               </tr>
             </thead>

@@ -3,7 +3,7 @@ import Axios from 'axios'
 
 import Notification from './Notification'
 import { LoadingSpinner } from './Loading'
-import { validEmail } from '../functions/validForm'
+import { validEmail } from '../utils/validForm'
 
 const Contact = () => {
   const [theName, setName] = useState('')

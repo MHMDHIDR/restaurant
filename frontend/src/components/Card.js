@@ -6,7 +6,7 @@ import { ToppingsContext } from '../Contexts/ToppingsContext'
 import TagIcon from '../components/Icons/TagIcon'
 import EmblaCarousel from '../components/Embla/EmblaCarousel'
 
-import { removeSlug } from '../functions/slug'
+import { removeSlug } from '../utils/slug'
 
 import Logo from './Icons/Logo'
 

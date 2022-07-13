@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import ThemeToggler from '../ThemeToggler'
 import Logo from '../Icons/Logo'
 
-import menuToggler from '../../functions/menuToggler'
+import menuToggler from '../../utils/menuToggler'
 
 const DashboardNav = () => {
   const handleLogout = () => {

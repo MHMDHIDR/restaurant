@@ -1,4 +1,4 @@
-import { toggleCSSclasses } from '../../functions/toggleCSSclasses'
+import { toggleCSSclasses } from '../../utils/toggleCSSclasses'
 
 const Backtop = ({ color = 'orange' }) => {
   const backTop = document.querySelector('.back__top')

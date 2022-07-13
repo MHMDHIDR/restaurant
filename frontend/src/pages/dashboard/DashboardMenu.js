@@ -11,10 +11,10 @@ import { Success, Error, Loading } from '../../components/Icons/Status'
 import { LoadingSpinner } from '../../components/Loading'
 import Pagination from '../../components/Pagination'
 
-import abstractText from '../../functions/abstractText'
-import { removeSlug } from '../../functions/slug'
-import goTo from '../../functions/goTo'
-import { createLocaleDateString } from '../../functions/convertDate'
+import abstractText from '../../utils/abstractText'
+import { removeSlug } from '../../utils/slug'
+import goTo from '../../utils/goTo'
+import { createLocaleDateString } from '../../utils/convertDate'
 
 const DashboardMenu = () => {
   useDocumentTitle('Menu')

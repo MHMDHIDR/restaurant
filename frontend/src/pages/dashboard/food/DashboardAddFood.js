@@ -13,8 +13,8 @@ import { Success, Error, Loading } from '../../../components/Icons/Status'
 import AddTags from '../../../components/AddTags'
 import FileUpload from '../../../components/FileUpload'
 
-import { createSlug } from '../../../functions/slug'
-import goTo from '../../../functions/goTo'
+import { createSlug } from '../../../utils/slug'
+import goTo from '../../../utils/goTo'
 
 const AddFood = () => {
   useDocumentTitle('Add Food or Drink')

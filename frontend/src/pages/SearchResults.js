@@ -4,8 +4,8 @@ import { Link, useParams } from 'react-router-dom'
 import useAxios from '../hooks/useAxios'
 import useDocumentTitle from '../hooks/useDocumentTitle'
 
-import abstractText from '../functions/abstractText'
-import { removeSlug } from '../functions/slug'
+import abstractText from '../utils/abstractText'
+import { removeSlug } from '../utils/slug'
 
 import { CartContext } from '../Contexts/CartContext'
 

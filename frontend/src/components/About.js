@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import useAxios from '../hooks/useAxios'
-import abstractText from '../functions/abstractText'
+import abstractText from '../utils/abstractText'
 
 const About = () => {
   const [data, setData] = useState('')

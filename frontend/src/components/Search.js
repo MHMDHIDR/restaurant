@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import useAxios from '../hooks/useAxios'
 import useEventListener from '../hooks/useEventListener'
 
-import { removeSlug } from '../functions/slug'
+import { removeSlug } from '../utils/slug'
 
 const Search = () => {
   const [search, setSearch] = useState('')

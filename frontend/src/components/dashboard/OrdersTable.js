@@ -5,8 +5,8 @@ import Axios from 'axios'
 
 import useEventListener from '../../hooks/useEventListener'
 
-import goTo from '../../functions/goTo'
-import { toggleCSSclasses } from '../../functions/toggleCSSclasses'
+import goTo from '../../utils/goTo'
+import { toggleCSSclasses } from '../../utils/toggleCSSclasses'
 
 import Modal from '../Modal/Modal'
 import { Success, Error, Loading } from '../Icons/Status'

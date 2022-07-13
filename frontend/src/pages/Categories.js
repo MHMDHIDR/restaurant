@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import useDocumentTitle from '../hooks/useDocumentTitle'
 import useAxios from '../hooks/useAxios'
 
-import goTo from '../functions/goTo'
+import goTo from '../utils/goTo'
 
 import { LoadingCard } from '../components/Loading'
 

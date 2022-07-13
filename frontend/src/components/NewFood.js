@@ -4,8 +4,8 @@ import { CartContext } from '../Contexts/CartContext'
 
 import useAxios from '../hooks/useAxios'
 
-import abstractText from '../functions/abstractText'
-import { removeSlug } from '../functions/slug'
+import abstractText from '../utils/abstractText'
+import { removeSlug } from '../utils/slug'
 
 import Card from './Card'
 import { LoadingCard } from './Loading'

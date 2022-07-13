@@ -2,7 +2,7 @@ import { useContext } from 'react'
 import { CartContext } from '../../Contexts/CartContext'
 import { ToppingsContext } from '../../Contexts/ToppingsContext'
 
-import { removeSlug } from '../../functions/slug'
+import { removeSlug } from '../../utils/slug'
 
 import Divider from '../../components/Divider'
 

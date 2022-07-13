@@ -1,8 +1,8 @@
 import { useRef } from 'react'
 import { NavLink } from 'react-router-dom'
 
-import goTo from '../../functions/goTo'
-import menuToggler from '../../functions/menuToggler'
+import goTo from '../../utils/goTo'
+import menuToggler from '../../utils/menuToggler'
 
 const DashboardSidebar = () => {
   const menuTogglerBtn = useRef(null)
@@ -121,7 +121,7 @@ const DashboardSidebar = () => {
             }
             onClick={menuToggler}
           >
-            المستخدمين
+            المدراء
           </NavLink>
         </li>
       </ul>

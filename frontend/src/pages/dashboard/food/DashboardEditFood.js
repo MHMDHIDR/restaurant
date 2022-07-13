@@ -15,8 +15,8 @@ import AddTags from '../../../components/AddTags'
 import { LoadingCard } from '../../../components/Loading'
 import FileUpload from '../../../components/FileUpload'
 
-import { removeSlug, createSlug } from '../../../functions/slug'
-import goTo from '../../../functions/goTo'
+import { removeSlug, createSlug } from '../../../utils/slug'
+import goTo from '../../../utils/goTo'
 
 const EditFood = () => {
   useDocumentTitle('Edit Food')

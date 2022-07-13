@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { DotButton, PrevButton, NextButton } from './EmblaCarouselButtons'
 import useEmblaCarousel from 'embla-carousel-react'
 import { Thumb } from './EmblaCarouselThumb'
-import { removeSlug } from '../../functions/slug'
+import { removeSlug } from '../../utils/slug'
 
 const EmblaCarousel = ({ slides, media, smallView = false }) => {
   const [selectedIndex, setSelectedIndex] = useState(0)

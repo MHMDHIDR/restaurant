@@ -4,7 +4,7 @@ import { CartContext } from '../Contexts/CartContext'
 import ThemeToggler from './ThemeToggler'
 import Logo from './Icons/Logo'
 
-import menuToggler from '../functions/menuToggler'
+import menuToggler from '../utils/menuToggler'
 
 import MyLink from '../components/MyLink'
 

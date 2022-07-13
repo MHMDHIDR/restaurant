@@ -1,4 +1,4 @@
-import scrollTo from '../functions/scrollToSection'
+import scrollTo from '../utils/scrollToSection'
 
 const ScrollDown = ({ target }) => {
   return (
