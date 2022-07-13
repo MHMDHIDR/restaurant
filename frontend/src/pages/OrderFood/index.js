@@ -27,7 +27,7 @@ const OrderFood = () => {
       ? process.env.REACT_APP_API_LOCAL_URL
       : process.env.REACT_APP_API_URL
 
-  const { items } = useContext(CartContext)
+  const { items, grandPrice } = useContext(CartContext)
   const { checkedToppings } = useContext(ToppingsContext)
 
   //Form States
@@ -36,13 +36,11 @@ const OrderFood = () => {
   const [personNotes, setPersonNotes] = useState('')
   const [orderFoodStatus, setOrderFoodStatus] = useState('')
   const [responseMsg, setResponseMsg] = useState('')
-  const [grandPrice, setGrandPrice] = useState('')
 
   //Declaring Referenced Element
   const personNameErr = useRef(null)
   const personPhoneErr = useRef(null)
   const formErr = useRef(null)
-  const grandPriceRef = useRef(null)
 
   const handleCollectOrder = async e => {
     e.preventDefault()
@@ -52,9 +50,9 @@ const OrderFood = () => {
     formData.append('personName', personName)
     formData.append('personPhone', personPhone)
     formData.append('personNotes', personNotes)
-    //if grandPrice is undefined, we'll take the value from grandPriceRef
-    formData.append('grandPrice', grandPrice || grandPriceRef?.current?.textContent)
+    formData.append('checkedToppings', JSON.stringify(checkedToppings))
     formData.append('foodItems', JSON.stringify(items))
+    formData.append('grandPrice', grandPrice)
 
     if (
       personName !== '' &&
@@ -89,10 +87,10 @@ const OrderFood = () => {
           <Modal
             status={Success}
             msg={responseMsg}
-            redirectLink='/view'
-            redirectTime='10000'
             btnName='قائمة الوجبات'
             btnLink='/view'
+            redirectLink='/view'
+            redirectTime='10000'
           />
         )}
 
@@ -100,7 +98,7 @@ const OrderFood = () => {
           {items.length > 0 ? (
             <>
               <h2 className='inline-block mb-20 text-3xl font-bold'>سلة الطلبات</h2>
-              <CartItems setGrandPrice={setGrandPrice} />
+              <CartItems />
 
               <form method='POST' onSubmit={handleCollectOrder}>
                 <Link
@@ -181,7 +179,7 @@ const OrderFood = () => {
                     className='form__input'
                     id='message'
                     name='message'
-                    minLength={MIN_CHARACTERS * 20}
+                    minLength={MIN_CHARACTERS * 10}
                     maxLength={MAX_CHARACTERS * 2}
                     onChange={e => setPersonNotes(e.target.value.trim())}
                   ></textarea>
@@ -196,7 +194,7 @@ const OrderFood = () => {
                 ></p>
                 <span className='inline-block px-3 py-1 my-4 text-xl text-green-800 bg-green-300 border border-green-800 rounded-md select-none'>
                   السعر الاجمالي:&nbsp;
-                  <strong ref={grandPriceRef}>
+                  <strong>
                     {
                       //calculate grand price
                       //calculate all items prices * all items quantities

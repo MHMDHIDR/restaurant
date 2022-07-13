@@ -25,13 +25,14 @@ const orderStatus = {
 const OrderSchema = new mongoose.Schema(
   {
     orderId: reqString,
-    //order personal data
     personName: reqString,
     personPhone: reqNumber,
     personNotes: {
       type: String
     },
-    //order food data
+    orderItems: reqObject,
+    orderToppings: reqObject,
+    grandPrice: reqNumber,
     orderStatus,
     orderDate: {
       type: String,
@@ -45,11 +46,7 @@ const OrderSchema = new mongoose.Schema(
         minute: 'numeric',
         second: 'numeric'
       })
-      //	الأحد، ١٣ مارس ٢٠٢٢, ٩:٢٦:٢٣ م
-    },
-    //ordered food data
-    orderItems: reqObject,
-    grandPrice: reqNumber
+    }
   },
   //Collection Name
   { collection: 'restaurant_orders' }

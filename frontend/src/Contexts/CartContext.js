@@ -4,6 +4,7 @@ export const CartContext = createContext()
 
 const CartContextProvider = ({ children }) => {
   const [items, setItems] = useState([])
+  const [grandPrice, setGrandPrice] = useState('')
   const { checkedToppings, setCheckedToppings } = useContext(ToppingsContext)
 
   //add items to card add the details like: cHeading, cImg, cPrice, cDesc, cToppings, cQuantity: 1
@@ -42,7 +43,9 @@ const CartContextProvider = ({ children }) => {
         items,
         setItems,
         addToCart,
-        removeFromCart
+        removeFromCart,
+        setGrandPrice,
+        grandPrice
       }}
     >
       {children}

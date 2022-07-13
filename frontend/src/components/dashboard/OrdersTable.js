@@ -155,10 +155,11 @@ const OrdersTable = () => {
       <table className='table w-full text-center border-collapse table-auto'>
         <thead className='text-white bg-orange-800'>
           <tr>
+            <th className='max-w-[0.25rem] px-1 py-2 '>الترتيب</th>
             <th className='px-1 py-2 min-w-[10rem]'>اسم الشخص</th>
             <th className='px-1 py-2'>تاريخ و وقت الطلب</th>
             <th className='px-1 py-2'>هاتف صاحب الطلب</th>
-            <th className='px-1 py-2 min-w-[20rem]'>محتويات الطلب</th>
+            <th className='px-1 py-2 min-w-[20rem]'>تفاصيل الطلب</th>
             <th className='px-1 py-2'>ملاحظات الطلب</th>
             <th className='px-1 py-2'>السعر الاجمالي</th>
             <th className='px-1 py-2'>رقم الطلب</th>
@@ -171,28 +172,29 @@ const OrdersTable = () => {
           {(ordersData ?? ordersData !== undefined) &&
           ordersData?.response?.length > 0 ? (
             <>
-              {ordersData?.response?.map(item => (
+              {ordersData?.response?.map((order, idx) => (
                 <tr
-                  key={item._id}
+                  key={order._id}
                   className='transition-colors even:bg-neutral-300 odd:bg-neutral-200 dark:even:bg-neutral-700 dark:odd:bg-neutral-600'
                 >
-                  <td className='px-1 py-2 min-w-[10rem]'>{item.personName}</td>
+                  <td className='px-1 py-2 max-w-[0.25rem]'>{idx + 1}</td>
+                  <td className='px-1 py-2 min-w-[10rem]'>{order.personName}</td>
                   <td className='text-right min-w-[13rem] px-1 py-2'>
-                    <p>التاريخ: {item.orderDate.split(',')[0]}</p>
-                    <p>الوقت: {item.orderDate.split(',')[1]}</p>
+                    <p>التاريخ: {order.orderDate.split(',')[0]}</p>
+                    <p>الوقت: {order.orderDate.split(',')[1]}</p>
                   </td>
-                  <td className='px-1 py-2'>{item.personPhone}</td>
-                  <td className='px-1 py-2 min-w-[20rem]'>
-                    <span tooltip={`عرض ${item.orderItems.length} طلبات`}>
+                  <td className='px-1 py-2'>{order.personPhone}</td>
+                  <td className='px-1 py-2 min-w-[30rem]'>
+                    <span tooltip={`عرض ${order.orderItems.length} طلبات`}>
                       <span
                         data-order-content-arrow
-                        className={`inline-block text-2xl font-bold transition-transform duration-300 cursor-pointer hover:translate-y-1`}
+                        className={`inline-block text-xl font-bold transition-transform duration-300 cursor-pointer hover:translate-y-1`}
                       >
                         &#8679;
                       </span>
                     </span>
                     <div className='max-h-screen overflow-hidden transition-all duration-300 ordered-items'>
-                      {item?.orderItems?.map(item => (
+                      {order?.orderItems?.map(item => (
                         <div key={item.cItemId}>
                           <div className='flex flex-col items-start gap-2'>
                             <img
@@ -203,10 +205,42 @@ const OrdersTable = () => {
                               height='50'
                               className='object-cover rounded-lg shadow-md w-14 h-14'
                             />
-                            <h4>اسم الطلب: {item.cHeading}</h4>
-                            <h4>الكمية: {item.cQuantity}</h4>
+                            <span>اسم الطلب: {item.cHeading}</span>
+                            <span>الكمية: {item.cQuantity}</span>
+
+                            <div className='flex flex-col text-right gap-y-2'>
+                              الإضافات:
+                              {ordersData?.response.map(({ orderToppings }) =>
+                                orderToppings.map(
+                                  ({ toppingId }) =>
+                                    toppingId.slice(0, -2) === item.cItemId &&
+                                    item.cToppings.map(
+                                      (
+                                        { toppingName, toppingQuantity, toppingPrice },
+                                        idx
+                                      ) => (
+                                        <div key={idx} className={`flex gap-x-2`}>
+                                          <small>✅</small>
+                                          <span className='px-2 text-orange-900 bg-orange-200 rounded-lg'>
+                                            {toppingName}
+                                          </span>
+                                          الكمية:
+                                          <span className='px-2 text-orange-900 bg-orange-200 rounded-lg'>
+                                            {toppingQuantity}
+                                          </span>
+                                          السعر:
+                                          <span className='px-2 text-orange-900 bg-orange-200 rounded-lg'>
+                                            {toppingPrice}
+                                          </span>
+                                        </div>
+                                      )
+                                    )
+                                )
+                              )}
+                            </div>
                             <span className='inline-block px-2 py-2 text-green-800 bg-green-300 rounded-xl bg-opacity-80'>
-                              السعر على حسب الكمية: {item.cPrice * item.cQuantity} ر.ق
+                              السعر على حسب الكميات: &nbsp;
+                              <strong>{item.cPrice * item.cQuantity}</strong> ر.ق
                             </span>
                           </div>
                           <Divider marginY='2' thickness='0.5' />
@@ -215,51 +249,51 @@ const OrdersTable = () => {
                     </div>
                   </td>
                   <td className='px-1 py-2'>
-                    {!item.personNotes ? (
+                    {!order.personNotes ? (
                       <span className='font-bold text-red-600 dark:text-red-400'>
                         لا يوجد ملاحظات في الطلب
                       </span>
                     ) : (
-                      item.personNotes
+                      order.personNotes
                     )}
                   </td>
                   <td>
                     <span className='inline-block px-2 py-2 text-green-800 bg-green-300 rounded-xl bg-opacity-80'>
-                      {item.grandPrice} ر.ق
+                      <strong>{order.grandPrice}</strong> ر.ق
                     </span>
                   </td>
-                  <td className='px-1 py-2'>{item.orderId}</td>
+                  <td className='px-1 py-2'>{order.orderId}</td>
                   <td
                     className={`px-1 py-2 font-bold${
-                      item.orderStatus === 'reject'
+                      order.orderStatus === 'reject'
                         ? ' text-red-600 dark:text-red-400'
-                        : item.orderStatus === 'accept'
+                        : order.orderStatus === 'accept'
                         ? ' text-green-600 dark:text-green-500'
                         : ''
                     }`}
                   >
-                    {item.orderStatus === 'pending'
+                    {order.orderStatus === 'pending'
                       ? 'تحت المراجعة'
-                      : item.orderStatus === 'accept'
+                      : order.orderStatus === 'accept'
                       ? 'تمت الموافقة'
                       : 'تم الرفض'}
                   </td>
                   <td>
-                    {item.orderStatus === 'pending' ? (
+                    {order.orderStatus === 'pending' ? (
                       <>
-                        <AcceptBtn id={item._id} />
-                        <RejectBtn id={item._id} />
-                        <DeleteBtn id={item._id} />
+                        <AcceptBtn id={order._id} />
+                        <RejectBtn id={order._id} />
+                        <DeleteBtn id={order._id} />
                       </>
-                    ) : item.orderStatus === 'accept' ? (
+                    ) : order.orderStatus === 'accept' ? (
                       <>
-                        <RejectBtn id={item._id} />
-                        <DeleteBtn id={item._id} />
+                        <RejectBtn id={order._id} />
+                        <DeleteBtn id={order._id} />
                       </>
-                    ) : item.orderStatus === 'reject' ? (
+                    ) : order.orderStatus === 'reject' ? (
                       <>
-                        <AcceptBtn id={item._id} />
-                        <DeleteBtn id={item._id} />
+                        <AcceptBtn id={order._id} />
+                        <DeleteBtn id={order._id} />
                       </>
                     ) : (
                       <span>لا يوجد إجراء</span>

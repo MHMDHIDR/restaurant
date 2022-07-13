@@ -6,8 +6,8 @@ import { removeSlug } from '../../utils/slug'
 
 import Divider from '../../components/Divider'
 
-const CartItems = ({ setGrandPrice }) => {
-  const { items, setItems, removeFromCart } = useContext(CartContext)
+const CartItems = () => {
+  const { items, setItems, removeFromCart, setGrandPrice } = useContext(CartContext)
   const { handleToppingChecked, checkedToppings } = useContext(ToppingsContext)
   const MAX_QUANTITY = 100
 
@@ -117,7 +117,7 @@ const CartItems = ({ setGrandPrice }) => {
                         >
                           +
                         </button>
-                        <span className='order-1 text-lg font-bold quantity-btn lg:-order-none'>
+                        <span className='text-lg font-bold quantity-btn'>
                           {topping.toppingQuantity}
                         </span>
                         <button
@@ -167,7 +167,25 @@ const CartItems = ({ setGrandPrice }) => {
                         setItems([...items])
                         setGrandPrice(
                           items.reduce(
-                            (acc, curr) => acc + curr.cPrice * curr.cQuantity,
+                            (acc, item) =>
+                              acc +
+                              item.cPrice * item.cQuantity +
+                              //calculate all items checked toppings prices * all items checked toppings quantities
+                              checkedToppings.reduce(
+                                (acc, curr) =>
+                                  curr.toppingId.slice(0, -2) === item.cItemId
+                                    ? acc +
+                                      parseInt(curr.toppingPrice) *
+                                        item.cToppings.reduce(
+                                          (acc, curr2) =>
+                                            curr2.toppingId === curr.toppingId
+                                              ? curr2.toppingQuantity
+                                              : acc,
+                                          0
+                                        )
+                                    : acc,
+                                0
+                              ),
                             0
                           )
                         )
@@ -185,7 +203,28 @@ const CartItems = ({ setGrandPrice }) => {
                       item.cQuantity--
                       setItems([...items])
                       setGrandPrice(
-                        items.reduce((acc, curr) => acc + curr.cPrice * curr.cQuantity, 0)
+                        items.reduce(
+                          (acc, item) =>
+                            acc +
+                            item.cPrice * item.cQuantity +
+                            //calculate all items checked toppings prices * all items checked toppings quantities
+                            checkedToppings.reduce(
+                              (acc, curr) =>
+                                curr.toppingId.slice(0, -2) === item.cItemId
+                                  ? acc +
+                                    parseInt(curr.toppingPrice) *
+                                      item.cToppings.reduce(
+                                        (acc, curr2) =>
+                                          curr2.toppingId === curr.toppingId
+                                            ? curr2.toppingQuantity
+                                            : acc,
+                                        0
+                                      )
+                                  : acc,
+                              0
+                            ),
+                          0
+                        )
                       )
                     }
                   }}
