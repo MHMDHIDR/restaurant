@@ -205,22 +205,26 @@ const CartItems = ({ setGrandPrice }) => {
             >
               <span>سعر الوجبة مع حساب الإضافات والكمية للإضافات والوجبة :&nbsp;</span>
               <strong className='text-lg'>
-                {item.cPrice * item.cQuantity +
-                  checkedToppings.reduce(
-                    (acc, curr) =>
-                      curr.toppingId.slice(0, -2) === item.cItemId
-                        ? acc +
-                          parseInt(curr.toppingPrice) *
-                            item.cToppings.reduce(
-                              (acc, curr2) =>
-                                curr2.toppingId === curr.toppingId
-                                  ? curr2.toppingQuantity
-                                  : acc,
-                              0
-                            )
-                        : acc,
-                    0
-                  )}
+                {
+                  //calculate the item price * item quantity
+                  item.cPrice * item.cQuantity +
+                    //calculate the item toppings price * item toppings quantity
+                    checkedToppings.reduce(
+                      (acc, curr) =>
+                        curr.toppingId.slice(0, -2) === item.cItemId
+                          ? acc +
+                            parseInt(curr.toppingPrice) *
+                              item.cToppings.reduce(
+                                (acc, curr2) =>
+                                  curr2.toppingId === curr.toppingId
+                                    ? curr2.toppingQuantity
+                                    : acc,
+                                0
+                              )
+                          : acc,
+                      0
+                    )
+                }
               </strong>
               &nbsp;ر.ق
             </span>

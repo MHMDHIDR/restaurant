@@ -197,9 +197,32 @@ const OrderFood = () => {
                 <span className='inline-block px-3 py-1 my-4 text-xl text-green-800 bg-green-300 border border-green-800 rounded-md select-none'>
                   السعر الاجمالي:&nbsp;
                   <strong ref={grandPriceRef}>
-                    {/* {items.reduce((acc, item) => acc + item.cPrice * item.cQuantity, 0)} */}
-                    {console.log(items)}
-                    {console.log(checkedToppings)}
+                    {
+                      //calculate grand price
+                      //calculate all items prices * all items quantities
+                      items.reduce(
+                        (acc, item) =>
+                          acc +
+                          item.cPrice * item.cQuantity +
+                          //calculate all items checked toppings prices * all items checked toppings quantities
+                          checkedToppings.reduce(
+                            (acc, curr) =>
+                              curr.toppingId.slice(0, -2) === item.cItemId
+                                ? acc +
+                                  parseInt(curr.toppingPrice) *
+                                    item.cToppings.reduce(
+                                      (acc, curr2) =>
+                                        curr2.toppingId === curr.toppingId
+                                          ? curr2.toppingQuantity
+                                          : acc,
+                                      0
+                                    )
+                                : acc,
+                            0
+                          ),
+                        0
+                      )
+                    }
                   </strong>
                   &nbsp;ر.ق
                 </span>
