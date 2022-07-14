@@ -96,8 +96,8 @@ const OrderFood = () => {
               msg={responseMsg}
               btnName='قائمة الوجبات'
               btnLink='/view'
-              // redirectLink='/view'
-              // redirectTime='10000'
+              redirectLink='/view'
+              redirectTime='10000'
             />
           )
         )}

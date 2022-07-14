@@ -37,10 +37,10 @@ const OrderSchema = new mongoose.Schema(
     orderDate: {
       type: String,
       required: true,
-      default: new Date().toLocaleDateString('ar-QA', {
+      default: new Date().toLocaleDateString('ar-EG', {
         weekday: 'long',
         year: 'numeric',
-        month: 'short',
+        month: 'long',
         day: 'numeric',
         hour: 'numeric',
         minute: 'numeric',

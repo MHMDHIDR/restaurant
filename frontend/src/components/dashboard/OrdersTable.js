@@ -57,8 +57,8 @@ const OrdersTable = () => {
     }
   }, [response.response])
 
-  const inSeletedToppings = orderToppingsId.filter(element =>
-    orderItemsIds.includes(element?.slice(0, -2))
+  const inSeletedToppings = orderToppingsId?.filter(element =>
+    orderItemsIds?.includes(element?.slice(0, -2))
   )
 
   useEventListener('click', e => {
