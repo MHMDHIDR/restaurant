@@ -1,6 +1,6 @@
 ## Restaurant App 🥘
 
-### Restaurant to order and find delicious food
+### Restaurant to find and order delicious foods, drinks, and sweets.
 
 &nbsp;
 

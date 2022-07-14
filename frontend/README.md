@@ -1,6 +1,6 @@
 ## Restaurant App 🥘
 
-### Restaurant to order and find delicious food
+### Restaurant to find and order delicious foods, drinks, and sweets.
 
 ### Built using:
 
@@ -15,4 +15,5 @@
 #### Netlify
 
 #### Bluehost MySQL-DB
+
 # restaurant-frontend
