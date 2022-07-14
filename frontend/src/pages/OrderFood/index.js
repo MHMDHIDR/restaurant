@@ -12,15 +12,15 @@ import { validPhone } from '../../utils/validForm'
 import Modal from '../../components/Modal/Modal'
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
+import { Success, Loading } from '../../components/Icons/Status'
+import { LoadingSpinner } from '../../components/Loading'
 import CartItems from './CartItems'
-import { Success } from '../../components/Icons/Status'
 
 //orderFood
 const OrderFood = () => {
-  useDocumentTitle('Order Food')
+  useDocumentTitle('Cart Items')
 
   //global variables
-  const MIN_CHARACTERS = 1
   const MAX_CHARACTERS = 100
   const BASE_URL =
     process.env.NODE_ENV === 'development'
@@ -36,11 +36,13 @@ const OrderFood = () => {
   const [personNotes, setPersonNotes] = useState('')
   const [orderFoodStatus, setOrderFoodStatus] = useState('')
   const [responseMsg, setResponseMsg] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
   //Declaring Referenced Element
   const personNameErr = useRef(null)
   const personPhoneErr = useRef(null)
   const formErr = useRef(null)
+  const grandPriceRef = useRef(null)
 
   const handleCollectOrder = async e => {
     e.preventDefault()
@@ -52,7 +54,7 @@ const OrderFood = () => {
     formData.append('personNotes', personNotes)
     formData.append('checkedToppings', JSON.stringify(checkedToppings))
     formData.append('foodItems', JSON.stringify(items))
-    formData.append('grandPrice', grandPrice)
+    formData.append('grandPrice', grandPrice || grandPriceRef?.current?.textContent)
 
     if (
       personName !== '' &&
@@ -61,6 +63,7 @@ const OrderFood = () => {
       personPhoneErr.current.textContent === ''
     ) {
       // if payment is successful, we'll send the data to the server
+      setIsLoading(true)
       handleSaveOrder(formData)
     } else {
       formErr.current.textContent = 'الرجاء إدخال البيانات المطلوبة بشكل صحيح'
@@ -71,6 +74,7 @@ const OrderFood = () => {
     try {
       const response = await Axios.post(`${BASE_URL}/orders`, formData)
       const { orderAdded, message } = response.data
+      setIsLoading(false)
 
       setOrderFoodStatus(orderAdded)
       setResponseMsg(message)
@@ -83,15 +87,19 @@ const OrderFood = () => {
     <>
       <Header />
       <section id='orderFood' className='py-12 my-8'>
-        {orderFoodStatus && (
-          <Modal
-            status={Success}
-            msg={responseMsg}
-            btnName='قائمة الوجبات'
-            btnLink='/view'
-            redirectLink='/view'
-            redirectTime='10000'
-          />
+        {isLoading ? (
+          <Modal status={Loading} msg={`جارِ إتمام الطلب...`} />
+        ) : (
+          orderFoodStatus === 1 && (
+            <Modal
+              status={Success}
+              msg={responseMsg}
+              btnName='قائمة الوجبات'
+              btnLink='/view'
+              // redirectLink='/view'
+              // redirectTime='10000'
+            />
+          )
         )}
 
         <div className='container mx-auto text-center'>
@@ -179,7 +187,6 @@ const OrderFood = () => {
                     className='form__input'
                     id='message'
                     name='message'
-                    minLength={MIN_CHARACTERS * 10}
                     maxLength={MAX_CHARACTERS * 2}
                     onChange={e => setPersonNotes(e.target.value.trim())}
                   ></textarea>
@@ -194,7 +201,7 @@ const OrderFood = () => {
                 ></p>
                 <span className='inline-block px-3 py-1 my-4 text-xl text-green-800 bg-green-300 border border-green-800 rounded-md select-none'>
                   السعر الاجمالي:&nbsp;
-                  <strong>
+                  <strong ref={grandPriceRef}>
                     {
                       //calculate grand price
                       //calculate all items prices * all items quantities
@@ -224,7 +231,6 @@ const OrderFood = () => {
                   </strong>
                   &nbsp;ر.ق
                 </span>
-                <h1 className='my-2 mb-10 text-2xl'>السداد بواسطة</h1>
 
                 <div className='flex flex-col items-center justify-evenly'>
                   <button
@@ -233,7 +239,14 @@ const OrderFood = () => {
                     className={`w-full py-2 text-white text-lg uppercase bg-green-800 hover:bg-green-700 rounded-lg scale-100 transition-all flex justify-center items-center gap-3`}
                     onClick={handleCollectOrder}
                   >
-                    إتمام الطلب
+                    {isLoading && isLoading ? (
+                      <>
+                        <LoadingSpinner />
+                        جارِ إتمام الطلب...
+                      </>
+                    ) : (
+                      'إتمام الطلب'
+                    )}
                   </button>
                 </div>
               </form>

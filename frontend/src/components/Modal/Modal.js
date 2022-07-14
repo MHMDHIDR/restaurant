@@ -4,7 +4,7 @@ const Modal = ({
   msg = '',
   status = 'Loading',
   modalHidden = '',
-  classes = msg.length > 130 ? 'text-center' : 'text-justify',
+  classes = msg.length > 200 ? 'text-justify' : 'text-center',
   redirectLink,
   redirectTime = 2500,
   btnName = '',

@@ -25,6 +25,8 @@ const OrdersTable = () => {
   const [orderId, setOrderId] = useState()
   const [orderStatus, setOrderStatus] = useState()
   const [ordersData, setOrdersData] = useState()
+  const [orderItemsIds, setOrderItemsIds] = useState([])
+  const [orderToppingsId, setOrderToppingsId] = useState([])
 
   const modalLoading = document.querySelector('#modal')
 
@@ -41,8 +43,23 @@ const OrdersTable = () => {
   useEffect(() => {
     if (response.response !== null) {
       setOrdersData(response.response)
+      setOrderItemsIds(
+        response.response.response.map(({ orderItems }) =>
+          orderItems?.map(({ cItemId }) => cItemId)
+        )[0]
+      )
+      setOrderToppingsId(
+        response.response.response.map(
+          ({ orderToppings }) =>
+            orderToppings?.length > 0 && orderToppings.map(({ toppingId }) => toppingId)
+        )[0]
+      )
     }
   }, [response.response])
+
+  const inSeletedToppings = orderToppingsId.filter(element =>
+    orderItemsIds.includes(element?.slice(0, -2))
+  )
 
   useEventListener('click', e => {
     if (
@@ -155,7 +172,7 @@ const OrdersTable = () => {
       <table className='table w-full text-center border-collapse table-auto'>
         <thead className='text-white bg-orange-800'>
           <tr>
-            <th className='max-w-[0.25rem] px-1 py-2 '>الترتيب</th>
+            <th className='max-w-[0.25rem] px-1 py-2 '>م.</th>
             <th className='px-1 py-2 min-w-[10rem]'>اسم الشخص</th>
             <th className='px-1 py-2'>تاريخ و وقت الطلب</th>
             <th className='px-1 py-2'>هاتف صاحب الطلب</th>
@@ -193,55 +210,60 @@ const OrdersTable = () => {
                         &#8679;
                       </span>
                     </span>
+
                     <div className='max-h-screen overflow-hidden transition-all duration-300 ordered-items'>
                       {order?.orderItems?.map(item => (
                         <div key={item.cItemId}>
-                          <div className='flex flex-col items-start gap-2'>
-                            <img
-                              loading='lazy'
-                              src={item.cImg[0].foodImgDisplayPath}
-                              alt={item.cHeading}
-                              width='50'
-                              height='50'
-                              className='object-cover rounded-lg shadow-md w-14 h-14'
-                            />
-                            <span>اسم الطلب: {item.cHeading}</span>
-                            <span>الكمية: {item.cQuantity}</span>
+                          <div className='flex flex-col gap-4'>
+                            <div className='flex flex-col items-start gap-2'>
+                              <div className='flex items-center w-full gap-4'>
+                                <img
+                                  loading='lazy'
+                                  src={item.cImg[0].foodImgDisplayPath}
+                                  alt={item.cHeading}
+                                  width='50'
+                                  height='50'
+                                  className='object-cover rounded-lg shadow-md w-14 h-14'
+                                />
+                                <div className='flex flex-col items-start'>
+                                  <span>اسم الطلب: {item.cHeading}</span>
+                                  <span>الكمية: {item.cQuantity}</span>
+                                </div>
+                              </div>
 
-                            <div className='flex flex-col text-right gap-y-2'>
-                              الإضافات:
-                              {ordersData?.response.map(({ orderToppings }) =>
-                                orderToppings.map(
-                                  ({ toppingId }) =>
-                                    toppingId.slice(0, -2) === item.cItemId &&
-                                    item.cToppings.map(
-                                      (
-                                        { toppingName, toppingQuantity, toppingPrice },
-                                        idx
-                                      ) => (
-                                        <div key={idx} className={`flex gap-x-2`}>
-                                          <small>✅</small>
-                                          <span className='px-2 text-orange-900 bg-orange-200 rounded-lg'>
-                                            {toppingName}
-                                          </span>
-                                          الكمية:
-                                          <span className='px-2 text-orange-900 bg-orange-200 rounded-lg'>
-                                            {toppingQuantity}
-                                          </span>
-                                          السعر:
-                                          <span className='px-2 text-orange-900 bg-orange-200 rounded-lg'>
-                                            {toppingPrice}
-                                          </span>
-                                        </div>
-                                      )
-                                    )
-                                )
+                              <span className='inline-block px-2 py-2 text-green-800 bg-green-300 rounded-xl bg-opacity-80'>
+                                السعر على حسب الكميات: &nbsp;
+                                <strong>{item.cPrice * item.cQuantity}</strong> ر.ق
+                              </span>
+                            </div>
+                            <div className='flex flex-col gap-6'>
+                              {inSeletedToppings
+                                .map(id => id.slice(0, -2))
+                                ?.includes(item.cItemId) && <h3>الاضافات</h3>}
+                              {item?.cToppings?.map(
+                                ({
+                                  toppingId,
+                                  toppingName,
+                                  toppingPrice,
+                                  toppingQuantity
+                                }) =>
+                                  inSeletedToppings?.includes(toppingId) && (
+                                    <div key={toppingId} className='flex gap-4'>
+                                      <span className='px-2 text-orange-900 bg-orange-200 rounded-lg'>
+                                        ✅ &nbsp; {toppingName}
+                                      </span>
+                                      <span className='px-2 text-orange-900 bg-orange-200 rounded-lg'>
+                                        الكمية المطلوبة {toppingQuantity}
+                                      </span>
+                                      <span className='px-2 text-green-900 bg-green-200 rounded-lg'>
+                                        السعر حسب الكمية: {toppingPrice * toppingQuantity}{' '}
+                                        ر.ق
+                                      </span>
+                                      <hr />
+                                    </div>
+                                  )
                               )}
                             </div>
-                            <span className='inline-block px-2 py-2 text-green-800 bg-green-300 rounded-xl bg-opacity-80'>
-                              السعر على حسب الكميات: &nbsp;
-                              <strong>{item.cPrice * item.cQuantity}</strong> ر.ق
-                            </span>
                           </div>
                           <Divider marginY='2' thickness='0.5' />
                         </div>
