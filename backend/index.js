@@ -18,7 +18,11 @@ app.use(express.urlencoded({ extended: true }))
 app.use(fileUpload())
 app.use(
   cors({
-    origin: [`https://mhmdhidr-restaurant.netlify.app`, `http://dev.com:3000`]
+    origin: [
+      `https://mhmdhidr-restaurant.netlify.app`,
+      `http://dev.com:3000`,
+      `http://localhost:3000`
+    ]
   })
 )
 

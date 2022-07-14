@@ -45,24 +45,25 @@ const App = () => (
                     <Route path='categories' element={<Categories />} />
                     <Route path='order-food' element={<OrderFood />} />
                     <Route path='search' element={<SearchResults />}>
-                      <Route path=':search' element={<SearchResults />}>
-                        <Route path=':pageNum' element={<SearchResults />} />
+                      <Route path=':search' element={<SearchResults />} />
+                    </Route>
+
+                    {/* View Routes */}
+                    <Route path='view' element={<ViewFood />}>
+                      <Route path=':pageNum' element={<ViewFood />} />
+                      <Route path=':category' element={<ViewFood />}>
+                        <Route path=':pageNum' element={<ViewFood />} />
+                      </Route>
+                      <Route path='item' element={<ViewFood />}>
+                        <Route path=':foodId' element={<ViewFood />} />
                       </Route>
                     </Route>
 
-                    {/* View All Food */}
-                    <Route path='view' element={<ViewFood />} />
-                    <Route path='view/:pageNum' element={<ViewFood />} />
-                    {/* multiple item */}
-                    <Route path='view/:category/:pageNum' element={<ViewFood />} />
-                    {/* single item */}
-                    <Route path='view/item/:foodId' element={<ViewFood />} />
-
-                    {/* authentication */}
+                    {/* Authentication */}
                     <Route path='join' element={<Join />} />
                     <Route path='login' element={<Login />} />
 
-                    {/* dashboard */}
+                    {/* Dashboard */}
                     <Route path='dashboard' element={<DashboardHome />}>
                       {/* Food */}
                       <Route path='orders' element={<DashboardOrders />} />
