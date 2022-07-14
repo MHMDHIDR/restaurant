@@ -1,4 +1,4 @@
-export const createLocaleDateString = date => {
+export const createLocaleDateString = date =>
   new Date(date).toLocaleDateString('ar-EG', {
     weekday: 'long',
     year: 'numeric',
@@ -8,4 +8,3 @@ export const createLocaleDateString = date => {
     minute: 'numeric',
     second: 'numeric'
   })
-}
