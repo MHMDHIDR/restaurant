@@ -46,20 +46,26 @@ const OrdersTable = () => {
       setOrderItemsIds(
         response.response.response.map(({ orderItems }) =>
           orderItems?.map(({ cItemId }) => cItemId)
-        )[0]
+        )
       )
       setOrderToppingsId(
         response.response.response.map(
           ({ orderToppings }) =>
             orderToppings?.length > 0 && orderToppings.map(({ toppingId }) => toppingId)
-        )[0]
+        )
       )
     }
   }, [response.response])
 
-  const inSeletedToppings = orderToppingsId?.filter(element =>
-    orderItemsIds?.includes(element?.slice(0, -2))
+  const inSeletedToppings = orderToppingsId?.map(selected =>
+    selected.filter(element =>
+      orderItemsIds.map(id => id?.includes(element?.slice(0, -2)))
+    )
   )
+
+  // console.log(orderItemsIds)
+  // console.log(orderToppingsId)
+  // console.log(inSeletedToppings)
 
   useEventListener('click', e => {
     if (
@@ -247,10 +253,13 @@ const OrdersTable = () => {
                                   toppingPrice,
                                   toppingQuantity
                                 }) =>
-                                  inSeletedToppings?.includes(toppingId) && (
+                                  inSeletedToppings[idx]?.includes(toppingId) && (
                                     <div key={toppingId} className='flex gap-4'>
                                       <span className='px-2 text-orange-900 bg-orange-200 rounded-lg'>
                                         ✅ &nbsp; {toppingName}
+                                      </span>
+                                      <span className='px-2 text-orange-900 bg-orange-200 rounded-lg'>
+                                        سعر الوحدة {toppingPrice}
                                       </span>
                                       <span className='px-2 text-orange-900 bg-orange-200 rounded-lg'>
                                         الكمية المطلوبة {toppingQuantity}
