@@ -6,6 +6,7 @@ import { CartContext } from '../../Contexts/CartContext'
 import { ToppingsContext } from '../../Contexts/ToppingsContext'
 
 import useDocumentTitle from '../../hooks/useDocumentTitle'
+import useGeoLocation from '../../hooks/useGeoLocation'
 
 import { validPhone } from '../../utils/validForm'
 
@@ -36,11 +37,13 @@ const OrderFood = () => {
   const [personNotes, setPersonNotes] = useState('')
   const [orderFoodStatus, setOrderFoodStatus] = useState('')
   const [responseMsg, setResponseMsg] = useState('')
+  const [viewLocation, setViewLocation] = useState('')
   const [isLoading, setIsLoading] = useState(false)
 
   //Declaring Referenced Element
   const personNameErr = useRef(null)
   const personPhoneErr = useRef(null)
+  const personLocationErr = useRef(null)
   const formErr = useRef(null)
   const grandPriceRef = useRef(null)
 
@@ -60,7 +63,8 @@ const OrderFood = () => {
       personName !== '' &&
       personPhone !== '' &&
       personNameErr.current.textContent === '' &&
-      personPhoneErr.current.textContent === ''
+      personPhoneErr.current.textContent === '' &&
+      personLocationErr.current.textContent === ''
     ) {
       // if payment is successful, we'll send the data to the server
       setIsLoading(true)
@@ -82,6 +86,8 @@ const OrderFood = () => {
       console.error(err)
     }
   }
+
+  const location = useGeoLocation()
 
   return (
     <>
@@ -181,6 +187,34 @@ const OrderFood = () => {
                     className='inline-block md:text-lg text-red-600 dark:text-red-400 font-[600] pt-2 px-1'
                     ref={personPhoneErr}
                   ></span>
+                </label>
+                <label
+                  htmlFor='personLocation'
+                  className='flex items-center gap-8 border-none cursor-pointer form__group'
+                >
+                  <input
+                    className='w-10 h-10 form__input'
+                    id='personLocation'
+                    name='personLocation'
+                    type='checkbox'
+                    onChange={() => setViewLocation(prev => !prev)}
+                  />
+                  {viewLocation === true && location.error ? (
+                    <span>الرجاء تفعيل تحديد الموقع من المتصفح</span>
+                  ) : (
+                    location.coordinates && (
+                      <a
+                        className='text-lg text-blue-500 hover:text-blue-700'
+                        target={'_blank'}
+                        href={`https://www.google.com/maps/@${location.coordinates.lat},${location.coordinates.lng}`}
+                      >
+                        📌 تم تحديد الموقع الخاص بك
+                      </a>
+                    )
+                  )}
+                  <span className='mb-5 form__label active'>
+                    تحديد موقع التوصيل تلقائياً (اختياري) &nbsp;
+                  </span>
                 </label>
                 <label htmlFor='message' className='form__group'>
                   <textarea
