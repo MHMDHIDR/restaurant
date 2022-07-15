@@ -206,6 +206,7 @@ const OrderFood = () => {
                       <a
                         className='text-lg text-blue-500 hover:text-blue-700'
                         target={'_blank'}
+                        rel='noreferrer'
                         href={`https://www.google.com/maps/@${location.coordinates.lat},${location.coordinates.lng}`}
                       >
                         📌 تم تحديد الموقع الخاص بك
