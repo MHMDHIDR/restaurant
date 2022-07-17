@@ -231,8 +231,10 @@ const OrderFood = () => {
                       )
                     }
                   </strong>
-                  &nbsp;ر.ق
+                  <span className='block mt-6'>&nbsp;ر.ق إدفع بواسطة PayPal</span>
                 </span>
+
+                {/* grandPrice || grandPriceRef?.current?.textContent */}
 
                 <div className='flex flex-col items-center justify-evenly'>
                   <button
