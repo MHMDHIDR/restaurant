@@ -6,7 +6,7 @@ import { removeSlug } from '../../utils/slug'
 
 import Divider from '../../components/Divider'
 
-const CartItems = () => {
+const CartItems = ({ checkout = false }) => {
   const { items, setItems, removeFromCart, setGrandPrice } = useContext(CartContext)
   const { handleToppingChecked, checkedToppings } = useContext(ToppingsContext)
   const MAX_QUANTITY = 100
@@ -14,7 +14,7 @@ const CartItems = () => {
   return (
     items?.length > 0 &&
     items.map(item => {
-      const hasToppings = typeof item?.cToppings[0].toppingName === 'string'
+      const hasToppings = typeof item?.cToppings[0]?.toppingName === 'string'
 
       return (
         <div key={item.cItemId}>
