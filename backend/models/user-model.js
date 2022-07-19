@@ -9,7 +9,13 @@ const reqString = {
 const userAccountStatus = {
   ...reqString,
   enum: ['active', 'block'],
-  default: 'block'
+  default: 'active'
+}
+
+const userAccountType = {
+  ...reqString,
+  enum: ['admin', 'user'],
+  default: 'user'
 }
 
 const UserSchema = new mongoose.Schema(
@@ -17,7 +23,8 @@ const UserSchema = new mongoose.Schema(
     userFullName: reqString,
     userEmail: reqString,
     userPassword: reqString,
-    userAccountStatus
+    userAccountStatus,
+    userAccountType
   },
   //Collection Name
   { collection: 'restaurant_users' }

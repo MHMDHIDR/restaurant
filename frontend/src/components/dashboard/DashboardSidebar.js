@@ -121,7 +121,7 @@ const DashboardSidebar = () => {
             }
             onClick={menuToggler}
           >
-            المدراء
+            المستخدمين
           </NavLink>
         </li>
       </ul>

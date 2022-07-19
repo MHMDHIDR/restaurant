@@ -23,10 +23,10 @@ const DashboardUsers = () => {
   const itemsPerPage = 10
 
   const [userId, setUserId] = useState()
-  const [userAccountStatus, setUserAccountAction] = useState()
+  const [userAccountAction, setUserAccountAction] = useState()
   const [userName, setUserName] = useState('')
   const [deleteUserStatus, setDeleteUserStatus] = useState()
-  const [userStatus, setUserStatus] = useState()
+  const [serUpdated, setUserUpdated] = useState()
   const [data, setData] = useState('')
 
   const modalLoading = document.querySelector('#modal')
@@ -51,13 +51,13 @@ const DashboardUsers = () => {
     if (
       e.target.id === 'deleteUser' ||
       e.target.id === 'blockUser' ||
-      e.target.id === 'activateUser'
+      e.target.id === 'activateUser' ||
+      e.target.id === 'user' ||
+      e.target.id === 'admin'
     ) {
       setUserId(e.target.dataset.id)
       setUserName(e.target.dataset.name)
-      setUserAccountAction(
-        e.target.dataset.action === 'delete' ? 'delete' : e.target.dataset.action
-      )
+      setUserAccountAction(e.target.dataset.action)
       //show modal
       modalLoading.classList.remove('hidden')
     }
@@ -65,12 +65,12 @@ const DashboardUsers = () => {
     if (e.target.id === 'cancel') {
       modalLoading.classList.add('hidden')
     } else if (e.target.id === 'confirm') {
-      handleUser(userId, userAccountStatus)
+      handleUser(userId, userAccountAction)
     }
   })
 
-  const handleUser = async (userId, userAccountStatus) => {
-    if (userAccountStatus === 'delete') {
+  const handleUser = async (userId, userAccountAction) => {
+    if (userAccountAction === 'delete') {
       try {
         //You need to name the body {data} so it can be recognized in (.delete) method
         const response = await Axios.delete(`${BASE_URL}/users/${userId}`, { data })
@@ -89,13 +89,13 @@ const DashboardUsers = () => {
       }
     } else {
       const formData = new FormData()
-      formData.append('userAccountStatus', userAccountStatus)
+      formData.append('userAccountAction', userAccountAction)
 
       try {
         const response = await Axios.patch(`${BASE_URL}/users/${userId}`, formData)
 
-        const { userStatusUpdated } = response.data
-        setUserStatus(userStatusUpdated)
+        const { userUpdated } = response.data
+        setUserUpdated(userUpdated)
         //Remove waiting modal
         setTimeout(() => {
           modalLoading.classList.add('hidden')
@@ -122,19 +122,27 @@ const DashboardUsers = () => {
           redirectLink={goTo('users')}
           redirectTime='3000'
         />
-      ) : userStatus === 1 ? (
+      ) : serUpdated === 1 ? (
         <Modal
           status={Success}
           msg={`تم${
-            userAccountStatus === 'block' ? `❗️ حظر 😔` : `🎉 تفعيل 😄`
-          } ${userName} بنجاح الرجاء الانتظار ليتم تحويلك لقائمة المستخدمين`}
+            userAccountAction === 'block'
+              ? `❗️ حظر 😔 ${userName} `
+              : userAccountAction === 'active'
+              ? `🎉 تفعيل 😄 ${userName}`
+              : userAccountAction === 'admin'
+              ? `🎉 تحويل ${userName} إلى مدير 😎`
+              : userAccountAction === 'user'
+              ? `❗️ تحويل ${userName}  إلى مستخدم 😎`
+              : null
+          } بنجاح الرجاء الانتظار ليتم تحويلك لقائمة المستخدمين`}
           redirectLink={goTo('users')}
           redirectTime='3000'
         />
-      ) : userStatus === 0 ? (
+      ) : serUpdated === 0 ? (
         <Modal
           status={Error}
-          msg={`حدث خطأ ما أثناء حظر ${userName}!`}
+          msg={`حدث خطأ ما أثناء تحديث ${userName}!`}
           redirectLink={goTo('users')}
           redirectTime='3000'
         />
@@ -146,19 +154,25 @@ const DashboardUsers = () => {
         modalHidden='hidden'
         classes='txt-blue text-center'
         msg={`هل أنت متأكد من ${
-          userAccountStatus === 'block'
+          userAccountAction === 'block'
             ? 'حظر'
-            : userAccountStatus === 'active'
+            : userAccountAction === 'active'
             ? 'تفعيل'
-            : userAccountStatus === 'delete'
-            ? 'حذف'
+            : userAccountAction === 'admin'
+            ? 'تحويل الى مدير'
+            : userAccountAction === 'user'
+            ? 'تحويل الى مستخدم'
             : 'الغاء'
         } ${userName} لا يمكن التراجع عن هذا القرار`}
         ctaConfirmBtns={[
-          userAccountStatus === 'block'
+          userAccountAction === 'block'
             ? 'حظر'
-            : userAccountStatus === 'active'
+            : userAccountAction === 'active'
             ? 'تفعيل'
+            : userAccountAction === 'admin'
+            ? 'تحويل الى مدير'
+            : userAccountAction === 'user'
+            ? 'تحويل الى مستخدم'
             : 'حذف',
           'الغاء'
         ]}
@@ -173,7 +187,8 @@ const DashboardUsers = () => {
               <tr>
                 <th className='px-1 py-2'>الإســــــــــــــم</th>
                 <th className='px-1 py-2'>البريد الالكتروني</th>
-                <th className='px-1 py-2'>حالة المدير</th>
+                <th className='px-1 py-2'>نوع المستخدم</th>
+                <th className='px-1 py-2'>حالة المستخدم</th>
                 <th className='px-1 py-2'>الاجراء</th>
               </tr>
             </thead>
@@ -187,8 +202,26 @@ const DashboardUsers = () => {
                       className='transition-colors even:bg-gray-200 odd:bg-gray-300 dark:even:bg-gray-600 dark:odd:bg-gray-700'
                     >
                       <td className='px-1 py-2'>{item.userFullName}</td>
-                      <td className='w-1/2 px-1 py-2'>
+                      <td className='px-1 py-2'>
                         <p>{item.userEmail}</p>
+                      </td>
+                      <td
+                        className={`px-1 py-2 font-bold${
+                          item.userAccountType === 'admin'
+                            ? ' text-orange-600 dark:text-orange-400 font-bold'
+                            : ' text-gray-600 dark:text-gray-500'
+                        }`}
+                      >
+                        <span
+                          tooltip={
+                            item.userAccountType === 'admin'
+                              ? 'المدير يملك صلاحية الدخول على لوحة التحكم، فعليه يستطيع إدارة الموقع من خلالها'
+                              : 'المستخدم العادي يملك صلاحية الدخول على حسابه ورؤية الطلبات الخاصة به فقط'
+                          }
+                          className='w-40'
+                        >
+                          {item.userAccountType === 'admin' ? 'مدير' : 'مستخدم عادي'}
+                        </span>
                       </td>
                       <td
                         className={`px-1 py-2 font-bold${
@@ -197,7 +230,7 @@ const DashboardUsers = () => {
                             : ' text-green-600 dark:text-green-500'
                         }`}
                       >
-                        <p
+                        <span
                           tooltip={
                             item.userAccountStatus === 'block'
                               ? 'المستخدم المحظور لا يملك صلاحية للدخول على حسابه فعليه لا يملك صلاحية الدخول للوحة التحكم'
@@ -207,16 +240,16 @@ const DashboardUsers = () => {
                           {item.userAccountStatus === 'block'
                             ? 'المستخدم محظور\u00A0\u00A0\u00A0❌'
                             : 'المستخدم مفعل\u00A0\u00A0\u00A0✅'}
-                        </p>
+                        </span>
                       </td>
-                      <td className='flex justify-center gap-3 px-1 py-2'>
+                      <td className='flex flex-wrap justify-center gap-3 px-1 py-2'>
                         {item.userAccountStatus === 'block' ? (
                           <button
                             id='activateUser'
                             data-id={item._id}
                             data-name={item.userFullName}
                             data-action='active'
-                            className='px-16 py-1 text-white bg-green-600 border-2 rounded-md hover:bg-green-700'
+                            className='py-1 text-white bg-green-600 border-2 rounded-md hover:bg-green-700 min-w-[4rem]'
                             tooltip='تفعيل المستخدم'
                           >
                             تفعيل
@@ -227,18 +260,43 @@ const DashboardUsers = () => {
                             data-id={item._id}
                             data-name={item.userFullName}
                             data-action='block'
-                            className='px-16 py-1 text-white border-2 rounded-md bg-neutral-600 hover:bg-neutral-700'
+                            className='py-1 px-2 text-white border-2 rounded-md bg-neutral-600 hover:bg-neutral-700 min-w-[6.5rem]'
                             tooltip='حظر المستخدم'
                           >
                             حظر
                           </button>
                         )}
+
+                        {item.userAccountType === 'admin' ? (
+                          <button
+                            id='user'
+                            data-id={item._id}
+                            data-name={item.userFullName}
+                            data-action='user'
+                            className='py-1 px-2 text-white bg-green-600 border-2 rounded-md hover:bg-green-700 min-w-[6.5rem]'
+                            tooltip='تحويل الى مستخدم عادي'
+                          >
+                            تحويل لمستخدم
+                          </button>
+                        ) : (
+                          <button
+                            id='admin'
+                            data-id={item._id}
+                            data-name={item.userFullName}
+                            data-action='admin'
+                            className='py-1 px-2 text-white bg-green-600 border-2 rounded-md hover:bg-green-700 min-w-[6.5rem]'
+                            tooltip='تحول الى مدير'
+                          >
+                            تحول لمدير
+                          </button>
+                        )}
+
                         <button
                           id='deleteUser'
                           data-id={item._id}
                           data-name={item.userFullName}
                           data-action='delete'
-                          className='px-16 py-1 text-white bg-red-600 rounded-md hover:bg-red-700'
+                          className='py-1 px-2 text-white bg-red-600 rounded-md hover:bg-red-700 min-w-[6.5rem]'
                           tooltip='حذف المستخدم'
                         >
                           حذف

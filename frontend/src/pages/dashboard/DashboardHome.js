@@ -29,7 +29,7 @@ const DashboardHome = () => {
 
   useEffect(() => {
     if (currentUser?.response !== null || menu.response !== null) {
-      setUserStatus(currentUser?.response?.response?.response?.userAccountStatus)
+      setUserStatus(currentUser?.response?.response?.response?.userAccountAction)
       setMenuCount(menu?.response?.itemsCount)
       setOrdersCount(orders?.response?.itemsCount)
     }
@@ -39,7 +39,7 @@ const DashboardHome = () => {
 
   useEventListener('keydown', e => e.key === 'Escape' && menuToggler())
 
-  return !USER_ID || userStatus === 'block' ? (
+  return !USER_ID || userStatus === 'block' || userStatus === 'user' ? (
     logoutUser(USER_ID)
   ) : (
     <section className='overflow-x-auto'>

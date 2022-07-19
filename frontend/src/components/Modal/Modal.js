@@ -51,7 +51,14 @@ const Modal = ({
           ) : ctaConfirmBtns ? (
             <button className='flex items-center justify-center w-full gap-6'>
               {ctaConfirmBtns.map((btn, key) => {
-                const conditions = ['تفعيل', 'موافق', 'متأكد', 'تأكيد']
+                const conditions = [
+                  'تفعيل',
+                  'موافق',
+                  'متأكد',
+                  'تأكيد',
+                  'تحويل الى مدير',
+                  'تحويل الى مستخدم'
+                ]
                 const confirmColor = btn.includes('حظر')
                   ? 'neutral'
                   : conditions.some(btnTxt => btn.includes(btnTxt))

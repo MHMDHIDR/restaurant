@@ -50,7 +50,7 @@ const loginUser = asyncHandler(async (req, res) => {
   // Check for user by using his/her email
   const user = await UserModel.findOne({ userEmail })
 
-  if (user && user.userAccountStatus === 'block') {
+  if (user && user.userAccountAction === 'block') {
     res.status(403).json({
       LoggedIn: 0,
       message: 'حسابك مغلق حاليا، يرجى التواصل مع الادارة'
@@ -104,7 +104,7 @@ const deleteUser = asyncHandler(async (req, res) => {
 
 const updateUser = asyncHandler(async (req, res) => {
   const { userId } = req.params
-  const { userAccountStatus } = req.body
+  const { userAccountAction } = req.body
 
   //if not valid id then return error message
   if (!mongoose.Types.ObjectId.isValid(userId)) {
@@ -115,18 +115,19 @@ const updateUser = asyncHandler(async (req, res) => {
   try {
     await UserModel.findByIdAndUpdate(
       userId,
-      {
-        userAccountStatus
-      },
+      //check if its a change of status or type
+      userAccountAction === 'active' || userAccountAction === 'block'
+        ? { userAccountStatus: userAccountAction }
+        : { userAccountType: userAccountAction },
       { new: true }
     )
 
     res.status(200).json({
       message: 'User Status Updated Successfully',
-      userStatusUpdated: 1
+      userUpdated: 1
     })
   } catch (error) {
-    res.status(404).json({ message: error.message, userStatusUpdated: 0 })
+    res.status(404).json({ message: error.message, userUpdated: 0 })
   }
 })
 
