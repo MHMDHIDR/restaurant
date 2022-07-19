@@ -58,14 +58,11 @@ const OrdersTable = () => {
   }, [response.response])
 
   const inSeletedToppings = orderToppingsId?.map(selected =>
-    selected.filter(element =>
+    //if there is no toppings in order then selected will be empty array
+    (selected || []).filter(element =>
       orderItemsIds.map(id => id?.includes(element?.slice(0, -2)))
     )
   )
-
-  // console.log(orderItemsIds)
-  // console.log(orderToppingsId)
-  // console.log(inSeletedToppings)
 
   useEventListener('click', e => {
     if (

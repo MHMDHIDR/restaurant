@@ -1,7 +1,8 @@
 import ThemeToggler from '../ThemeToggler'
 
 const Modal = ({
-  msg = '',
+  msg = ``,
+  extraComponents,
   status = 'Loading',
   modalHidden = '',
   classes = msg.length > 200 ? 'text-justify' : 'text-center',
@@ -41,6 +42,7 @@ const Modal = ({
           <pre className='py-8 leading-9 whitespace-pre-line' dir='auto'>
             <p className={classes}>{msg}</p>
           </pre>
+          {extraComponents && extraComponents}
           {btnName && btnLink ? (
             <a
               href={btnLink}

@@ -37,7 +37,7 @@ const OrderFood = () => {
   const [personNotes, setPersonNotes] = useState('')
   const [orderFoodStatus, setOrderFoodStatus] = useState('')
   const [responseMsg, setResponseMsg] = useState('')
-  const [isValidForm, setIsValidForm] = useState(false)
+  const [showPaymentModal, setShowPaymentModal] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
   //Declaring Referenced Element
@@ -64,10 +64,12 @@ const OrderFood = () => {
       personNameErr.current.textContent === '' &&
       personPhoneErr.current.textContent === ''
     ) {
+      //remove error messages
+      formErr.current.textContent = ''
+      //show payment Modal
+      setShowPaymentModal(true)
       // if payment is successful, we'll send the data to the server
-      setIsValidForm(true)
-      // setIsLoading(true)
-      // handleSaveOrder(formData)
+      handleSaveOrder(formData)
     } else {
       formErr.current.textContent = 'الرجاء إدخال البيانات المطلوبة بشكل صحيح'
     }
@@ -90,17 +92,25 @@ const OrderFood = () => {
     <>
       <Header />
       <section id='orderFood' className='py-12 my-8'>
-        {isLoading ? (
-          <Modal status={Loading} msg={`جارِ إتمام الطلب...`} />
+        {orderFoodStatus === 1 ? (
+          <Modal
+            status={Success}
+            msg={responseMsg}
+            btnName='قائمة الوجبات'
+            btnLink='/view'
+            redirectLink='/view'
+            redirectTime='10000'
+          />
         ) : (
-          orderFoodStatus === 1 && (
+          showPaymentModal === true && (
             <Modal
-              status={Success}
-              msg={responseMsg}
-              btnName='قائمة الوجبات'
-              btnLink='/view'
-              redirectLink='/view'
-              redirectTime='10000'
+              status={Loading}
+              msg={`يمكنك الدفع بإستخدام إحدى الوسائل أدناه:`}
+              extraComponents={
+                <PaymentButton
+                  value={grandPrice || grandPriceRef?.current?.textContent}
+                />
+              }
             />
           )
         )}
@@ -123,10 +133,7 @@ const OrderFood = () => {
                 </Link>
 
                 <h2 className='mb-10 text-2xl'>يرجى إضافة تفاصيل الطلب</h2>
-                <label
-                  htmlFor='name'
-                  className={`form__group ${isValidForm === true && 'bg-gray-300'}`}
-                >
+                <label htmlFor='name' className={`form__group`}>
                   <input
                     className={`relative form__input`}
                     id='name'
@@ -146,9 +153,8 @@ const OrderFood = () => {
                       }
                     }}
                     required
-                    readOnly={isValidForm === true}
                   />
-                  <span className={`form__label ${isValidForm === true && 'active'}`}>
+                  <span className={`form__label`}>
                     اسمك الكريم &nbsp;
                     <strong className='text-xl leading-4 text-red-600'>*</strong>
                   </span>
@@ -157,10 +163,7 @@ const OrderFood = () => {
                     ref={personNameErr}
                   ></span>
                 </label>
-                <label
-                  htmlFor='phoneNumber'
-                  className={`form__group ${isValidForm === true && 'bg-gray-300'}`}
-                >
+                <label htmlFor='phoneNumber' className={`form__group`}>
                   <input
                     className={`form__input`}
                     id='phoneNumber'
@@ -182,9 +185,8 @@ const OrderFood = () => {
                       }
                     }}
                     required
-                    readOnly={isValidForm === true}
                   />
-                  <span className={`form__label ${isValidForm === true && 'active'}`}>
+                  <span className={`form__label`}>
                     رقم الهاتف - مثال: 33445566 &nbsp;
                     <strong className='text-xl leading-4 text-red-600'>*</strong>
                   </span>
@@ -193,20 +195,16 @@ const OrderFood = () => {
                     ref={personPhoneErr}
                   ></span>
                 </label>
-                <label
-                  htmlFor='message'
-                  className={`form__group ${isValidForm === true && 'bg-gray-300'}`}
-                >
+                <label htmlFor='message' className={`form__group`}>
                   <textarea
-                    className={`form__input ${isValidForm === true && 'select-none'}`}
+                    className={`form__input`}
                     id='message'
                     name='message'
                     maxLength={MAX_CHARACTERS * 2}
                     onChange={e => setPersonNotes(e.target.value.trim())}
-                    readOnly={isValidForm === true}
                   ></textarea>
 
-                  <span className={`form__label ${isValidForm === true && 'active'}`}>
+                  <span className={`form__label`}>
                     تستطيع وضع ملاحظات أو اضافات للشيف لإضافتها لك في طلبك &nbsp;😄
                   </span>
                 </label>
@@ -250,29 +248,21 @@ const OrderFood = () => {
                 {/* grandPrice || grandPriceRef?.current?.textContent */}
 
                 <div className='flex flex-col items-center justify-evenly'>
-                  {isValidForm && (
-                    <PaymentButton
-                      value={grandPrice || grandPriceRef?.current?.textContent}
-                    />
-                  )}
-
-                  {!isValidForm && (
-                    <button
-                      to='/checkout'
-                      type='submit'
-                      className={`w-full py-2 text-white text-lg uppercase bg-green-800 hover:bg-green-700 rounded-lg scale-100 transition-all flex justify-center items-center gap-3`}
-                      onClick={handleCollectOrder}
-                    >
-                      {isLoading && isLoading ? (
-                        <>
-                          <LoadingSpinner />
-                          جارِ تأكيد بيانات الطلب...
-                        </>
-                      ) : (
-                        'تأكيد البيانات'
-                      )}
-                    </button>
-                  )}
+                  <button
+                    to='/checkout'
+                    type='submit'
+                    className={`w-full py-2 text-white text-lg uppercase bg-green-800 hover:bg-green-700 rounded-lg scale-100 transition-all flex justify-center items-center gap-3`}
+                    onClick={handleCollectOrder}
+                  >
+                    {isLoading && isLoading ? (
+                      <>
+                        <LoadingSpinner />
+                        جارِ تأكيد بيانات الطلب...
+                      </>
+                    ) : (
+                      'تأكيد البيانات'
+                    )}
+                  </button>
                 </div>
               </form>
             </>
