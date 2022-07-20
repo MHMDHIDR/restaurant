@@ -1,12 +1,18 @@
-import { useState, createContext, useContext } from 'react'
+import { useState, createContext, useContext, useEffect } from 'react'
 import { ToppingsContext } from './ToppingsContext'
 export const CartContext = createContext()
 
+const cartFromLocalStorage = JSON.parse(localStorage.getItem('restCartItems') || '[]')
+
 const CartContextProvider = ({ children }) => {
-  const [items, setItems] = useState([])
+  const [items, setItems] = useState(cartFromLocalStorage)
   const [orderDetails, setOrderDetails] = useState()
   const [grandPrice, setGrandPrice] = useState('')
   const { checkedToppings, setCheckedToppings } = useContext(ToppingsContext)
+
+  useEffect(() => {
+    localStorage.setItem('restCartItems', JSON.stringify(items))
+  }, [items])
 
   //add items to card add the details like: cHeading, cImg, cPrice, cDesc, cToppings, cQuantity: 1
   const addToCart = (cItemId, cHeading, cImg, cPrice, cDesc, cToppings) => {

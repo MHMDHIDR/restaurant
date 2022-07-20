@@ -1,8 +1,16 @@
-import { createContext, useState } from 'react'
+import { createContext, useState, useEffect } from 'react'
 export const ToppingsContext = createContext()
 
+const checkedToppingsFromLocalStorage = JSON.parse(
+  localStorage.getItem('restCheckedToppings') || '[]'
+)
+
 const ToppingsContextProvider = ({ children }) => {
-  const [checkedToppings, setCheckedToppings] = useState([])
+  const [checkedToppings, setCheckedToppings] = useState(checkedToppingsFromLocalStorage)
+
+  useEffect(() => {
+    localStorage.setItem('restCheckedToppings', JSON.stringify(checkedToppings))
+  }, [checkedToppings])
 
   const handleToppingChecked = (toppingId, toppingPrice) => {
     const topping = checkedToppings.find(topping => topping.toppingId === toppingId)
