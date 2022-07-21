@@ -8,8 +8,15 @@ const getOrders = asyncHandler(async (req, res) => {
 })
 
 const addOrder = asyncHandler(async (req, res) => {
-  const { personName, personPhone, personNotes, foodItems, checkedToppings, grandPrice } =
-    req.body
+  const {
+    personName,
+    personPhone,
+    personNotes,
+    foodItems,
+    checkedToppings,
+    grandPrice,
+    paymentData
+  } = req.body
 
   try {
     const orders = new OrdersModel({
@@ -19,14 +26,15 @@ const addOrder = asyncHandler(async (req, res) => {
       personNotes,
       orderItems: JSON.parse(foodItems),
       orderToppings: JSON.parse(checkedToppings),
-      grandPrice
+      grandPrice,
+      paymentData: JSON.parse(paymentData)
     })
 
     await orders.save()
 
     res.json({
       message: `
-        تم طلب الوجبة    😄    سيتم التواصل معك في رقم هاتفك عندما
+        شكراً لك على الانتظار، تم طلب الوجبة بنجاح   😄  ✅  سيتم التواصل معك في رقم هاتفك عندما
         يكون الطلب جاهزاً للتوصيل 📞
         في هذه الأثناء حاول التجول في باقي المطعم واختر ما يعجبك من قائمة الوجبات    😃
         جارِ اعادة التحويل...

@@ -33,6 +33,7 @@ const OrderSchema = new mongoose.Schema(
     orderItems: reqObject,
     orderToppings: reqObject,
     grandPrice: reqNumber,
+    paymentData: reqObject,
     orderStatus,
     orderDate: {
       type: String,

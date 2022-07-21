@@ -80,7 +80,7 @@ const OrderFood = () => {
     }
   }
 
-  const handleSaveOrder = async () => {
+  const handleSaveOrder = async paymentData => {
     //using FormData to send constructed data
     const formData = new FormData()
     formData.append('personName', personName)
@@ -89,6 +89,7 @@ const OrderFood = () => {
     formData.append('checkedToppings', JSON.stringify(checkedToppings))
     formData.append('foodItems', JSON.stringify(items))
     formData.append('grandPrice', grandPriceRef?.current?.textContent || grandPrice)
+    formData.append('paymentData', JSON.stringify(paymentData))
 
     try {
       const response = await Axios.post(`${BASE_URL}/orders`, formData)
@@ -130,15 +131,22 @@ const OrderFood = () => {
                 PaymentButton ? (
                   <PaymentButton
                     value={grandPriceRef?.current?.textContent || grandPrice}
-                    onSuccess={() => {
+                    onSuccess={paymentData => {
                       setShowPaymentModal(false)
-                      handleSaveOrder()
+                      handleSaveOrder(paymentData)
+                    }}
+                    onError={() => {
+                      setShowPaymentModal(false)
+                      setOrderFoodStatus(0)
+                      setResponseMsg('حدث خطأ أثناء الدفع')
                     }}
                   />
                 ) : (
                   <LoadingSpinner />
                 )
               }
+              btnName='رجوع'
+              btnLink={`order-food`}
             />
           )
         )}

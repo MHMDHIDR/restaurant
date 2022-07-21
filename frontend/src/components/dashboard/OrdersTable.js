@@ -10,6 +10,7 @@ import { toggleCSSclasses } from '../../utils/toggleCSSclasses'
 
 import Modal from '../Modal/Modal'
 import { Success, Error, Loading } from '../Icons/Status'
+import { PayPal } from '../Icons/Payments'
 import { LoadingSpinner } from '../Loading'
 import Pagination from '../Pagination'
 import Divider from '../Divider'
@@ -183,6 +184,7 @@ const OrdersTable = () => {
             <th className='px-1 py-2'>ملاحظات الطلب</th>
             <th className='px-1 py-2'>السعر الاجمالي</th>
             <th className='px-1 py-2'>رقم الطلب</th>
+            <th className='px-1 py-2 min-w-[6rem]'>وسلة الدفع</th>
             <th className='px-1 py-2'>حالة الطلب</th>
             <th className='px-1 py-2'>الاجراء</th>
           </tr>
@@ -291,6 +293,15 @@ const OrdersTable = () => {
                     </span>
                   </td>
                   <td className='px-1 py-2'>{order.orderId}</td>
+                  <td className='px-1 py-2 min-w-[6rem]'>
+                    <span
+                      tooltip={`دفع عن طريق ${
+                        order.paymentData.paymentSource === 'paypal' && 'باي بال'
+                      }`}
+                    >
+                      {order.paymentData.paymentSource === 'paypal' && <PayPal />}
+                    </span>
+                  </td>
                   <td
                     className={`px-1 py-2 font-bold${
                       order.orderStatus === 'reject'

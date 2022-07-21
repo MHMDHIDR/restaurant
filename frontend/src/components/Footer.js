@@ -95,13 +95,13 @@ const Footer = () => {
             href='https://api.whatsapp.com/send/?phone=97466171224&text=مرحبا+اسمي:+....،+معك+.....+أرغب+بالتواصل+معك+بخصوص:+....'
             target='_blank'
           >
-            <WhatsApp fillColor='lime' />
+            <WhatsApp fill='lime' />
           </a>
           <a rel='noreferrer' href='https://instagram.com/instagram' target='_blank'>
-            <Instagram fillColor='hotpink' />
+            <Instagram fill='hotpink' />
           </a>
           <a rel='noreferrer' href='https://twitter.com/twitter' target='_blank'>
-            <Twitter fillColor='cyan' />
+            <Twitter fill='cyan' />
           </a>
         </div>
 

@@ -6,9 +6,10 @@ const PaymentButton = ({ value, onSuccess }) => {
   const createOrder = (_, actions) =>
     actions.order.create({ purchase_units: [{ amount: { value } }] })
 
-  const onApprove = async (_, actions) => {
+  const onApprove = async (data, actions) => {
     await actions.order.capture()
-    onSuccess()
+    onSuccess(data)
+    return data
   }
 
   const onCancel = () => console.log('cancelled Payment')
