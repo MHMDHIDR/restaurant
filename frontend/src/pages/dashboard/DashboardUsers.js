@@ -196,7 +196,7 @@ const DashboardUsers = () => {
             <tbody>
               {(data ?? data !== undefined) && data?.response?.length > 0 ? (
                 <>
-                  {data?.response?.map(item => (
+                  {data?.response?.map((item, idx) => (
                     <tr
                       key={item._id}
                       className='transition-colors even:bg-gray-200 odd:bg-gray-300 dark:even:bg-gray-600 dark:odd:bg-gray-700'
@@ -242,65 +242,76 @@ const DashboardUsers = () => {
                             : 'المستخدم مفعل\u00A0\u00A0\u00A0✅'}
                         </span>
                       </td>
-                      <td className='flex flex-wrap justify-center gap-3 px-1 py-2'>
-                        {item.userAccountStatus === 'block' ? (
-                          <button
-                            id='activateUser'
-                            data-id={item._id}
-                            data-name={item.userFullName}
-                            data-action='active'
-                            className='py-1 text-white bg-green-600 border-2 rounded-md hover:bg-green-700 min-w-[4rem]'
-                            tooltip='تفعيل المستخدم'
-                          >
-                            تفعيل
-                          </button>
+                      <td className='flex flex-wrap items-center justify-center gap-3 px-1 py-2'>
+                        {idx === 0 ? (
+                          <span className='text-gray-600 select-none dark:text-gray-200'>
+                            لا يوجد إجراء
+                          </span>
                         ) : (
-                          <button
-                            id='blockUser'
-                            data-id={item._id}
-                            data-name={item.userFullName}
-                            data-action='block'
-                            className='py-1 px-2 text-white border-2 rounded-md bg-neutral-600 hover:bg-neutral-700 min-w-[6.5rem]'
-                            tooltip='حظر المستخدم'
-                          >
-                            حظر
-                          </button>
-                        )}
+                          <>
+                            {/* UserStatus Buttons */}
+                            {item.userAccountStatus === 'block' ? (
+                              <button
+                                id='activateUser'
+                                data-id={item._id}
+                                data-name={item.userFullName}
+                                data-action='active'
+                                className='py-1 text-white bg-green-600 border-2 rounded-md hover:bg-green-700 min-w-[4rem]'
+                                tooltip='تفعيل المستخدم'
+                              >
+                                تفعيل
+                              </button>
+                            ) : (
+                              <button
+                                id='blockUser'
+                                data-id={item._id}
+                                data-name={item.userFullName}
+                                data-action='block'
+                                className='py-1 px-2 text-white border-2 rounded-md bg-neutral-600 hover:bg-neutral-700 min-w-[6.5rem]'
+                                tooltip='حظر المستخدم'
+                              >
+                                حظر
+                              </button>
+                            )}
 
-                        {item.userAccountType === 'admin' ? (
-                          <button
-                            id='user'
-                            data-id={item._id}
-                            data-name={item.userFullName}
-                            data-action='user'
-                            className='py-1 px-2 text-white bg-green-600 border-2 rounded-md hover:bg-green-700 min-w-[6.5rem]'
-                            tooltip='تحويل الى مستخدم عادي'
-                          >
-                            تحويل لمستخدم
-                          </button>
-                        ) : (
-                          <button
-                            id='admin'
-                            data-id={item._id}
-                            data-name={item.userFullName}
-                            data-action='admin'
-                            className='py-1 px-2 text-white bg-green-600 border-2 rounded-md hover:bg-green-700 min-w-[6.5rem]'
-                            tooltip='تحول الى مدير'
-                          >
-                            تحول لمدير
-                          </button>
-                        )}
+                            {/* UserType Buttons */}
+                            {item.userAccountType === 'admin' ? (
+                              <button
+                                id='user'
+                                data-id={item._id}
+                                data-name={item.userFullName}
+                                data-action='user'
+                                className='py-1 px-2 text-white bg-green-600 border-2 rounded-md hover:bg-green-700 min-w-[6.5rem]'
+                                tooltip='تحويل الى مستخدم عادي'
+                              >
+                                تحويل لمستخدم
+                              </button>
+                            ) : (
+                              <button
+                                id='admin'
+                                data-id={item._id}
+                                data-name={item.userFullName}
+                                data-action='admin'
+                                className='py-1 px-2 text-white bg-green-600 border-2 rounded-md hover:bg-green-700 min-w-[6.5rem]'
+                                tooltip='تحول الى مدير'
+                              >
+                                تحول لمدير
+                              </button>
+                            )}
 
-                        <button
-                          id='deleteUser'
-                          data-id={item._id}
-                          data-name={item.userFullName}
-                          data-action='delete'
-                          className='py-1 px-2 text-white bg-red-600 rounded-md hover:bg-red-700 min-w-[6.5rem]'
-                          tooltip='حذف المستخدم'
-                        >
-                          حذف
-                        </button>
+                            {/* Delete Button */}
+                            <button
+                              id='deleteUser'
+                              data-id={item._id}
+                              data-name={item.userFullName}
+                              data-action='delete'
+                              className='py-1 px-2 text-white bg-red-600 rounded-md hover:bg-red-700 min-w-[6.5rem]'
+                              tooltip='حذف المستخدم'
+                            >
+                              حذف
+                            </button>
+                          </>
+                        )}
                       </td>
                     </tr>
                   ))}

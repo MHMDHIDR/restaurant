@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense, lazy } from 'react'
 import { Link, Outlet } from 'react-router-dom'
 
 import useAxios from '../../hooks/useAxios'
@@ -9,16 +9,20 @@ import goTo from '../../utils/goTo'
 import logoutUser from '../../utils/logoutUser'
 import menuToggler from '../../utils/menuToggler'
 
-import DashboardNav from '../../components/dashboard/DashboardNav'
-import DashboardSidebar from '../../components/dashboard/DashboardSidebar'
+import ModalNotFound from '../../components/Modal/ModalNotFound'
+import { LoadingPage } from '../../components/Loading'
+const DashboardNav = lazy(() => import('../../components/dashboard/DashboardNav'))
+const DashboardSidebar = lazy(() => import('../../components/dashboard/DashboardSidebar'))
 
 const DashboardHome = () => {
   useDocumentTitle('Home')
 
   //getting user id from local storage
-  const USER_ID = 'user' in localStorage && JSON.parse(localStorage.getItem('user'))._id
+  const USER_ID =
+    'user' in localStorage ? JSON.parse(localStorage.getItem('user'))._id : null
 
   const [userStatus, setUserStatus] = useState('')
+  const [userType, setUserType] = useState('')
   const [menuCount, setMenuCount] = useState()
   const [ordersCount, setOrdersCount] = useState()
 
@@ -29,70 +33,78 @@ const DashboardHome = () => {
 
   useEffect(() => {
     if (currentUser?.response !== null || menu.response !== null) {
-      setUserStatus(currentUser?.response?.response?.response?.userAccountAction)
+      setUserStatus(currentUser?.response?.response?.userAccountStatus)
+      setUserType(currentUser?.response?.response?.userAccountType)
       setMenuCount(menu?.response?.itemsCount)
       setOrdersCount(orders?.response?.itemsCount)
     }
-  }, [currentUser?.response, menu.response, orders?.response])
+  }, [currentUser?.response, menu?.response, orders?.response])
 
   document.body.classList.add('dashboard')
 
   useEventListener('keydown', e => e.key === 'Escape' && menuToggler())
 
-  return !USER_ID || userStatus === 'block' || userStatus === 'user' ? (
+  //check if userStatus is active and the userType is admin
+  return !USER_ID ? (
+    <ModalNotFound />
+  ) : !USER_ID || userStatus === 'block' || userType === 'user' ? (
     logoutUser(USER_ID)
+  ) : !userStatus || !userType ? (
+    <LoadingPage />
   ) : (
-    <section className='overflow-x-auto'>
-      <DashboardSidebar />
-      <DashboardNav />
-      <div className='container mx-auto'>
-        <h3 className='mx-0 mt-32 mb-5 text-2xl text-center'>لوحة التحكم</h3>
-        <div className='flex flex-wrap justify-center gap-4 md:justify-between'>
-          <Link
-            to={goTo('orders')}
-            className='inline-flex flex-col items-center justify-center p-4 space-y-4 text-white bg-orange-800 hover:bg-orange-700 rounded-xl'
-          >
-            <img
-              loading='lazy'
-              src='/assets/img/icons/orders.svg'
-              alt='menu slider img'
-              className='w-40 h-24'
-            />
-            <h3>الطلبات</h3>
-            <span className='text-lg font-bold'>عدد الطلبات {ordersCount}</span>
-          </Link>
+    <Suspense fallback={<LoadingPage />}>
+      <section className='overflow-x-auto'>
+        <DashboardSidebar />
+        <DashboardNav />
+        <div className='container mx-auto'>
+          <h3 className='mx-0 mt-32 mb-5 text-2xl text-center'>لوحة التحكم</h3>
+          <div className='flex flex-wrap justify-center gap-4 md:justify-between'>
+            <Link
+              to={goTo('orders')}
+              className='inline-flex flex-col items-center justify-center p-4 space-y-4 text-white bg-orange-800 hover:bg-orange-700 rounded-xl'
+            >
+              <img
+                loading='lazy'
+                src='/assets/img/icons/orders.svg'
+                alt='menu slider img'
+                className='w-40 h-24'
+              />
+              <h3>الطلبات</h3>
+              <span className='text-lg font-bold'>عدد الطلبات {ordersCount}</span>
+            </Link>
 
-          <Link
-            to={goTo('menu')}
-            className='inline-flex flex-col items-center justify-center px-2 py-4 space-y-4 text-white bg-orange-800 hover:bg-orange-700 rounded-xl'
-          >
-            <img
-              loading='lazy'
-              src='/assets/img/icons/menu.svg'
-              alt='menu slider img'
-              className='w-40 h-24'
-            />
-            <h3>القائمة</h3>
-            <span className='text-lg font-bold'>عدد الوجبات {menuCount}</span>
-          </Link>
+            <Link
+              to={goTo('menu')}
+              className='inline-flex flex-col items-center justify-center px-2 py-4 space-y-4 text-white bg-orange-800 hover:bg-orange-700 rounded-xl'
+            >
+              <img
+                loading='lazy'
+                src='/assets/img/icons/menu.svg'
+                alt='menu slider img'
+                className='w-40 h-24'
+              />
+              <h3>القائمة</h3>
+              <span className='text-lg font-bold'>عدد الوجبات {menuCount}</span>
+            </Link>
 
-          <Link
-            to={goTo('add-food')}
-            className='inline-flex flex-col items-center justify-center px-2 py-4 space-y-4 text-white bg-orange-800 hover:bg-orange-700 rounded-xl'
-          >
-            <img
-              loading='lazy'
-              src='/assets/img/icons/add_food.svg'
-              alt='menu slider img'
-              className='w-40 h-24'
-            />
-            <h3>إضافة وجبة أو مشروب</h3>
-          </Link>
+            <Link
+              to={goTo('add-food')}
+              className='inline-flex flex-col items-center justify-center px-2 py-4 space-y-4 text-white bg-orange-800 hover:bg-orange-700 rounded-xl'
+            >
+              <img
+                loading='lazy'
+                src='/assets/img/icons/add_food.svg'
+                alt='menu slider img'
+                className='w-40 h-24'
+              />
+              <h3>إضافة وجبة أو مشروب</h3>
+            </Link>
+          </div>
         </div>
-      </div>
 
-      <Outlet />
-    </section>
+        <Outlet />
+      </section>
+    </Suspense>
   )
 }
 
