@@ -17,10 +17,12 @@ import { LoadingSpinner } from '../../components/Loading'
 import CartItems from './CartItems'
 import PaymentButton from './PaymentButton'
 
-const formDataFromLocalStorage = JSON.parse(
-  localStorage.getItem('formDataCart') ||
-    '{personName: "", personPhone: "", personAddress: ""}'
-)
+const formDataFromLocalStorage =
+  'formDataCart' in localStorage &&
+  JSON.parse(
+    localStorage.getItem('formDataCart') ||
+      '{personName: "", personPhone: "", personAddress: ""}'
+  )
 
 //orderFood
 const OrderFood = () => {
@@ -65,6 +67,20 @@ const OrderFood = () => {
   const handleCollectOrder = async e => {
     e.preventDefault()
 
+    if (
+      personName !== '' &&
+      personPhone !== '' &&
+      personNameErr.current.textContent === '' &&
+      personPhoneErr.current.textContent === ''
+    ) {
+      formErr.current.textContent = ''
+      setShowPaymentModal(true)
+    } else {
+      formErr.current.textContent = 'الرجاء إدخال البيانات المطلوبة بشكل صحيح'
+    }
+  }
+
+  const handleSaveOrder = async () => {
     //using FormData to send constructed data
     const formData = new FormData()
     formData.append('personName', personName)
@@ -72,26 +88,8 @@ const OrderFood = () => {
     formData.append('personNotes', personNotes)
     formData.append('checkedToppings', JSON.stringify(checkedToppings))
     formData.append('foodItems', JSON.stringify(items))
-    formData.append('grandPrice', grandPrice || grandPriceRef?.current?.textContent)
+    formData.append('grandPrice', grandPriceRef?.current?.textContent || grandPrice)
 
-    if (
-      personName !== '' &&
-      personPhone !== '' &&
-      personNameErr.current.textContent === '' &&
-      personPhoneErr.current.textContent === ''
-    ) {
-      //remove error messages
-      formErr.current.textContent = ''
-      //show payment Modal
-      setShowPaymentModal(true)
-      // if payment is successful, we'll send the data to the server
-      handleSaveOrder(formData)
-    } else {
-      formErr.current.textContent = 'الرجاء إدخال البيانات المطلوبة بشكل صحيح'
-    }
-  }
-
-  const handleSaveOrder = async formData => {
     try {
       const response = await Axios.post(`${BASE_URL}/orders`, formData)
       const { orderAdded, message } = response.data
@@ -99,6 +97,12 @@ const OrderFood = () => {
 
       setOrderFoodStatus(orderAdded)
       setResponseMsg(message)
+
+      //remove all items from cart
+      if (orderAdded) {
+        const cartItems = ['restCartItems', 'restCheckedToppings', 'formDataCart']
+        cartItems.forEach(item => localStorage.removeItem(item))
+      }
     } catch (err) {
       console.error(err)
     }
@@ -123,9 +127,17 @@ const OrderFood = () => {
               status={Loading}
               msg={`يمكنك الدفع بإستخدام إحدى الوسائل أدناه:`}
               extraComponents={
-                <PaymentButton
-                  value={grandPrice || grandPriceRef?.current?.textContent}
-                />
+                PaymentButton ? (
+                  <PaymentButton
+                    value={grandPriceRef?.current?.textContent || grandPrice}
+                    onSuccess={() => {
+                      setShowPaymentModal(false)
+                      handleSaveOrder()
+                    }}
+                  />
+                ) : (
+                  <LoadingSpinner />
+                )
               }
             />
           )
@@ -263,8 +275,6 @@ const OrderFood = () => {
                   </strong>
                   &nbsp; ر.ق
                 </span>
-
-                {/* grandPrice || grandPriceRef?.current?.textContent */}
 
                 <div className='flex flex-col items-center justify-evenly'>
                   <button

@@ -1,23 +1,26 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-const PayPalButton = window.paypal.Buttons.driver('react', { React, ReactDOM })
+const PayPalButton = window?.paypal?.Buttons?.driver('react', { React, ReactDOM })
 
-const PaymentButton = ({ value }) => {
+const PaymentButton = ({ value, onSuccess }) => {
   const createOrder = (_, actions) =>
     actions.order.create({ purchase_units: [{ amount: { value } }] })
 
-  const onApprove = (_, actions) => actions.order.capture()
+  const onApprove = async (_, actions) => {
+    await actions.order.capture()
+    onSuccess()
+  }
 
-  const onError = error => error
+  const onCancel = () => console.log('cancelled Payment')
 
-  const onCancel = () => console.log('cancelled')
+  const onError = error => console.log('some error happened=> ', error)
 
   return (
     <PayPalButton
       createOrder={(data, actions) => createOrder(data, actions)}
       onApprove={(data, actions) => onApprove(data, actions)}
-      onError={err => onError(err)}
       onCancel={onCancel}
+      onError={err => onError(err)}
     />
   )
 }
