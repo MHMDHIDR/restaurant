@@ -8,6 +8,7 @@ import useDocumentTitle from '../hooks/useDocumentTitle'
 //components
 const Header = lazy(() => import('../components/Header'))
 const Menu = lazy(() => import('../components/Menu'))
+const FetchCategories = lazy(() => import('../components/FetchCategories'))
 const NewFood = lazy(() => import('../components/NewFood'))
 const About = lazy(() => import('../components/About'))
 const Contact = lazy(() => import('../components/Contact'))
@@ -20,6 +21,7 @@ const Home = () => {
     <Suspense fallback={<LoadingPage />}>
       <Header />
       <Menu />
+      <FetchCategories />
       <NewFood />
       <About />
       <Contact />
