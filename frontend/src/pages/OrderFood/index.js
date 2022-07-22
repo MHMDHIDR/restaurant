@@ -18,11 +18,7 @@ import CartItems from './CartItems'
 import PaymentButton from './PaymentButton'
 
 const formDataFromLocalStorage =
-  'formDataCart' in localStorage &&
-  JSON.parse(
-    localStorage.getItem('formDataCart') ||
-      '{personName: "", personPhone: "", personAddress: ""}'
-  )
+  'formDataCart' in localStorage && JSON.parse(localStorage.getItem('formDataCart'))
 
 //orderFood
 const OrderFood = () => {
@@ -39,9 +35,13 @@ const OrderFood = () => {
   const { checkedToppings } = useContext(ToppingsContext)
 
   //Form States
-  const [personName, setPersonName] = useState(formDataFromLocalStorage.personName)
-  const [personPhone, setPersonPhone] = useState(formDataFromLocalStorage.personPhone)
-  const [personNotes, setPersonNotes] = useState(formDataFromLocalStorage.personNotes)
+  const [personName, setPersonName] = useState(formDataFromLocalStorage.personName || '')
+  const [personPhone, setPersonPhone] = useState(
+    formDataFromLocalStorage.personPhone || ''
+  )
+  const [personNotes, setPersonNotes] = useState(
+    formDataFromLocalStorage.personNotes || ''
+  )
   const [orderFoodStatus, setOrderFoodStatus] = useState('')
   const [responseMsg, setResponseMsg] = useState('')
   const [showPaymentModal, setShowPaymentModal] = useState(false)
@@ -175,7 +175,7 @@ const OrderFood = () => {
                     id='name'
                     name='name'
                     type='text'
-                    defaultValue={formDataFromLocalStorage.personName}
+                    defaultValue={personName}
                     onChange={e => setPersonName(e.target.value.trim())}
                     onKeyUp={e => {
                       const target = e.target.value.trim()
@@ -206,7 +206,7 @@ const OrderFood = () => {
                     id='phoneNumber'
                     name='phoneNumber'
                     type='tel'
-                    defaultValue={formDataFromLocalStorage.personPhone}
+                    defaultValue={personPhone}
                     onChange={e => setPersonPhone(e.target.value.trim())}
                     onKeyUp={e => {
                       const target = e.target.value.trim()
@@ -238,7 +238,7 @@ const OrderFood = () => {
                     className={`form__input`}
                     id='message'
                     name='message'
-                    defaultValue={formDataFromLocalStorage.personNotes}
+                    defaultValue={personNotes}
                     maxLength={MAX_CHARACTERS * 2}
                     onChange={e => setPersonNotes(e.target.value.trim())}
                   ></textarea>

@@ -10,6 +10,7 @@ import { LoadingSpinner, LoadingPage } from '../components/Loading'
 const Login = () => {
   const [userFullName, setFullName] = useState('')
   const [userEmail, setEmail] = useState('')
+  const [userTel, setTel] = useState('')
   const [userPassword, setPassword] = useState('')
   const [data, setData] = useState('')
   const [regStatus, setRegStatus] = useState()
@@ -49,9 +50,7 @@ const Login = () => {
         })
     }
 
-    return () => {
-      setData('')
-    }
+    return () => setData('')
   }, [USER, BASE_URL, data.id, navigate])
 
   const handleJoin = async e => {
@@ -63,6 +62,7 @@ const Login = () => {
       const joinUser = await Axios.post(`${BASE_URL}/users/join`, {
         userFullName,
         userEmail,
+        userTel,
         userPassword
       })
       //getting response from backend
@@ -119,10 +119,23 @@ const Login = () => {
                   name='email'
                   type='text'
                   onChange={e => setEmail(e.target.value)}
-                  required
                   dir='auto'
+                  required
                 />
                 <span className='form__label'>بريدك الالكتروني</span>
+              </label>
+
+              <label htmlFor='tel' className='form__group'>
+                <input
+                  className='form__input'
+                  id='tel'
+                  name='tel'
+                  type='tel'
+                  onChange={e => setTel(e.target.value)}
+                  dir='auto'
+                  required
+                />
+                <span className='form__label'>رقم الهاتف</span>
               </label>
 
               <label htmlFor='password' className='form__group'>
@@ -132,8 +145,8 @@ const Login = () => {
                   name='password'
                   type='password'
                   onChange={e => setPassword(e.target.value)}
-                  required
                   dir='auto'
+                  required
                 />
                 <span className='form__label'>كلمة المرور</span>
               </label>

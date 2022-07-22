@@ -9,8 +9,13 @@ import { LoadingSpinner, LoadingPage } from '../components/Loading'
 
 import useEventListener from '../hooks/useEventListener'
 
+const LoginDataFromLocalStorage =
+  'LoginData' in localStorage && JSON.parse(localStorage.getItem('LoginData'))
+
 const Login = () => {
-  const [userEmail, setEmail] = useState('')
+  const [userEmailOrTel, setEmailOrTel] = useState(
+    LoginDataFromLocalStorage.userEmailOrTel || ''
+  )
   const [userPassword, setPassword] = useState('')
   const [data, setData] = useState('')
   const [loggedInStatus, setLoggedInStatus] = useState()
@@ -71,7 +76,7 @@ const Login = () => {
 
     try {
       const loginUser = await Axios.post(`${BASE_URL}/users/login`, {
-        userEmail,
+        userEmailOrTel,
         userPassword
       })
       //getting response from backend
@@ -117,12 +122,13 @@ const Login = () => {
                   id='email'
                   name='email'
                   type='text'
-                  onChange={e => setEmail(e.target.value)}
+                  onChange={e => setEmailOrTel(e.target.value)}
+                  defaultValue={userEmailOrTel}
+                  dir='auto'
                   autoFocus
                   required
-                  dir='auto'
                 />
-                <span className='form__label'>بريدك الالكتروني</span>
+                <span className='form__label'>البريد الالكتروني أو رقم الهاتف</span>
               </label>
 
               <label htmlFor='password' className='form__group'>
@@ -132,8 +138,8 @@ const Login = () => {
                   name='password'
                   type='password'
                   onChange={e => setPassword(e.target.value)}
-                  required
                   dir='auto'
+                  required
                 />
                 <span className='form__label'>كلمة المرور</span>
               </label>

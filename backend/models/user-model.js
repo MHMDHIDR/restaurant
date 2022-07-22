@@ -22,6 +22,7 @@ const UserSchema = new mongoose.Schema(
   {
     userFullName: reqString,
     userEmail: reqString,
+    userTel: reqString,
     userPassword: reqString,
     userAccountStatus,
     userAccountType
