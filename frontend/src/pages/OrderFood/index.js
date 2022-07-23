@@ -1,5 +1,5 @@
 import { useContext, useState, useRef, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import Axios from 'axios'
 
 import { CartContext } from '../../Contexts/CartContext'
@@ -23,6 +23,7 @@ const formDataFromLocalStorage =
 //orderFood
 const OrderFood = () => {
   useDocumentTitle('Cart Items')
+  const { pathname } = useLocation()
 
   //global variables
   const MAX_CHARACTERS = 100
@@ -41,17 +42,22 @@ const OrderFood = () => {
   const [personPhone, setPersonPhone] = useState(
     formDataFromLocalStorage.personPhone || ''
   )
+  const [personAddress, setPersonAddress] = useState(
+    formDataFromLocalStorage.personAddress || ''
+  )
   const [personNotes, setPersonNotes] = useState(
     formDataFromLocalStorage.personNotes || ''
   )
   const [orderFoodStatus, setOrderFoodStatus] = useState('')
   const [responseMsg, setResponseMsg] = useState('')
+  const [showLoginRegisterModal, setShowLoginRegisterModal] = useState(false)
   const [showPaymentModal, setShowPaymentModal] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
   //Declaring Referenced Element
   const personNameErr = useRef('')
   const personPhoneErr = useRef('')
+  const personAddressErr = useRef('')
   const formErr = useRef('')
   const grandPriceRef = useRef()
 
@@ -64,10 +70,11 @@ const OrderFood = () => {
       JSON.stringify({
         personName,
         personPhone,
+        personAddress,
         personNotes
       })
     )
-  }, [personName, personPhone, personNotes])
+  }, [personName, personPhone, personAddress, personNotes])
 
   const handleCollectOrder = async e => {
     e.preventDefault()
@@ -76,10 +83,18 @@ const OrderFood = () => {
       personName !== '' &&
       personPhone !== '' &&
       personNameErr.current.textContent === '' &&
-      personPhoneErr.current.textContent === ''
+      personPhoneErr.current.textContent === '' &&
+      personAddressErr.current.textContent === ''
     ) {
       formErr.current.textContent = ''
-      setShowPaymentModal(true)
+
+      //if there's No user in localStorage then show modal to login or register else collect order
+      if (JSON.parse(localStorage.getItem('user'))) {
+        setShowLoginRegisterModal(false)
+        setShowPaymentModal(true)
+      } else {
+        setShowLoginRegisterModal(true)
+      }
     } else {
       formErr.current.textContent = 'الرجاء إدخال البيانات المطلوبة بشكل صحيح'
     }
@@ -92,6 +107,7 @@ const OrderFood = () => {
     formData.append('userEmail', userEmail)
     formData.append('personName', personName)
     formData.append('personPhone', personPhone)
+    formData.append('personAddress', personAddress)
     formData.append('personNotes', personNotes)
     formData.append('checkedToppings', JSON.stringify(checkedToppings))
     formData.append('foodItems', JSON.stringify(items))
@@ -128,6 +144,13 @@ const OrderFood = () => {
             btnLink='/view'
             redirectLink='/view'
             redirectTime='10000'
+          />
+        ) : showLoginRegisterModal === true ? (
+          <Modal
+            status={Loading}
+            msg={`يجب عليك تسجيل الدخول أو عمل حساب جديد أولا وذلك للطلب`}
+            btnName='تسجيل دخول'
+            btnLink={`/login${pathname}`}
           />
         ) : (
           showPaymentModal === true && (
@@ -238,6 +261,35 @@ const OrderFood = () => {
                   <span
                     className='inline-block md:text-lg text-red-600 dark:text-red-400 font-[600] pt-2 px-1'
                     ref={personPhoneErr}
+                  ></span>
+                </label>
+                <label htmlFor='Address' className={`form__group`}>
+                  <input
+                    className={`form__input`}
+                    id='Address'
+                    name='Address'
+                    type='text'
+                    defaultValue={personAddress}
+                    onChange={e => setPersonAddress(e.target.value.trim())}
+                    onKeyUp={e => {
+                      const target = e.target.value.trim()
+
+                      if (target.length > 0 && target.length < 4) {
+                        personAddressErr.current.textContent =
+                          'يرجى إدخال إسم بصيغة صحيحة'
+                      } else {
+                        personAddressErr.current.textContent = ''
+                      }
+                    }}
+                    required
+                  />
+                  <span className={`form__label`}>
+                    العنوان - مثال: منطقة رقم 53 - شارع رقم 000 - منزل رقم 00&nbsp;
+                    <strong className='text-xl leading-4 text-red-600'>*</strong>
+                  </span>
+                  <span
+                    className='inline-block md:text-lg text-red-600 dark:text-red-400 font-[600] pt-2 px-1'
+                    ref={personAddressErr}
                   ></span>
                 </label>
                 <label htmlFor='message' className={`form__group`}>

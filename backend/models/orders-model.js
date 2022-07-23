@@ -29,6 +29,7 @@ const OrderSchema = new mongoose.Schema(
     userEmail: reqString,
     personName: reqString,
     personPhone: reqNumber,
+    personAddress: reqString,
     personNotes: {
       type: String
     },

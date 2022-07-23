@@ -65,7 +65,9 @@ const App = () => (
 
                     {/* Authentication */}
                     <Route path='join' element={<Join />} />
-                    <Route path='login' element={<Login />} />
+                    <Route path='login' element={<Login />}>
+                      <Route path=':redirect' element={<Login />} />
+                    </Route>
 
                     {/* Dashboard */}
                     <Route path='dashboard' element={<DashboardHome />}>

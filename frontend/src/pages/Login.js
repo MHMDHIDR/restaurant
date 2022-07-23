@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import Axios from 'axios'
 
 import Header from '../components/Header'
@@ -21,6 +21,7 @@ const Login = () => {
   const [loggedInStatus, setLoggedInStatus] = useState()
   const [loading, setloading] = useState(false)
   const [loginMsg, setLoginMsg] = useState('')
+  const { redirect } = useParams()
 
   const modalLoading = document.querySelector('#modal')
 
@@ -96,7 +97,12 @@ const Login = () => {
         'user',
         JSON.stringify({ _id, userAccountType, userEmail, userTel, token })
       )
-      userAccountType === 'admin' ? navigate('/dashboard') : navigate('/')
+
+      redirect
+        ? navigate(`/${redirect}`)
+        : userAccountType === 'admin'
+        ? navigate('/dashboard')
+        : navigate('/')
     } catch ({ response }) {
       setLoginMsg(response?.data?.message)
     } finally {
