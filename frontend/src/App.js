@@ -16,6 +16,7 @@ import { LoadingPage } from './components/Loading'
 //user pages
 const Home = lazy(() => import('./pages/Home'))
 const OrderFood = lazy(() => import('./pages/OrderFood'))
+const MyOrders = lazy(() => import('./pages/MyOrders'))
 const ViewFood = lazy(() => import('./pages/ViewFood'))
 const SearchResults = lazy(() => import('./pages/SearchResults'))
 const Categories = lazy(() => import('./pages/Categories'))
@@ -44,6 +45,7 @@ const App = () => (
                     <Route path='/' element={<Home />} />
                     <Route path='categories' element={<Categories />} />
                     <Route path='order-food' element={<OrderFood />} />
+                    <Route path='my-orders' element={<MyOrders />} />
                     <Route path='search' element={<SearchResults />}>
                       <Route path=':search' element={<SearchResults />} />
                     </Route>

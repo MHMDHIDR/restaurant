@@ -9,6 +9,8 @@ const getOrders = asyncHandler(async (req, res) => {
 
 const addOrder = asyncHandler(async (req, res) => {
   const {
+    userId,
+    userEmail,
     personName,
     personPhone,
     personNotes,
@@ -21,6 +23,8 @@ const addOrder = asyncHandler(async (req, res) => {
   try {
     const orders = new OrdersModel({
       orderId: uuidv4(),
+      userId,
+      userEmail,
       personName,
       personPhone,
       personNotes,

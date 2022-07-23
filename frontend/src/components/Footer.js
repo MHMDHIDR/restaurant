@@ -92,7 +92,7 @@ const Footer = () => {
         <div className='flex items-center justify-around gap-6 py-4'>
           <a
             rel='noreferrer'
-            href='https://api.whatsapp.com/send/?phone=97466171224&text=مرحبا+اسمي:+....،+معك+.....+أرغب+بالتواصل+معك+بخصوص:+....'
+            href='https://web.whatsapp.com/send?phone=97466171224&text=مرحبا+اسمي:+....،+معك+.....+أرغب+بالتواصل+معك+بخصوص:+....'
             target='_blank'
           >
             <WhatsApp fill='lime' />

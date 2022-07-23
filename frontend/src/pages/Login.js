@@ -38,15 +38,15 @@ const Login = () => {
       setloading(true)
 
       Axios.get(`${BASE_URL}/users`, {
-        headers: {
-          Authorization: `Bearer ${USER.token}`
-        }
+        headers: { Authorization: `Bearer ${USER.token}` }
       })
         .then(res => {
           setData(res.data)
 
-          if (USER?._id === data.id) {
+          if (USER?._id === data.id && USER.userAccountType === 'admin') {
             navigate('/dashboard')
+          } else if (USER?._id === data.id && USER.userAccountType === 'user') {
+            navigate('/')
           }
         })
         .catch(err => {
@@ -81,19 +81,22 @@ const Login = () => {
       })
       //getting response from backend
       const { data } = loginUser
+
       setLoggedInStatus(data.LoggedIn)
 
       if (data.LoggedIn === 0) {
         return setLoginMsg(data?.message)
       }
 
+      const { _id, userAccountType, userEmail, userTel, token } = data
+
       //if user is logged in
       setLoginMsg(data?.message)
       localStorage.setItem(
         'user',
-        JSON.stringify({ _id: data._id, email: data.email, token: data.token })
+        JSON.stringify({ _id, userAccountType, userEmail, userTel, token })
       )
-      navigate('/dashboard')
+      userAccountType === 'admin' ? navigate('/dashboard') : navigate('/')
     } catch ({ response }) {
       setLoginMsg(response?.data?.message)
     } finally {

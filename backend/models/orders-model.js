@@ -25,6 +25,8 @@ const orderStatus = {
 const OrderSchema = new mongoose.Schema(
   {
     orderId: reqString,
+    userId: reqString,
+    userEmail: reqString,
     personName: reqString,
     personPhone: reqNumber,
     personNotes: {

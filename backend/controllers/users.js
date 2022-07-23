@@ -64,7 +64,9 @@ const loginUser = asyncHandler(async (req, res) => {
       LoggedIn: 1,
       message: 'تم تسجيل الدخول بنجاح، جار تحويلك الى لوحة التحكم',
       _id: user.id,
-      emailOrTel: user.userEmailOrTel,
+      userAccountType: user.userAccountType,
+      userEmail: user.userEmail,
+      userTel: user.userTel,
       token: generateToken(user._id)
     })
   } else {

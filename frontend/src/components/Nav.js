@@ -101,11 +101,19 @@ const Nav = () => {
             </li>
             {'user' in localStorage ? (
               <li className='flex gap-3'>
+                {JSON.parse(localStorage.getItem('user')).userAccountType === 'admin' && (
+                  <Link
+                    to='/dashboard'
+                    className='px-3 py-0.5 text-white transition-colors bg-gray-800 border-2 rounded-lg hover:bg-gray-700 xl:border-0 text-sm'
+                  >
+                    لوحة التحكم
+                  </Link>
+                )}
                 <Link
-                  to='/dashboard'
+                  to='/my-orders'
                   className='px-3 py-0.5 text-white transition-colors bg-gray-800 border-2 rounded-lg hover:bg-gray-700 xl:border-0 text-sm'
                 >
-                  لوحة التحكم
+                  طلباتي
                 </Link>
                 <Link
                   to='/#'

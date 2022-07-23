@@ -35,6 +35,8 @@ const OrderFood = () => {
   const { checkedToppings } = useContext(ToppingsContext)
 
   //Form States
+  const [userId, setUserId] = useState('')
+  const [userEmail, setUserEmail] = useState('')
   const [personName, setPersonName] = useState(formDataFromLocalStorage.personName || '')
   const [personPhone, setPersonPhone] = useState(
     formDataFromLocalStorage.personPhone || ''
@@ -54,6 +56,9 @@ const OrderFood = () => {
   const grandPriceRef = useRef()
 
   useEffect(() => {
+    setUserId(JSON.parse(localStorage.getItem('user'))._id)
+    setUserEmail(JSON.parse(localStorage.getItem('user')).userEmail)
+
     localStorage.setItem(
       'formDataCart',
       JSON.stringify({
@@ -83,6 +88,8 @@ const OrderFood = () => {
   const handleSaveOrder = async paymentData => {
     //using FormData to send constructed data
     const formData = new FormData()
+    formData.append('userId', userId)
+    formData.append('userEmail', userEmail)
     formData.append('personName', personName)
     formData.append('personPhone', personPhone)
     formData.append('personNotes', personNotes)
