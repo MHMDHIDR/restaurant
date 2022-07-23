@@ -2,8 +2,6 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import useAxios from '../hooks/useAxios'
 
-import goTo from '../utils/goTo'
-
 import { LoadingCard } from '../components/Loading'
 
 const FetchCategories = () => {
