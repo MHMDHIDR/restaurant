@@ -220,7 +220,11 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
                         </td>
                         <td className='px-1 py-2'>{order.personPhone}</td>
                         <td className='px-1 py-2 min-w-[30rem]'>
-                          <span tooltip={`عرض ${order.orderItems.length} طلبات`}>
+                          <span
+                            tooltip={`عرض ${order.orderItems.length} ${
+                              order.orderItems.length > 1 ? 'طلبات' : 'طلب'
+                            }`}
+                          >
                             <span
                               data-order-content-arrow
                               className={`inline-block text-xl font-bold transition-transform duration-300 cursor-pointer hover:translate-y-1`}
@@ -371,7 +375,11 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
                       </td>
                       <td className='px-1 py-2'>{order.personPhone}</td>
                       <td className='px-1 py-2 min-w-[30rem]'>
-                        <span tooltip={`عرض ${order.orderItems.length} طلبات`}>
+                        <span
+                          tooltip={`عرض ${order.orderItems.length} ${
+                            order.orderItems.length > 1 ? 'طلبات' : 'طلب'
+                          }`}
+                        >
                           <span
                             data-order-content-arrow
                             className={`inline-block text-xl font-bold transition-transform duration-300 cursor-pointer hover:translate-y-1`}
@@ -508,7 +516,7 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
               <tr>
                 <td colSpan='100%'>
                   <Pagination
-                    routeName={`dashboard/orders`}
+                    routeName={ordersByUserEmail ? `my-orders` : `dashboard/orders`}
                     pageNum={pageNumber}
                     numberOfPages={ordersData?.numberOfPages}
                     count={ordersData?.itemsCount}

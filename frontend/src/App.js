@@ -45,7 +45,9 @@ const App = () => (
                     <Route path='/' element={<Home />} />
                     <Route path='categories' element={<Categories />} />
                     <Route path='order-food' element={<OrderFood />} />
-                    <Route path='my-orders' element={<MyOrders />} />
+                    <Route path='my-orders' element={<MyOrders />}>
+                      <Route path=':pageNum' element={<MyOrders />} />
+                    </Route>
                     <Route path='search' element={<SearchResults />}>
                       <Route path=':search' element={<SearchResults />} />
                     </Route>
@@ -68,8 +70,9 @@ const App = () => (
                     {/* Dashboard */}
                     <Route path='dashboard' element={<DashboardHome />}>
                       {/* Food */}
-                      <Route path='orders' element={<DashboardOrders />} />
-                      <Route path='orders/:pageNum' element={<DashboardOrders />} />
+                      <Route path='orders' element={<DashboardOrders />}>
+                        <Route path=':pageNum' element={<DashboardOrders />} />
+                      </Route>
                       <Route path='menu' element={<DashboardMenu />} />
                       <Route path='menu/:pageNum' element={<DashboardMenu />} />
                       <Route path='add-food' element={<DashboardAddFood />} />

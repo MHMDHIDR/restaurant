@@ -56,8 +56,8 @@ const OrderFood = () => {
   const grandPriceRef = useRef()
 
   useEffect(() => {
-    setUserId(JSON.parse(localStorage.getItem('user'))._id)
-    setUserEmail(JSON.parse(localStorage.getItem('user')).userEmail)
+    setUserId(JSON.parse(localStorage.getItem('user'))?._id)
+    setUserEmail(JSON.parse(localStorage.getItem('user'))?.userEmail)
 
     localStorage.setItem(
       'formDataCart',
