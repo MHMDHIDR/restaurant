@@ -12,26 +12,17 @@ import { WhatsApp, Twitter, Instagram } from './Icons/Socials'
 
 const Footer = () => {
   const [settings, setSettings] = useState('')
-  const [productsNames, setProductsNames] = useState([])
+  const [itemsNames, setItemsNames] = useState([])
 
-  const fetchSettings = useAxios({
-    method: 'get',
-    url: '/settings'
-  })
-
-  const products_names = useAxios({
-    method: 'get',
-    url: '/foods/1/2'
-  })
+  const fetchSettings = useAxios({ method: 'get', url: '/settings' })
+  const productsNames = useAxios({ method: 'get', url: '/foods/1/2' })
 
   useEffect(() => {
-    if (products_names.response !== null || fetchSettings.response !== null) {
+    if (productsNames.response !== null || fetchSettings.response !== null) {
       setSettings(fetchSettings.response)
-      setProductsNames(products_names.response?.response)
+      setItemsNames(productsNames.response?.response)
     }
-  }, [fetchSettings, products_names])
-
-  const { appDesc, whatsAppNumber, instagramAccount, twitterAccount } = settings
+  }, [fetchSettings, productsNames])
 
   return (
     <footer className='text-white bg-orange-700 footer'>
@@ -48,7 +39,7 @@ const Footer = () => {
             </Link>
             <p className='w-full mr-4 leading-10'>
               {settings
-                ? appDesc
+                ? settings?.appDesc
                 : 'أطلب ألذ الأطعمة والمشروبات الطازجة من مطعمنا العالمي'}
             </p>
           </div>
@@ -56,14 +47,14 @@ const Footer = () => {
             <div>
               <h3 className='mb-3 text-lg font-bold'>وجبات مقترحة لك</h3>
               <ul className='space-y-2'>
-                {!productsNames || productsNames.length === 0 ? (
+                {!itemsNames || itemsNames.length === 0 ? (
                   <li>
                     <Link to='/view' className='hover:text-gray-700'>
                       عرض الوجبات
                     </Link>
                   </li>
                 ) : (
-                  productsNames.map((item, idx) => (
+                  itemsNames.map((item, idx) => (
                     <li key={idx}>
                       <Link to={`/view/item/${item._id}`} className='hover:text-gray-700'>
                         {removeSlug(abstractText(item.foodName, 20))}
@@ -94,15 +85,15 @@ const Footer = () => {
         <div className='flex items-center justify-around gap-6 py-4'>
           <a
             rel='noreferrer'
-            href={`https://web.whatsapp.com/send?phone=974${whatsAppNumber}&text=مرحبا+اسمي:+....،+معك+.....+أرغب+بالتواصل+معك+بخصوص:+....`}
+            href={`https://web.whatsapp.com/send?phone=974${settings?.whatsAppNumber}&text=مرحبا+اسمي:+....،+معك+.....+أرغب+بالتواصل+معك+بخصوص:+....`}
             target='_blank'
           >
             <WhatsApp fill='lime' />
           </a>
-          <a rel='noreferrer' href={instagramAccount} target='_blank'>
+          <a rel='noreferrer' href={settings?.instagramAccount} target='_blank'>
             <Instagram fill='hotpink' />
           </a>
-          <a rel='noreferrer' href={twitterAccount} target='_blank'>
+          <a rel='noreferrer' href={settings?.twitterAccount} target='_blank'>
             <Twitter fill='cyan' />
           </a>
         </div>
