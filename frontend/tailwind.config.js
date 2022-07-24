@@ -4,7 +4,8 @@ module.exports = {
   theme: {
     extend: {
       screens: {
-        xs: '480px'
+        xs: '480px',
+        standalone: { raw: '(display-mode: standalone)' }
       },
       animation: {
         cursor: 'cursor .6s linear infinite alternate',

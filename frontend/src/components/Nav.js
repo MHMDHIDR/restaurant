@@ -22,12 +22,17 @@ const Nav = () => {
   useEventListener('scroll', () => {
     const nav = document.querySelector('.nav')
     const hideNavClass = '-translate-y-[1000px]'
+    const isStandalone =
+      window.matchMedia('(display-mode: standalone)').matches ||
+      'standalone' in window.navigator
 
-    lastScrollY < window.scrollY
-      ? nav?.classList.add(hideNavClass)
-      : nav?.classList.remove(hideNavClass)
+    if (!isStandalone) {
+      lastScrollY < window.scrollY
+        ? nav?.classList.add(hideNavClass)
+        : nav?.classList.remove(hideNavClass)
 
-    lastScrollY = window.scrollY
+      lastScrollY = window.scrollY
+    }
   })
 
   const { items } = useContext(CartContext)
@@ -38,6 +43,7 @@ const Nav = () => {
         className='flex flex-wrap items-center justify-between px-5 xl:px-10 lg:px-20 py-1
           bg-gray-300 bg-opacity-90 dark:bg-neutral-900 dark:bg-opacity-90
           shadow-xl backdrop-blur-sm saturate-[180%] transition-all
+          standalone:pt-10
         '
       >
         <Link aria-label='App Logo' title='App Logo' to='/'>
@@ -53,7 +59,7 @@ const Nav = () => {
 
         {/* Nav toggler */}
         <input
-          className='absolute w-10 h-10 opacity-0 cursor-pointer xl:pointer-events-none right-5 lg:right-20 top-1 peer group'
+          className='absolute w-10 h-10 opacity-0 cursor-pointer xl:pointer-events-none right-5 lg:right-20 top-1 peer group standalone:top-10'
           type='checkbox'
           aria-label='Navigation Menu'
           title='Navigation Menu'
