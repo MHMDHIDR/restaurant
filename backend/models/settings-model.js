@@ -14,6 +14,9 @@ const SettingsSchema = new mongoose.Schema(
   {
     appDesc: reqString,
     appTagline: reqString,
+    whatsAppNumber: reqString,
+    instagramAccount: reqString,
+    twitterAccount: reqString,
     heroBg: reqArray,
     CategoryList: reqArray
   },

@@ -31,6 +31,8 @@ const Footer = () => {
     }
   }, [fetchSettings, products_names])
 
+  const { appDesc, whatsAppNumber, instagramAccount, twitterAccount } = settings
+
   return (
     <footer className='text-white bg-orange-700 footer'>
       <div className='container mx-auto'>
@@ -46,7 +48,7 @@ const Footer = () => {
             </Link>
             <p className='w-full mr-4 leading-10'>
               {settings
-                ? settings.appDesc
+                ? appDesc
                 : 'أطلب ألذ الأطعمة والمشروبات الطازجة من مطعمنا العالمي'}
             </p>
           </div>
@@ -92,15 +94,15 @@ const Footer = () => {
         <div className='flex items-center justify-around gap-6 py-4'>
           <a
             rel='noreferrer'
-            href='https://web.whatsapp.com/send?phone=97466171224&text=مرحبا+اسمي:+....،+معك+.....+أرغب+بالتواصل+معك+بخصوص:+....'
+            href={`https://web.whatsapp.com/send?phone=974${whatsAppNumber}&text=مرحبا+اسمي:+....،+معك+.....+أرغب+بالتواصل+معك+بخصوص:+....`}
             target='_blank'
           >
             <WhatsApp fill='lime' />
           </a>
-          <a rel='noreferrer' href='https://instagram.com/instagram' target='_blank'>
+          <a rel='noreferrer' href={instagramAccount} target='_blank'>
             <Instagram fill='hotpink' />
           </a>
-          <a rel='noreferrer' href='https://twitter.com/twitter' target='_blank'>
+          <a rel='noreferrer' href={twitterAccount} target='_blank'>
             <Twitter fill='cyan' />
           </a>
         </div>

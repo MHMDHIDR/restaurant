@@ -3,7 +3,14 @@ const SettingsModel = require(`${__dirname}/../models/settings-model.js`)
 
 const updateSettings = async (req, res) => {
   const _id = req.params.id
-  const { appDesc, appTagline, CategoryList } = req.body
+  const {
+    appDesc,
+    appTagline,
+    whatsAppNumber,
+    instagramAccount,
+    twitterAccount,
+    CategoryList
+  } = req.body
   const categories = JSON.parse(CategoryList)
 
   //if not valid _id then return error message
@@ -16,6 +23,9 @@ const updateSettings = async (req, res) => {
     await SettingsModel.findByIdAndUpdate(_id, {
       appDesc,
       appTagline,
+      whatsAppNumber,
+      instagramAccount,
+      twitterAccount,
       CategoryList: categories
     })
 

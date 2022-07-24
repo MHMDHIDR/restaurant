@@ -14,6 +14,9 @@ const About = () => {
   //Description Form States
   const [appDesc, setAppDesc] = useState('')
   const [appTagline, setAppTagline] = useState('')
+  const [whatsAppNumber, setWhatsAppNumber] = useState('')
+  const [instagramAccount, setInstagramAccount] = useState('')
+  const [twitterAccount, setTwitterAccount] = useState('')
 
   //Loading States
   const [settingsUpdated, setSettingsUpdated] = useState()
@@ -46,6 +49,9 @@ const About = () => {
   //Form errors messages
   const descErr = useRef(null)
   const tagLineErr = useRef(null)
+  const whatsAppNumberErr = useRef(null)
+  const instagramAccountErr = useRef(null)
+  const twitterAccountErr = useRef(null)
   const formMsg = useRef(null)
 
   const modalLoading = document.querySelector('#modal')
@@ -81,14 +87,26 @@ const About = () => {
     //initial form values if no value was updated taking it from [0] index
     const currentAppDesc = appDesc || data?.appDesc
     const currentAppTagline = appTagline || data?.appTagline
+    const currentWhatsAppNumber = whatsAppNumber || data?.whatsAppNumber
+    const currentInstagramAccount = instagramAccount || data?.instagramAccount
+    const currentTwitterAccount = twitterAccount || data?.twitterAccount
     const currentCategoryList = categoryList || data?.appTagline
 
     const formData = new FormData()
     formData.append('appDesc', currentAppDesc)
     formData.append('appTagline', currentAppTagline)
+    formData.append('whatsAppNumber', currentWhatsAppNumber)
+    formData.append('instagramAccount', currentInstagramAccount)
+    formData.append('twitterAccount', currentTwitterAccount)
     formData.append('CategoryList', JSON.stringify(currentCategoryList))
 
-    if (descErr.current.textContent === '' || tagLineErr.current.textContent === '') {
+    if (
+      descErr.current.textContent === '' ||
+      tagLineErr.current.textContent === '' ||
+      whatsAppNumberErr.current.textContent === '' ||
+      instagramAccountErr.current.textContent === '' ||
+      twitterAccountErr.current.textContent === ''
+    ) {
       //show waiting modal
       modalLoading.classList.remove('hidden')
       setLoading(true)
@@ -197,6 +215,107 @@ const About = () => {
               <span
                 className='inline-block md:text-lg text-red-600 dark:text-red-400 font-[600] pt-2 px-1'
                 ref={tagLineErr}
+              ></span>
+            </label>
+
+            <h3 className='mx-0 mt-4 mb-12 text-lg text-center'>رقم الواتساب</h3>
+            <label htmlFor='whatsAppNumber' className='form__group'>
+              <input
+                name='whatsAppNumber'
+                id='instagramAccount'
+                type='text'
+                className='form__input'
+                defaultValue={data && data.instagramAccount}
+                minLength={8}
+                maxLength={8}
+                onChange={e => setWhatsAppNumber(e.target.value.trim())}
+                onKeyUp={e => {
+                  const target = e.target.value.trim()
+
+                  if (target.length > 0 && target.length < 8) {
+                    whatsAppNumberErr.current.textContent = `رقم الوتساب قصير يجب أن يتكون من ٨ أرقام`
+                  } else if (target.length > 8) {
+                    whatsAppNumberErr.current.textContent = `رقم الوتساب طويل لا يمكن أن يزيد عن ٨ أرقام`
+                  } else {
+                    whatsAppNumberErr.current.textContent = ''
+                  }
+                }}
+                required
+              />
+              <span className='pointer-events-none form__label'>
+                رقم الواتساب الخاص بالموقع للتواصل معك عبر الواتساب
+              </span>
+              <span
+                className='inline-block md:text-lg text-red-600 dark:text-red-400 font-[600] pt-2 px-1'
+                ref={whatsAppNumberErr}
+              ></span>
+            </label>
+
+            <h3 className='mx-0 mt-4 mb-12 text-lg text-center'>رابط حساب الانستقرام</h3>
+            <label htmlFor='instagramAccount' className='form__group'>
+              <input
+                name='instagramAccount'
+                id='instagramAccount'
+                type='text'
+                className='form__input'
+                defaultValue={data && data.instagramAccount}
+                minLength={TAGLINE_MIN_LENGTH}
+                maxLength={TAGLINE_MAX_LENGTH}
+                onChange={e => setInstagramAccount(e.target.value.trim())}
+                onKeyUp={e => {
+                  const target = e.target.value.trim()
+
+                  if (target.length > 0 && target.length < TAGLINE_MIN_LENGTH) {
+                    instagramAccountErr.current.textContent = `رابط حساب الانستقرام قصير جداً يجب أن يتكون من ${TAGLINE_MIN_LENGTH} حرف على الأقل`
+                  } else if (target.length > TAGLINE_MAX_LENGTH) {
+                    instagramAccountErr.current.textContent = `رابط حساب الانستقرام طويل جداً! لا يمكن أن يزيد عن ${TAGLINE_MAX_LENGTH} حرف`
+                  } else {
+                    instagramAccountErr.current.textContent = ''
+                  }
+                }}
+                required
+              />
+              <span className='pointer-events-none form__label'>
+                اكتب رابط حساب الانستقرام الخاص بك، وذلك لفتح صفحة حسابك عند الضغط على
+                ايقونة انستقرام اسفل الموقع
+              </span>
+              <span
+                className='inline-block md:text-lg text-red-600 dark:text-red-400 font-[600] pt-2 px-1'
+                ref={instagramAccountErr}
+              ></span>
+            </label>
+
+            <h3 className='mx-0 mt-4 mb-12 text-lg text-center'>رابط حساب التويتر</h3>
+            <label htmlFor='twitterAccount' className='form__group'>
+              <input
+                name='twitterAccount'
+                id='twitterAccount'
+                type='text'
+                className='form__input'
+                defaultValue={data && data.twitterAccount}
+                minLength={TAGLINE_MIN_LENGTH}
+                maxLength={TAGLINE_MAX_LENGTH}
+                onChange={e => setTwitterAccount(e.target.value.trim())}
+                onKeyUp={e => {
+                  const target = e.target.value.trim()
+
+                  if (target.length > 0 && target.length < TAGLINE_MIN_LENGTH) {
+                    twitterAccountErr.current.textContent = `رابط حساب التويتر قصير جداً، يجب أن يتكون من ${TAGLINE_MIN_LENGTH} حرف على الأقل`
+                  } else if (target.length > TAGLINE_MAX_LENGTH) {
+                    twitterAccountErr.current.textContent = `رابط حساب التويتر طويل جداً! لا يمكن أن يزيد عن ${TAGLINE_MAX_LENGTH} حرف`
+                  } else {
+                    twitterAccountErr.current.textContent = ''
+                  }
+                }}
+                required
+              />
+              <span className='pointer-events-none form__label'>
+                اكتب رابط حساب التويتر الخاص بك، وذلك لفتح صفحة حسابك عند الضغط على ايقونة
+                تويتر اسفل الموقع
+              </span>
+              <span
+                className='inline-block md:text-lg text-red-600 dark:text-red-400 font-[600] pt-2 px-1'
+                ref={twitterAccountErr}
               ></span>
             </label>
 
