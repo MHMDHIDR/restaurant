@@ -14,7 +14,7 @@ const PaymentButton = ({ value, onSuccess }) => {
 
   const onCancel = () => console.log('cancelled Payment')
 
-  const onError = error => console.log('some error happened=> ', error)
+  const onError = error => console.error('some error happened=> ', error)
 
   return (
     <PayPalButton

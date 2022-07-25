@@ -59,7 +59,7 @@ const FetchCategories = () => {
       </h3>
       <div className='flex flex-wrap justify-center mt-32 gap-14 xl:justify-between'>
         <Link
-          to={`view`}
+          to={`/view`}
           className='block overflow-hidden transition-transform duration-300 bg-cover w-72 h-72 rounded-2xl hover:-translate-y-2'
           style={{
             backgroundImage: `url("${getRandomFoodImg()}")`

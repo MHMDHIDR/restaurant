@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import Arrow from './Icons/Arrow'
+import scrollToView from '../utils/scrollToView'
 
 const Pagination = ({
   routeName,
@@ -12,23 +13,13 @@ const Pagination = ({
 }) => {
   numberOfPages = [...Array(numberOfPages).keys()]
 
-  const handleScrollTop = () =>
-    setTimeout(
-      () =>
-        window.scrollTo({
-          top: document.querySelector(`#hero`)?.offsetHeight || 500, //window.scrollY / 3
-          behavior: 'smooth'
-        }),
-      100 //animation duration in ms
-    )
-
   // only render pagination if there is no food id (not multiple food items)
   if (!foodId) {
     if (count > itemsPerPage) {
       return (
         <div
           className='flex flex-wrap items-center justify-center mt-8 text-lg select-none ltr'
-          onClick={handleScrollTop}
+          onClick={scrollToView}
         >
           {/* Previous Link Arrow */}
           <Link

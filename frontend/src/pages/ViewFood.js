@@ -9,6 +9,7 @@ import abstractText from '../utils/abstractText'
 import { removeSlug } from '../utils/slug'
 
 import { LoadingCard } from '../components/Loading'
+import scrollToView from '../utils/scrollToView'
 
 const ModalNotFound = lazy(() => import('../components/Modal/ModalNotFound'))
 const Card = lazy(() => import('../components/Card'))
@@ -17,6 +18,10 @@ const Footer = lazy(() => import('../components/Footer'))
 const Pagination = lazy(() => import('../components/Pagination'))
 
 const ViewFood = () => {
+  useEffect(() => {
+    scrollToView()
+  }, [])
+
   useDocumentTitle('View Foods')
 
   let { pageNum, foodId } = useParams()

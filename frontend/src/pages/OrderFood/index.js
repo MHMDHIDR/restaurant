@@ -8,6 +8,7 @@ import { ToppingsContext } from '../../Contexts/ToppingsContext'
 import useDocumentTitle from '../../hooks/useDocumentTitle'
 
 import { validPhone } from '../../utils/validForm'
+import scrollToView from '../../utils/scrollToView'
 
 import Modal from '../../components/Modal/Modal'
 import Header from '../../components/Header'
@@ -24,6 +25,10 @@ const formDataFromLocalStorage =
 const OrderFood = () => {
   useDocumentTitle('Cart Items')
   const { pathname } = useLocation()
+
+  useEffect(() => {
+    scrollToView()
+  }, [])
 
   //global variables
   const MAX_CHARACTERS = 100
