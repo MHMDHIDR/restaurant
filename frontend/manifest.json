@@ -1,0 +1,38 @@
+{
+  "start_url": "/",
+  "orientation": "portrait",
+  "background_color": "#b73306",
+  "theme_color": "#b73306",
+  "display": "standalone",
+  "name": "Resaturant",
+  "short_name": "Resaturant",
+  "description": "Restaurant Web and App to order and find delicious food",
+  "categories": ["Restaurant", "Food", "Drinks", "Delicious", "Order", "Online"],
+  "icons": [
+    {
+      "src": "assets/img/icons/mobile/manifest-icon-192.maskable.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/img/icons/mobile/manifest-icon-192.maskable.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "assets/img/icons/mobile/manifest-icon-512.maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/img/icons/mobile/manifest-icon-512.maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "scope": "/"
+}

@@ -12,11 +12,11 @@ import Logo from './Icons/Logo'
 
 interface cardProps {
   cItemId: string
-  cHeading: string
+  cHeading: any
   cDesc: string
   cTags: string[]
   cToppings: string[]
-  cCtaLabel: string
+  cCtaLabel: any
   cCtaLink: string
   cImg?: string
   cImgAlt?: string

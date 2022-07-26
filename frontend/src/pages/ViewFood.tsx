@@ -32,7 +32,19 @@ const ViewFood = () => {
 
   const pageNumber = !pageNum || pageNum < 1 || isNaN(pageNum) ? 1 : parseInt(pageNum)
   const itemsPerPage = 5
-  const [data, setData] = useState('')
+
+  interface dataProps {
+    _id: string
+    foodName: string
+    foodPrice: number
+    foodDesc: string
+    foodTags: string[]
+    foodToppings: string[]
+    foodImgs: string
+    length: number
+  }
+
+  const [data, setData] = useState<{ response: dataProps }>()
 
   //if there's food id then fetch with food id, otherwise fetch everything
   const { error, ...response } = useAxios({
@@ -74,7 +86,7 @@ const ViewFood = () => {
             // if data.length gives a number that means there are Multiple food items
             data?.response?.length > 0 ? (
               <Suspense fallback={<LoadingCard />}>
-                {data?.response?.map(item => (
+                {data?.response?.map((item: dataProps) => (
                   // View Multiple (Many) food items
                   <Card
                     key={item._id}
@@ -92,7 +104,10 @@ const ViewFood = () => {
                     cImgAlt={item.foodName}
                     cCtaLabel={
                       //add to cart button, if item is already in cart then disable the button
-                      items.find(itemInCart => itemInCart.cItemId === item._id) ? (
+                      items.find(
+                        (itemInCart: { cItemId: string }) =>
+                          itemInCart.cItemId === item._id
+                      ) ? (
                         <div className='relative rtl m-2 min-w-[7.5rem] text-white py-1.5 px-6 rounded-lg bg-red-800 hover:bg-red-700'>
                           <span className='py-0.5 px-1 pr-1.5 bg-gray-100 rounded-md absolute right-1 top-1 pointer-events-none'>
                             ❌
@@ -150,7 +165,8 @@ const ViewFood = () => {
                   cCtaLabel={
                     //add to cart button, if item is already in cart then disable the button
                     items.find(
-                      itemInCart => itemInCart.cItemId === data?.response?._id
+                      (itemInCart: { cItemId: string }) =>
+                        itemInCart.cItemId === data?.response?._id
                     ) ? (
                       <div className='relative rtl m-2 min-w-[7.5rem] text-white py-1.5 px-6 rounded-lg bg-red-800 hover:bg-red-700'>
                         <span className='py-0.5 px-1 pr-1.5 bg-gray-100 rounded-md absolute right-1 top-1 pointer-events-none'>

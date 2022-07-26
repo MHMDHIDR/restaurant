@@ -1,4 +1,4 @@
-import { Suspense, lazy, JSXElementConstructor } from 'react'
+import { Suspense, lazy } from 'react'
 import ThemeContextProvider from './Contexts/ThemeContext'
 import CartContextProvider from './Contexts/CartContext'
 import TagsContextProvider from './Contexts/TagsContext'
@@ -16,7 +16,7 @@ import { LoadingPage } from './components/Loading'
 //user pages
 const Home = lazy(() => import('./pages/Home'))
 const OrderFood = lazy(() => import('./pages/OrderFood'))
-const MyOrders = lazy(() => import('./pages/MyOrders'))
+const MyOrders = lazy<any>(() => import('./pages/MyOrders'))
 const ViewFood = lazy(() => import('./pages/ViewFood'))
 const SearchResults = lazy(() => import('./pages/SearchResults'))
 const Categories = lazy(() => import('./pages/Categories'))
@@ -24,7 +24,7 @@ const Join = lazy(() => import('./pages/Join'))
 const Login = lazy(() => import('./pages/Login'))
 
 //dashboard pages
-const DashboardHome = lazy(() => import('./pages/dashboard/DashboardHome'))
+const DashboardHome = lazy<any>(() => import('./pages/dashboard/DashboardHome'))
 const DashboardOrders = lazy(() => import('./pages/dashboard/DashboardOrders'))
 const DashboardMenu = lazy(() => import('./pages/dashboard/DashboardMenu'))
 const DashboardAddFood = lazy(() => import('./pages/dashboard/food/DashboardAddFood'))
