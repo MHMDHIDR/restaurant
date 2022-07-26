@@ -21,7 +21,6 @@ app.use(
     origin: [
       `https://mhmdhidr-restaurant.netlify.app`,
       `http://dev.com:3000`,
-      `http://dev.com:5173`,
       `http://localhost:3000`
     ]
   })

@@ -1,4 +1,4 @@
-export const createLocaleDateString = date =>
+export const createLocaleDateString = (date: string) =>
   new Date(date).toLocaleDateString('ar-EG', {
     weekday: 'long',
     year: 'numeric',

@@ -16,7 +16,7 @@ import { LoadingPage } from './components/Loading'
 //user pages
 const Home = lazy(() => import('./pages/Home'))
 const OrderFood = lazy(() => import('./pages/OrderFood'))
-const MyOrders = lazy(() => import('./pages/MyOrders'))
+// const MyOrders = lazy(() => import('./pages/MyOrders'))
 const ViewFood = lazy(() => import('./pages/ViewFood'))
 const SearchResults = lazy(() => import('./pages/SearchResults'))
 const Categories = lazy(() => import('./pages/Categories'))
@@ -32,7 +32,7 @@ const DashboardEditFood = lazy(() => import('./pages/dashboard/food/DashboardEdi
 const DashboardAppSettings = lazy(() => import('./pages/dashboard/DashboardAppSettings'))
 const DashboardUsers = lazy(() => import('./pages/dashboard/DashboardUsers'))
 
-const App = () => (
+const App: React.FC = () => (
   <FileUploadContextProvider>
     <ThemeContextProvider>
       <ToppingsContextProvider>
@@ -45,9 +45,9 @@ const App = () => (
                     <Route path='/' element={<Home />} />
                     <Route path='categories' element={<Categories />} />
                     <Route path='order-food' element={<OrderFood />} />
-                    <Route path='my-orders' element={<MyOrders />}>
+                    {/* <Route path='my-orders' element={<MyOrders />}>
                       <Route path=':pageNum' element={<MyOrders />} />
-                    </Route>
+                    </Route> */}
                     <Route path='search' element={<SearchResults />}>
                       <Route path=':search' element={<SearchResults />} />
                     </Route>

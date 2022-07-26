@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-const useDocumentTitle = title => {
+const useDocumentTitle = (title: string) => {
   useEffect(() => {
     document.title = window.location.pathname.includes('dashboard')
       ? 'Dashboard | ' + title

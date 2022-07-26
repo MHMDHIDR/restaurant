@@ -82,7 +82,7 @@ const Contact = () => {
                   onChange={e => setName(e.target.value)}
                   required
                 />
-                <span className='form__label'>اسمك الكريم</span>
+                <span className='form__label'>الاسم</span>
                 <span className='form__name__msg inline-block my-2 text-red-500 font-[600]'></span>
               </label>
 
@@ -105,7 +105,7 @@ const Contact = () => {
                   }}
                   required
                 />
-                <span className='form__label'>بريدك الالكتروني</span>
+                <span className='form__label'>البريد الالكتروني</span>
                 <span className='form__email__msg my-2 md:text-2xl text-red-600 dark:text-red-400 font-[600] py-2 px-1'></span>
               </label>
 

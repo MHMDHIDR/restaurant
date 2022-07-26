@@ -25,9 +25,7 @@ const About = () => {
             data?.appDesc?.length > 75 ? 'text-justify' : 'text-center'
           }`}
         >
-          {data
-            ? abstractText(data.appDesc)
-            : 'أطلب ألذ الأطعمة والمشروبات الطازجة من مطعمنا العالمي'}
+          {data ? data?.appDesc : 'أطلب ألذ الأطعمة والمشروبات الطازجة من مطعمنا العالمي'}
         </p>
       </div>
     </section>

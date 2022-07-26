@@ -1,13 +1,22 @@
 {
-  "name": "frontend",
+  "name": "resaturant",
+  "version": "0.1.0",
   "private": true,
-  "version": "0.0.0",
+  "homepage": "/",
+  "author": "Mohammed Hayder",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite  --host dev.com --port 3000",
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
+  "keywords": [
+    "Restaurant",
+    "order",
+    "online",
+    "delicious",
+    "food"
+  ],
   "dependencies": {
     "axios": "^0.27.2",
     "embla-carousel-react": "^7.0.0-rc05",
