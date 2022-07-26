@@ -2,9 +2,9 @@ import { useState, createContext, useEffect } from 'react'
 import useAxios from '../hooks/useAxios'
 import { removeSlug } from '../utils/slug'
 
-export const SearchContext = createContext()
+export const SearchContext = createContext({})
 
-const SearchContextProvider = ({ children }) => {
+const SearchContextProvider = ({ children }: { children: React.ReactNode }) => {
   /**
    * @param {string} search - the search query
    * @param {string} searchResults - the search results that match the query coming from the server and filtered

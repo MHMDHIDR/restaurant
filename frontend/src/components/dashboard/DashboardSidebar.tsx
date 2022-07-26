@@ -5,7 +5,7 @@ import goTo from '../../utils/goTo'
 import menuToggler from '../../utils/menuToggler'
 
 const DashboardSidebar = () => {
-  const menuTogglerBtn = useRef(null)
+  const menuTogglerBtn = useRef<HTMLLabelElement>(null)
   const { top } = menuTogglerBtn?.current?.getBoundingClientRect() ?? ''
 
   return (

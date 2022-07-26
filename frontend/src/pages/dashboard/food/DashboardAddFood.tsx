@@ -35,11 +35,11 @@ const AddFood = () => {
   const { file } = useContext(FileUploadContext)
 
   //Form errors messages
-  const ImgErr = useRef(null)
-  const foodNameErr = useRef(null)
-  const priceErr = useRef(null)
-  const descErr = useRef(null)
-  const formMsg = useRef(null)
+  const ImgErr = useRef<HTMLSpanElement>(null)
+  const foodNameErr = useRef<HTMLSpanElement>(null)
+  const priceErr = useRef<HTMLSpanElement>(null)
+  const descErr = useRef<HTMLSpanElement>(null)
+  const formMsg = useRef<HTMLDivElement>(null)
 
   const modalLoading = document.querySelector('#modal')
   const BASE_URL =

@@ -1,8 +1,8 @@
 import { useEffect, useState, createContext } from 'react'
 
-export const FileUploadContext = createContext()
+export const FileUploadContext = createContext({})
 
-const FileUploadContextProvider = ({ children }) => {
+const FileUploadContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [file, setFile] = useState([])
   const [fileURLs, setFileURLs] = useState([])
 

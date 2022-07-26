@@ -60,11 +60,11 @@ const OrderFood = () => {
   const [isLoading, setIsLoading] = useState(false)
 
   //Declaring Referenced Element
-  const personNameErr = useRef('')
-  const personPhoneErr = useRef('')
-  const personAddressErr = useRef('')
-  const formErr = useRef('')
-  const grandPriceRef = useRef()
+  const personNameErr = useRef<HTMLSpanElement>(null)
+  const personPhoneErr = useRef<HTMLSpanElement>(null)
+  const personAddressErr = useRef<HTMLSpanElement>(null)
+  const formErr = useRef<HTMLParagraphElement>(null)
+  const grandPriceRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
     setUserId(JSON.parse(localStorage.getItem('user'))?._id)

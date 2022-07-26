@@ -47,12 +47,12 @@ const About = () => {
   const TAGLINE_MAX_LENGTH = 100
 
   //Form errors messages
-  const descErr = useRef(null)
-  const tagLineErr = useRef(null)
-  const whatsAppNumberErr = useRef(null)
-  const instagramAccountErr = useRef(null)
-  const twitterAccountErr = useRef(null)
-  const formMsg = useRef(null)
+  const descErr = useRef<HTMLSpanElement>(null)
+  const tagLineErr = useRef<HTMLSpanElement>(null)
+  const whatsAppNumberErr = useRef<HTMLSpanElement>(null)
+  const instagramAccountErr = useRef<HTMLSpanElement>(null)
+  const twitterAccountErr = useRef<HTMLSpanElement>(null)
+  const formMsg = useRef<HTMLDivElement>(null)
 
   const modalLoading = document.querySelector('#modal')
 

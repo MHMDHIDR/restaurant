@@ -5,7 +5,7 @@ const checkedToppingsFromLocalStorage = JSON.parse(
   localStorage.getItem('restCheckedToppings') || '[]'
 )
 
-const ToppingsContextProvider = ({ children }) => {
+const ToppingsContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [checkedToppings, setCheckedToppings] = useState(checkedToppingsFromLocalStorage)
 
   useEffect(() => {

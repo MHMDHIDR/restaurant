@@ -1,4 +1,4 @@
-import { Suspense, lazy } from 'react'
+import { Suspense, lazy, JSXElementConstructor } from 'react'
 import ThemeContextProvider from './Contexts/ThemeContext'
 import CartContextProvider from './Contexts/CartContext'
 import TagsContextProvider from './Contexts/TagsContext'

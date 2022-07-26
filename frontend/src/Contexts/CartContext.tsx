@@ -1,10 +1,10 @@
 import { useState, createContext, useContext, useEffect } from 'react'
 import { ToppingsContext } from './ToppingsContext'
-export const CartContext = createContext()
+export const CartContext = createContext({})
 
 const cartFromLocalStorage = JSON.parse(localStorage.getItem('restCartItems') || '[]')
 
-const CartContextProvider = ({ children }) => {
+const CartContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [items, setItems] = useState(cartFromLocalStorage)
   const [orderDetails, setOrderDetails] = useState()
   const [grandPrice, setGrandPrice] = useState('')

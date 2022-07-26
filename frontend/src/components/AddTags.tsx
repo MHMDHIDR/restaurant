@@ -2,7 +2,7 @@ import { useContext } from 'react'
 import { TagsContext } from '../Contexts/TagsContext'
 import TagIcon from './Icons/TagIcon'
 
-const AddTags = ({ inputId }) => {
+const AddTags: React.FC<{ inputId: string }> = ({ inputId }) => {
   const { tags, removeTags, addTag } = useContext(TagsContext)
 
   return (

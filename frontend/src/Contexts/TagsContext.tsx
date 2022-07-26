@@ -1,8 +1,8 @@
 import { useState, createContext } from 'react'
 
-export const TagsContext = createContext()
+export const TagsContext = createContext({})
 
-const TagsContextProvider = ({ children }) => {
+const TagsContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [tags, setTags] = useState([])
   const [selectedTags, setSelectedTags] = useState([])
 
