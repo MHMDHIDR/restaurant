@@ -4,6 +4,7 @@ import useAxios from '../hooks/useAxios'
 import Search from './Search'
 import Nav from './Nav'
 import ScrollDown from './ScrollDown'
+import Logo from './Icons/Logo'
 
 const Header = () => {
   const [data, setData] = useState('')
@@ -34,6 +35,7 @@ const Header = () => {
         <div className='container mx-auto ltr'>
           {/* Search form and main hero */}
           <main className='flex flex-col items-center justify-center min-h-screen'>
+            <Logo width='32 xl:w-48' height='32 xl:h-48' className='mb-20' />
             <h1 className='max-w-xs px-2 mb-24 text-lg font-bold leading-loose text-center text-white select-none sm:max-w-fit xl:text-3xl sm:text-xl md:text-4xl rtl'>
               <span className='inline-flex h-20 pt-2 overflow-x-hidden animate-type sm:whitespace-nowrap'>
                 {data ? data.appTagline : 'نحن الأفضل، كنا ولازلنا وسنبقى كذلك...للأبد'}

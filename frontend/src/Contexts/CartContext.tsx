@@ -15,7 +15,14 @@ const CartContextProvider = ({ children }: { children: React.ReactNode }) => {
   }, [items])
 
   //add items to card add the details like: cHeading, cImg, cPrice, cDesc, cToppings, cQuantity: 1
-  const addToCart = (cItemId, cHeading, cImg, cPrice, cDesc, cToppings) => {
+  const addToCart = (
+    cItemId: string,
+    cHeading: string,
+    cImg: string,
+    cPrice: string,
+    cDesc: string,
+    cToppings: any[]
+  ) => {
     setItems([
       ...items,
       {
@@ -37,8 +44,8 @@ const CartContextProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   //remove items from card
-  const removeFromCart = cItemId => {
-    setItems(items.filter(item => item.cItemId !== cItemId))
+  const removeFromCart = (cItemId: string) => {
+    setItems(items.filter((item: { cItemId: string }) => item.cItemId !== cItemId))
     setCheckedToppings(
       checkedToppings.filter(topping => topping.toppingId.slice(0, -2) !== cItemId)
     )

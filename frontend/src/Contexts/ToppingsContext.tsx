@@ -1,5 +1,11 @@
 import { createContext, useState, useEffect } from 'react'
-export const ToppingsContext = createContext()
+export const ToppingsContext = createContext({
+  handleToppingChecked: (toppingId: string, toppingPrice: string) => {},
+  checkedToppings: [],
+  setCheckedToppings: (
+    checkedToppings: { toppingId: string; toppingPrice: string }[]
+  ) => {}
+})
 
 const checkedToppingsFromLocalStorage = JSON.parse(
   localStorage.getItem('restCheckedToppings') || '[]'
@@ -12,12 +18,14 @@ const ToppingsContextProvider = ({ children }: { children: React.ReactNode }) =>
     localStorage.setItem('restCheckedToppings', JSON.stringify(checkedToppings))
   }, [checkedToppings])
 
-  const handleToppingChecked = (toppingId, toppingPrice) => {
-    const topping = checkedToppings.find(topping => topping.toppingId === toppingId)
+  const handleToppingChecked = (toppingId: string, toppingPrice: string) => {
+    const topping = checkedToppings.find(
+      (topping: { toppingId: string }) => topping.toppingId === toppingId
+    )
     !topping ? addTopping(toppingId, toppingPrice) : removeTopping(toppingId)
   }
 
-  const addTopping = (toppingId, toppingPrice) => {
+  const addTopping = (toppingId: string, toppingPrice: string) => {
     setCheckedToppings([
       ...checkedToppings,
       {
@@ -27,8 +35,12 @@ const ToppingsContextProvider = ({ children }: { children: React.ReactNode }) =>
     ])
   }
 
-  const removeTopping = toppingId => {
-    setCheckedToppings(checkedToppings.filter(topping => topping.toppingId !== toppingId))
+  const removeTopping = (toppingId: string) => {
+    setCheckedToppings(
+      checkedToppings.filter(
+        (topping: { toppingId: string }) => topping.toppingId !== toppingId
+      )
+    )
   }
 
   return (

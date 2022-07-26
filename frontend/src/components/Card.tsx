@@ -10,6 +10,19 @@ import { removeSlug } from '../utils/slug'
 
 import Logo from './Icons/Logo'
 
+interface cardProps {
+  cItemId: string
+  cHeading: string
+  cDesc: string
+  cTags: string[]
+  cToppings: string[]
+  cCtaLabel: string
+  cCtaLink: string
+  cImg?: string
+  cImgAlt?: string
+  cPrice: number
+}
+
 const Card = ({
   cItemId,
   cHeading,
@@ -21,7 +34,7 @@ const Card = ({
   cImg = '',
   cImgAlt = 'Food Card',
   cPrice
-}) => {
+}: cardProps) => {
   const { items, addToCart, removeFromCart } = useContext(CartContext)
   const { handleToppingChecked, checkedToppings } = useContext(ToppingsContext)
 
