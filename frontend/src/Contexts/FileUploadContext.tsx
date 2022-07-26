@@ -3,13 +3,7 @@ import { useEffect, useState, createContext } from 'react'
 export const FileUploadContext = createContext({})
 
 const FileUploadContextProvider = ({ children }: { children: React.ReactNode }) => {
-  const [file, setFile] = useState<{
-    file: File | typeof length | null
-    length: number
-  }>({
-    length: 0,
-    file: null
-  })
+  const [file, setFile] = useState<File[]>([])
   const [fileURLs, setFileURLs] = useState([])
 
   const onFileAdd = (e: { target: { files: any } }) =>

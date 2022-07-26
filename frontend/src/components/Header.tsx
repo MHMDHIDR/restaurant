@@ -7,7 +7,7 @@ import ScrollDown from './ScrollDown'
 import Logo from './Icons/Logo'
 
 const Header = () => {
-  const [data, setData] = useState('')
+  const [data, setData] = useState<{ appTagline: string }>()
 
   const { response } = useAxios({
     method: 'get',

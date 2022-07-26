@@ -16,7 +16,7 @@ const MyOrders = () => {
 
   //getting user id from local storage
   const USER_ID =
-    'user' in localStorage ? JSON.parse(localStorage.getItem('user'))._id : null
+    'user' in localStorage ? JSON.parse(localStorage.getItem('user') || '{}')._id : null
   const [userStatus, setUserStatus] = useState('')
 
   const currentUser = useAxios({ method: 'get', url: `/users/all/1/1/${USER_ID}` })

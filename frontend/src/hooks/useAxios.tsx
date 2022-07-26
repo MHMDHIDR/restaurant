@@ -2,9 +2,7 @@ import { useEffect, useState } from 'react'
 import Axios from 'axios'
 
 Axios.defaults.baseURL =
-  process.env.NODE_ENV === 'development'
-    ? process.env.REACT_APP_API_LOCAL_URL
-    : process.env.REACT_APP_API_URL
+  process.env.NODE_ENV === 'development' ? process.env.API_LOCAL_URL : process.env.API_URL
 
 const useAxios = ({ url, method, body = null, headers = null }) => {
   const [response, setResponse] = useState(null)

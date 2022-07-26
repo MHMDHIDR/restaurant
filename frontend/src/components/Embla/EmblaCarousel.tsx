@@ -46,11 +46,11 @@ const EmblaCarousel = ({ slides, media, smallView = false }) => {
   }, [embla, setScrollSnaps, onSelect])
 
   //get food id, image, name, price from the array of object
-  const IdByIndex = index => media[index % media.length].foodId
-  const priceByIndex = index => media[index % media.length].foodPrice
-  const mediaByIndex = index => media[index % media.length].foodImgDisplayPath
-  const nameByIndex = index => media[index % media.length].foodName
-  const HEADER_BG_IMG = 'assets/img/header-bg.png' // or using data.heroBg
+  const IdByIndex = (index: number) => media[index % media.length].foodId
+  const priceByIndex = (index: number) => media[index % media.length].foodPrice
+  const mediaByIndex = (index: number) => media[index % media.length].foodImgDisplayPath
+  const nameByIndex = (index: number) => media[index % media.length].foodName
+  const HEADER_BG_IMG = '/assets/img/header-bg-1.webp' // or using data.heroBg
 
   return (
     <div dir='ltr'>
