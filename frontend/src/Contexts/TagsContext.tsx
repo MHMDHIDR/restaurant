@@ -6,7 +6,7 @@ const TagsContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [tags, setTags] = useState([])
   const [selectedTags, setSelectedTags] = useState([])
 
-  const removeTags = indexToRemove => {
+  const removeTags = (indexToRemove: number) => {
     setTags([...tags.filter((_, index) => index !== indexToRemove)])
   }
 

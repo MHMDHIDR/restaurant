@@ -47,7 +47,9 @@ const CartContextProvider = ({ children }: { children: React.ReactNode }) => {
   const removeFromCart = (cItemId: string) => {
     setItems(items.filter((item: { cItemId: string }) => item.cItemId !== cItemId))
     setCheckedToppings(
-      checkedToppings.filter(topping => topping.toppingId.slice(0, -2) !== cItemId)
+      checkedToppings.filter(
+        (topping: { toppingId: string }) => topping.toppingId.slice(0, -2) !== cItemId
+      )
     )
   }
 
