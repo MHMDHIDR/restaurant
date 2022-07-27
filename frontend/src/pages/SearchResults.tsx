@@ -15,7 +15,7 @@ const Nav = lazy(() => import('../components/Nav'))
 const Footer = lazy(() => import('../components/Footer'))
 const Search = lazy(() => import('../components/Search'))
 
-const SearchResults: React.FC = () => {
+const SearchResults = () => {
   const { search, searchResults, loading } = useContext(SearchContext)
   const { items } = useContext(CartContext)
 

@@ -32,7 +32,7 @@ const DashboardEditFood = lazy(() => import('./pages/dashboard/food/DashboardEdi
 const DashboardAppSettings = lazy(() => import('./pages/dashboard/DashboardAppSettings'))
 const DashboardUsers = lazy(() => import('./pages/dashboard/DashboardUsers'))
 
-const App: React.FC = () => (
+const App = () => (
   <FileUploadContextProvider>
     <ThemeContextProvider>
       <ToppingsContextProvider>

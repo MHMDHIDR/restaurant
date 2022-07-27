@@ -12,7 +12,7 @@ const Login = () => {
   const [userEmail, setEmail] = useState('')
   const [userTel, setTel] = useState('')
   const [userPassword, setPassword] = useState('')
-  const [data, setData] = useState('')
+  const [data, setData] = useState<{ id: number }>({})
   const [regStatus, setRegStatus] = useState()
   const [loading, setloading] = useState(false)
   const [errMsg, setErrMsg] = useState('')
@@ -23,8 +23,9 @@ const Login = () => {
       ? process.env.API_LOCAL_URL
       : process.env.API_URL
 
-  //setting user token from local storage
-  const USER = JSON.parse(localStorage.getItem('user'))
+  //setting user token from local storage type of string or null
+  const USER = JSON.parse(localStorage.getItem('user') || 'null')
+
   //get user data using token if the user is logged-in and token is saved in localStorage then I'll get the current user data from the database
   useEffect(() => {
     if (USER) {
@@ -50,10 +51,10 @@ const Login = () => {
         })
     }
 
-    return () => setData('')
+    return () => setData({})
   }, [USER, BASE_URL, data.id, navigate])
 
-  const handleJoin = async e => {
+  const handleJoin = async (e: React.FormEvent<HTMLInputElement>) => {
     e.preventDefault()
 
     setloading(true)
@@ -109,7 +110,7 @@ const Login = () => {
                   autoFocus
                   required
                 />
-                <span className='form__label'>اسمك الكريم</span>
+                <span className='form__label'>الاســـــــــــــــــم</span>
               </label>
 
               <label htmlFor='email' className='form__group'>
@@ -135,7 +136,7 @@ const Login = () => {
                   dir='auto'
                   required
                 />
-                <span className='form__label'>رقم الهاتف</span>
+                <span className='form__label'>رقم الهاتــــــــف</span>
               </label>
 
               <label htmlFor='password' className='form__group'>
@@ -148,7 +149,7 @@ const Login = () => {
                   dir='auto'
                   required
                 />
-                <span className='form__label'>كلمة المرور</span>
+                <span className='form__label'>كلمة المـــــــرور</span>
               </label>
 
               <div className='flex flex-col gap-6 text-center border-none form__group ltr'>
