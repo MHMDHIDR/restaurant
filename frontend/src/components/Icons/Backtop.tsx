@@ -23,7 +23,7 @@ const Backtop = ({ color = 'orange' }) => {
     <div
       className={`
         cursor-pointer bg-${color}-700 hover:bg-${color}-800 fixed right-[3%] h-10 w-10 border-2 border-solid border-${color}-100 rounded-md z-50 overflow-hidden transition-all back__top
-        after:content-["⬆"] after:block after:text-center after:text-lg after:mt-1 after:transition-[margin]
+        after:content-["⇧"] after:block after:text-center after:text-lg after:mt-1 after:transition-[margin]
         hover:after:mt-0.5
         opacity-0 bottom-1/2 pointer-events-none
       `}
