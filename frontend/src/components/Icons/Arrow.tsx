@@ -1,7 +1,17 @@
-const Arrow = ({ width = 'clamp(15px,2vw,3rem)', height = width, toLeft, css }) => {
+const Arrow = ({
+  width = 'clamp(15px,2vw,3rem)',
+  height = width,
+  toLeft,
+  css
+}: {
+  width?: string
+  height?: string
+  toLeft?: boolean
+  css?: string
+}) => {
   return (
     <svg
-      alt='svg arrow'
+      // alt='svg arrow'
       viewBox='0 0 64 118'
       fill='black'
       xmlns='http://www.w3.org/2000/svg'

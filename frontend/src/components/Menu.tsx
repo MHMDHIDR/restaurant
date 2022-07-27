@@ -6,7 +6,7 @@ const EmblaCarousel = lazy(() => import('./Embla/EmblaCarousel'))
 
 const Menu = () => {
   const SLIDES_IN_MENU = 10
-  const [food, setFood] = useState('')
+  const [food, setFood] = useState<any>('')
 
   const { ...response } = useAxios({
     method: 'get',

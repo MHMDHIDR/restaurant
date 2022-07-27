@@ -5,7 +5,10 @@ Axios.defaults.baseURL =
   process.env.NODE_ENV === 'development' ? process.env.API_LOCAL_URL : process.env.API_URL
 
 const useAxios = ({ url, method, body = null, headers = null }) => {
-  const [response, setResponse] = useState<{ response: any } | null>(null)
+  const [response, setResponse] = useState<{
+    itemsCount: any
+    response: any
+  } | null>(null)
   const [error, setError] = useState<{ error: any } | null>(null)
   const [loading, setloading] = useState(true)
 

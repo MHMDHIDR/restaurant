@@ -13,12 +13,12 @@ const ScrollDown = () => {
       role='button'
       area-label={`Click to Scroll to down to section`}
       onClick={e => {
-        const { nextSibling } =
-          e.target.parentElement.parentElement.parentElement.parentElement
+        const { nextSibling } = (e.target as HTMLDivElement).parentElement.parentElement
+          .parentElement.parentElement
 
         if (nextSibling) {
           window.scrollTo({
-            top: nextSibling.offsetTop - 50,
+            top: (nextSibling as HTMLElement).offsetTop - 50,
             behavior: 'smooth'
           })
         } else {

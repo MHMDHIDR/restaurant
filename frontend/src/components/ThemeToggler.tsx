@@ -20,7 +20,7 @@ const DarkmodeToggle = () => {
    * 5- make a function to set the theme in <html>
    */
 
-  const { isDark, setIsDark, getLocalStorageTheme } = useContext(ThemeContext)
+  const { isDark, setIsDark, getLocalStorageTheme } = useContext<any>(ThemeContext)
 
   const PREFERENCE = window.matchMedia('(prefers-color-scheme: dark)')
 

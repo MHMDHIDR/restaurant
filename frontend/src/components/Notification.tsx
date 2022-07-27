@@ -13,7 +13,7 @@ const Notification = ({ sendStatus, sendStatusMsg }) => {
         aria-label='close noification'
         title='close noification'
         onClick={e => {
-          const noification = e.target.parentElement
+          const noification = (e.target as HTMLButtonElement).parentElement
           noification.remove()
         }}
       >
