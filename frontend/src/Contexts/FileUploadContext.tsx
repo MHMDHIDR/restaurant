@@ -1,6 +1,14 @@
 import { useEffect, useState, createContext } from 'react'
 
-export const FileUploadContext = createContext({})
+export interface FileUploadProps {
+  file: File[]
+  fileURLs: string[]
+  setFileURLs(fileURLs: string[]): void
+  onFileAdd: (e: { target: { files: any } }) => void
+  onFileRemove(fileUrl: string, fileName: string): void
+}
+
+export const FileUploadContext = createContext({} as FileUploadProps)
 
 const FileUploadContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [file, setFile] = useState<File[]>([])

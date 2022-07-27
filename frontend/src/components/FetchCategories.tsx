@@ -4,10 +4,15 @@ import useAxios from '../hooks/useAxios'
 
 import { LoadingCard } from './Loading'
 
+interface ImgsProps {
+  length: number
+  foodImgs: string[]
+}
+
 const FetchCategories = () => {
-  const [foodImgs, setFoodImgs] = useState('')
-  const [drinkImgs, setDrinkImgs] = useState('')
-  const [sweetsImgs, setSweetsImgs] = useState('')
+  const [foodImgs, setFoodImgs] = useState<ImgsProps>()
+  const [drinkImgs, setDrinkImgs] = useState<ImgsProps>()
+  const [sweetsImgs, setSweetsImgs] = useState<ImgsProps>()
   const ITEMS_COUNT = 0 // if items count is == 0 then it will fetch everything in food category
 
   const foods = useAxios({

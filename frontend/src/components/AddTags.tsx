@@ -1,9 +1,15 @@
 import { useContext } from 'react'
 import { TagsContext } from '../Contexts/TagsContext'
+import { TagsProps } from '../Contexts/TagsContext'
 import TagIcon from './Icons/TagIcon'
 
-const AddTags: React.FC<{ inputId: string }> = ({ inputId }) => {
-  const { tags, removeTags, addTag } = useContext(TagsContext)
+interface AddTagsProps {
+  inputId: string
+  storedTags: string[]
+}
+
+const AddTags = ({ inputId }: AddTagsProps) => {
+  const { tags, removeTags, addTag } = useContext<TagsProps>(TagsContext)
 
   return (
     <>

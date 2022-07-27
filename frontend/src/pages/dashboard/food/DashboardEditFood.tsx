@@ -24,9 +24,11 @@ const EditFood = () => {
   const [delFoodName, setDelFoodName] = useState()
   const [action, setAction] = useState()
   const [delFoodImg, setDelFoodImg] = useState()
-  const [data, setData] = useState('')
+  const [data, setData] = useState<any>()
   const [categoryList, setCategoryList] = useState([])
-  const [toppings, setToppings] = useState([{}])
+  const [toppings, setToppings] = useState<{ toppingName: string }[] | {}>([
+    { toppingName: '' }
+  ])
   const [deleteFoodStatus, setDeleteFoodStatus] = useState()
   const [deleteImgStatus, setDeleteImgStatus] = useState()
 
@@ -89,7 +91,7 @@ const EditFood = () => {
     setToppings([...toppings, {}])
   }
 
-  const handleRemoveClick = index => {
+  const handleRemoveClick = (index: number) => {
     const list = [...toppings]
     list.splice(index, 1)
     setToppings(list)
@@ -99,7 +101,7 @@ const EditFood = () => {
     data && setTags(data?.foodTags)
   }, [data, setTags])
 
-  const handleUpdateFood = async e => {
+  const handleUpdateFood = async (e: { key: string; preventDefault: () => void }) => {
     if (e.key === 'Enter') {
       //don't submit the form if Enter is pressed
       e.preventDefault()

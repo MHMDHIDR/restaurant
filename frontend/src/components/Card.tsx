@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { useContext } from 'react'
 
 import { CartContext } from '../Contexts/CartContext'
+import { CartProps } from '../Contexts/CartContext'
 import { ToppingsContext } from '../Contexts/ToppingsContext'
 import TagIcon from './Icons/TagIcon'
 import EmblaCarousel from './Embla/EmblaCarousel'
@@ -15,10 +16,10 @@ interface cardProps {
   cHeading: any
   cDesc: string
   cTags: string[]
-  cToppings: string[]
+  cToppings: { toppingName: string; toppingPrice: string }[]
   cCtaLabel: any
   cCtaLink: string
-  cImg?: string
+  cImg?: any
   cImgAlt?: string
   cPrice: number
 }
@@ -35,7 +36,7 @@ const Card = ({
   cImgAlt = 'Food Card',
   cPrice
 }: cardProps) => {
-  const { items, addToCart, removeFromCart } = useContext(CartContext)
+  const { items, addToCart, removeFromCart } = useContext<CartProps>(CartContext)
   const { handleToppingChecked, checkedToppings } = useContext(ToppingsContext)
 
   const handleCart = () => {
@@ -68,10 +69,7 @@ const Card = ({
       <div className='flex flex-wrap items-center justify-center max-w-xs mx-auto lg:justify-between sm:max-w-full'>
         <div className='flex flex-col flex-wrap items-center justify-center flex-1 order-1 gap-3 sm:px-16'>
           {cHeading ? (
-            <h3
-              name='foodName'
-              className='inline-block pt-5 mt-10 text-xl text-center text-gray-800 bg-transparent sm:mt-0 sm:pt-2 dark:text-white underline-hover'
-            >
+            <h3 className='inline-block pt-5 mt-10 text-xl text-center text-gray-800 bg-transparent sm:mt-0 sm:pt-2 dark:text-white underline-hover'>
               {cHeading}
             </h3>
           ) : null}
@@ -147,9 +145,8 @@ const Card = ({
           ) : null}
         </div>
         <div
-          style={{ '--cardImgSize': '20rem' }}
           title={removeSlug(cImgAlt)}
-          className='min-w-[var(--cardImgSize)] max-w-[calc(var(--cardImgSize))] overflow-hidden transition-colors bg-gray-100 border border-gray-400 rounded-lg dark:bg-gray-600 min-h-[var(--cardImgSize)] max-h-[calc(var(--cardImgSize)*1.1)]'
+          className='[--cardImgSize:20rem] min-w-[var(--cardImgSize)] max-w-[calc(var(--cardImgSize))] overflow-hidden transition-colors bg-gray-100 border border-gray-400 rounded-lg dark:bg-gray-600 min-h-[var(--cardImgSize)] max-h-[calc(var(--cardImgSize)*1.1)]'
         >
           {cImg ? (
             <EmblaCarousel slides={slides} media={media} smallView={true} />

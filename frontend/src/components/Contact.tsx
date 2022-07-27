@@ -11,9 +11,9 @@ const Contact = () => {
   const [msg, setMsg] = useState('')
 
   //Msg returned from server
-  const [loading, setLoading] = useState()
-  const [sendStatus, setSendStatus] = useState()
-  const [sendStatusMsg, setSendStatusMsg] = useState()
+  const [loading, setLoading] = useState(true)
+  const [sendStatus, setSendStatus] = useState(0)
+  const [sendStatusMsg, setSendStatusMsg] = useState('')
 
   const EMAIL_FORM_URL = 'https://formsubmit.co/ajax/mr.hamood277@gmail.com'
 

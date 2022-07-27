@@ -1,10 +1,14 @@
-import { useContext } from 'react'
+import { Key, useContext } from 'react'
 import { useLocation } from 'react-router-dom'
 import { FileUploadContext } from '../Contexts/FileUploadContext'
+import { FileUploadProps } from '../Contexts/FileUploadContext'
 
 const FileUpload = ({ data }) => {
-  const { file, fileURLs, onFileRemove, onFileAdd } = useContext(FileUploadContext)
+  const { file, fileURLs, onFileRemove, onFileAdd } =
+    useContext<FileUploadProps>(FileUploadContext)
   let { pathname } = useLocation()
+
+  console.log(fileURLs)
 
   return (
     <>
@@ -22,28 +26,30 @@ const FileUpload = ({ data }) => {
             />
           </div>
         ) : data.defaultImg.length > 0 ? (
-          data.defaultImg.map(({ foodImgDisplayName, foodImgDisplayPath }, index) => (
-            <div
-              key={index}
-              className={`flex items-center flex-col gap-y-3 max-h-44 h-44 place-content-center`}
-            >
-              <img
-                src={foodImgDisplayPath}
-                alt={foodImgDisplayName}
-                className='object-cover p-1 border border-gray-400 w-28 min-h-fit h-28 dark:border-gray-300 rounded-xl'
-              />
-              <button
-                type='button'
-                id='deleteImg'
-                className='px-6 py-1 text-white transition-colors bg-red-500 rounded-full hover:bg-red-700'
-                data-img-name={foodImgDisplayName}
+          data.defaultImg.map(
+            ({ foodImgDisplayName, foodImgDisplayPath }, index: Key) => (
+              <div
+                key={index}
+                className={`flex items-center flex-col gap-y-3 max-h-44 h-44 place-content-center`}
               >
-                حذف
-              </button>
-            </div>
-          ))
+                <img
+                  src={foodImgDisplayPath}
+                  alt={foodImgDisplayName}
+                  className='object-cover p-1 border border-gray-400 w-28 min-h-fit h-28 dark:border-gray-300 rounded-xl'
+                />
+                <button
+                  type='button'
+                  id='deleteImg'
+                  className='px-6 py-1 text-white transition-colors bg-red-500 rounded-full hover:bg-red-700'
+                  data-img-name={foodImgDisplayName}
+                >
+                  حذف
+                </button>
+              </div>
+            )
+          )
         ) : (
-          fileURLs.map((fileURL, index) => (
+          fileURLs.map((fileURL: string, index: Key) => (
             <div
               key={index}
               className={`flex items-center flex-col gap-y-3 max-h-44 h-44 place-content-center`}
