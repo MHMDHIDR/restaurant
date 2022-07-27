@@ -15,10 +15,10 @@ interface cardProps {
   cHeading: any
   cDesc: string
   cTags: string[]
-  cToppings: any
+  cToppings: string[]
   cCtaLabel: any
   cCtaLink: string
-  cImg?: any
+  cImg?: string
   cImgAlt?: string
   cPrice: number
 }
@@ -35,7 +35,7 @@ const Card = ({
   cImgAlt = 'Food Card',
   cPrice
 }: cardProps) => {
-  const { items, addToCart, removeFromCart } = useContext<any>(CartContext)
+  const { items, addToCart, removeFromCart } = useContext(CartContext)
   const { handleToppingChecked, checkedToppings } = useContext(ToppingsContext)
 
   const handleCart = () => {

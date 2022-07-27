@@ -3,7 +3,7 @@ import { TagsContext } from '../Contexts/TagsContext'
 import TagIcon from './Icons/TagIcon'
 
 const AddTags = ({ inputId }: { inputId: string }) => {
-  const { tags, removeTags, addTag } = useContext<any>(TagsContext)
+  const { tags, removeTags, addTag } = useContext(TagsContext)
 
   return (
     <>

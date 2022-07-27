@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom'
 import { FileUploadContext } from '../Contexts/FileUploadContext'
 
 const FileUpload = ({ data }) => {
-  const { file, fileURLs, onFileRemove, onFileAdd } = useContext<any>(FileUploadContext)
+  const { file, fileURLs, onFileRemove, onFileAdd } = useContext(FileUploadContext)
   let { pathname } = useLocation()
 
   return (

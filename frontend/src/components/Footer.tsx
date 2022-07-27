@@ -11,7 +11,7 @@ import Backtop from './Icons/Backtop'
 import { WhatsApp, Twitter, Instagram } from './Icons/Socials'
 
 const Footer = () => {
-  const [settings, setSettings] = useState<any>('')
+  const [settings, setSettings] = useState('')
   const [itemsNames, setItemsNames] = useState([])
 
   const fetchSettings = useAxios({ method: 'get', url: '/settings' })

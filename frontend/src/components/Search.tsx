@@ -8,7 +8,7 @@ import useEventListener from '../hooks/useEventListener'
 import { removeSlug } from '../utils/slug'
 
 const Search = () => {
-  const { setSearch, search, searchResults } = useContext<any>(SearchContext)
+  const { setSearch, search, searchResults } = useContext(SearchContext)
   const navigate = useNavigate()
 
   const searchWrapper = document.querySelector('.search__wrapper')

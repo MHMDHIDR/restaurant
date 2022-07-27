@@ -11,7 +11,7 @@ import Card from './Card'
 import { LoadingCard } from './Loading'
 
 const NewFood = () => {
-  const [data, setData] = useState<any>('')
+  const [data, setData] = useState('')
 
   const { ...response } = useAxios({
     method: 'get',
@@ -24,7 +24,7 @@ const NewFood = () => {
     }
   }, [response.response])
 
-  const { items } = useContext<any>(CartContext)
+  const { items } = useContext(CartContext)
 
   return (
     <section id='new' className='py-12 my-8 new'>
@@ -72,7 +72,6 @@ const NewFood = () => {
                     </div>
                   )
                 }
-                cCtaLink={''}
               />
             </div>
           ))

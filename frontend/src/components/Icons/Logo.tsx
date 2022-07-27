@@ -1,7 +1,7 @@
 // Website - App Logo
 interface LogoProps {
-  width?: string | number
-  height?: string | number
+  width: string | number
+  height: string | number
   className?: string
   color?: 'white' | 'black' | ''
 }

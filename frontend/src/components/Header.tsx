@@ -6,7 +6,7 @@ import Nav from './Nav'
 import ScrollDown from './ScrollDown'
 
 const Header = () => {
-  const [data, setData] = useState<any>()
+  const [data, setData] = useState<{ appTagline: string }>()
 
   const { response } = useAxios({
     method: 'get',

@@ -6,7 +6,7 @@ import menuToggler from '../../utils/menuToggler'
 
 const DashboardSidebar = () => {
   const menuTogglerBtn = useRef<HTMLLabelElement>(null)
-  const { top } = menuTogglerBtn?.current as any
+  const { top } = menuTogglerBtn?.current?.getBoundingClientRect() ?? ''
 
   return (
     <aside>
@@ -19,7 +19,7 @@ const DashboardSidebar = () => {
       />
       <label
         htmlFor='menuToggler'
-        // tooltip='القائمة'
+        tooltip='القائمة'
         className={`block z-20 w-10 h-10 transition-all translate-x-0 bg-orange-700 border-2 border-r-0 border-gray-800 cursor-pointer hover:bg-orange-800 dark:border-white translate-y-36 sm:translate-y-24 peer-checked:-translate-x-56 ${
           top < 100 &&
           `after:content-[attr(tooltip)] after:bottom-[calc(var(--top)*2)] after:mt-2
@@ -45,7 +45,7 @@ const DashboardSidebar = () => {
       {/* overlay full inset-0 */}
       <div
         className='fixed inset-0 z-10 transition-opacity duration-500 bg-black opacity-0 pointer-events-none peer-checked:opacity-100 peer-checked:bg-opacity-80 peer-checked:pointer-events-auto'
-        // onClick={menuToggler}
+        onClick={menuToggler}
       />
 
       <ul
@@ -59,7 +59,7 @@ const DashboardSidebar = () => {
             className={({ isActive }) =>
               !isActive ? 'dashboard__nav' : 'dashboard__nav isActive'
             }
-            // onClick={menuToggler}
+            onClick={menuToggler}
           >
             لوحة التحكم
           </NavLink>
@@ -71,7 +71,7 @@ const DashboardSidebar = () => {
             className={({ isActive }) =>
               !isActive ? 'dashboard__nav' : 'dashboard__nav isActive'
             }
-            // onClick={menuToggler}
+            onClick={menuToggler}
           >
             الطلبات
           </NavLink>
@@ -83,7 +83,7 @@ const DashboardSidebar = () => {
             className={({ isActive }) =>
               !isActive ? 'dashboard__nav' : 'dashboard__nav isActive'
             }
-            // onClick={menuToggler}
+            onClick={menuToggler}
           >
             قائمة الوجبات
           </NavLink>
@@ -95,7 +95,7 @@ const DashboardSidebar = () => {
             className={({ isActive }) =>
               !isActive ? 'dashboard__nav' : 'dashboard__nav isActive'
             }
-            // onClick={menuToggler}
+            onClick={menuToggler}
           >
             إضافة وجبة
           </NavLink>
@@ -107,7 +107,7 @@ const DashboardSidebar = () => {
             className={({ isActive }) =>
               !isActive ? 'dashboard__nav' : 'dashboard__nav isActive'
             }
-            // onClick={menuToggler}
+            onClick={menuToggler}
           >
             إعدادات الموقع
           </NavLink>
@@ -119,7 +119,7 @@ const DashboardSidebar = () => {
             className={({ isActive }) =>
               !isActive ? 'dashboard__nav' : 'dashboard__nav isActive'
             }
-            // onClick={menuToggler}
+            onClick={menuToggler}
           >
             المستخدمين
           </NavLink>

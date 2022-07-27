@@ -3,7 +3,7 @@ import useAxios from '../hooks/useAxios'
 import abstractText from '../utils/abstractText'
 
 const About = () => {
-  const [data, setData] = useState<any>('')
+  const [data, setData] = useState('')
 
   const { response } = useAxios({
     method: 'get',

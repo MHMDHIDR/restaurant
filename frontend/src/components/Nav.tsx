@@ -35,7 +35,7 @@ const Nav = () => {
     }
   })
 
-  const { items } = useContext<any>(CartContext)
+  const { items } = useContext(CartContext)
 
   return (
     <div className='fixed inset-0 bottom-auto z-[9999] w-full transition-transform duration-300 nav ltr'>
@@ -69,7 +69,7 @@ const Nav = () => {
           xmlns='http://www.w3.org/2000/svg'
           className='w-10 h-10 transition-colors xl:hidden stroke-gray-800 dark:stroke-white peer-checked:stroke-orange-600'
           viewBox='0 0 24 24'
-          onClick={() => menuToggler()}
+          onClick={menuToggler}
         >
           <path
             strokeLinecap='round'
