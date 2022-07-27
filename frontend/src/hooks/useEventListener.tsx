@@ -6,7 +6,7 @@ const useEventListener = (
   target = window,
   options = null
 ) => {
-  const savedListener = useRef()
+  const savedListener = useRef<any>()
 
   useEffect(() => {
     savedListener.current = listener

@@ -9,7 +9,7 @@ const useAxios = ({ url, method, body = null, headers = null }) => {
   const [error, setError] = useState<{ error: any } | null>(null)
   const [loading, setloading] = useState(true)
 
-  useEffect(() => {
+  useEffect((): { () } => {
     let isMounted = true
 
     setloading(true)
