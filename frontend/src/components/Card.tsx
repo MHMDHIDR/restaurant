@@ -16,7 +16,10 @@ interface cardProps {
   cHeading: any
   cDesc: string
   cTags: string[]
-  cToppings: string[]
+  cToppings: {
+    toppingName: string
+    toppingPrice: number
+  }[]
   cCtaLabel: any
   cCtaLink?: string
   cImg?: any
@@ -98,7 +101,7 @@ const Card = ({
             // if this item has toppings and it's a string
             <div className='flex flex-col flex-wrap items-start gap-4 rtl'>
               <span>الإضافات:</span>
-              {cToppings.map(({ toppingName = 'إضافة', toppingPrice = '1' }, idx) => {
+              {cToppings.map(({ toppingName = 'إضافة', toppingPrice = 1 }, idx) => {
                 const cToppingId = cItemId + '-' + idx
 
                 return (

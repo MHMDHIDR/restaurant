@@ -21,7 +21,7 @@ const DashboardHome = () => {
   const USER_ID =
     'user' in localStorage ? JSON.parse(localStorage.getItem('user'))._id : null
 
-  const [userStatus, setUserStatus] = useState<any>('')
+  const [userStatus, setUserStatus] = useState()
   const [userType, setUserType] = useState<any>('')
   const [menuCount, setMenuCount] = useState<any>()
   const [ordersCount, setOrdersCount] = useState<any>()

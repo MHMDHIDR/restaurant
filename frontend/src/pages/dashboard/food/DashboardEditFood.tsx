@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useContext } from 'react'
+import { useState, useEffect, useRef, useContext, ChangeEvent } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import Axios from 'axios'
 
@@ -21,14 +21,12 @@ import goTo from '../../../utils/goTo'
 const EditFood = () => {
   useDocumentTitle('Edit Food')
 
-  const [delFoodName, setDelFoodName] = useState()
-  const [action, setAction] = useState()
+  const [delFoodName, setDelFoodName] = useState('')
+  const [action, setAction] = useState('')
   const [delFoodImg, setDelFoodImg] = useState()
   const [data, setData] = useState<any>()
   const [categoryList, setCategoryList] = useState([])
-  const [toppings, setToppings] = useState<{ toppingName: string }[] | {}>([
-    { toppingName: '' }
-  ])
+  const [toppings, setToppings] = useState([])
   const [deleteFoodStatus, setDeleteFoodStatus] = useState()
   const [deleteImgStatus, setDeleteImgStatus] = useState()
 
@@ -80,7 +78,10 @@ const EditFood = () => {
     }
   }, [foodData?.response?.response, categories?.response])
 
-  const handleInputChange = (e, index) => {
+  const handleInputChange = (
+    e: ChangeEvent<HTMLInputElement>,
+    index: string | number
+  ) => {
     const { name, value } = e.target
     const newToppings = [...toppings]
     newToppings[index][name] = value
@@ -223,7 +224,7 @@ const EditFood = () => {
     }
   }
 
-  useEventListener('click', e => {
+  useEventListener('click', (e: any) => {
     if (e.target.id === 'deleteImg') {
       setAction('deleteImg')
       setHasConfirmBtn(true)
@@ -420,8 +421,8 @@ const EditFood = () => {
                       name='foodDescription'
                       id='foodDescription'
                       className='form__input'
-                      minLength='10'
-                      maxLength='300'
+                      minLength={10}
+                      maxLength={300}
                       onChange={e => setFoodDesc(e.target.value.trim())}
                       onKeyUp={e => {
                         const target = e.target.value.trim()
@@ -522,7 +523,7 @@ const EditFood = () => {
                     <button
                       id='updateFood'
                       className='min-w-[7rem] bg-green-600 hover:bg-green-700 text-white py-1.5 px-6 rounded-md'
-                      onClick={handleUpdateFood}
+                      onClick={(e: any) => handleUpdateFood(e)}
                     >
                       تحديث
                     </button>

@@ -5,15 +5,16 @@ import TagIcon from './Icons/TagIcon'
 
 interface AddTagsProps {
   inputId: string
+  storedTags: string[]
 }
 
-const AddTags = ({ inputId }: AddTagsProps) => {
+const AddTags = ({ inputId, storedTags }: AddTagsProps) => {
   const { tags, removeTags, addTag } = useContext<TagsProps>(TagsContext)
 
   return (
     <>
       <ul className='flex flex-wrap mt-6 overflow-x-scroll'>
-        {tags.map((tag, index) => (
+        {[...tags, storedTags].map((tag, index) => (
           <li
             key={index}
             className='flex items-center justify-center py-1 mt-0 mb-2 ml-2 tracking-widest text-white bg-orange-700 rounded select-none hover:bg-orange-800 group hover:cursor-pointer'

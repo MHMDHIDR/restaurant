@@ -6,7 +6,7 @@ import { LoadingCard } from './Loading'
 
 interface ImgsProps {
   length: number
-  foodImgs: string[]
+  foodImgs?: string[]
 }
 
 const FetchCategories = () => {
