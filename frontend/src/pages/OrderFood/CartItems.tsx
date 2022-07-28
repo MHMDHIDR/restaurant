@@ -6,7 +6,7 @@ import { removeSlug } from '../../utils/slug'
 
 import Divider from '../../components/Divider'
 
-const CartItems = ({ checkout = false }) => {
+const CartItems = () => {
   const { items, setItems, removeFromCart, setGrandPrice } = useContext(CartContext)
   const { handleToppingChecked, checkedToppings } = useContext(ToppingsContext)
   const MAX_QUANTITY = 100
@@ -60,7 +60,7 @@ const CartItems = ({ checkout = false }) => {
                     ({
                       toppingId,
                       toppingName = 'إضافة',
-                      toppingPrice = '1',
+                      toppingPrice = 1,
                       toppingQuantity
                     }) => (
                       <div className='flex items-center' key={toppingId}>
@@ -93,7 +93,7 @@ const CartItems = ({ checkout = false }) => {
 
                 <div className='flex flex-col items-center gap-2 text-lg select-none'>
                   <h2 className='text-center ltr'>كمية الإضافات</h2>
-                  {item?.cToppings?.map((topping, idx) => {
+                  {item?.cToppings?.map((topping: any, idx: number) => {
                     const toppingId = item.cItemId + idx
                     return (
                       <div key={toppingId} className='flex gap-1 select-none'>

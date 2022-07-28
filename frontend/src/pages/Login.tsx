@@ -17,7 +17,7 @@ const Login = () => {
     LoginDataFromLocalStorage.userEmailOrTel || ''
   )
   const [userPassword, setPassword] = useState('')
-  const [data, setData] = useState('')
+  const [data, setData] = useState<any>('')
   const [loggedInStatus, setLoggedInStatus] = useState()
   const [loading, setloading] = useState(false)
   const [loginMsg, setLoginMsg] = useState('')
@@ -63,7 +63,7 @@ const Login = () => {
     }
   }, [USER, BASE_URL, data.id, navigate])
 
-  useEventListener('click', e => {
+  useEventListener('click', (e: any) => {
     //confirm means cancel Modal message (hide it)
     if (e.target.id === 'confirm') {
       modalLoading.classList.add('hidden')

@@ -1,12 +1,20 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-const PayPalButton = window?.paypal?.Buttons?.driver('react', { React, ReactDOM })
+
+const PayPalButton = (window as any)?.paypal?.Buttons?.driver('react', {
+  React,
+  ReactDOM
+})
 
 const PaymentButton = ({ value, onSuccess }) => {
-  const createOrder = (_, actions) =>
-    actions.order.create({ purchase_units: [{ amount: { value } }] })
+  const createOrder = (
+    _: any,
+    actions: {
+      order: { create: (arg0: { purchase_units: { amount: { value: any } }[] }) => any }
+    }
+  ) => actions.order.create({ purchase_units: [{ amount: { value } }] })
 
-  const onApprove = async (data, actions) => {
+  const onApprove = async (data: any, actions: { order: { capture: () => any } }) => {
     await actions.order.capture()
     onSuccess(data)
     return data
@@ -14,14 +22,23 @@ const PaymentButton = ({ value, onSuccess }) => {
 
   const onCancel = () => console.log('cancelled Payment')
 
-  const onError = error => console.error('some error happened=> ', error)
+  const onError = (error: any) => console.error('some error happened=> ', error)
 
   return (
     <PayPalButton
-      createOrder={(data, actions) => createOrder(data, actions)}
-      onApprove={(data, actions) => onApprove(data, actions)}
+      createOrder={(
+        data: any,
+        actions: {
+          order: {
+            create: (arg0: { purchase_units: { amount: { value: any } }[] }) => any
+          }
+        }
+      ) => createOrder(data, actions)}
+      onApprove={(data: any, actions: { order: { capture: () => any } }) =>
+        onApprove(data, actions)
+      }
       onCancel={onCancel}
-      onError={err => onError(err)}
+      onError={(err: any) => onError(err)}
     />
   )
 }

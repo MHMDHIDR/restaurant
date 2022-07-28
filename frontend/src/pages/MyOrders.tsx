@@ -17,21 +17,21 @@ const MyOrders = () => {
   //getting user id from local storage
   const USER_ID =
     'user' in localStorage ? JSON.parse(localStorage.getItem('user') || '{}')._id : null
-  const [userStatus, setUserStatus] = useState('')
+  const [userStatus, setUserStatus] = useState<any>('')
 
   const currentUser = useAxios({ method: 'get', url: `/users/all/1/1/${USER_ID}` })
 
   useEffect(() => {
     if (currentUser?.response !== null) {
-      setUserStatus(currentUser?.response?.response?.userAccountStatus)
+      setUserStatus(currentUser?.response?.response)
     }
   }, [currentUser?.response])
 
   return !USER_ID ? (
     <ModalNotFound />
-  ) : !USER_ID || userStatus === 'block' ? (
+  ) : !USER_ID || userStatus.userAccountStatus === 'block' ? (
     logoutUser(USER_ID)
-  ) : !userStatus ? (
+  ) : !userStatus.userAccountStatus ? (
     <LoadingPage />
   ) : (
     <>

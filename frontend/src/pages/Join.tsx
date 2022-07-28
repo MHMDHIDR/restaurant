@@ -12,7 +12,7 @@ const Login = () => {
   const [userEmail, setEmail] = useState('')
   const [userTel, setTel] = useState('')
   const [userPassword, setPassword] = useState('')
-  const [data, setData] = useState('')
+  const [data, setData] = useState<any>('')
   const [regStatus, setRegStatus] = useState()
   const [loading, setloading] = useState(false)
   const [errMsg, setErrMsg] = useState('')

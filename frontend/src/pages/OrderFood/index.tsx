@@ -53,7 +53,7 @@ const OrderFood = () => {
   const [personNotes, setPersonNotes] = useState(
     formDataFromLocalStorage.personNotes || ''
   )
-  const [orderFoodStatus, setOrderFoodStatus] = useState('')
+  const [orderFoodStatus, setOrderFoodStatus] = useState(0)
   const [responseMsg, setResponseMsg] = useState('')
   const [showLoginRegisterModal, setShowLoginRegisterModal] = useState(false)
   const [showPaymentModal, setShowPaymentModal] = useState(false)
@@ -81,7 +81,7 @@ const OrderFood = () => {
     )
   }, [personName, personPhone, personAddress, personNotes])
 
-  const handleCollectOrder = async e => {
+  const handleCollectOrder = async (e: { preventDefault: () => void }) => {
     e.preventDefault()
 
     if (
@@ -166,7 +166,7 @@ const OrderFood = () => {
                 PaymentButton ? (
                   <PaymentButton
                     value={grandPriceRef?.current?.textContent || grandPrice}
-                    onSuccess={paymentData => {
+                    onSuccess={(paymentData: any) => {
                       setShowPaymentModal(false)
                       handleSaveOrder(paymentData)
                     }}
@@ -350,7 +350,6 @@ const OrderFood = () => {
 
                 <div className='flex flex-col items-center justify-evenly'>
                   <button
-                    to='/checkout'
                     type='submit'
                     className={`w-full py-2 text-white text-lg uppercase bg-green-800 hover:bg-green-700 rounded-lg scale-100 transition-all flex justify-center items-center gap-3`}
                     onClick={handleCollectOrder}

@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect } from 'react'
 export const ToppingsContext = createContext({
-  handleToppingChecked: (toppingId: string, toppingPrice: string) => {},
+  handleToppingChecked: (toppingId: string, toppingPrice: number) => {},
   checkedToppings: [],
   setCheckedToppings: (
     checkedToppings: { toppingId: string; toppingPrice: string }[]
@@ -18,14 +18,14 @@ const ToppingsContextProvider = ({ children }: { children: React.ReactNode }) =>
     localStorage.setItem('restCheckedToppings', JSON.stringify(checkedToppings))
   }, [checkedToppings])
 
-  const handleToppingChecked = (toppingId: string, toppingPrice: string) => {
+  const handleToppingChecked = (toppingId: string, toppingPrice: number) => {
     const topping = checkedToppings.find(
       (topping: { toppingId: string }) => topping.toppingId === toppingId
     )
     !topping ? addTopping(toppingId, toppingPrice) : removeTopping(toppingId)
   }
 
-  const addTopping = (toppingId: string, toppingPrice: string) => {
+  const addTopping = (toppingId: string, toppingPrice: number) => {
     setCheckedToppings([
       ...checkedToppings,
       {
