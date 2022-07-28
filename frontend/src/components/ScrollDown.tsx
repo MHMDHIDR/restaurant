@@ -11,7 +11,7 @@ const ScrollDown = () => {
       name='scrolldown'
       area-label={`Click to Scroll to down to section`}
       onClick={() => {
-        const nextSibling = document.getElementById('hero') as HTMLElement | null
+        const { nextSibling }: any = document.getElementById('hero') as HTMLElement | null
 
         if (nextSibling) {
           window.scrollTo({
