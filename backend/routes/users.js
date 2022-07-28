@@ -1,16 +1,17 @@
-const express = require('express')
-const paginatedResults = require(`${__dirname}/../middleware/paginatedResults.js`)
-const UserModel = require(`${__dirname}/../models/user-model.js`)
-const { protect } = require(`${__dirname}/../middleware/authMiddleware.js`)
-const router = express.Router()
-const {
+import express from 'express'
+import paginatedResults from '../middleware/paginatedResults.js'
+import UserModel from '../models/user-model.js'
+import protect from '../middleware/authMiddleware.js'
+import {
   joinUser,
   loginUser,
   getUser,
   getAllUsers,
   deleteUser,
   updateUser
-} = require(`${__dirname}/../controllers/users.js`)
+} from '../controllers/users.js'
+
+const router = express.Router()
 
 router.post('/join', joinUser)
 router.post('/login', loginUser)
@@ -19,4 +20,4 @@ router.get('/', protect, getUser)
 router.delete('/:userId', deleteUser)
 router.patch('/:userId', updateUser)
 
-module.exports = router
+export default router

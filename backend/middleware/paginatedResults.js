@@ -55,4 +55,4 @@ const paginatedResults = model => {
   }
 }
 
-module.exports = paginatedResults
+export default paginatedResults

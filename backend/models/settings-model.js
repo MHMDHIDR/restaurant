@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+import mongoose from 'mongoose'
 const connection = mongoose.createConnection(process.env.CONNECTION_URL)
 
 const reqString = {
@@ -26,4 +26,4 @@ const SettingsSchema = new mongoose.Schema(
 
 const SettingsModel = connection.model('restaurant', SettingsSchema)
 
-module.exports = SettingsModel
+export default SettingsModel

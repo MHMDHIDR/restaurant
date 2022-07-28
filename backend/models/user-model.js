@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+import mongoose from 'mongoose'
 const connection = mongoose.createConnection(process.env.CONNECTION_URL)
 
 const reqString = {
@@ -33,4 +33,4 @@ const UserSchema = new mongoose.Schema(
 
 const UserModel = connection.model('restaurant', UserSchema)
 
-module.exports = UserModel
+export default UserModel

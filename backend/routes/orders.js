@@ -1,17 +1,13 @@
-const express = require('express')
-const paginatedResults = require(`${__dirname}/../middleware/paginatedResults.js`)
-const OrdersModel = require(`${__dirname}/../models/orders-model.js`)
+import express from 'express'
+import paginatedResults from '../middleware/paginatedResults.js'
+import OrdersModel from '../models/orders-model.js'
+import { addOrder, getOrders, updateOrder, deleteOrder } from '../controllers/orders.js'
+
 const router = express.Router()
-const {
-  addOrder,
-  getOrders,
-  updateOrder,
-  deleteOrder
-} = require(`${__dirname}/../controllers/orders.js`)
 
 router.get('/:page/:limit/:itemId?/:orderDate?', paginatedResults(OrdersModel), getOrders)
 router.post('/', addOrder)
 router.patch('/:orderId', updateOrder)
 router.delete('/:orderId', deleteOrder)
 
-module.exports = router
+export default router

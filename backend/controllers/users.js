@@ -1,10 +1,11 @@
-const jwt = require('jsonwebtoken')
-const bcrypt = require('bcryptjs')
-const asyncHandler = require('express-async-handler')
-const mongoose = require('mongoose')
-const UserModel = require(`${__dirname}/../models/user-model.js`)
+import jwt from 'jsonwebtoken'
+// import { compare, hash, genSalt } from 'bcryptjs'
+import bcrypt from 'bcryptjs'
+import asyncHandler from 'express-async-handler'
+import Types from 'mongoose'
+import UserModel from '../models/user-model.js'
 
-const joinUser = asyncHandler(async (req, res) => {
+export const joinUser = asyncHandler(async (req, res) => {
   const { userFullName, userEmail, userTel, userPassword } = req.body
 
   if (userFullName === '' || userEmail === '' || userTel === '' || userPassword === '') {
@@ -47,11 +48,11 @@ const joinUser = asyncHandler(async (req, res) => {
   }
 })
 
-const loginUser = asyncHandler(async (req, res) => {
-  const { userEmailOrTel, userPassword } = req.body
+export const loginUser = asyncHandler(async (req, res) => {
+  const { userEmail, userTel, userPassword } = req.body
   // Check for user by using his/her email or telephone number
   const user = await UserModel.findOne({
-    $or: [{ userEmail: userEmailOrTel }, { userTel: userEmailOrTel }]
+    $or: [{ userEmail }, { userTel }]
   })
 
   if (user && user.userAccountAction === 'block') {
@@ -77,7 +78,7 @@ const loginUser = asyncHandler(async (req, res) => {
   }
 })
 
-const getUser = asyncHandler(async (req, res) => {
+export const getUser = asyncHandler(async (req, res) => {
   const { _id, userEmail } = await UserModel.findById(req.user.id)
 
   res.status(200).json({
@@ -86,11 +87,11 @@ const getUser = asyncHandler(async (req, res) => {
   })
 })
 
-const getAllUsers = asyncHandler(async (req, res) => {
+export const getAllUsers = asyncHandler(async (req, res) => {
   res.json(res.paginatedResults)
 })
 
-const deleteUser = asyncHandler(async (req, res) => {
+export const deleteUser = asyncHandler(async (req, res) => {
   const { userId } = req.params
 
   try {
@@ -108,12 +109,12 @@ const deleteUser = asyncHandler(async (req, res) => {
   }
 })
 
-const updateUser = asyncHandler(async (req, res) => {
+export const updateUser = asyncHandler(async (req, res) => {
   const { userId } = req.params
   const { userAccountAction } = req.body
 
   //if not valid id then return error message
-  if (!mongoose.Types.ObjectId.isValid(userId)) {
+  if (!Types.ObjectId.isValid(userId)) {
     return res.json({ message: `Sorry, No User with this ID => ${userId}` })
   }
 
@@ -137,17 +138,4 @@ const updateUser = asyncHandler(async (req, res) => {
   }
 })
 
-const generateToken = id => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: '30d'
-  })
-}
-
-module.exports = {
-  joinUser,
-  loginUser,
-  getAllUsers,
-  getUser,
-  deleteUser,
-  updateUser
-}
+const generateToken = id => jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '30d' })

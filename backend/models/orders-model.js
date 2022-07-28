@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+import mongoose from 'mongoose'
 const connection = mongoose.createConnection(process.env.CONNECTION_URL)
 
 const reqNumber = {
@@ -58,4 +58,4 @@ const OrderSchema = new mongoose.Schema(
 
 const FoodModel = connection.model('restaurant', OrderSchema)
 
-module.exports = FoodModel
+export default FoodModel

@@ -1,10 +1,17 @@
-//require librairies/frameworks
-require('dotenv').config()
-const express = require('express')
+//import librairies/frameworks
+import 'dotenv/config'
+import express, { json, urlencoded } from 'express'
+import connectDB from './config/db.js'
+import cors from 'cors'
+import fileUpload from 'express-fileupload'
+
+//Routes
+import foods from './routes/foods.js'
+import settings from './routes/settings.js'
+import orders from './routes/orders.js'
+import users from './routes/users.js'
+
 const app = express()
-const connectDB = require('./config/db')
-const cors = require('cors')
-const fileUpload = require('express-fileupload')
 
 //PORT
 const PORT = process.env.PORT || 4000
@@ -13,8 +20,8 @@ const PORT = process.env.PORT || 4000
 app.disable('x-powered-by')
 
 //APP Use
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
+app.use(json())
+app.use(urlencoded({ extended: true }))
 app.use(fileUpload())
 app.use(
   cors({
@@ -27,20 +34,18 @@ app.use(
 )
 
 //Main GET Route
-app.get('/', (req, res) =>
+app.get('/', (_req, res) =>
   res.send(
     `<body style='overflow:hidden;word-spacing:2rem;height:100vh;display:grid;place-items:center;font-size:3em;font-weight:bold;color:white;background-color:#222'>WELCOME TO RESTAURANT API</body>`
   )
 )
 
 // Use Routes
-app.use('/settings', require(`${__dirname}/routes/settings.js`))
-app.use('/foods', require(`${__dirname}/routes/foods.js`))
-app.use('/orders', require(`${__dirname}/routes/orders.js`))
-app.use('/users', require(`${__dirname}/routes/users.js`))
+app.use('/foods', foods)
+app.use('/settings', settings)
+app.use('/orders', orders)
+app.use('/users', users)
 
 connectDB()
 
-app.listen(PORT, () =>
-  console.log(`CONNECTED TO MONGO AND SERVER STARTED ON PORT => ${PORT}`)
-)
+app.listen(PORT, () => console.log(`CONNECTED MONGO, SERVER PORT: ${PORT}`))

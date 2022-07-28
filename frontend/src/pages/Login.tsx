@@ -77,8 +77,9 @@ const Login = () => {
 
     try {
       const loginUser = await Axios.post(`${BASE_URL}/users/login`, {
-        userEmailOrTel,
-        userPassword
+        userPassword,
+        userEmail: userEmailOrTel.toLowerCase(),
+        userTel: userEmailOrTel.toLowerCase()
       })
       //getting response from backend
       const { data } = loginUser

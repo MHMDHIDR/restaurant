@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+import mongoose from 'mongoose'
 const connection = mongoose.createConnection(process.env.CONNECTION_URL)
 
 const reqString = {
@@ -64,4 +64,4 @@ const FoodSchema = new mongoose.Schema(
 
 const WorkModel = connection.model('restaurant', FoodSchema)
 
-module.exports = WorkModel
+export default WorkModel

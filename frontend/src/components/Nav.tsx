@@ -39,13 +39,7 @@ const Nav = () => {
 
   return (
     <div className='fixed inset-0 bottom-auto z-[9999] w-full transition-transform duration-300 nav ltr'>
-      <nav
-        className='flex flex-wrap items-center justify-between px-5 xl:px-10 lg:px-20 py-1
-          bg-gray-300 bg-opacity-90 dark:bg-neutral-900 dark:bg-opacity-90
-          shadow-xl backdrop-blur-sm saturate-[180%] transition-all
-          standalone:pt-10
-        '
-      >
+      <nav className='flex flex-wrap items-center justify-between px-5 xl:px-10 lg:px-20 py-1 bg-gray-300 bg-opacity-90 dark:bg-neutral-900 dark:bg-opacity-90 shadow-xl backdrop-blur-sm saturate-[180%] transition-all standalone:pt-10'>
         <Link aria-label='App Logo' title='App Logo' to='/'>
           <Logo width='10 xl:w-14' height='10 xl:h-14' />
         </Link>

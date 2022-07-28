@@ -1,14 +1,15 @@
-const FoodsModel = require(`${__dirname}/../models/food-model.js`)
-const { v4: uuidv4 } = require('uuid')
-const asyncHandler = require('express-async-handler')
-const sharp = require('sharp')
-const AWS = require('aws-sdk')
+import FoodsModel from '../models/food-model.js'
+import { v4 as uuidv4 } from 'uuid'
+import asyncHandler from 'express-async-handler'
+import sharp from 'sharp'
+import AWS from 'aws-sdk'
+
 const s3 = new AWS.S3({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
 })
 
-const addFood = asyncHandler(async (req, res) => {
+export const addFood = asyncHandler(async (req, res) => {
   const { foodName, foodPrice, category, foodDesc, foodToppings, foodTags } = req.body
   const toppings = foodToppings && JSON.parse(foodToppings)
   const tags = JSON.parse(foodTags)
@@ -56,11 +57,11 @@ const addFood = asyncHandler(async (req, res) => {
   })
 })
 
-const getFood = asyncHandler(async (req, res) => {
+export const getFood = asyncHandler(async (req, res) => {
   res.json(res.paginatedResults)
 })
 
-const deleteFood = asyncHandler((req, res) => {
+export const deleteFood = asyncHandler((req, res) => {
   const { foodId, imgName } = req.params
 
   if (imgName) {
@@ -139,7 +140,7 @@ const deleteFood = asyncHandler((req, res) => {
   }
 })
 
-const updateFood = asyncHandler(async (req, res) => {
+export const updateFood = asyncHandler(async (req, res) => {
   const { foodName, foodPrice, foodDesc, foodToppings, foodTags, category } = req.body
   const prevFoodImgPathsAndNames = JSON.parse(req.body.prevFoodImgPathsAndNames)
 
@@ -273,4 +274,6 @@ const updateFood = asyncHandler(async (req, res) => {
   }
 })
 
-module.exports = { addFood, getFood, deleteFood, updateFood }
+{
+  addFood, getFood, deleteFood, updateFood
+}

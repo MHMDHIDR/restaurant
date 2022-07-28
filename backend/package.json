@@ -5,6 +5,7 @@
     "node": "16.15.0",
     "npm": "8.1.0"
   },
+  "type": "module",
   "description": "Restaurant to order and find delicious food",
   "main": "index.js",
   "scripts": {

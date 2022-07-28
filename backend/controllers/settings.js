@@ -1,7 +1,7 @@
-const mongoose = require('mongoose')
-const SettingsModel = require(`${__dirname}/../models/settings-model.js`)
+import mongoose from 'mongoose'
+import SettingsModel from '../models/settings-model.js'
 
-const updateSettings = async (req, res) => {
+export const updateSettings = async (req, res) => {
   const _id = req.params.id
   const {
     appDesc,
@@ -38,7 +38,7 @@ const updateSettings = async (req, res) => {
   }
 }
 
-const getSettings = async (req, res) => {
+export const getSettings = async (req, res) => {
   try {
     const settings = await SettingsModel.findOne({ _id: '6210bdda057555eb91c05efb' })
     res.header('Access-Control-Allow-Origin', '*')
@@ -47,5 +47,3 @@ const getSettings = async (req, res) => {
     res.status(404).json({ message: error.message })
   }
 }
-
-module.exports = { updateSettings, getSettings }

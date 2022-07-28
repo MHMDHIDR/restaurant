@@ -1,13 +1,13 @@
-const mongoose = require('mongoose')
-const OrdersModel = require(`${__dirname}/../models/orders-model.js`)
-const asyncHandler = require('express-async-handler')
-const { v4: uuidv4 } = require('uuid')
+import mongoose from 'mongoose'
+import asyncHandler from 'express-async-handler'
+import OrdersModel from '../models/orders-model.js'
+import { v4 as uuidv4 } from 'uuid'
 
-const getOrders = asyncHandler(async (req, res) => {
+export const getOrders = asyncHandler(async (req, res) => {
   res.json(res.paginatedResults)
 })
 
-const addOrder = asyncHandler(async (req, res) => {
+export const addOrder = asyncHandler(async (req, res) => {
   const {
     userId,
     userEmail,
@@ -56,7 +56,7 @@ const addOrder = asyncHandler(async (req, res) => {
 })
 
 //this route for accepting or rejcting an order from dashboard
-const updateOrder = asyncHandler(async (req, res) => {
+export const updateOrder = asyncHandler(async (req, res) => {
   const _id = req.params.orderId
   const { orderStatus } = req.body
 
@@ -84,7 +84,7 @@ const updateOrder = asyncHandler(async (req, res) => {
   }
 })
 
-const deleteOrder = asyncHandler(async (req, res) => {
+export const deleteOrder = asyncHandler(async (req, res) => {
   const { orderId } = req.params
 
   try {
@@ -101,5 +101,3 @@ const deleteOrder = asyncHandler(async (req, res) => {
     })
   }
 })
-
-module.exports = { addOrder, getOrders, updateOrder, deleteOrder }

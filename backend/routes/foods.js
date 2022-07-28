@@ -1,13 +1,9 @@
-const express = require('express')
-const paginatedResults = require(`${__dirname}/../middleware/paginatedResults.js`)
-const FoodsModel = require(`${__dirname}/../models/food-model.js`)
+import express from 'express'
+import FoodsModel from '../models/food-model.js'
+import paginatedResults from '../middleware/paginatedResults.js'
+import { addFood, getFood, deleteFood, updateFood } from '../controllers/foods.js'
+
 const router = express.Router()
-const {
-  addFood,
-  getFood,
-  deleteFood,
-  updateFood
-} = require(`${__dirname}/../controllers/foods.js`)
 
 // ? means optional parameter (must be here for other requests to work)
 router.get('/:page/:limit/:itemId?/:createdAt?', paginatedResults(FoodsModel), getFood)
@@ -15,4 +11,4 @@ router.post('/', addFood)
 router.delete('/:foodId/:imgName?', deleteFood)
 router.patch('/:foodId', updateFood)
 
-module.exports = router
+export default router
