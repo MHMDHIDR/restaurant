@@ -8,8 +8,6 @@ const FileUpload = ({ data }) => {
     useContext<FileUploadProps>(FileUploadContext)
   let { pathname } = useLocation()
 
-  console.log(fileURLs)
-
   return (
     <>
       <div

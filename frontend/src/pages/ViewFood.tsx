@@ -24,7 +24,7 @@ const ViewFood = () => {
 
   useDocumentTitle('View Foods')
 
-  let { pageNum, foodId } = useParams()
+  let { pageNum, foodId }: any = useParams()
 
   const loaction =
     useLocation().pathname.split('/')[useLocation().pathname.split('/').length - 2]
@@ -44,7 +44,7 @@ const ViewFood = () => {
     length: number
   }
 
-  const [data, setData] = useState<{ response: dataProps }>()
+  const [data, setData] = useState<any>()
 
   //if there's food id then fetch with food id, otherwise fetch everything
   const { error, ...response } = useAxios({

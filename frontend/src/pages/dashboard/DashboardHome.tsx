@@ -21,10 +21,10 @@ const DashboardHome = () => {
   const USER_ID =
     'user' in localStorage ? JSON.parse(localStorage.getItem('user'))._id : null
 
-  const [userStatus, setUserStatus] = useState('')
-  const [userType, setUserType] = useState('')
-  const [menuCount, setMenuCount] = useState()
-  const [ordersCount, setOrdersCount] = useState()
+  const [userStatus, setUserStatus] = useState<any>('')
+  const [userType, setUserType] = useState<any>('')
+  const [menuCount, setMenuCount] = useState<any>()
+  const [ordersCount, setOrdersCount] = useState<any>()
 
   //if there's food id then fetch with food id, otherwise fetch everything
   const currentUser = useAxios({ method: 'get', url: `/users/all/1/1/${USER_ID}` })
@@ -42,7 +42,7 @@ const DashboardHome = () => {
 
   document.body.classList.add('dashboard')
 
-  useEventListener('keydown', e => e.key === 'Escape' && menuToggler())
+  useEventListener('keydown', (e: any) => e.key === 'Escape' && menuToggler())
 
   //check if userStatus is active and the userType is admin
   return !USER_ID ? (

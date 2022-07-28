@@ -8,8 +8,12 @@ const useAxios = ({ url, method, body = null, headers = null }) => {
   const [response, setResponse] = useState<{
     response: Array<any> | null
     itemsCount: number
+    CategoryList: string[]
   } | null>(null)
-  const [error, setError] = useState<{ error: any } | null>(null)
+  const [error, setError] = useState<{
+    error: any
+    response: any
+  } | null>(null)
   const [loading, setloading] = useState(true)
 
   useEffect((): { () } => {

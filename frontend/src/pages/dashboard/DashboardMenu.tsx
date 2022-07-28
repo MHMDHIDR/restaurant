@@ -19,7 +19,7 @@ import { createLocaleDateString } from '../../utils/convertDate'
 const DashboardMenu = () => {
   useDocumentTitle('Menu')
 
-  let { pageNum } = useParams()
+  let { pageNum }: any = useParams()
 
   const pageNumber = !pageNum || pageNum < 1 || isNaN(pageNum) ? 1 : parseInt(pageNum)
   const itemsPerPage = 10
@@ -27,7 +27,7 @@ const DashboardMenu = () => {
   const [delFoodId, setDelFoodId] = useState()
   const [delFoodName, setDelFoodName] = useState('')
   const [deleteFoodStatus, setDeleteFoodStatus] = useState()
-  const [data, setData] = useState('')
+  const [data, setData] = useState<any>('')
 
   const modalLoading = document.querySelector('#modal')
   const BASE_URL =
@@ -46,7 +46,7 @@ const DashboardMenu = () => {
     }
   }, [response.response])
 
-  useEventListener('click', e => {
+  useEventListener('click', (e: any) => {
     if (e.target.id === 'deleteFood') {
       setDelFoodId(e.target.dataset.id)
       setDelFoodName(removeSlug(e.target.dataset.name))
@@ -60,7 +60,10 @@ const DashboardMenu = () => {
     }
   })
 
-  const handleDeleteFood = async (foodId, foodImgs) => {
+  const handleDeleteFood = async (
+    foodId: string,
+    foodImgs?: { foodImgDisplayPath: string; foodImgDisplayName: string }[]
+  ) => {
     const prevFoodImgPathsAndNames = [
       ...foodImgs.map(({ foodImgDisplayPath, foodImgDisplayName }) => {
         return {
@@ -195,7 +198,7 @@ const DashboardMenu = () => {
                   ))}
 
                   <tr>
-                    <td colSpan='100%'>
+                    <td colSpan={100}>
                       <Pagination
                         routeName={`dashboard/menu`}
                         pageNum={pageNumber}

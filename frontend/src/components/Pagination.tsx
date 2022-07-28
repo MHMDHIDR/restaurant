@@ -11,6 +11,7 @@ interface PaginationProps {
   foodId?: string
   itemsPerPage?: number
   category?: string
+  loaction?: string
 }
 
 const Pagination = ({

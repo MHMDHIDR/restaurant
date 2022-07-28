@@ -23,9 +23,9 @@ const About = () => {
   const [settingsUpdatedMsg, setSettingsUpdatedMsg] = useState()
 
   //TagLine Form States
-  const [data, setData] = useState()
+  const [data, setData] = useState<any>()
   const [categoryList, setCategoryList] = useState([])
-  const [loading, setLoading] = useState()
+  const [loading, setLoading] = useState(false)
 
   //fetching description data
   const { response } = useAxios({

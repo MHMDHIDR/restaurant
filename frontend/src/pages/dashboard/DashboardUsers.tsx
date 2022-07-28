@@ -17,7 +17,7 @@ import Pagination from '../../components/Pagination'
 const DashboardUsers = () => {
   useDocumentTitle('Users')
 
-  let { pageNum } = useParams()
+  let { pageNum }: any = useParams()
 
   const pageNumber = !pageNum || pageNum < 1 || isNaN(pageNum) ? 1 : parseInt(pageNum)
   const itemsPerPage = 10
@@ -27,7 +27,7 @@ const DashboardUsers = () => {
   const [userName, setUserName] = useState('')
   const [deleteUserStatus, setDeleteUserStatus] = useState()
   const [serUpdated, setUserUpdated] = useState()
-  const [data, setData] = useState('')
+  const [data, setData] = useState<any>('')
 
   const modalLoading = document.querySelector('#modal')
   const BASE_URL =
@@ -47,7 +47,7 @@ const DashboardUsers = () => {
     }
   }, [response.response])
 
-  useEventListener('click', e => {
+  useEventListener('click', (e: any) => {
     if (
       e.target.id === 'deleteUser' ||
       e.target.id === 'blockUser' ||
@@ -317,7 +317,7 @@ const DashboardUsers = () => {
                   ))}
 
                   <tr>
-                    <td colSpan='100%'>
+                    <td colSpan={100}>
                       <Pagination
                         routeName={`dashboard/users`}
                         pageNum={pageNumber}

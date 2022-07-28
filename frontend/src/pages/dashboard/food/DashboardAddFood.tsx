@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useContext } from 'react'
+import { useState, useEffect, useRef, useContext, ChangeEvent } from 'react'
 import { Link } from 'react-router-dom'
 import Axios from 'axios'
 
@@ -28,7 +28,7 @@ const AddFood = () => {
   const [addFoodStatus, setAddFoodStatus] = useState()
   const [addFoodMessage, setAddFoodMessage] = useState()
   const [categoryList, setCategoryList] = useState([])
-  const [toppings, setToppings] = useState([{}])
+  const [toppings, setToppings] = useState([])
 
   //Contexts
   const { tags } = useContext(TagsContext)
@@ -59,7 +59,7 @@ const AddFood = () => {
     }
   }, [response])
 
-  const handleAddFood = async e => {
+  const handleAddFood = async (e: { key?: string; preventDefault: () => void }) => {
     if (e.key === 'Enter') {
       //don't submit the form if Enter is pressed
       e.preventDefault()
@@ -105,7 +105,7 @@ const AddFood = () => {
     }
   }
 
-  const handleInputChange = (e, index) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>, index: number) => {
     const { name, value } = e.target
     const newToppings = [...toppings]
     newToppings[index][name] = value
@@ -152,7 +152,7 @@ const AddFood = () => {
                 method='POST'
                 className='form'
                 encType='multipart/form-data'
-                onSubmit={handleAddFood}
+                onSubmit={e => handleAddFood(e)}
               >
                 <div className='flex flex-col items-center justify-center gap-4 mb-8 sm:justify-between'>
                   <FileUpload
@@ -188,7 +188,7 @@ const AddFood = () => {
                         foodNameErr.current.textContent =
                           'إسم الوجبة أو المشروب صغير ولا يوصف'
                       } else if (target.length > 30) {
-                        foodNameErr.textContent =
+                        foodNameErr.current.textContent =
                           'الاسم لا يمكن أن يزيد عن 30 حرفاً، يمكنك إضافة وصف طويل إذا كنت تحتاج لذلك'
                       } else {
                         foodNameErr.current.textContent = ''
@@ -256,8 +256,8 @@ const AddFood = () => {
                   <textarea
                     name='foodDescription'
                     id='foodDescription'
-                    minLength='10'
-                    maxLength='300'
+                    minLength={10}
+                    maxLength={300}
                     className='form__input'
                     required
                     onChange={e => setFoodDesc(e.target.value.trim())}
