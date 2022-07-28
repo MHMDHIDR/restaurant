@@ -1,6 +1,5 @@
 {
   "start_url": "/",
-  "scope": "/",
   "orientation": "portrait",
   "background_color": "#b73306",
   "theme_color": "#b73306",
@@ -34,5 +33,6 @@
       "type": "image/png",
       "purpose": "maskable"
     }
-  ]
+  ],
+  "scope": "/"
 }
