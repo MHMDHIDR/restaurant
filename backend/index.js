@@ -19,7 +19,7 @@ app.use(fileUpload())
 app.use(
   cors({
     origin: [
-      `https://mhmdhidr-restaurant.netlify.app`,
+      `https://mhmdhidr-restaurant.netlify.app/`,
       `http://dev.com:3000`,
       `http://localhost:3000`
     ]
