@@ -16,10 +16,7 @@ interface cardProps {
   cHeading: any
   cDesc: string
   cTags: string[]
-  cToppings: {
-    toppingName: string
-    toppingPrice: number
-  }[]
+  cToppings: Array<any>
   cCtaLabel: any
   cCtaLink?: string
   cImg?: any

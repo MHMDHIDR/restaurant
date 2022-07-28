@@ -170,11 +170,11 @@ const OrderFood = () => {
                       setShowPaymentModal(false)
                       handleSaveOrder(paymentData)
                     }}
-                    onError={() => {
-                      setShowPaymentModal(false)
-                      setOrderFoodStatus(0)
-                      setResponseMsg('حدث خطأ أثناء الدفع')
-                    }}
+                    // onError={() => {
+                    //   setShowPaymentModal(false)
+                    //   setOrderFoodStatus(0)
+                    //   setResponseMsg('حدث خطأ أثناء الدفع')
+                    // }}
                   />
                 ) : (
                   <LoadingSpinner />

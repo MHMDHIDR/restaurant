@@ -1,5 +1,5 @@
 const menuToggler = (onlyHide = true) => {
-  const togglerCheckbox = document.querySelector('#menuToggler')
+  const togglerCheckbox = document.querySelector('#menuToggler') as HTMLInputElement
 
   if (onlyHide) {
     togglerCheckbox.checked = false

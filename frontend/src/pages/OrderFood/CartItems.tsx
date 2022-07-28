@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { JSXElementConstructor, useContext } from 'react'
 import { CartContext } from '../../Contexts/CartContext'
 import { ToppingsContext } from '../../Contexts/ToppingsContext'
 
@@ -6,7 +6,7 @@ import { removeSlug } from '../../utils/slug'
 
 import Divider from '../../components/Divider'
 
-const CartItems = () => {
+const CartItems: any = () => {
   const { items, setItems, removeFromCart, setGrandPrice } = useContext(CartContext)
   const { handleToppingChecked, checkedToppings } = useContext(ToppingsContext)
   const MAX_QUANTITY = 100
