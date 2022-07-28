@@ -11,13 +11,13 @@ const Contact = () => {
   const [msg, setMsg] = useState('')
 
   //Msg returned from server
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const [sendStatus, setSendStatus] = useState(0)
   const [sendStatusMsg, setSendStatusMsg] = useState('')
 
   const EMAIL_FORM_URL = 'https://formsubmit.co/ajax/mr.hamood277@gmail.com'
 
-  const sendContactForm = async e => {
+  const sendContactForm = async (e: any) => {
     e.preventDefault()
 
     if (email === '' || msg === '' || theName === '') {
