@@ -38,9 +38,11 @@ const Header = () => {
             <img
               src='/assets/img/icons/logo.svg'
               alt='logo'
-              className='w-auto h-48 mb-20'
+              className='mb-12 w-32 md:w-60 h-32 md:h-60'
+              width={150}
+              height={150}
             />
-            <h1 className='max-w-xs px-2 mb-24 text-lg font-bold leading-loose text-center text-white select-none sm:max-w-fit xl:text-3xl sm:text-xl md:text-4xl rtl'>
+            <h1 className='max-w-xs px-2 text-lg font-bold leading-loose text-center text-white select-none sm:max-w-fit xl:text-3xl sm:text-xl md:text-4xl rtl'>
               <span className='inline-flex h-20 pt-2 overflow-x-hidden animate-type sm:whitespace-nowrap'>
                 {data ? data.appTagline : 'نحن الأفضل، كنا ولازلنا وسنبقى كذلك...للأبد'}
               </span>

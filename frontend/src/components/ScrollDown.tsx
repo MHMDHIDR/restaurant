@@ -4,12 +4,14 @@ const ScrollDown = () => {
   const navigate = useNavigate()
 
   return (
-    <div
+    <button
       className='cursor-pointer flex flex-col items-center animate-bounce absolute bottom-[3vh] sm:bottom-[4vh] md:bottom-[5.5vh] lg:bottom-[7.5vh] xl:bottom-[10vh] z-10'
       role='button'
+      type='button'
+      name='scrolldown'
       area-label={`Click to Scroll to down to section`}
       onClick={() => {
-        const { nextSibling }: any = document.getElementById('hero') as HTMLElement | null
+        const nextSibling = document.getElementById('hero') as HTMLElement | null
 
         if (nextSibling) {
           window.scrollTo({
@@ -28,7 +30,7 @@ const ScrollDown = () => {
         <span className='block w-3 h-3 -mb-2 rotate-45 border-b-2 border-r-2 border-solid sm:w-4 sm:h-4 border-r-gray-300 border-b-gray-300'></span>
         <span className='block w-3 h-3 rotate-45 border-b-2 border-r-2 border-solid sm:w-4 sm:h-4 border-r-gray-300 border-b-gray-300'></span>
       </div>
-    </div>
+    </button>
   )
 }
 
