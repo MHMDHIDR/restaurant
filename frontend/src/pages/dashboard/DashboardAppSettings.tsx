@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef } from 'react'
-import useAxios from '../../hooks/useAxios'
+import { useState, useEffect, useRef, ChangeEvent } from 'react'
+import useAxios, { responseTypes } from '../../hooks/useAxios'
 import Axios from 'axios'
 
 import useDocumentTitle from '../../hooks/useDocumentTitle'
@@ -12,6 +12,7 @@ const About = () => {
   useDocumentTitle('App Settings')
 
   //Description Form States
+  const [appName, setAppName] = useState('')
   const [appDesc, setAppDesc] = useState('')
   const [appTagline, setAppTagline] = useState('')
   const [whatsAppNumber, setWhatsAppNumber] = useState('')
@@ -23,7 +24,7 @@ const About = () => {
   const [settingsUpdatedMsg, setSettingsUpdatedMsg] = useState()
 
   //TagLine Form States
-  const [data, setData] = useState<any>()
+  const [data, setData] = useState<responseTypes>()
   const [categoryList, setCategoryList] = useState([])
   const [loading, setLoading] = useState(false)
 
@@ -47,6 +48,7 @@ const About = () => {
   const TAGLINE_MAX_LENGTH = 100
 
   //Form errors messages
+  const appNameErr = useRef<HTMLSpanElement>(null)
   const descErr = useRef<HTMLSpanElement>(null)
   const tagLineErr = useRef<HTMLSpanElement>(null)
   const whatsAppNumberErr = useRef<HTMLSpanElement>(null)
@@ -57,7 +59,11 @@ const About = () => {
   const modalLoading = document.querySelector('#modal')
 
   // handle input change
-  const handleInputChange = (e, index, otherValue) => {
+  const handleInputChange = (
+    e: ChangeEvent<HTMLInputElement>,
+    index: number,
+    otherValue: any
+  ) => {
     const { name, value } = e.target
     const list = [...categoryList]
     list[index] = name === 'categoryValue' ? [otherValue, value] : [value, otherValue]
@@ -70,7 +76,7 @@ const About = () => {
     setCategoryList([...categoryList, ['', '']])
   }
 
-  const handleRemoveClick = index => {
+  const handleRemoveClick = (index: number) => {
     const list = [...categoryList]
     list.splice(index, 1)
     setCategoryList(list)
@@ -81,10 +87,11 @@ const About = () => {
       ? process.env.API_LOCAL_URL
       : process.env.API_URL
 
-  const handleUpdate = async e => {
+  const handleUpdate = async (e: { preventDefault: () => void }) => {
     e.preventDefault()
 
     //initial form values if no value was updated taking it from [0] index
+    const currentAppName = appName || data?.appName
     const currentAppDesc = appDesc || data?.appDesc
     const currentAppTagline = appTagline || data?.appTagline
     const currentWhatsAppNumber = whatsAppNumber || data?.whatsAppNumber
@@ -93,6 +100,7 @@ const About = () => {
     const currentCategoryList = categoryList || data?.appTagline
 
     const formData = new FormData()
+    formData.append('appName', currentAppName)
     formData.append('appDesc', currentAppDesc)
     formData.append('appTagline', currentAppTagline)
     formData.append('whatsAppNumber', currentWhatsAppNumber)
@@ -158,6 +166,36 @@ const About = () => {
 
           {/* Description Form */}
           <form id='descForm' onSubmit={handleUpdate}>
+            <h3 className='mx-0 mt-4 mb-12 text-lg text-center'>اسم الموقع</h3>
+            <label htmlFor='appName' className='form__group'>
+              <input
+                name='appName'
+                id='appName'
+                className='form__input'
+                defaultValue={data && data.appName}
+                minLength={10}
+                maxLength={100}
+                onChange={e => setAppName(e.target.value.trim())}
+                onKeyUp={e => {
+                  const target = e.target.value.trim()
+
+                  if (target.length > 0 && target.length < 10) {
+                    appNameErr.current.textContent = `اسم الموقع قصير جداً ولا يوصف الموقع بشكل كافي، الاســـــم يجب يتكون من ${10} حرف على الأقل`
+                  } else if (target.length > 100) {
+                    appNameErr.current.textContent = `وصف الموقع طويل جداً! لا يمكن أن يزيد عن ${100} حرف`
+                  } else {
+                    appNameErr.current.textContent = ''
+                  }
+                }}
+                required
+              ></input>
+              <span className='form__label'>اكتب اسم الموقع</span>
+              <span
+                className='inline-block md:text-lg text-red-600 dark:text-red-400 font-[600] pt-2 px-1'
+                ref={appNameErr}
+              ></span>
+            </label>
+
             <h3 className='mx-0 mt-4 mb-12 text-lg text-center'>عن الموقع</h3>
             <label htmlFor='aboutDescription' className='form__group'>
               <textarea
@@ -240,10 +278,9 @@ const About = () => {
                     whatsAppNumberErr.current.textContent = ''
                   }
                 }}
-                required
               />
               <span className='pointer-events-none form__label'>
-                رقم الواتساب الخاص بالموقع للتواصل معك عبر الواتساب
+                رقم الواتساب الخاص بالموقع للتواصل معك عبر الواتساب (إختياري)
               </span>
               <span
                 className='inline-block md:text-lg text-red-600 dark:text-red-400 font-[600] pt-2 px-1'
@@ -273,11 +310,10 @@ const About = () => {
                     instagramAccountErr.current.textContent = ''
                   }
                 }}
-                required
               />
               <span className='pointer-events-none form__label'>
                 اكتب رابط حساب الانستقرام الخاص بك، وذلك لفتح صفحة حسابك عند الضغط على
-                ايقونة انستقرام اسفل الموقع
+                ايقونة انستقرام اسفل الموقع (إختياري)
               </span>
               <span
                 className='inline-block md:text-lg text-red-600 dark:text-red-400 font-[600] pt-2 px-1'
@@ -307,11 +343,10 @@ const About = () => {
                     twitterAccountErr.current.textContent = ''
                   }
                 }}
-                required
               />
               <span className='pointer-events-none form__label'>
                 اكتب رابط حساب التويتر الخاص بك، وذلك لفتح صفحة حسابك عند الضغط على ايقونة
-                تويتر اسفل الموقع
+                تويتر اسفل الموقع (إختياري)
               </span>
               <span
                 className='inline-block md:text-lg text-red-600 dark:text-red-400 font-[600] pt-2 px-1'

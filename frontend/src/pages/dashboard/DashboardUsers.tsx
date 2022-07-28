@@ -196,7 +196,7 @@ const DashboardUsers = () => {
             <tbody>
               {(data ?? data !== undefined) && data?.response?.length > 0 ? (
                 <>
-                  {data?.response?.map((item, idx) => (
+                  {data?.response?.map((item: any, idx: number) => (
                     <tr
                       key={item._id}
                       className='transition-colors even:bg-gray-200 odd:bg-gray-300 dark:even:bg-gray-600 dark:odd:bg-gray-700'
@@ -209,7 +209,7 @@ const DashboardUsers = () => {
                         className={`px-1 py-2 font-bold${
                           item.userAccountType === 'admin'
                             ? ' text-orange-600 dark:text-orange-400 font-bold'
-                            : ' text-gray-600 dark:text-gray-500'
+                            : ' text-gray-800 dark:text-gray-300'
                         }`}
                       >
                         <span

@@ -9,14 +9,18 @@ const reqArray = {
   type: Array,
   required: true
 }
+const typeString = {
+  type: String
+}
 
 const SettingsSchema = new mongoose.Schema(
   {
+    appName: reqString,
     appDesc: reqString,
     appTagline: reqString,
-    whatsAppNumber: reqString,
-    instagramAccount: reqString,
-    twitterAccount: reqString,
+    whatsAppNumber: typeString,
+    instagramAccount: typeString,
+    twitterAccount: typeString,
     heroBg: reqArray,
     CategoryList: reqArray
   },

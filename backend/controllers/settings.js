@@ -4,6 +4,7 @@ import SettingsModel from '../models/settings-model.js'
 export const updateSettings = async (req, res) => {
   const _id = req.params.id
   const {
+    appName,
     appDesc,
     appTagline,
     whatsAppNumber,
@@ -21,6 +22,7 @@ export const updateSettings = async (req, res) => {
   //else do this
   try {
     await SettingsModel.findByIdAndUpdate(_id, {
+      appName,
       appDesc,
       appTagline,
       whatsAppNumber,
@@ -29,16 +31,16 @@ export const updateSettings = async (req, res) => {
       CategoryList: categories
     })
 
-    res.json({ message: 'تم تحديث الإعدادات بنجاح', settingUpdated: 1 })
+    res.json({ message: 'تم تحديث الإعدادات بنجاح', settingsUpdated: 1 })
   } catch (error) {
     res.json({
       message: `Sorry! Something went wrong, check the error => 😥: \n ${error}`,
-      settingUpdated: 0
+      settingsUpdated: 0
     })
   }
 }
 
-export const getSettings = async (req, res) => {
+export const getSettings = async (_req, res) => {
   try {
     const settings = await SettingsModel.findOne({ _id: '6210bdda057555eb91c05efb' })
     res.header('Access-Control-Allow-Origin', '*')

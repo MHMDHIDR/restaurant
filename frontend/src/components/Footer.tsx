@@ -92,19 +92,25 @@ const Footer = () => {
         </div>
 
         <div className='flex items-center justify-around gap-6 py-4'>
-          <a
-            rel='noreferrer'
-            href={`https://web.whatsapp.com/send?phone=974${settings?.whatsAppNumber}&text=مرحبا+اسمي:+....،+معك+.....+أرغب+بالتواصل+معك+بخصوص:+....`}
-            target='_blank'
-          >
-            <WhatsApp fill='lime' />
-          </a>
-          <a rel='noreferrer' href={settings?.instagramAccount} target='_blank'>
-            <Instagram fill='hotpink' />
-          </a>
-          <a rel='noreferrer' href={settings?.twitterAccount} target='_blank'>
-            <Twitter fill='cyan' />
-          </a>
+          {settings?.whatsAppNumber && settings?.whatsAppNumber !== '' && (
+            <a
+              rel='noreferrer'
+              href={`https://web.whatsapp.com/send?phone=974${settings?.whatsAppNumber}&text=مرحبا+اسمي:+....،+معك+.....+أرغب+بالتواصل+معك+بخصوص:+....`}
+              target='_blank'
+            >
+              <WhatsApp fill='lime' />
+            </a>
+          )}
+          {settings?.instagramAccount && settings?.instagramAccount !== '' && (
+            <a rel='noreferrer' href={settings?.instagramAccount} target='_blank'>
+              <Instagram fill='hotpink' />
+            </a>
+          )}
+          {settings?.twitterAccount && settings?.twitterAccount !== '' && (
+            <a rel='noreferrer' href={settings?.twitterAccount} target='_blank'>
+              <Twitter fill='cyan' />
+            </a>
+          )}
         </div>
 
         <div className='flex items-center justify-around gap-6 py-4'>

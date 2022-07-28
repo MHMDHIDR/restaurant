@@ -445,7 +445,7 @@ const EditFood = () => {
                   </label>
 
                   <label htmlFor='foodTags' className='form__group'>
-                    <AddTags inputId='foodTags' storedTags={data?.foodTags} />
+                    <AddTags inputId='foodTags' />
                     <span className='form__label'>
                       علامات تصنيفية تساعد في عملية البحث عن الوجبة (Tags) - هذا الحقل
                       اختياري
