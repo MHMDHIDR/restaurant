@@ -5,7 +5,7 @@ import TagIcon from './Icons/TagIcon'
 
 interface AddTagsProps {
   inputId: string
-  storedTags: string[]
+  storedTags?: string[]
 }
 
 const AddTags = ({ inputId, storedTags }: AddTagsProps) => {
