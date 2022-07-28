@@ -140,7 +140,7 @@ const About = () => {
           status={Success}
           msg={settingsUpdatedMsg}
           redirectLink='./'
-          redirectTime='3500'
+          redirectTime={3500}
         />
       ) : settingsUpdated === 0 ? (
         <Modal status={Error} msg='حدث خطأ ما أثناء تحديث الإعدادات!' />

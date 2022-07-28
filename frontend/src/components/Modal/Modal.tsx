@@ -1,9 +1,24 @@
 import ThemeToggler from '../ThemeToggler'
+import { Loading } from '../Icons/Status'
+
+interface ModalProps {
+  msg: string
+  extraComponents?: React.ReactNode
+  status?: React.ReactNode
+  modalHidden?: string
+  classes?: string
+  redirectLink?: string
+  redirectTime?: number
+  btnName?: string
+  btnLink?: string
+  ctaConfirmBtns?: string[]
+  ctaSpecialBtns?: string[]
+}
 
 const Modal = ({
   msg = ``,
   extraComponents,
-  status = 'Loading',
+  status = Loading,
   modalHidden = '',
   classes = msg.length > 200 ? 'text-justify' : 'text-center',
   redirectLink,
@@ -12,9 +27,9 @@ const Modal = ({
   btnLink = '/',
   ctaConfirmBtns = [],
   ctaSpecialBtns = []
-}) => {
+}: ModalProps) => {
   if (redirectLink && redirectTime) {
-    setTimeout(() => window.location.assign(redirectLink), parseInt(redirectTime))
+    setTimeout(() => window.location.assign(redirectLink), redirectTime)
   }
 
   if (!modalHidden.includes('hidden')) {

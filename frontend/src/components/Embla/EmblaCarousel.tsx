@@ -1,7 +1,13 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { DotButton, PrevButton, NextButton } from './EmblaCarouselButtons'
-import useEmblaCarousel from 'embla-carousel-react'
+import useEmblaCarousel, {
+  EmblaCarouselType,
+  EmblaOptionsType,
+  EmblaPluginType,
+  EmblaEventType,
+  UseEmblaCarouselType
+} from 'embla-carousel-react'
 import { Thumb } from './EmblaCarouselThumb'
 import { removeSlug } from '../../utils/slug'
 
@@ -16,13 +22,13 @@ const EmblaCarousel = ({ slides, media, smallView = false }) => {
     containScroll: 'keepSnaps',
     selectedClass: '',
     dragFree: true
-  })
+  } as EmblaOptionsType)
   const scrollPrev = useCallback(() => embla && embla.scrollPrev(), [embla])
   const scrollNext = useCallback(() => embla && embla.scrollNext(), [embla])
   const scrollTo = useCallback(index => embla && embla.scrollTo(index), [embla])
 
   const onThumbClick = useCallback(
-    index => {
+    (index: number) => {
       if (!embla || !emblaThumbs) return
       if (emblaThumbs.clickAllowed()) embla.scrollTo(index)
     },
@@ -63,7 +69,7 @@ const EmblaCarousel = ({ slides, media, smallView = false }) => {
       >
         <div className='w-full overflow-hidden' ref={mainViewportRef}>
           <div className='flex -ml-2 select-none'>
-            {slides.map(index => (
+            {slides.map((index: number) => (
               <Link
                 to={`/view/item/${IdByIndex(index)}`}
                 className='relative min-w-full pl-2'

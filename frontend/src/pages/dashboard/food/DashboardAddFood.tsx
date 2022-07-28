@@ -129,7 +129,7 @@ const AddFood = () => {
           status={Success}
           msg={`تم إضافة ${category[1]} بنجاح 😄 الرجاء الانتظار ليتم تحويلك لقائمة الوجبات والمشروبات`}
           redirectLink='menu'
-          redirectTime='3000'
+          redirectTime={3000}
         />
       ) : addFoodStatus === 0 ? (
         <Modal status={Error} msg={addFoodMessage} />
@@ -325,7 +325,7 @@ const AddFood = () => {
                       {toppings.length !== 1 && (
                         <button
                           type='button'
-                          tooltip='حذف الإضافة'
+                          data-tooltip='حذف الإضافة'
                           className='px-5 py-2 text-white transition-colors bg-red-500 rounded-lg w-fit hover:bg-red-600'
                           onClick={() => handleRemoveClick(idx)}
                         >
@@ -335,7 +335,7 @@ const AddFood = () => {
                       {toppings.length - 1 === idx && (
                         <button
                           type='button'
-                          tooltip='إضافة جديدة'
+                          data-tooltip='إضافة جديدة'
                           className='px-5 py-2 text-white transition-colors bg-blue-500 rounded-lg w-fit hover:bg-blue-600'
                           onClick={handleAddClick}
                         >

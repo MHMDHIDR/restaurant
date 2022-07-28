@@ -5,16 +5,11 @@ const ScrollDown = () => {
 
   return (
     <div
-      className='
-        cursor-pointer flex flex-col items-center animate-bounce
-        absolute bottom-[3vh] sm:bottom-[4vh] md:bottom-[5.5vh] lg:bottom-[7.5vh] xl:bottom-[10vh]
-        z-10
-      '
+      className='cursor-pointer flex flex-col items-center animate-bounce absolute bottom-[3vh] sm:bottom-[4vh] md:bottom-[5.5vh] lg:bottom-[7.5vh] xl:bottom-[10vh] z-10'
       role='button'
       area-label={`Click to Scroll to down to section`}
-      onClick={e => {
-        const { nextSibling } =
-          e.target.parentElement.parentElement.parentElement.parentElement
+      onClick={() => {
+        const { nextSibling }: any = document.getElementById('hero') as HTMLElement | null
 
         if (nextSibling) {
           window.scrollTo({

@@ -1,6 +1,17 @@
 import { Link } from 'react-router-dom'
 import Arrow from './Icons/Arrow'
 import scrollToView from '../utils/scrollToView'
+import { Key } from 'react'
+
+interface PaginationProps {
+  routeName: string
+  pageNum: number
+  numberOfPages: number[]
+  count: number
+  foodId?: string
+  itemsPerPage?: number
+  category?: string
+}
 
 const Pagination = ({
   routeName,
@@ -10,7 +21,7 @@ const Pagination = ({
   foodId,
   itemsPerPage,
   category
-}) => {
+}: PaginationProps) => {
   numberOfPages = [...Array(numberOfPages).keys()]
 
   // only render pagination if there is no food id (not multiple food items)
@@ -39,7 +50,7 @@ const Pagination = ({
 
           {/* Current Link Number */}
           <div>
-            {numberOfPages.map((page, index) => (
+            {numberOfPages.map((page: number, index: Key) => (
               <Link
                 key={index}
                 to={`/${routeName}${

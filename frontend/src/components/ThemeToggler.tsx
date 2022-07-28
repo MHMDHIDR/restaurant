@@ -2,24 +2,6 @@ import { useContext } from 'react'
 import { ThemeContext } from '../Contexts/ThemeContext'
 
 const DarkmodeToggle = () => {
-  /**
-   * @description
-   * This component is used to toggle the dark mode of the website.
-   * It uses the `matchMedia` API to check if the user prefers dark mode.
-   * It uses the `localStorage` API to save the user preference.
-   * It uses the `classList` API to add and remove classes.
-   * It uses the `querySelector` API to get the `html` element.
-   * It uses the `setLocalStorage` function to save the user preference.
-   * It uses the `setTheme` function to set the theme.
-   * It uses the `useState` hook to set the theme on the first render.
-   *
-   * 1- Check if there's no theme object in the localStorage, (if TRUE), get the user System preference.
-   * 2- Make a useState variable with value of (System preference), and save it in the local storage.
-   * 3- if user clicks on the toggle call the setTheme function with the opposite value of the useState variable.
-   * 4- make a function to set the theme in localStorage.
-   * 5- make a function to set the theme in <html>
-   */
-
   const { isDark, setIsDark, getLocalStorageTheme } = useContext(ThemeContext)
 
   const PREFERENCE = window.matchMedia('(prefers-color-scheme: dark)')

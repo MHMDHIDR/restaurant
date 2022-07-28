@@ -13,12 +13,12 @@ const Search = () => {
 
   const searchWrapper = document.querySelector('.search__wrapper')
 
-  useEventListener('click', e => {
+  useEventListener('click', (e: any) => {
     // when clicking outside search input
     if (e.target.id !== 'search') searchWrapper?.classList.remove('opacity-100')
   })
 
-  const handleSearch = e => {
+  const handleSearch = (e: { preventDefault: () => void }) => {
     e.preventDefault()
     navigate(`/search/${search}`)
   }

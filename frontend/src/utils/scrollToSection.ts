@@ -10,7 +10,7 @@ const ScrollToSection = e => {
     if (targetLinkExists.length) {
       //(50 means padding top)
       window.scrollTo({
-        top: document.querySelector('.' + targetLink).offsetTop - 50,
+        top: (document.querySelector('.' + targetLink) as HTMLElement).offsetTop - 50,
         behavior: 'smooth'
       })
     } else {

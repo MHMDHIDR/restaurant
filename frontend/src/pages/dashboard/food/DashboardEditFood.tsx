@@ -262,42 +262,42 @@ const EditFood = () => {
             data?.foodName
           )} بنجاح   😄   الرجاء الانتظار ليتم تحويلك لقائمة الوجبات والمشروبات`}
           redirectLink={goTo('menu')}
-          redirectTime='3500'
+          redirectTime={3500}
         />
       ) : updatedFoodStatus === 0 ? (
         <Modal
           status={Error}
           msg='حدث خطأ ما أثناء تحديث بيانات الوجبة!'
-          // redirectLink={goTo(`edit-food/${data?._id}`)}
-          // redirectTime='3500'
+          redirectLink={goTo(`edit-food/${data?._id}`)}
+          redirectTime={3500}
         />
       ) : deleteImgStatus === 1 ? (
         <Modal
           status={Success}
           msg={`تم حذف الصورة بنجاح 😄`}
           redirectLink={goTo(`edit-food/${data?._id}`)}
-          redirectTime='3500'
+          redirectTime={3500}
         />
       ) : deleteImgStatus === 0 ? (
         <Modal
           status={Error}
           msg='حدث خطأ ما أثناء حذف الصورة!'
           redirectLink={goTo(`edit-food/${data?._id}`)}
-          redirectTime='3500'
+          redirectTime={3500}
         />
       ) : deleteFoodStatus === 1 ? (
         <Modal
           status={Success}
           msg={`تم حذف ${delFoodName} بنجاح 😄 الرجاء الانتظار ليتم تحويلك لقائمة الوجبات`}
           redirectLink={goTo('menu')}
-          redirectTime='3500'
+          redirectTime={3500}
         />
       ) : deleteFoodStatus === 0 ? (
         <Modal
           status={Error}
           msg={`حدث خطأ ما أثناء حذف ${delFoodName}!`}
           redirectLink={goTo(`edit-food/${data?._id}`)}
-          redirectTime='3500'
+          redirectTime={3500}
         />
       ) : null}
 
@@ -492,7 +492,7 @@ const EditFood = () => {
                         {toppings.length !== 1 && (
                           <button
                             type='button'
-                            tooltip='حذف الإضافة'
+                            data-tooltip='حذف الإضافة'
                             className='px-5 py-2 text-white transition-colors bg-red-500 rounded-lg w-fit hover:bg-red-600'
                             onClick={() => handleRemoveClick(idx)}
                           >
@@ -502,7 +502,7 @@ const EditFood = () => {
                         {toppings.length - 1 === idx && (
                           <button
                             type='button'
-                            tooltip='إضافة جديدة'
+                            data-tooltip='إضافة جديدة'
                             className='px-5 py-2 text-white transition-colors bg-blue-500 rounded-lg w-fit hover:bg-blue-600'
                             onClick={handleAddClick}
                           >

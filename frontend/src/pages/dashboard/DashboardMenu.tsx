@@ -95,14 +95,14 @@ const DashboardMenu = () => {
           status={Success}
           msg={`تم حذف ${delFoodName} بنجاح 😄 الرجاء الانتظار ليتم تحويلك لقائمة الوجبات`}
           redirectLink={goTo('menu')}
-          redirectTime='3500'
+          redirectTime={3500}
         />
       ) : deleteFoodStatus === 0 ? (
         <Modal
           status={Error}
           msg={`حدث خطأ ما أثناء حذف ${delFoodName}!`}
           redirectLink={goTo('menu')}
-          redirectTime='3500'
+          redirectTime={3500}
         />
       ) : null}
 

@@ -2,7 +2,17 @@ import { useState, createContext, useEffect } from 'react'
 import useAxios from '../hooks/useAxios'
 import { removeSlug } from '../utils/slug'
 
-export const SearchContext = createContext({})
+interface SearchContextProps {
+  setSearch: (search: string) => void
+  search: string
+  searchResults: any[]
+  setSearchFor: (searchFor: string) => void
+  setFoodCategory: (foodCategory: string) => void
+  loading: boolean
+  error: any
+}
+
+export const SearchContext = createContext<SearchContextProps>({} as SearchContextProps)
 
 const SearchContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [search, setSearch] = useState('')

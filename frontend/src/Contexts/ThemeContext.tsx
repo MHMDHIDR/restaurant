@@ -1,6 +1,12 @@
 import React, { useState, createContext } from 'react'
 
-export const ThemeContext = createContext({})
+interface ThemeProps {
+  isDark: boolean
+  setIsDark: (isDark: boolean) => void
+  getLocalStorageTheme: () => boolean
+}
+
+export const ThemeContext = createContext<ThemeProps>({} as ThemeProps)
 
 const ThemeContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [isDark, setIsDark] = useState(getLocalStorageTheme() ? true : false)

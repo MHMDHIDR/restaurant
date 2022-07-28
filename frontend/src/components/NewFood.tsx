@@ -10,8 +10,18 @@ import { removeSlug } from '../utils/slug'
 import Card from './Card'
 import { LoadingCard } from './Loading'
 
+interface dataItemProps {
+  _id: string
+  foodPrice: number
+  foodDesc: string
+  foodTags: string[]
+  foodToppings: string[]
+  foodImgs: string[]
+  foodName: string
+}
+
 const NewFood = () => {
-  const [data, setData] = useState('')
+  const [data, setData] = useState<any>()
 
   const { ...response } = useAxios({
     method: 'get',
@@ -20,7 +30,7 @@ const NewFood = () => {
 
   useEffect(() => {
     if (response.response !== null) {
-      setData(response.response?.response)
+      setData(response.response)
     }
   }, [response.response])
 
@@ -32,8 +42,8 @@ const NewFood = () => {
         <h2 className='mx-0 mt-4 mb-12 text-2xl text-center md:text-3xl'>
           الوجبات الجديدة
         </h2>
-        {data && data?.length > 0 ? (
-          data?.map(item => (
+        {data && data?.response?.length > 0 ? (
+          data?.response?.map((item: dataItemProps) => (
             <div className='odd:ltr' key={item._id}>
               <Card
                 cItemId={item._id}
@@ -75,7 +85,9 @@ const NewFood = () => {
               />
             </div>
           ))
-        ) : !data || data === null || data?.itemsCount === undefined ? (
+        ) : !data?.response ||
+          data?.response === null ||
+          data?.response?.itemsCount === undefined ? (
           <LoadingCard />
         ) : (
           <p className='form__msg inline-block md:text-lg text-red-600 dark:text-red-400 font-[600] pt-2 px-1'>

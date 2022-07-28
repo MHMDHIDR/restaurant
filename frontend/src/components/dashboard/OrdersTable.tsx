@@ -16,16 +16,16 @@ import Pagination from '../Pagination'
 import Divider from '../Divider'
 
 const OrdersTable = ({ ordersByUserEmail = false }) => {
-  let { pageNum } = useParams()
+  let { pageNum }: any = useParams()
 
   const pageNumber = !pageNum || pageNum < 1 || isNaN(pageNum) ? 1 : parseInt(pageNum)
   const itemsPerPage = 5
 
-  const [acceptOrderStatus, setAcceptOrderStatus] = useState(false)
-  const [deleteOrderStatus, setDeleteOrderStatus] = useState(false)
+  const [acceptOrderStatus, setAcceptOrderStatus] = useState()
+  const [deleteOrderStatus, setDeleteOrderStatus] = useState()
   const [orderId, setOrderId] = useState()
   const [orderStatus, setOrderStatus] = useState()
-  const [ordersData, setOrdersData] = useState()
+  const [ordersData, setOrdersData] = useState<any>()
   const [orderItemsIds, setOrderItemsIds] = useState([])
   const [orderToppingsId, setOrderToppingsId] = useState([])
 
@@ -60,12 +60,12 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
 
   const inSeletedToppings = orderToppingsId?.map(selected =>
     //if there is no toppings in order then selected will be empty array
-    (selected || []).filter(element =>
+    (selected || []).filter((element: string | any[]) =>
       orderItemsIds.map(id => id?.includes(element?.slice(0, -2)))
     )
   )
 
-  useEventListener('click', e => {
+  useEventListener('click', (e: any) => {
     if (
       e.target.id === 'acceptOrder' ||
       e.target.id === 'rejectOrder' ||
@@ -97,7 +97,7 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
     }
   })
 
-  const handleOrder = async (orderId, orderStatus) => {
+  const handleOrder = async (orderId: string, orderStatus: string) => {
     //delete order
     if (orderStatus === 'delete') {
       try {
@@ -149,14 +149,14 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
               : `❗️    تم رفض الطلب بنجاح    😔`
           }
           redirectLink={goTo('orders')}
-          redirectTime='4000'
+          redirectTime={4000}
         />
       ) : acceptOrderStatus === 0 ? (
         <Modal
           status={Error}
           msg={`عفواً! خطأ ما!`}
           redirectLink={goTo('orders')}
-          redirectTime='4000'
+          redirectTime={4000}
         />
       ) : null}
 
@@ -208,7 +208,7 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
                 ).length > 0 ? ( //means there is at least one order by the current user email
                   ordersData?.response
                     ?.filter(
-                      order =>
+                      (order: { userEmail: string }) =>
                         order.userEmail ===
                         JSON.parse(localStorage.getItem('user')).userEmail
                     )
@@ -227,7 +227,7 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
                         <td className='px-1 py-2'>{order.personPhone}</td>
                         <td className='px-1 py-2 min-w-[30rem]'>
                           <span
-                            tooltip={`عرض ${order.orderItems.length} ${
+                            data-tooltip={`عرض ${order.orderItems.length} ${
                               order.orderItems.length > 1 ? 'طلبات' : 'طلب'
                             }`}
                           >
@@ -296,7 +296,7 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
                                     )}
                                   </div>
                                 </div>
-                                <Divider marginY='2' thickness='0.5' />
+                                <Divider marginY={2} thickness={0.5} />
                               </div>
                             ))}
                           </div>
@@ -318,7 +318,7 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
                         <td className='px-1 py-2'>{order.orderId}</td>
                         <td className='px-1 py-2 min-w-[6rem]'>
                           <span
-                            tooltip={`دفع عن طريق ${
+                            data-tooltip={`دفع عن طريق ${
                               order.paymentData.paymentSource === 'paypal' && 'باي بال'
                             }`}
                           >
@@ -407,7 +407,7 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
                     <td className='px-1 py-2'>{order.personPhone}</td>
                     <td className='px-1 py-2 min-w-[30rem]'>
                       <span
-                        tooltip={`عرض ${order.orderItems.length} ${
+                        data-tooltip={`عرض ${order.orderItems.length} ${
                           order.orderItems.length > 1 ? 'طلبات' : 'طلب'
                         }`}
                       >
@@ -476,7 +476,7 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
                                 )}
                               </div>
                             </div>
-                            <Divider marginY='2' thickness='0.5' />
+                            <Divider marginY={2} thickness={0.5} />
                           </div>
                         ))}
                       </div>
@@ -498,7 +498,7 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
                     <td className='px-1 py-2'>{order.orderId}</td>
                     <td className='px-1 py-2 min-w-[6rem]'>
                       <span
-                        tooltip={`دفع عن طريق ${
+                        data-tooltip={`دفع عن طريق ${
                           order.paymentData.paymentSource === 'paypal' && 'باي بال'
                         }`}
                       >
@@ -546,7 +546,7 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
               )}
 
               <tr>
-                <td colSpan='100%'>
+                <td colSpan={100}>
                   <Pagination
                     routeName={ordersByUserEmail ? `my-orders` : `dashboard/orders`}
                     pageNum={pageNumber}
@@ -606,7 +606,7 @@ const AcceptBtn = ({ id }) => (
     data-id={id}
     data-status='accept'
     className='m-1 px-2 py-2 text-sm text-white bg-green-600 rounded-md hover:bg-green-700 min-w-[7rem] relative text-center overflow-hidden'
-    tooltip='موافقة الطلب'
+    data-tooltip='موافقة الطلب'
   >
     <span className='py-0.5 px-1 md:pl-1 md:pr-2 bg-green-300 rounded-md absolute right-2 top-1.5 pointer-events-none'>
       &#9989;
@@ -621,7 +621,7 @@ const RejectBtn = ({ id }) => (
     data-id={id}
     data-status='reject'
     className='m-1 px-2 py-2 text-sm text-white bg-gray-600 rounded-md hover:bg-gray-700 min-w-[7rem] relative text-center overflow-hidden border'
-    tooltip='رفض الطلب'
+    data-tooltip='رفض الطلب'
   >
     <span className='py-0.5 px-1 md:pl-1 md:pr-2 bg-gray-300 rounded-md absolute right-2 top-1.5 pointer-events-none'>
       &#10060;
@@ -636,7 +636,7 @@ const DeleteBtn = ({ id }) => (
     data-id={id}
     data-status='delete'
     className='m-1 px-2 py-2 text-sm text-white bg-red-600 rounded-md hover:bg-red-700 min-w-[7rem] relative text-center overflow-hidden'
-    tooltip='حذف الطلب'
+    data-tooltip='حذف الطلب'
   >
     <span className='py-0.5 px-1 md:pl-1 md:pr-2 bg-red-200 rounded-md absolute right-2 top-1.5 pointer-events-none'>
       &#128465;

@@ -96,31 +96,31 @@
   --typewriterSpeed: 6s;
 }
 
-[tooltip] {
+[data-tooltip] {
   @apply relative inline-block align-middle;
 }
 
-[tooltip]::after,
-[tooltip]::before {
+[data-tooltip]::after,
+[data-tooltip]::before {
   --bottom: 1.75rem;
   --duration: 300ms;
   @apply absolute transition-all ease-in-out scale-50 opacity-0 pointer-events-none min-w-fit;
 }
 
-[tooltip]::after {
-  /* tooltip box */
-  content: attr(tooltip);
+[data-tooltip]::after {
+  /* data-tooltip box */
+  content: attr(data-tooltip);
   @apply right-0 z-50 w-min max-w-min min-w-[calc(100%+5rem)] text-center p-2 duration-[var(--duration)] text-sm text-white bg-gray-800 dark:bg-gray-300 dark:text-black dark:border-2 dark:border-gray-800 shadow-lg bottom-[calc(var(--bottom)*1.65)] rounded-md;
 }
 
-[tooltip]::before {
-  /* tooltip tringle */
+[data-tooltip]::before {
+  /* data-tooltip tringle */
   content: '';
   @apply z-50 mx-auto border-[.7em] duration-[var(--duration)] border-transparent border-t-gray-800 dark:border-t-gray-300 bottom-[var(--bottom)] -translate-x-1/2 left-[10%] lg:left-1/2;
 }
 
-[tooltip]:hover::after,
-[tooltip]:hover::before {
+[data-tooltip]:hover::after,
+[data-tooltip]:hover::before {
   @apply scale-100 opacity-100;
 }
 

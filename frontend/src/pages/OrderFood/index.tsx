@@ -148,7 +148,7 @@ const OrderFood = () => {
             btnName='قائمة الوجبات'
             btnLink='/view'
             redirectLink='/view'
-            redirectTime='10000'
+            redirectTime={10000}
           />
         ) : showLoginRegisterModal === true ? (
           <Modal
