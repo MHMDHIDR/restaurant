@@ -9,7 +9,8 @@ import {
   getAllUsers,
   deleteUser,
   updateUser,
-  forgotPass
+  forgotPass,
+  resetPass
 } from '../controllers/users.js'
 
 const router = express.Router()
@@ -21,5 +22,6 @@ router.get('/', protect, getUser)
 router.delete('/:userId', deleteUser)
 router.patch('/:userId', updateUser)
 router.post('/forgotpass', forgotPass)
+router.post('/resetpass', resetPass)
 
 export default router

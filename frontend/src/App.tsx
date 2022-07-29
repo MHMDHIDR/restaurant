@@ -74,7 +74,9 @@ const App: React.FC = () => (
                       <Route path=':redirect' element={<Login />} />
                     </Route>
                     <Route path='auth/forgot' element={<ForgotPassword />} />
-                    <Route path='auth/reset' element={<ResetPassword />} />
+                    <Route path='auth/reset' element={<ResetPassword />}>
+                      <Route path=':token' element={<ResetPassword />} />
+                    </Route>
 
                     {/* Dashboard */}
                     <Route path='dashboard' element={<DashboardHome />}>

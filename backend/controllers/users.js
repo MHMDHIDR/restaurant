@@ -204,4 +204,76 @@ export const forgotPass = asyncHandler(async (req, res) => {
   }
 })
 
+export const resetPass = asyncHandler(async (req, res) => {
+  const { userPass, userToken } = req.body
+  // Check for user by using his/her email or telephone number
+  const user = await UserModel.findOne({
+    $or: [{ userPass }, { userToken }]
+  })
+
+  if (user && user.userAccountStatus === 'block') {
+    res.status(403).json({
+      forgotPassSent: 0,
+      message: 'حسابك مغلق حاليا، يرجى التواصل مع الادارة'
+    })
+  } else if (user && user.userAccountStatus === 'active') {
+    if (userToken === user.userResetPasswordToken) {
+      if (userResetPasswordExpires > Date.now()) {
+        await UserModel.findByIdAndUpdate(user._id, {
+          userPass,
+          userResetPasswordToken: null,
+          userResetPasswordExpires: null
+        })
+
+        res.status(200).json({
+          message: 'تم تغيير كلمة المرور بنجاح',
+          newPassSet: 1
+        })
+      } else {
+        res.status(400).json({
+          newPassSet: 0,
+          message: 'عفواً، لقد انتهى صلاحية رابط اعادة تعيين كلمة المرور الخاص بك'
+        })
+      }
+    }
+
+    //send the user an email with a link to reset his/her password
+    const emailData = {
+      from: 'mr.hamood277@gmail.com',
+      to: user.userEmail,
+      subject: 'Password Has been Reset',
+      msg: `
+        <h1>Your password has been rest succefully</h1>
+        <br />
+        <p>
+          If you did not reset your password, please contact us as soon as possible, otherwise this email is just for notifying you for the change that happened.</small>
+        </p>
+      `
+    }
+
+    try {
+      const { accepted, rejected } = await email(emailData)
+
+      if (accepted.length > 0) {
+        res.status(200).json({
+          message: 'تم ارسال رابط اعادة تعيين كلمة المرور الى بريدك الالكتروني',
+          forgotPassSent: 1
+        })
+      } else if (rejected.length > 0) {
+        res.status(400).json({
+          forgotPassSent: 0,
+          message: `عفواً، لم نستطع ارسال رابط اعادة تعيين كلمة المرور الى بريدك الالكتروني: ${rejected[0].message}`
+        })
+      }
+    } catch (err) {
+      res.json({ message: `Ooops!, something went wrong!: ${error} `, mailSent: 0 })
+    }
+  } else if (!user) {
+    res.json({
+      forgotPassSent: 0,
+      message: 'عفواً، ليس لديك حساب مسجل معنا'
+    })
+  }
+})
+
 const generateToken = id => jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '30d' })

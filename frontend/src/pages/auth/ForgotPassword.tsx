@@ -5,25 +5,25 @@ import Axios from 'axios'
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 import Notification from '../../components/Notification'
-import { LoadingSpinner, LoadingPage } from '../../components/Loading'
+import { LoadingSpinner } from '../../components/Loading'
 
 import useEventListener from '../../hooks/useEventListener'
 import useDocumentTitle from '../../hooks/useDocumentTitle'
 
 import { API_URL } from '../../data/constants'
 
-const LoginDataFromLocalStorage =
-  'LoginData' in localStorage && JSON.parse(localStorage.getItem('LoginData'))
+const ForgotDataFromLocalStorage =
+  'ForgotData' in localStorage && JSON.parse(localStorage.getItem('ForgotData'))
 
 const ForgotPassword = () => {
   useDocumentTitle('Forgot Password')
 
-  const [userEmailOrTel, setEmailOrTel] = useState(
-    LoginDataFromLocalStorage.userEmailOrTel || ''
+  const [emailOrTel, setEmailOrTel] = useState(
+    ForgotDataFromLocalStorage.newUserPassword || ''
   )
   const [data, setData] = useState<any>('')
   const [loading, setloading] = useState(false)
-  const [forgotLinkSentStatus, setForgotLinkSentStatus] = useState()
+  const [forgotLinkSentStatus, setForgotLinkSentStatus] = useState(0)
   const [forgotLinkMsg, setForgotLinkMsg] = useState('')
 
   const modalLoading = document.querySelector('#modal')
@@ -69,16 +69,27 @@ const ForgotPassword = () => {
     }
   })
 
-  const sendForgotPassForm = async (e: { preventDefault: () => void }) => {
+  const sendForgotPassForm = async (e: any) => {
     e.preventDefault()
 
+    if (emailOrTel === '') {
+      setForgotLinkSentStatus(0)
+      setForgotLinkMsg('الرجاء ملء جميع الحقول بطريقة صحيحة')
+
+      return
+    }
+
+    const formData = new FormData()
+    formData.append('userEmail', emailOrTel.trim().toLowerCase())
+    formData.append('userTel', emailOrTel.trim().toLowerCase())
+
+    // if there's no error in the form
+    e.target.reset()
+    e.target.querySelector('button').setAttribute('disabled', 'disabled')
     setloading(true)
 
     try {
-      const { data } = await Axios.post(`${API_URL}/users/forgotpass`, {
-        userEmail: userEmailOrTel.trim().toLowerCase(),
-        userTel: userEmailOrTel.trim().toLowerCase()
-      })
+      const { data } = await Axios.post(`${API_URL}/users/forgotpass`, formData)
       //destructering response from backend
       const { forgotPassSent, message } = data
 
@@ -98,7 +109,7 @@ const ForgotPassword = () => {
   }
 
   // if done loading (NOT Loading) then show the login form
-  return !loading ? (
+  return (
     <>
       <Header />
       <section className='py-12 my-8'>
@@ -119,7 +130,7 @@ const ForgotPassword = () => {
                   name='email'
                   type='text'
                   onChange={e => setEmailOrTel(e.target.value)}
-                  defaultValue={userEmailOrTel}
+                  defaultValue={emailOrTel}
                   dir='auto'
                   autoFocus
                   required
@@ -168,8 +179,6 @@ const ForgotPassword = () => {
       </section>
       <Footer />
     </>
-  ) : (
-    <LoadingPage />
   )
 }
 export default ForgotPassword
