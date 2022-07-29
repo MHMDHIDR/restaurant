@@ -5,6 +5,7 @@ import Types from 'mongoose'
 import UserModel from '../models/user-model.js'
 import { v4 as uuidv4 } from 'uuid'
 import email from '../utils/email.js'
+import { APP_URL } from '../data/constants.js'
 
 export const joinUser = asyncHandler(async (req, res) => {
   const { userFullName, userEmail, userTel, userPassword } = req.body
@@ -88,7 +89,7 @@ export const getUser = asyncHandler(async (req, res) => {
   })
 })
 
-export const getAllUsers = asyncHandler(async (req, res) => {
+export const getAllUsers = asyncHandler(async (_req, res) => {
   res.json(res.paginatedResults)
 })
 
@@ -147,13 +148,21 @@ export const forgotPass = asyncHandler(async (req, res) => {
   })
 
   if (user && user.userAccountStatus === 'block') {
-    res.status(403).json({
+    res.json({
       forgotPassSent: 0,
       message: 'حسابك مغلق حاليا، يرجى التواصل مع الادارة'
     })
+  } else if (
+    (user && user.userResetPasswordToken !== null) ||
+    (user && user.userResetPasswordExpires > Date.now())
+  ) {
+    res.json({
+      forgotPassSent: 0,
+      message: 'لقد تم إرسال رابط تغيير كلمة المرور بالفعل، الرجاء رؤية بريدك الالكتروني'
+    })
   } else if (user && user.userAccountStatus === 'active') {
     const userResetPasswordToken = uuidv4()
-    const userResetPasswordExpires = Date.now() + 3600000
+    const userResetPasswordExpires = Date.now() + 3600000 // 1 hour
 
     await UserModel.findByIdAndUpdate(user._id, {
       userResetPasswordToken,
@@ -161,7 +170,8 @@ export const forgotPass = asyncHandler(async (req, res) => {
     })
 
     //send the user an email with a link to reset his/her password
-    const resetLink = `http://dev.com:3000/auth/reset/${userResetPasswordToken}`
+    const resetLink =
+      APP_URL + `:${process.env.PORT || 3000}/auth/reset/${userResetPasswordToken}`
 
     const emailData = {
       from: 'mr.hamood277@gmail.com',
@@ -205,32 +215,37 @@ export const forgotPass = asyncHandler(async (req, res) => {
 })
 
 export const resetPass = asyncHandler(async (req, res) => {
-  const { userPass, userToken } = req.body
+  const { userPassword, userToken } = req.body
   // Check for user by using his/her email or telephone number
   const user = await UserModel.findOne({
-    $or: [{ userPass }, { userToken }]
+    // $or: [{ userPassword}, { userToken }]
+    userResetPasswordToken: userToken
   })
 
   if (user && user.userAccountStatus === 'block') {
-    res.status(403).json({
-      forgotPassSent: 0,
+    res.json({
+      newPassSet: 0,
       message: 'حسابك مغلق حاليا، يرجى التواصل مع الادارة'
     })
   } else if (user && user.userAccountStatus === 'active') {
     if (userToken === user.userResetPasswordToken) {
-      if (userResetPasswordExpires > Date.now()) {
+      if (user.userResetPasswordExpires > Date.now()) {
+        // Hash new password
+        const salt = await bcrypt.genSalt(10)
+        const hashedPassword = await bcrypt.hash(userPassword, salt)
+
         await UserModel.findByIdAndUpdate(user._id, {
-          userPass,
+          userPassword: hashedPassword,
           userResetPasswordToken: null,
           userResetPasswordExpires: null
         })
 
-        res.status(200).json({
-          message: 'تم تغيير كلمة المرور بنجاح',
+        res.json({
+          message: 'تم تغيير كلمة المرور بنجاح، سيتم تحويلك لتسجيل الدخول',
           newPassSet: 1
         })
       } else {
-        res.status(400).json({
+        res.json({
           newPassSet: 0,
           message: 'عفواً، لقد انتهى صلاحية رابط اعادة تعيين كلمة المرور الخاص بك'
         })
@@ -241,12 +256,12 @@ export const resetPass = asyncHandler(async (req, res) => {
     const emailData = {
       from: 'mr.hamood277@gmail.com',
       to: user.userEmail,
-      subject: 'Password Has been Reset',
+      subject: 'Your Password Has been Reset',
       msg: `
         <h1>Your password has been rest succefully</h1>
         <br />
         <p>
-          If you did not reset your password, please contact us as soon as possible, otherwise this email is just for notifying you for the change that happened.</small>
+          If you did not reset your password, please contact us as soon as possible, otherwise this email is just for notifying you for the change that happened, no need to reply to this email.</small>
         </p>
       `
     }
@@ -256,13 +271,13 @@ export const resetPass = asyncHandler(async (req, res) => {
 
       if (accepted.length > 0) {
         res.status(200).json({
-          message: 'تم ارسال رابط اعادة تعيين كلمة المرور الى بريدك الالكتروني',
-          forgotPassSent: 1
+          message: 'تم ارسال رسالة تحديث كلمة المرور الى بريدك الالكتروني',
+          newPassSet: 1
         })
       } else if (rejected.length > 0) {
         res.status(400).json({
-          forgotPassSent: 0,
-          message: `عفواً، لم نستطع ارسال رابط اعادة تعيين كلمة المرور الى بريدك الالكتروني: ${rejected[0].message}`
+          newPassSet: 0,
+          message: `عفواً، لم نستطع ارسال رسالة تحديث كلمة المرور الى بريدك الالكتروني: ${rejected[0].message}`
         })
       }
     } catch (err) {
@@ -270,7 +285,7 @@ export const resetPass = asyncHandler(async (req, res) => {
     }
   } else if (!user) {
     res.json({
-      forgotPassSent: 0,
+      newPassSet: 0,
       message: 'عفواً، ليس لديك حساب مسجل معنا'
     })
   }

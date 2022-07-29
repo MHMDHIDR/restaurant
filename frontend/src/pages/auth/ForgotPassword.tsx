@@ -140,14 +140,21 @@ const ForgotPassword = () => {
 
               <div className='flex flex-col gap-6 text-center border-none form__group ltr'>
                 <button
-                  className={`w-48 mx-auto px-12 py-3 text-white uppercase bg-orange-700 rounded-lg hover:bg-orange-800 scale-100 transition-all`}
+                  className={`flex gap-4 w-fit mx-auto px-12 py-3 text-white uppercase bg-orange-700 rounded-lg hover:bg-orange-800 scale-100 transition-all rtl${
+                    loading && loading ? ' scale-105 cursor-progress' : ''
+                  } ${
+                    //add disbaled class if is true or false (that means user has clicked send button)
+                    loading || !loading
+                      ? ' disabled:opacity-30 disabled:hover:bg-orange-700'
+                      : ''
+                  }`}
                   type='submit'
                   id='submitBtn'
                 >
                   {loading && loading ? (
                     <>
                       <LoadingSpinner />
-                      جارِ إرسال طلب استعادة كلمة المرور...
+                      <span>جارِ إرسال طلب استعادة كلمة المرور...</span>
                     </>
                   ) : (
                     'إرسال طلب'

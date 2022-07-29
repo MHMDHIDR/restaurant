@@ -6,6 +6,13 @@ export const validEmail = (email: string) => {
 }
 
 export const validPassword = (password: string) => {
+  /**
+   * regex for password it must contain:
+   * - at least one lowercase letter,
+   * - one uppercase letter,
+   * - one number,
+   * - one special character, and at least 8 characters AND maximum of 50 characters
+   */
   const passwordFormat = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-_]).{8,}$/
 
   return password.match(passwordFormat) ? true : false

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import Axios from 'axios'
 
@@ -9,9 +9,9 @@ import { LoadingSpinner, LoadingPage } from '../../components/Loading'
 
 import useEventListener from '../../hooks/useEventListener'
 import useDocumentTitle from '../../hooks/useDocumentTitle'
-import useAxios from '../../hooks/useAxios'
 
 import { API_URL } from '../../data/constants'
+import { validPassword } from '../../utils/validForm'
 
 const ResetPassword = () => {
   useDocumentTitle('Reset Password')
@@ -23,17 +23,13 @@ const ResetPassword = () => {
   const [resetLinkSentStatus, setNewPassStatus] = useState(0)
   const [resetLinkMsg, setNewPassMsg] = useState('')
 
+  const newPassErr = useRef<HTMLSpanElement>(null)
+  const confirmNewPassErr = useRef<HTMLSpanElement>(null)
+
   const modalLoading = document.querySelector('#modal')
 
   const navigate = useNavigate()
   const { token } = useParams()
-
-  const userToken = useAxios({
-    method: 'get',
-    url: `${API_URL}/users`
-  })
-
-  console.log('userToken==> ', userToken)
 
   //setting user token from local storage
   const USER = JSON.parse(localStorage.getItem('user'))
@@ -87,7 +83,7 @@ const ResetPassword = () => {
       return
     } else {
       const formData = new FormData()
-      formData.append('userPass', newUserPass.trim())
+      formData.append('userPassword', newUserPass.trim())
       formData.append('userToken', token)
 
       // if there's no error in the form
@@ -101,13 +97,14 @@ const ResetPassword = () => {
         const { newPassSet, message } = data
 
         setNewPassStatus(newPassSet)
-
-        if (newPassSet === 0) {
-          return setNewPassMsg(message)
-        }
-
-        //if user is logged in
         setNewPassMsg(message)
+
+        if (newPassSet === 1) {
+          //if user has changed his password successfully
+          setTimeout(() => {
+            navigate('/auth/login')
+          }, 5000)
+        }
       } catch ({ response }) {
         setNewPassMsg(response?.message)
       } finally {
@@ -129,43 +126,89 @@ const ResetPassword = () => {
           >
             كلمة السر الجديدة
           </h3>
+
           <div className='max-w-6xl mx-auto'>
             <form className='mt-32' onSubmit={sendResetPassForm}>
-              <label htmlFor='email' className='form__group'>
+              <label htmlFor='newUserPass' className='form__group'>
                 <input
-                  className='form__input'
-                  id='email'
-                  name='email'
+                  className='form__input rtl'
+                  id='newUserPass'
+                  name='newUserPass'
                   type='password'
+                  min={8}
+                  max={50}
                   onChange={e => setNewUserPass(e.target.value)}
-                  defaultValue={newUserPass}
-                  dir='auto'
+                  onKeyUp={e => {
+                    const parent = e.target.parentElement
+                    if (e.target.value.length > 0 && !validPassword(e.target.value)) {
+                      parent.classList.add('notvalid')
+                      newPassErr.current.textContent =
+                        'كلمة المرور يجب أن تتكون من حروف وأرقام بالانجليزية فقط، وطولها 8 أحرف وأرقام على الأقل و 50 أحرف وأرقام على الأكثر'
+                    } else if (
+                      newUserPassConfirm.length > 0 &&
+                      e.target.value !== newUserPassConfirm
+                    ) {
+                      parent.classList.add('notvalid')
+                      newPassErr.current.textContent = 'كلمة المرور غير متطابقة'
+                    } else {
+                      parent.classList.remove('notvalid')
+                      newPassErr.current.textContent = ''
+                    }
+                  }}
                   autoFocus
                   required
                 />
                 <span className='form__label'>الرجاء كتابة كلمة المرور الجديدة</span>
+                <span
+                  className='inline-block md:text-lg text-red-600 dark:text-red-400 font-[600] pt-2 px-1'
+                  ref={newPassErr}
+                />
               </label>
 
-              <label htmlFor='email' className='form__group'>
+              <label htmlFor='newUserPassConfirm' className='form__group'>
                 <input
-                  className='form__input'
-                  id='email'
-                  name='email'
+                  className='form__input rtl'
+                  id='newUserPassConfirm'
+                  name='newUserPassConfirm'
                   type='password'
+                  min={8}
+                  max={50}
                   onChange={e => setNewUserPassConfirm(e.target.value)}
-                  defaultValue={newUserPass}
-                  dir='auto'
-                  autoFocus
+                  onKeyUp={e => {
+                    const parent = e.target.parentElement
+                    if (e.target.value && !validPassword(e.target.value)) {
+                      parent.classList.add('notvalid')
+                      confirmNewPassErr.current.textContent =
+                        'كلمة المرور يجب أن تتكون من حروف وأرقام بالانجليزية فقط، وطولها 8 أحرف وأرقام على الأقل و 50 أحرف وأرقام على الأكثر'
+                    } else if (e.target.value !== newUserPass) {
+                      parent.classList.add('notvalid')
+                      confirmNewPassErr.current.textContent = 'كلمة المرور غير متطابقة'
+                    } else {
+                      parent.classList.remove('notvalid')
+                      confirmNewPassErr.current.textContent = ''
+                    }
+                  }}
                   required
                 />
                 <span className='form__label'>
                   الرجاء كتابة كلمة المرور الجديدة مرة أخرى للتأكيد
                 </span>
+                <span
+                  className='inline-block md:text-lg text-red-600 dark:text-red-400 font-[600] pt-2 px-1'
+                  ref={confirmNewPassErr}
+                />
               </label>
 
               <div className='flex flex-col gap-6 text-center border-none form__group ltr'>
                 <button
-                  className={`w-48 mx-auto px-12 py-3 text-white uppercase bg-orange-700 rounded-lg hover:bg-orange-800 scale-100 transition-all`}
+                  className={`flex gap-4 w-fit  mx-auto px-12 py-3 text-white uppercase bg-orange-700 rounded-lg hover:bg-orange-800 scale-100 transition-all rtl${
+                    loading && loading ? ' scale-105 cursor-progress' : ''
+                  } ${
+                    //add disbaled class if is true or false (that means user has clicked send button)
+                    loading || !loading
+                      ? ' disabled:opacity-30 disabled:hover:bg-orange-700'
+                      : ''
+                  }`}
                   type='submit'
                   id='submitBtn'
                 >
