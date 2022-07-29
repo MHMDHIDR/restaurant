@@ -1,35 +1,25 @@
 import { useState, useEffect } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Axios from 'axios'
 
-import Header from '../components/Header'
-import Footer from '../components/Footer'
-import Notification from '../components/Notification'
-import { LoadingSpinner, LoadingPage } from '../components/Loading'
+import Header from '../../components/Header'
+import Footer from '../../components/Footer'
+import Notification from '../../components/Notification'
+import { LoadingSpinner, LoadingPage } from '../../components/Loading'
 
-import useEventListener from '../hooks/useEventListener'
-
-const LoginDataFromLocalStorage =
-  'LoginData' in localStorage && JSON.parse(localStorage.getItem('LoginData'))
+import { API_URL } from '../../data/constants'
 
 const Login = () => {
-  const [userEmailOrTel, setEmailOrTel] = useState(
-    LoginDataFromLocalStorage.userEmailOrTel || ''
-  )
+  const [userFullName, setFullName] = useState('')
+  const [userEmail, setEmail] = useState('')
+  const [userTel, setTel] = useState('')
   const [userPassword, setPassword] = useState('')
   const [data, setData] = useState<any>('')
-  const [loggedInStatus, setLoggedInStatus] = useState()
+  const [regStatus, setRegStatus] = useState()
   const [loading, setloading] = useState(false)
-  const [loginMsg, setLoginMsg] = useState('')
-  const { redirect } = useParams()
-
-  const modalLoading = document.querySelector('#modal')
+  const [errMsg, setErrMsg] = useState('')
 
   const navigate = useNavigate()
-  const BASE_URL =
-    process.env.NODE_ENV === 'development'
-      ? process.env.API_LOCAL_URL
-      : process.env.API_URL
 
   //setting user token from local storage
   const USER = JSON.parse(localStorage.getItem('user'))
@@ -38,16 +28,16 @@ const Login = () => {
     if (USER) {
       setloading(true)
 
-      Axios.get(`${BASE_URL}/users`, {
-        headers: { Authorization: `Bearer ${USER.token}` }
+      Axios.get(`${API_URL}/users`, {
+        headers: {
+          Authorization: `Bearer ${USER.token}`
+        }
       })
         .then(res => {
           setData(res.data)
 
-          if (USER?._id === data.id && USER.userAccountType === 'admin') {
+          if (USER?._id === data.id) {
             navigate('/dashboard')
-          } else if (USER?._id === data.id && USER.userAccountType === 'user') {
-            navigate('/')
           }
         })
         .catch(err => {
@@ -58,54 +48,35 @@ const Login = () => {
         })
     }
 
-    return () => {
-      setData('')
-    }
-  }, [USER, BASE_URL, data.id, navigate])
+    return () => setData('')
+  }, [USER, API_URL, data.id, navigate])
 
-  useEventListener('click', (e: any) => {
-    //confirm means cancel Modal message (hide it)
-    if (e.target.id === 'confirm') {
-      modalLoading.classList.add('hidden')
-    }
-  })
-
-  const sendLoginForm = async e => {
+  const handleJoin = async (e: { preventDefault: () => void }) => {
     e.preventDefault()
 
     setloading(true)
 
     try {
-      const loginUser = await Axios.post(`${BASE_URL}/users/login`, {
-        userPassword,
-        userEmail: userEmailOrTel.toLowerCase(),
-        userTel: userEmailOrTel.toLowerCase()
+      const joinUser = await Axios.post(`${API_URL}/users/join`, {
+        userFullName,
+        userEmail,
+        userTel,
+        userPassword
       })
       //getting response from backend
-      const { data } = loginUser
+      const { data } = joinUser
+      setRegStatus(data.userAdded)
 
-      setLoggedInStatus(data.LoggedIn)
-
-      if (data.LoggedIn === 0) {
-        return setLoginMsg(data?.message)
-      }
-
-      const { _id, userAccountType, userEmail, userTel, token } = data
-
-      //if user is logged in
-      setLoginMsg(data?.message)
-      localStorage.setItem(
-        'user',
-        JSON.stringify({ _id, userAccountType, userEmail, userTel, token })
-      )
-
-      redirect
-        ? navigate(`/${redirect}`)
-        : userAccountType === 'admin'
-        ? navigate('/dashboard')
-        : navigate('/')
+      //if user is joined correctly
+      setErrMsg(data?.message)
     } catch ({ response }) {
-      setLoginMsg(response?.data?.message)
+      setErrMsg(
+        response.status === 409
+          ? 'عفواً المستخدم مسجل من قبل بنفس البريد الالكتروني'
+          : response.status === 400
+          ? 'رجاء تعبئة جميع الحقول أدناه'
+          : response.statusText
+      )
     } finally {
       setloading(false)
     }
@@ -117,28 +88,52 @@ const Login = () => {
       <Header />
       <section className='py-12 my-8'>
         <div className='container mx-auto'>
-          <Notification sendStatus={loggedInStatus} sendStatusMsg={loginMsg} />
+          <Notification sendStatus={regStatus} sendStatusMsg={errMsg} />
           <h3
             className='mx-0 mt-4 mb-12 text-2xl text-center md:text-3xl'
             data-section='login'
           >
-            تسجيل الدخول للوحة التحكم
+            تسجيل حساب جديد للوحة التحكم
           </h3>
           <div className='max-w-6xl mx-auto'>
-            <form className='mt-32' onSubmit={sendLoginForm}>
+            <form className='mt-32' onSubmit={handleJoin}>
+              <label htmlFor='name' className='form__group'>
+                <input
+                  className='form__input'
+                  id='name'
+                  name='name'
+                  type='text'
+                  onChange={e => setFullName(e.target.value)}
+                  autoFocus
+                  required
+                />
+                <span className='form__label'>اسمك الكريم</span>
+              </label>
+
               <label htmlFor='email' className='form__group'>
                 <input
                   className='form__input'
                   id='email'
                   name='email'
                   type='text'
-                  onChange={e => setEmailOrTel(e.target.value)}
-                  defaultValue={userEmailOrTel}
+                  onChange={e => setEmail(e.target.value)}
                   dir='auto'
-                  autoFocus
                   required
                 />
-                <span className='form__label'>البريد الالكتروني أو رقم الهاتف</span>
+                <span className='form__label'>بريدك الالكتروني</span>
+              </label>
+
+              <label htmlFor='tel' className='form__group'>
+                <input
+                  className='form__input'
+                  id='tel'
+                  name='tel'
+                  type='tel'
+                  onChange={e => setTel(e.target.value)}
+                  dir='auto'
+                  required
+                />
+                <span className='form__label'>رقم الهاتف</span>
               </label>
 
               <label htmlFor='password' className='form__group'>
@@ -163,10 +158,10 @@ const Login = () => {
                   {loading && loading ? (
                     <>
                       <LoadingSpinner />
-                      جارِ تسجيل الدخول...
+                      جارِ التسجيل...
                     </>
                   ) : (
-                    'تسجيل الدخول'
+                    'تسجيل'
                   )}
                 </button>
 
@@ -175,10 +170,10 @@ const Login = () => {
                 </strong>
 
                 <Link
-                  to='/join'
+                  to='/auth/login'
                   className='mx-auto text-center text-orange-700 underline-hover dark:text-orange-500 w-fit'
                 >
-                  تسجيل حساب جديد
+                  تسجيل الدخول
                 </Link>
               </div>
             </form>

@@ -10,6 +10,7 @@ import foods from './routes/foods.js'
 import settings from './routes/settings.js'
 import orders from './routes/orders.js'
 import users from './routes/users.js'
+import contact from './routes/contact.js'
 
 const app = express()
 
@@ -45,6 +46,7 @@ app.use('/foods', foods)
 app.use('/settings', settings)
 app.use('/orders', orders)
 app.use('/users', users)
+app.use('/contact', contact)
 
 connectDB()
 

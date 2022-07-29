@@ -8,7 +8,8 @@ import {
   getUser,
   getAllUsers,
   deleteUser,
-  updateUser
+  updateUser,
+  forgotPass
 } from '../controllers/users.js'
 
 const router = express.Router()
@@ -19,5 +20,6 @@ router.get('/all/:page/:limit/:itemId?', paginatedResults(UserModel), getAllUser
 router.get('/', protect, getUser)
 router.delete('/:userId', deleteUser)
 router.patch('/:userId', updateUser)
+router.post('/forgotpass', forgotPass)
 
 export default router

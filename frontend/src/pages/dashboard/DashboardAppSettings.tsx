@@ -4,6 +4,8 @@ import Axios from 'axios'
 
 import useDocumentTitle from '../../hooks/useDocumentTitle'
 
+import { API_URL } from '../../data/constants'
+
 import Modal from '../../components/Modal/Modal'
 import { Success, Error, Loading } from '../../components/Icons/Status'
 import { LoadingSpinner } from '../../components/Loading'
@@ -82,11 +84,6 @@ const About = () => {
     setCategoryList(list)
   }
 
-  const BASE_URL =
-    process.env.NODE_ENV === 'development'
-      ? process.env.API_LOCAL_URL
-      : process.env.API_URL
-
   const handleUpdate = async (e: { preventDefault: () => void }) => {
     e.preventDefault()
 
@@ -120,7 +117,7 @@ const About = () => {
       setLoading(true)
 
       try {
-        const response = await Axios.patch(`${BASE_URL}/settings/${data?._id}`, formData)
+        const response = await Axios.patch(`${API_URL}/settings/${data?._id}`, formData)
         const { settingsUpdated, message } = response.data
 
         setSettingsUpdated(settingsUpdated)

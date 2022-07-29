@@ -8,6 +8,8 @@ import useEventListener from '../../hooks/useEventListener'
 import goTo from '../../utils/goTo'
 import { toggleCSSclasses } from '../../utils/toggleCSSclasses'
 
+import { API_URL } from '../../data/constants'
+
 import Modal from '../Modal/Modal'
 import { Success, Error, Loading } from '../Icons/Status'
 import { PayPal } from '../Icons/Payments'
@@ -30,11 +32,6 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
   const [orderToppingsId, setOrderToppingsId] = useState([])
 
   const modalLoading = document.querySelector('#modal')
-
-  const BASE_URL =
-    process.env.NODE_ENV === 'development'
-      ? process.env.API_LOCAL_URL
-      : process.env.API_URL
 
   const { ...response } = useAxios({
     method: 'get',
@@ -102,7 +99,7 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
     if (orderStatus === 'delete') {
       try {
         //You need to name the body {data} so it can be recognized in (.delete) method
-        const response = await Axios.delete(`${BASE_URL}/orders/${orderId}`)
+        const response = await Axios.delete(`${API_URL}/orders/${orderId}`)
         const { orderDeleted } = response.data
 
         setDeleteOrderStatus(orderDeleted)
@@ -122,7 +119,7 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
     formData.append('orderStatus', orderStatus)
 
     try {
-      const response = await Axios.patch(`${BASE_URL}/orders/${orderId}`, formData)
+      const response = await Axios.patch(`${API_URL}/orders/${orderId}`, formData)
       const { OrderStatusUpdated } = response.data
 
       setAcceptOrderStatus(OrderStatusUpdated)

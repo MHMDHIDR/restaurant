@@ -9,6 +9,8 @@ import useEventListener from '../../hooks/useEventListener'
 import goTo from '../../utils/goTo'
 import logoutUser from '../../utils/logoutUser'
 
+import { API_URL } from '../../data/constants'
+
 import Modal from '../../components/Modal/Modal'
 import { Success, Error, Loading } from '../../components/Icons/Status'
 import { LoadingSpinner } from '../../components/Loading'
@@ -30,10 +32,6 @@ const DashboardUsers = () => {
   const [data, setData] = useState<any>('')
 
   const modalLoading = document.querySelector('#modal')
-  const BASE_URL =
-    process.env.NODE_ENV === 'development'
-      ? process.env.API_LOCAL_URL
-      : process.env.API_URL
 
   //get users data only if the admin is authenticated and logged in
   const { ...response } = useAxios({
@@ -73,7 +71,7 @@ const DashboardUsers = () => {
     if (userAccountAction === 'delete') {
       try {
         //You need to name the body {data} so it can be recognized in (.delete) method
-        const response = await Axios.delete(`${BASE_URL}/users/${userId}`, { data })
+        const response = await Axios.delete(`${API_URL}/users/${userId}`, { data })
 
         const { userDeleted } = response.data
 
@@ -92,7 +90,7 @@ const DashboardUsers = () => {
       formData.append('userAccountAction', userAccountAction)
 
       try {
-        const response = await Axios.patch(`${BASE_URL}/users/${userId}`, formData)
+        const response = await Axios.patch(`${API_URL}/users/${userId}`, formData)
 
         const { userUpdated } = response.data
         setUserUpdated(userUpdated)

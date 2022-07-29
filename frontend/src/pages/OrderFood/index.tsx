@@ -10,6 +10,8 @@ import useDocumentTitle from '../../hooks/useDocumentTitle'
 import { validPhone } from '../../utils/validForm'
 import scrollToView from '../../utils/scrollToView'
 
+import { API_URL } from '../../data/constants'
+
 import Modal from '../../components/Modal/Modal'
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
@@ -32,10 +34,6 @@ const OrderFood = () => {
 
   //global variables
   const MAX_CHARACTERS = 100
-  const BASE_URL =
-    process.env.NODE_ENV === 'development'
-      ? process.env.API_LOCAL_URL
-      : process.env.API_URL
 
   const { items, grandPrice } = useContext(CartContext)
   const { checkedToppings } = useContext(ToppingsContext)
@@ -105,7 +103,7 @@ const OrderFood = () => {
     }
   }
 
-  const handleSaveOrder = async paymentData => {
+  const handleSaveOrder = async (paymentData: any) => {
     //using FormData to send constructed data
     const formData = new FormData()
     formData.append('userId', userId)
@@ -120,7 +118,7 @@ const OrderFood = () => {
     formData.append('paymentData', JSON.stringify(paymentData))
 
     try {
-      const response = await Axios.post(`${BASE_URL}/orders`, formData)
+      const response = await Axios.post(`${API_URL}/orders`, formData)
       const { orderAdded, message } = response.data
       setIsLoading(false)
 
@@ -155,7 +153,7 @@ const OrderFood = () => {
             status={Loading}
             msg={`يجب عليك تسجيل الدخول أو عمل حساب جديد أولا وذلك للطلب`}
             btnName='تسجيل دخول'
-            btnLink={`/login${pathname}`}
+            btnLink={`/auth/login${pathname}`}
           />
         ) : (
           showPaymentModal === true && (

@@ -1,5 +1,4 @@
 import jwt from 'jsonwebtoken'
-// import { compare, hash, genSalt } from 'bcryptjs'
 import bcrypt from 'bcryptjs'
 import asyncHandler from 'express-async-handler'
 import Types from 'mongoose'
@@ -135,6 +134,28 @@ export const updateUser = asyncHandler(async (req, res) => {
     })
   } catch (error) {
     res.status(404).json({ message: error.message, userUpdated: 0 })
+  }
+})
+
+export const forgotPass = asyncHandler(async (req, res) => {
+  const { userEmail, userTel } = req.body
+  // Check for user by using his/her email or telephone number
+  const user = await UserModel.findOne({
+    $or: [{ userEmail }, { userTel }]
+  })
+
+  if (user && user.userAccountStatus === 'block') {
+    res.status(403).json({
+      forgotPassSent: 0,
+      message: 'حسابك مغلق حاليا، يرجى التواصل مع الادارة'
+    })
+  } else if (user && user.userAccountStatus === 'active') {
+    //then send the user his/her password in an email and change userResetPasswordToken to a random string
+  } else {
+    res.json({
+      forgotPassSent: 0,
+      message: 'عفواً، ليس لديك حساب مسجل معنا'
+    })
   }
 })
 

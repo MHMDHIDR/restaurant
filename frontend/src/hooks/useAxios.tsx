@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import Axios from 'axios'
+import { API_URL } from '../data/constants'
 
 export type responseTypes = {
   response: Array<any> | null | any
@@ -15,8 +16,7 @@ export type responseTypes = {
   whatsAppNumber: string
 }
 
-Axios.defaults.baseURL =
-  process.env.NODE_ENV === 'development' ? process.env.API_LOCAL_URL : process.env.API_URL
+Axios.defaults.baseURL = API_URL
 
 const useAxios = ({ url, method, body = null, headers = null }) => {
   const [response, setResponse] = useState<responseTypes | null>(null)

@@ -16,6 +16,8 @@ import FileUpload from '../../../components/FileUpload'
 import { createSlug } from '../../../utils/slug'
 import goTo from '../../../utils/goTo'
 
+import { API_URL } from '../../../data/constants'
+
 const AddFood = () => {
   useDocumentTitle('Add Food or Drink')
 
@@ -42,10 +44,6 @@ const AddFood = () => {
   const formMsg = useRef<HTMLDivElement>(null)
 
   const modalLoading = document.querySelector('#modal')
-  const BASE_URL =
-    process.env.NODE_ENV === 'development'
-      ? process.env.API_LOCAL_URL
-      : process.env.API_URL
 
   //fetching categories
   const { response } = useAxios({
@@ -86,7 +84,7 @@ const AddFood = () => {
         modalLoading.classList.remove('hidden')
 
         try {
-          const response = await Axios.post(`${BASE_URL}/foods`, formData)
+          const response = await Axios.post(`${API_URL}/foods`, formData)
 
           const { foodAdded, message } = response.data
           setAddFoodStatus(foodAdded)

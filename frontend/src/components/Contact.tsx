@@ -3,10 +3,14 @@ import Axios from 'axios'
 
 import Notification from './Notification'
 import { LoadingSpinner } from './Loading'
+
 import { validEmail } from '../utils/validForm'
+
+import { API_URL } from '../data/constants'
 
 const Contact = () => {
   const [theName, setName] = useState('')
+  const [subject, setSubject] = useState('')
   const [email, setEmail] = useState('')
   const [msg, setMsg] = useState('')
 
@@ -15,17 +19,21 @@ const Contact = () => {
   const [sendStatus, setSendStatus] = useState(0)
   const [sendStatusMsg, setSendStatusMsg] = useState('')
 
-  const EMAIL_FORM_URL = 'https://formsubmit.co/ajax/mr.hamood277@gmail.com'
-
   const sendContactForm = async (e: any) => {
     e.preventDefault()
 
-    if (email === '' || msg === '' || theName === '') {
+    if (email === '' || msg === '' || theName === '' || subject === '') {
       setSendStatus(0)
       setSendStatusMsg('الرجاء ملء جميع الحقول بطريقة صحيحة')
 
       return
     }
+
+    const formData = new FormData()
+    formData.append('name', theName)
+    formData.append('subject', subject)
+    formData.append('from', email)
+    formData.append('msg', msg)
 
     // if there's no error in the form
     e.target.reset()
@@ -33,17 +41,11 @@ const Contact = () => {
     setLoading(true)
 
     try {
-      Axios.defaults.headers.post['Content-Type'] = 'application/json'
-      const sendMail = await Axios.post(EMAIL_FORM_URL, {
-        name: theName,
-        email,
-        message: msg
-      })
+      const { data } = await Axios.post(`${API_URL}/contact`, formData)
 
-      const { data } = sendMail
-      setSendStatus(data.success === 'true' ? 1 : 0)
+      setSendStatus(data.mailSent)
       setSendStatusMsg(
-        data?.message === 'The form was submitted successfully.'
+        data?.message === 'Email Sent Successfully'
           ? 'شكراً على تواصلك معنا، سيتم الرد عليك في أقرب وقت ممكن 😄'
           : data?.message
       )
@@ -70,9 +72,6 @@ const Contact = () => {
             <form method='POST' className='form' onSubmit={sendContactForm}>
               <Notification sendStatus={sendStatus} sendStatusMsg={sendStatusMsg} />
 
-              <input type='hidden' name='_template' value='table' />
-              <input type='hidden' name='_subject' value={`رسالة جديدة من ${email}`} />
-
               <label htmlFor='name' className='form__group'>
                 <input
                   className='form__input'
@@ -83,7 +82,18 @@ const Contact = () => {
                   required
                 />
                 <span className='form__label'>الاســـــــــــــــــم</span>
-                <span className='form__name__msg inline-block my-2 text-red-500 font-[600]'></span>
+              </label>
+
+              <label htmlFor='subject' className='form__group'>
+                <input
+                  className='form__input'
+                  type='text'
+                  name='subject'
+                  id='subject'
+                  onChange={e => setSubject(e.target.value)}
+                  required
+                />
+                <span className='form__label'>العنــــــــــــوان</span>
               </label>
 
               <label htmlFor='email' className='form__group'>
@@ -106,7 +116,6 @@ const Contact = () => {
                   required
                 />
                 <span className='form__label'>البريد الالكترونــي</span>
-                <span className='form__email__msg my-2 md:text-2xl text-red-600 dark:text-red-400 font-[600] py-2 px-1'></span>
               </label>
 
               <label htmlFor='message' className='form__group'>
@@ -118,7 +127,6 @@ const Contact = () => {
                   required
                 ></textarea>
                 <span className='form__label'>أكتب لنا ماذا تريد؟</span>
-                <span className='form__message__msg inline-block my-2 text-red-500 font-[600]'></span>
               </label>
 
               <div className='mb-20 border-none form__group'>

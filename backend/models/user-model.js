@@ -25,7 +25,8 @@ const UserSchema = new mongoose.Schema(
     userTel: reqString,
     userPassword: reqString,
     userAccountStatus,
-    userAccountType
+    userAccountType,
+    userResetPasswordToken: reqString
   },
   //Collection Name
   { collection: 'restaurant_users' }

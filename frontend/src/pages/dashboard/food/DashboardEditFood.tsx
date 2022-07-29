@@ -52,7 +52,7 @@ const EditFood = () => {
   const formMsg = useRef<HTMLDivElement>(null)
 
   const modalLoading = document.querySelector('#modal')
-  const BASE_URL =
+  const API_URL =
     process.env.NODE_ENV === 'development'
       ? process.env.API_LOCAL_URL
       : process.env.API_URL
@@ -160,7 +160,7 @@ const EditFood = () => {
           //show waiting modal
           modalLoading.classList.remove('hidden')
           const response = await Axios.patch(
-            `${BASE_URL}/foods/${currentFoodId}`,
+            `${API_URL}/foods/${currentFoodId}`,
             formData
           )
 
@@ -195,7 +195,7 @@ const EditFood = () => {
     formData.append('prevFoodImgPathsAndNames', JSON.stringify(prevFoodImgPathsAndNames))
     try {
       //You need to name the body {data} so it can be recognized in (.delete) method
-      const response = await Axios.delete(`${BASE_URL}/foods/${foodId}`, {
+      const response = await Axios.delete(`${API_URL}/foods/${foodId}`, {
         data: formData
       })
       const { foodDeleted } = response.data
@@ -212,7 +212,7 @@ const EditFood = () => {
   const handleDeleteImg = async (foodId, foodImg) => {
     try {
       //You need to name the body {data} so it can be recognized in (.delete) method
-      const response = await Axios.delete(`${BASE_URL}/foods/${foodId}/${foodImg}`)
+      const response = await Axios.delete(`${API_URL}/foods/${foodId}/${foodImg}`)
       const { ImgDeleted } = response.data
       setDeleteImgStatus(ImgDeleted)
       //Remove waiting modal

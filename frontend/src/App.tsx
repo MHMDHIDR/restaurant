@@ -7,7 +7,7 @@ import FileUploadContextProvider from './Contexts/FileUploadContext'
 import SearchContextProvider from './Contexts/SearchContext'
 
 //components
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import ModalNotFound from './components/Modal/ModalNotFound'
 
 //Loading Page
@@ -20,8 +20,11 @@ const MyOrders = lazy<any>(() => import('./pages/MyOrders'))
 const ViewFood = lazy(() => import('./pages/ViewFood'))
 const SearchResults = lazy(() => import('./pages/SearchResults'))
 const Categories = lazy(() => import('./pages/Categories'))
-const Join = lazy(() => import('./pages/Join'))
-const Login = lazy(() => import('./pages/Login'))
+
+//Auth pages
+const Join = lazy(() => import('./pages/auth/Join'))
+const Login = lazy(() => import('./pages/auth/Login'))
+const ForgotPassword = lazy(() => import('./pages/auth/ForgotPassword'))
 
 //dashboard pages
 const DashboardHome = lazy<any>(() => import('./pages/dashboard/DashboardHome'))
@@ -64,10 +67,12 @@ const App: React.FC = () => (
                     </Route>
 
                     {/* Authentication */}
-                    <Route path='join' element={<Join />} />
-                    <Route path='login' element={<Login />}>
+
+                    <Route path='auth/join' element={<Join />} />
+                    <Route path='auth/login' element={<Login />}>
                       <Route path=':redirect' element={<Login />} />
                     </Route>
+                    <Route path='auth/forgot' element={<ForgotPassword />} />
 
                     {/* Dashboard */}
                     <Route path='dashboard' element={<DashboardHome />}>

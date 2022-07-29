@@ -126,7 +126,7 @@ const Nav = () => {
             ) : (
               <li>
                 <Link
-                  to='/login'
+                  to='/auth/login'
                   className='px-3 py-0.5 text-white transition-colors bg-gray-800 border-2 rounded-lg hover:bg-gray-700 xl:border-0 text-sm'
                 >
                   تسجيل الدخول

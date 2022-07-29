@@ -273,7 +273,3 @@ export const updateFood = asyncHandler(async (req, res) => {
     }
   }
 })
-
-{
-  addFood, getFood, deleteFood, updateFood
-}
