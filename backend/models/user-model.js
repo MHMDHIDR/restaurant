@@ -6,6 +6,10 @@ const reqString = {
   required: true
 }
 
+const typeString = {
+  type: String
+}
+
 const userAccountStatus = {
   ...reqString,
   enum: ['active', 'block'],
@@ -26,7 +30,8 @@ const UserSchema = new mongoose.Schema(
     userPassword: reqString,
     userAccountStatus,
     userAccountType,
-    userResetPasswordToken: reqString
+    userResetPasswordToken: typeString,
+    userResetPasswordExpires: typeString
   },
   //Collection Name
   { collection: 'restaurant_users' }

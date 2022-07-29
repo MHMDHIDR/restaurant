@@ -3,6 +3,8 @@ import bcrypt from 'bcryptjs'
 import asyncHandler from 'express-async-handler'
 import Types from 'mongoose'
 import UserModel from '../models/user-model.js'
+import { v4 as uuidv4 } from 'uuid'
+import email from '../utils/email.js'
 
 export const joinUser = asyncHandler(async (req, res) => {
   const { userFullName, userEmail, userTel, userPassword } = req.body
@@ -150,7 +152,50 @@ export const forgotPass = asyncHandler(async (req, res) => {
       message: 'حسابك مغلق حاليا، يرجى التواصل مع الادارة'
     })
   } else if (user && user.userAccountStatus === 'active') {
-    //then send the user his/her password in an email and change userResetPasswordToken to a random string
+    const userResetPasswordToken = uuidv4()
+    const userResetPasswordExpires = Date.now() + 3600000
+
+    await UserModel.findByIdAndUpdate(user._id, {
+      userResetPasswordToken,
+      userResetPasswordExpires
+    })
+
+    //send the user an email with a link to reset his/her password
+    const resetLink = `http://dev.com:3000/auth/reset/${userResetPasswordToken}`
+
+    const emailData = {
+      from: 'mr.hamood277@gmail.com',
+      to: user.userEmail,
+      subject: 'Reset Password',
+      msg: `
+        <h1>You have requested to reset your password</h1>
+        <p>
+          Please <a href="${resetLink}" target="_blank">Click Here</a>
+          to reset your password, OR use the following link to reset your password: ${resetLink}
+
+          <small>If you did not request this, please ignore this email and your password will remain unchanged.</small>
+          <small>Note: This link will expire in 1 hour</small>
+        </p>
+      `
+    }
+
+    try {
+      const { accepted, rejected } = await email(emailData)
+
+      if (accepted.length > 0) {
+        res.status(200).json({
+          message: 'تم ارسال رابط اعادة تعيين كلمة المرور الى بريدك الالكتروني',
+          forgotPassSent: 1
+        })
+      } else if (rejected.length > 0) {
+        res.status(400).json({
+          forgotPassSent: 0,
+          message: `عفواً، لم نستطع ارسال رابط اعادة تعيين كلمة المرور الى بريدك الالكتروني: ${rejected[0].message}`
+        })
+      }
+    } catch (err) {
+      res.json({ message: `Ooops!, something went wrong!: ${error} `, mailSent: 0 })
+    }
   } else {
     res.json({
       forgotPassSent: 0,

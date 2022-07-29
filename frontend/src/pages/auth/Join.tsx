@@ -7,9 +7,13 @@ import Footer from '../../components/Footer'
 import Notification from '../../components/Notification'
 import { LoadingSpinner, LoadingPage } from '../../components/Loading'
 
+import useDocumentTitle from '../../hooks/useDocumentTitle'
+
 import { API_URL } from '../../data/constants'
 
-const Login = () => {
+const Join = () => {
+  useDocumentTitle('Join')
+
   const [userFullName, setFullName] = useState('')
   const [userEmail, setEmail] = useState('')
   const [userTel, setTel] = useState('')
@@ -186,4 +190,4 @@ const Login = () => {
     <LoadingPage />
   )
 }
-export default Login
+export default Join

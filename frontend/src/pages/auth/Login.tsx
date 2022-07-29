@@ -8,11 +8,14 @@ import Notification from '../../components/Notification'
 import { LoadingSpinner, LoadingPage } from '../../components/Loading'
 
 import useEventListener from '../../hooks/useEventListener'
+import useDocumentTitle from '../../hooks/useDocumentTitle'
 
 const LoginDataFromLocalStorage =
   'LoginData' in localStorage && JSON.parse(localStorage.getItem('LoginData'))
 
 const Login = () => {
+  useDocumentTitle('Login')
+
   const [userEmailOrTel, setEmailOrTel] = useState(
     LoginDataFromLocalStorage.userEmailOrTel || ''
   )

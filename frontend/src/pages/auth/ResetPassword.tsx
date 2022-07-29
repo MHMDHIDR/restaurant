@@ -15,8 +15,8 @@ import { API_URL } from '../../data/constants'
 const LoginDataFromLocalStorage =
   'LoginData' in localStorage && JSON.parse(localStorage.getItem('LoginData'))
 
-const ForgotPassword = () => {
-  useDocumentTitle('Forgot Password')
+const ResetPassword = () => {
+  useDocumentTitle('Reset Password')
 
   const [userEmailOrTel, setEmailOrTel] = useState(
     LoginDataFromLocalStorage.userEmailOrTel || ''
@@ -172,4 +172,4 @@ const ForgotPassword = () => {
     <LoadingPage />
   )
 }
-export default ForgotPassword
+export default ResetPassword

@@ -1,8 +1,15 @@
 import nodemailer from 'nodemailer'
 import asyncHandler from 'express-async-handler'
 
-const email = asyncHandler(async (name, subject, from, to, msg) => {
+const email = asyncHandler(async ({ name, subject, from, to, msg }) => {
+  /**
+   * @returns {Promise<any>} JSON
+   */
+
   to = to || process.env.MAILER_EMAIL
+  from = from || process.env.MAILER_EMAIL
+  name = name || to
+
   // create reusable transporter object using the default SMTP transport
   const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',

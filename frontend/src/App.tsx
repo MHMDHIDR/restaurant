@@ -25,6 +25,7 @@ const Categories = lazy(() => import('./pages/Categories'))
 const Join = lazy(() => import('./pages/auth/Join'))
 const Login = lazy(() => import('./pages/auth/Login'))
 const ForgotPassword = lazy(() => import('./pages/auth/ForgotPassword'))
+const ResetPassword = lazy(() => import('./pages/auth/ResetPassword'))
 
 //dashboard pages
 const DashboardHome = lazy<any>(() => import('./pages/dashboard/DashboardHome'))
@@ -73,6 +74,7 @@ const App: React.FC = () => (
                       <Route path=':redirect' element={<Login />} />
                     </Route>
                     <Route path='auth/forgot' element={<ForgotPassword />} />
+                    <Route path='auth/reset' element={<ResetPassword />} />
 
                     {/* Dashboard */}
                     <Route path='dashboard' element={<DashboardHome />}>
