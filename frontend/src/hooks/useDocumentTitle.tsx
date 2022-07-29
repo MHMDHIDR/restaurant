@@ -10,8 +10,8 @@ const useDocumentTitle = (title: string) => {
 
   useEffect(() => {
     document.title = window.location.pathname.includes('dashboard')
-      ? title + `| Dashboard | ${appName}`
-      : title + `| ${appName}`
+      ? title + ` | Dashboard | ${appName}`
+      : title + ` | ${appName}`
   })
 }
 
