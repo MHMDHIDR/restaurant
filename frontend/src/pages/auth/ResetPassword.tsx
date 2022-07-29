@@ -41,14 +41,14 @@ const ResetPassword = () => {
       Axios.get(`${API_URL}/users`, {
         headers: { Authorization: `Bearer ${USER.token}` }
       })
-        .then(res => {
-          setData(res.data)
+        .then(({ data }) => {
+          setData(data)
 
-          if (USER?._id === data.id && USER.userAccountType === 'admin') {
-            navigate('/dashboard')
-          } else if (USER?._id === data.id && USER.userAccountType === 'user') {
-            navigate('/')
-          }
+          USER?._id === data._id && data.userAccountType === 'admin'
+            ? navigate('/dashboard')
+            : USER?._id === data._id && data.userAccountType === 'user'
+            ? navigate('/')
+            : navigate('/')
         })
         .catch(err => {
           console.error(err)
@@ -73,7 +73,12 @@ const ResetPassword = () => {
   const sendResetPassForm = async (e: any) => {
     e.preventDefault()
 
-    if (newUserPass === '' || newUserPassConfirm === '') {
+    if (
+      newUserPass === '' ||
+      newUserPassConfirm === '' ||
+      newPassErr.current.textContent !== '' ||
+      confirmNewPassErr.current.textContent !== ''
+    ) {
       setNewPassStatus(0)
       setNewPassMsg('الرجاء ملء جميع الحقول بطريقة صحيحة')
       return

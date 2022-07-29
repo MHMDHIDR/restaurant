@@ -37,12 +37,14 @@ const Join = () => {
           Authorization: `Bearer ${USER.token}`
         }
       })
-        .then(res => {
-          setData(res.data)
+        .then(({ data }) => {
+          setData(data)
 
-          if (USER?._id === data.id) {
-            navigate('/dashboard')
-          }
+          USER?._id === data._id && data.userAccountType === 'admin'
+            ? navigate('/dashboard')
+            : USER?._id === data._id && data.userAccountType === 'user'
+            ? navigate('/')
+            : navigate('/')
         })
         .catch(err => {
           console.error(err)
@@ -52,7 +54,9 @@ const Join = () => {
         })
     }
 
-    return () => setData('')
+    return () => {
+      setData('')
+    }
   }, [USER, API_URL, data.id, navigate])
 
   const handleJoin = async (e: { preventDefault: () => void }) => {

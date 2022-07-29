@@ -81,11 +81,12 @@ export const loginUser = asyncHandler(async (req, res) => {
 })
 
 export const getUser = asyncHandler(async (req, res) => {
-  const { _id, userEmail } = await UserModel.findById(req.user.id)
+  const { _id, userEmail, userAccountType } = await UserModel.findById(req.user.id)
 
   res.status(200).json({
-    id: _id,
-    email: userEmail
+    _id,
+    userEmail,
+    userAccountType
   })
 })
 
