@@ -18,8 +18,7 @@ const DashboardHome = () => {
   useDocumentTitle('Home')
 
   //getting user id from local storage
-  const USER_ID =
-    'user' in localStorage ? JSON.parse(localStorage.getItem('user'))._id : null
+  const USER = JSON.parse(localStorage.getItem('user'))
 
   const [userStatus, setUserStatus] = useState()
   const [userType, setUserType] = useState<any>('')
@@ -27,9 +26,13 @@ const DashboardHome = () => {
   const [ordersCount, setOrdersCount] = useState<any>()
 
   //if there's food id then fetch with food id, otherwise fetch everything
-  const currentUser = useAxios({ method: 'get', url: `/users/all/1/1/${USER_ID}` })
+  const currentUser = useAxios({ method: 'get', url: `/users/all/1/1/${USER?._id}` })
   const menu = useAxios({ method: 'get', url: `/foods/0/0` })
-  const orders = useAxios({ method: 'get', url: `/orders/0/0` })
+  const orders = useAxios({
+    method: 'get',
+    url: `/orders/0/0`,
+    headers: USER ? JSON.stringify({ Authorization: `Bearer ${USER.token}` }) : null
+  })
 
   useEffect(() => {
     if (currentUser?.response !== null || menu.response !== null) {
@@ -45,10 +48,10 @@ const DashboardHome = () => {
   useEventListener('keydown', (e: any) => e.key === 'Escape' && menuToggler())
 
   //check if userStatus is active and the userType is admin
-  return !USER_ID ? (
+  return !USER?._id ? (
     <ModalNotFound />
-  ) : !USER_ID || userStatus === 'block' || userType === 'user' ? (
-    logoutUser(USER_ID)
+  ) : !USER?._id || userStatus === 'block' || userType === 'user' ? (
+    logoutUser(USER?._id)
   ) : !userStatus || !userType ? (
     <LoadingPage />
   ) : (

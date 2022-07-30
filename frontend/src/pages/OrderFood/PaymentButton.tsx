@@ -20,7 +20,7 @@ const PaymentButton = ({ value, onSuccess }) => {
     return data
   }
 
-  const onCancel = () => console.log('cancelled Payment')
+  const onCancel = () => alert('cancelled Payment')
 
   const onError = (error: any) => console.error('some error happened=> ', error)
 

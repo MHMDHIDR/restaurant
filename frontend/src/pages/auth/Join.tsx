@@ -10,6 +10,8 @@ import { LoadingSpinner, LoadingPage } from '../../components/Loading'
 import useDocumentTitle from '../../hooks/useDocumentTitle'
 
 import { API_URL } from '../../data/constants'
+import useAxios from '../../hooks/useAxios'
+import useAuth from '../../hooks/useAuth'
 
 const Join = () => {
   useDocumentTitle('Join')
@@ -18,51 +20,25 @@ const Join = () => {
   const [userEmail, setEmail] = useState('')
   const [userTel, setTel] = useState('')
   const [userPassword, setPassword] = useState('')
-  const [data, setData] = useState<any>('')
   const [regStatus, setRegStatus] = useState()
-  const [loading, setloading] = useState(false)
+  const [isSendingJoinForm, setIsSendingJoinForm] = useState(false)
   const [errMsg, setErrMsg] = useState('')
 
   const navigate = useNavigate()
 
-  //setting user token from local storage
-  const USER = JSON.parse(localStorage.getItem('user'))
-  //get user data using token if the user is logged-in and token is saved in localStorage then I'll get the current user data from the database
+  const { isAuth, userType, loading } = useAuth()
   useEffect(() => {
-    if (USER) {
-      setloading(true)
-
-      Axios.get(`${API_URL}/users`, {
-        headers: {
-          Authorization: `Bearer ${USER.token}`
-        }
-      })
-        .then(({ data }) => {
-          setData(data)
-
-          USER?._id === data._id && data.userAccountType === 'admin'
-            ? navigate('/dashboard')
-            : USER?._id === data._id && data.userAccountType === 'user'
-            ? navigate('/')
-            : navigate('/')
-        })
-        .catch(err => {
-          console.error(err)
-        })
-        .finally(() => {
-          setloading(false)
-        })
-    }
-
-    return () => {
-      setData('')
-    }
-  }, [USER, API_URL, data.id, navigate])
+    isAuth && userType === 'admin'
+      ? navigate('/dashboard')
+      : isAuth && userType === 'user'
+      ? navigate('/')
+      : null
+  }, [isAuth, userType, navigate])
 
   const handleJoin = async (e: { preventDefault: () => void }) => {
     e.preventDefault()
 
-    setloading(true)
+    setIsSendingJoinForm(true)
 
     try {
       const joinUser = await Axios.post(`${API_URL}/users/join`, {
@@ -86,7 +62,7 @@ const Join = () => {
           : response.statusText
       )
     } finally {
-      setloading(false)
+      setIsSendingJoinForm(false)
     }
   }
 
@@ -163,7 +139,7 @@ const Join = () => {
                   type='submit'
                   id='submitBtn'
                 >
-                  {loading && loading ? (
+                  {isSendingJoinForm && isSendingJoinForm ? (
                     <>
                       <LoadingSpinner />
                       جارِ التسجيل...

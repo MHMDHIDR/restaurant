@@ -3,6 +3,7 @@ import Axios from 'axios'
 import { API_URL } from '../data/constants'
 
 export type responseTypes = {
+  userAccountType: string
   response: Array<any> | null | any
   itemsCount: number
   CategoryList: string[]
@@ -26,33 +27,25 @@ const useAxios = ({ url, method, body = null, headers = null }) => {
   } | null>(null)
   const [loading, setloading] = useState(true)
 
-  useEffect((): { () } => {
-    let isMounted = true
-
-    setloading(true)
-
-    const getData = async () => {
+  useEffect(() => {
+    const fetchData = async () => {
       try {
-        const makeFetch = await Axios[method](url, JSON.parse(headers), JSON.parse(body))
-        const { data } = await makeFetch
-
-        if (isMounted) {
-          setResponse(data)
-          setError(null)
-        }
+        const result = await Axios({
+          url,
+          method,
+          data: body,
+          headers: JSON.parse(headers)
+        })
+        setResponse(result.data)
+        setloading(false)
       } catch (error) {
-        if (isMounted) {
-          setError(error)
-          setResponse(null)
-        }
+        setError({ error, response: error.response })
       } finally {
-        isMounted && setloading(false)
+        setloading(false)
       }
     }
-    getData()
-
-    return () => (isMounted = false)
-  }, [method, url, body, headers])
+    fetchData()
+  }, [url, method, body, headers])
 
   return { response, error, loading }
 }

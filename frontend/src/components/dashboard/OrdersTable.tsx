@@ -33,9 +33,12 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
 
   const modalLoading = document.querySelector('#modal')
 
+  const USER = JSON.parse(localStorage.getItem('user'))
+
   const { ...response } = useAxios({
     method: 'get',
-    url: `/orders/${pageNumber}/${itemsPerPage}?orderDate=-1`
+    url: `/orders/${pageNumber}/${itemsPerPage}?orderDate=-1`,
+    headers: USER ? JSON.stringify({ Authorization: `Bearer ${USER.token}` }) : null
   })
 
   useEffect(() => {

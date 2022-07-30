@@ -99,7 +99,7 @@ const DashboardUsers = () => {
           modalLoading.classList.add('hidden')
         }, 300)
       } catch (err) {
-        console.log(err)
+        console.error(err)
       }
     }
   }

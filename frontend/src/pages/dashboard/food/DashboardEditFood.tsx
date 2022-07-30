@@ -165,7 +165,7 @@ const EditFood = () => {
           )
 
           const { foodUpdated, message } = response.data
-          console.log(message)
+
           setUpdatedFoodStatus(foodUpdated)
           //Remove waiting modal
           setTimeout(() => {

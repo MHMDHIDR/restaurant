@@ -9,6 +9,8 @@ import { LoadingSpinner, LoadingPage } from '../../components/Loading'
 
 import useEventListener from '../../hooks/useEventListener'
 import useDocumentTitle from '../../hooks/useDocumentTitle'
+import useAxios from '../../hooks/useAxios'
+import useAuth from '../../hooks/useAuth'
 
 const LoginDataFromLocalStorage =
   'LoginData' in localStorage && JSON.parse(localStorage.getItem('LoginData'))
@@ -20,9 +22,8 @@ const Login = () => {
     LoginDataFromLocalStorage.userEmailOrTel || ''
   )
   const [userPassword, setPassword] = useState('')
-  const [data, setData] = useState<any>('')
   const [loggedInStatus, setLoggedInStatus] = useState()
-  const [loading, setloading] = useState(false)
+  const [isSendingLoginForm, setIsSendingLoginForm] = useState(false)
   const [loginMsg, setLoginMsg] = useState('')
   const { redirect } = useParams()
 
@@ -34,37 +35,14 @@ const Login = () => {
       ? process.env.API_LOCAL_URL
       : process.env.API_URL
 
-  //setting user token from local storage
-  const USER = JSON.parse(localStorage.getItem('user'))
-  //get user data using token if the user is logged-in and token is saved in localStorage then I'll get the current user data from the database
+  const { isAuth, userType, loading } = useAuth()
   useEffect(() => {
-    if (USER) {
-      setloading(true)
-
-      Axios.get(`${API_URL}/users`, {
-        headers: { Authorization: `Bearer ${USER.token}` }
-      })
-        .then(({ data }) => {
-          setData(data)
-
-          USER?._id === data._id && data.userAccountType === 'admin'
-            ? navigate('/dashboard')
-            : USER?._id === data._id && data.userAccountType === 'user'
-            ? navigate('/')
-            : navigate('/')
-        })
-        .catch(err => {
-          console.error(err)
-        })
-        .finally(() => {
-          setloading(false)
-        })
-    }
-
-    return () => {
-      setData('')
-    }
-  }, [USER, API_URL, data.id, navigate])
+    isAuth && userType === 'admin'
+      ? navigate('/dashboard')
+      : isAuth && userType === 'user'
+      ? navigate('/')
+      : null
+  }, [isAuth, userType, navigate])
 
   useEventListener('click', (e: any) => {
     //confirm means cancel Modal message (hide it)
@@ -75,8 +53,7 @@ const Login = () => {
 
   const sendLoginForm = async (e: { preventDefault: () => void }) => {
     e.preventDefault()
-
-    setloading(true)
+    setIsSendingLoginForm(true)
 
     try {
       const loginUser = await Axios.post(`${API_URL}/users/login`, {
@@ -110,7 +87,7 @@ const Login = () => {
     } catch ({ response }) {
       setLoginMsg(response?.data?.message)
     } finally {
-      setloading(false)
+      setIsSendingLoginForm(false)
     }
   }
 
@@ -163,7 +140,7 @@ const Login = () => {
                   type='submit'
                   id='submitBtn'
                 >
-                  {loading && loading ? (
+                  {isSendingLoginForm && isSendingLoginForm ? (
                     <>
                       <LoadingSpinner />
                       جارِ تسجيل الدخول...

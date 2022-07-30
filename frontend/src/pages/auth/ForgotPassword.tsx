@@ -5,12 +5,14 @@ import Axios from 'axios'
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 import Notification from '../../components/Notification'
-import { LoadingSpinner } from '../../components/Loading'
+import { LoadingPage, LoadingSpinner } from '../../components/Loading'
 
 import useEventListener from '../../hooks/useEventListener'
 import useDocumentTitle from '../../hooks/useDocumentTitle'
 
 import { API_URL } from '../../data/constants'
+import useAxios from '../../hooks/useAxios'
+import useAuth from '../../hooks/useAuth'
 
 const ForgotDataFromLocalStorage =
   'ForgotData' in localStorage && JSON.parse(localStorage.getItem('ForgotData'))
@@ -21,8 +23,7 @@ const ForgotPassword = () => {
   const [emailOrTel, setEmailOrTel] = useState(
     ForgotDataFromLocalStorage.newUserPassword || ''
   )
-  const [data, setData] = useState<any>('')
-  const [loading, setloading] = useState(false)
+  const [sendingForgotForm, setSendingForgotForm] = useState(false)
   const [forgotLinkSentStatus, setForgotLinkSentStatus] = useState(0)
   const [forgotLinkMsg, setForgotLinkMsg] = useState('')
 
@@ -30,37 +31,14 @@ const ForgotPassword = () => {
 
   const navigate = useNavigate()
 
-  //setting user token from local storage
-  const USER = JSON.parse(localStorage.getItem('user'))
-  //get user data using token if the user is logged-in and token is saved in localStorage then I'll get the current user data from the database
+  const { isAuth, userType, loading } = useAuth()
   useEffect(() => {
-    if (USER) {
-      setloading(true)
-
-      Axios.get(`${API_URL}/users`, {
-        headers: { Authorization: `Bearer ${USER.token}` }
-      })
-        .then(({ data }) => {
-          setData(data)
-
-          USER?._id === data._id && data.userAccountType === 'admin'
-            ? navigate('/dashboard')
-            : USER?._id === data._id && data.userAccountType === 'user'
-            ? navigate('/')
-            : navigate('/')
-        })
-        .catch(err => {
-          console.error(err)
-        })
-        .finally(() => {
-          setloading(false)
-        })
-    }
-
-    return () => {
-      setData('')
-    }
-  }, [USER, API_URL, data.id, navigate])
+    isAuth && userType === 'admin'
+      ? navigate('/dashboard')
+      : isAuth && userType === 'user'
+      ? navigate('/')
+      : null
+  }, [isAuth, userType, navigate])
 
   useEventListener('click', (e: any) => {
     //confirm means cancel Modal message (hide it)
@@ -86,7 +64,7 @@ const ForgotPassword = () => {
     // if there's no error in the form
     e.target.reset()
     e.target.querySelector('button').setAttribute('disabled', 'disabled')
-    setloading(true)
+    setSendingForgotForm(true)
 
     try {
       const { data } = await Axios.post(`${API_URL}/users/forgotpass`, formData)
@@ -104,12 +82,12 @@ const ForgotPassword = () => {
     } catch ({ response }) {
       setForgotLinkMsg(response?.message)
     } finally {
-      setloading(false)
+      setSendingForgotForm(false)
     }
   }
 
   // if done loading (NOT Loading) then show the login form
-  return (
+  return !loading ? (
     <>
       <Header />
       <section className='py-12 my-8'>
@@ -141,17 +119,19 @@ const ForgotPassword = () => {
               <div className='flex flex-col gap-6 text-center border-none form__group ltr'>
                 <button
                   className={`flex gap-4 w-fit mx-auto px-12 py-3 text-white uppercase bg-orange-700 rounded-lg hover:bg-orange-800 scale-100 transition-all rtl${
-                    loading && loading ? ' scale-105 cursor-progress' : ''
+                    sendingForgotForm && sendingForgotForm
+                      ? ' scale-105 cursor-progress'
+                      : ''
                   } ${
                     //add disbaled class if is true or false (that means user has clicked send button)
-                    loading || !loading
+                    sendingForgotForm || !sendingForgotForm
                       ? ' disabled:opacity-30 disabled:hover:bg-orange-700'
                       : ''
                   }`}
                   type='submit'
                   id='submitBtn'
                 >
-                  {loading && loading ? (
+                  {sendingForgotForm && sendingForgotForm ? (
                     <>
                       <LoadingSpinner />
                       <span>جارِ إرسال طلب استعادة كلمة المرور...</span>
@@ -186,6 +166,8 @@ const ForgotPassword = () => {
       </section>
       <Footer />
     </>
+  ) : (
+    <LoadingPage />
   )
 }
 export default ForgotPassword
