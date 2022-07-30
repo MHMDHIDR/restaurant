@@ -21,16 +21,11 @@ const Backtop = ({ color = 'orange' }) => {
 
   return (
     <button
-      className={`
-        cursor-pointer bg-${color}-700 hover:bg-${color}-800 fixed right-[3%] h-10 w-10 border-2 border-solid border-${color}-100 rounded-md z-50 overflow-hidden transition-all back__top
-        after:content-["⇧"] after:block after:text-center after:text-lg after:mt-1 after:transition-[margin]
-        hover:after:mt-0.5
-        opacity-0 bottom-1/2 pointer-events-none
-      `}
+      className={`back__top pointer-events-none cursor-pointer bg-${color}-700 hover:bg-${color}-800 fixed right-[3%] h-10 w-10 border-2 border-solid border-${color}-100 rounded-md z-50 overflow-hidden transition-all back__top after:content-["⬆"] after:block after:text-center after:text-lg after:mt-1 after:transition-[margin] hover:after:mt-0.5 opacity-0 bottom-1/2 pointer-events-none`}
       name='backtop'
       aria-label='backtop'
-      data-tooltip='الذهاب للأعلى'
-    ></button>
+      title='الذهاب للأعلى'
+    />
   )
 }
 
