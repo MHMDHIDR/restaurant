@@ -19,19 +19,23 @@ interface settingsProps {
 
 const Footer = () => {
   const [settings, setSettings] = useState<settingsProps | any>()
-  const [itemsNames, setItemsNames] = useState([])
+  const [suggestedItems, setSuggestedItems] = useState([])
 
   const fetchSettings = useAxios({ method: 'get', url: '/settings' })
-  const productsNames = useAxios({ method: 'get', url: '/foods/1/2' })
+  const productsNames = useAxios({ method: 'get', url: '/foods/1/0' })
+  const SUGGESTED_ITEMS_COUNT = 2
 
   useEffect(() => {
-    if (productsNames.response !== null || fetchSettings.response !== null) {
-      // setSettings and it Types
+    if (fetchSettings.response !== null || productsNames.response !== null) {
       setSettings(fetchSettings.response)
-
-      setItemsNames(productsNames.response?.response)
+      setSuggestedItems(
+        productsNames.response?.response
+          .map((product: any) => product)
+          .sort(() => Math.random() - 0.5)
+          .slice(0, SUGGESTED_ITEMS_COUNT)
+      )
     }
-  }, [fetchSettings, productsNames])
+  }, [fetchSettings.response, productsNames.response])
 
   return (
     <footer className='text-white bg-orange-700 footer'>
@@ -54,16 +58,16 @@ const Footer = () => {
           </div>
           <div className='flex flex-wrap flex-1 w-full gap-14 sm:w-auto justify-evenly'>
             <div>
-              <h3 className='mb-3 text-lg font-bold'>وجبات مقترحة لك</h3>
+              <h3 className='mb-3 text-lg font-bold'>مقترحات ستنال على اعجابك</h3>
               <ul className='space-y-2'>
-                {!itemsNames || itemsNames.length === 0 ? (
+                {!suggestedItems || suggestedItems.length === 0 ? (
                   <li>
                     <Link to='/view' className='hover:text-gray-700'>
                       عرض الوجبات
                     </Link>
                   </li>
                 ) : (
-                  itemsNames.map((item, idx) => (
+                  suggestedItems.map((item, idx) => (
                     <li key={idx}>
                       <Link to={`/view/item/${item._id}`} className='hover:text-gray-700'>
                         {removeSlug(abstractText(item.foodName, 20))}

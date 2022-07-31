@@ -77,7 +77,7 @@ const Join = () => {
             className='mx-0 mt-4 mb-12 text-2xl text-center md:text-3xl'
             data-section='login'
           >
-            تسجيل حساب جديد للوحة التحكم
+            تسجيل حساب جديد
           </h3>
           <div className='max-w-6xl mx-auto'>
             <form className='mt-32' onSubmit={handleJoin}>
@@ -91,7 +91,7 @@ const Join = () => {
                   autoFocus
                   required
                 />
-                <span className='form__label'>اسمك الكريم</span>
+                <span className='form__label'>الاســـــــــــــــــم</span>
               </label>
 
               <label htmlFor='email' className='form__group'>
@@ -104,7 +104,7 @@ const Join = () => {
                   dir='auto'
                   required
                 />
-                <span className='form__label'>بريدك الالكتروني</span>
+                <span className='form__label'>البريد الالكترونــي</span>
               </label>
 
               <label htmlFor='tel' className='form__group'>
@@ -117,7 +117,7 @@ const Join = () => {
                   dir='auto'
                   required
                 />
-                <span className='form__label'>رقم الهاتف</span>
+                <span className='form__label'>رقم الهاتـــــــــف</span>
               </label>
 
               <label htmlFor='password' className='form__group'>
@@ -130,7 +130,7 @@ const Join = () => {
                   dir='auto'
                   required
                 />
-                <span className='form__label'>كلمة المرور</span>
+                <span className='form__label'>كلمــة المــــــرور</span>
               </label>
 
               <div className='flex flex-col gap-6 text-center border-none form__group ltr'>
@@ -155,7 +155,7 @@ const Join = () => {
 
                 <Link
                   to='/auth/login'
-                  className='mx-auto text-center text-orange-700 underline-hover dark:text-orange-500 w-fit'
+                  className='mx-auto text-center text-orange-700 underline-hover dark:text-orange-800 w-fit'
                 >
                   تسجيل الدخول
                 </Link>
