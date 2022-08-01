@@ -162,6 +162,14 @@ export const forgotPass = asyncHandler(async (req, res) => {
       message: 'لقد تم إرسال رابط تغيير كلمة المرور بالفعل، الرجاء رؤية بريدك الالكتروني'
     })
   } else if (user && user.userAccountStatus === 'active') {
+    const userResetPasswordToken = uuidv4()
+    const userResetPasswordExpires = Date.now() + 3600000 // 1 hour
+
+    await UserModel.findByIdAndUpdate(user._id, {
+      userResetPasswordToken,
+      userResetPasswordExpires
+    })
+
     //send the user an email with a link to reset his/her password
     const resetLink =
       APP_URL + `:${process.env.PORT || 3000}/auth/reset/${userResetPasswordToken}`
@@ -172,11 +180,12 @@ export const forgotPass = asyncHandler(async (req, res) => {
       subject: 'Reset Password',
       msg: `
         <h1>You have requested to reset your password</h1>
-        <p>Please <a href="${resetLink}" target="_blank">Click Here</a> to reset your password,
-OR use the following link to reset your password: ${resetLink}
-
-<small>If you did not request this, please ignore this email and your password will remain unchanged.</small>
-<small>Note: This link will expire in 1 hour</small>
+        <p>
+          Please <a href="${resetLink}" target="_blank">Click Here</a>
+          to reset your password, OR use the following link to reset your password: ${resetLink}
+          <small>If you did not request this, please ignore this email and your password will remain unchanged.</small>
+          <small>Note: This link will expire in 1 hour</small>
+        </p>
       `
     }
 
@@ -184,15 +193,6 @@ OR use the following link to reset your password: ${resetLink}
       const { accepted, rejected } = await email(emailData)
 
       if (accepted.length > 0) {
-        //only if the email is sent successfully then
-        const userResetPasswordToken = uuidv4()
-        const userResetPasswordExpires = Date.now() + 3600000 // 1 hour
-
-        await UserModel.findByIdAndUpdate(user._id, {
-          userResetPasswordToken,
-          userResetPasswordExpires
-        })
-
         res.status(200).json({
           message: 'تم ارسال رابط اعادة تعيين كلمة المرور الى بريدك الالكتروني',
           forgotPassSent: 1
