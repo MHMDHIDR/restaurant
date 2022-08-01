@@ -9,7 +9,6 @@ import { LoadingSpinner, LoadingPage } from '../../components/Loading'
 
 import useEventListener from '../../hooks/useEventListener'
 import useDocumentTitle from '../../hooks/useDocumentTitle'
-import useAxios from '../../hooks/useAxios'
 import useAuth from '../../hooks/useAuth'
 
 const LoginDataFromLocalStorage =

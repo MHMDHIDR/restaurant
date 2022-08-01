@@ -162,14 +162,6 @@ export const forgotPass = asyncHandler(async (req, res) => {
       message: 'لقد تم إرسال رابط تغيير كلمة المرور بالفعل، الرجاء رؤية بريدك الالكتروني'
     })
   } else if (user && user.userAccountStatus === 'active') {
-    const userResetPasswordToken = uuidv4()
-    const userResetPasswordExpires = Date.now() + 3600000 // 1 hour
-
-    await UserModel.findByIdAndUpdate(user._id, {
-      userResetPasswordToken,
-      userResetPasswordExpires
-    })
-
     //send the user an email with a link to reset his/her password
     const resetLink =
       APP_URL + `:${process.env.PORT || 3000}/auth/reset/${userResetPasswordToken}`
@@ -180,32 +172,11 @@ export const forgotPass = asyncHandler(async (req, res) => {
       subject: 'Reset Password',
       msg: `
         <h1>You have requested to reset your password</h1>
-        <style>
-          .reset__link {
-            text-decoration: none !important;
-            color: unset !important;
-          }
-          .reset__btn {
-            transition: transform 200ms ease !important;
-            background-color: transparent !important;
-            border: 2px solid white !important;
-            padding: 8px !important;
-            border-radius: 6px !important;
-            color: white !important;
-          }
-          .reset__btn:hover {
-            cursor: pointer !important;
-            color: #c65400 !important
-            border-color: #c65400 !important;
-            transform: scale(1.1);
-          }
-        </style>
-        <p>Please <a href="${resetLink}" target="_blank" class="reset__link"><button class="reset__btn">Click Here</button></a> to reset your password,
+        <p>Please <a href="${resetLink}" target="_blank">Click Here</a> to reset your password,
 OR use the following link to reset your password: ${resetLink}
 
 <small>If you did not request this, please ignore this email and your password will remain unchanged.</small>
 <small>Note: This link will expire in 1 hour</small>
-        </p>
       `
     }
 
@@ -213,6 +184,15 @@ OR use the following link to reset your password: ${resetLink}
       const { accepted, rejected } = await email(emailData)
 
       if (accepted.length > 0) {
+        //only if the email is sent successfully then
+        const userResetPasswordToken = uuidv4()
+        const userResetPasswordExpires = Date.now() + 3600000 // 1 hour
+
+        await UserModel.findByIdAndUpdate(user._id, {
+          userResetPasswordToken,
+          userResetPasswordExpires
+        })
+
         res.status(200).json({
           message: 'تم ارسال رابط اعادة تعيين كلمة المرور الى بريدك الالكتروني',
           forgotPassSent: 1

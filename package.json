@@ -29,5 +29,6 @@
   "homepage": "https://github.com/MHMDHIDR/restaurant#readme",
   "devDependencies": {
     "concurrently": "^7.1.0"
-  }
+  },
+  "dependencies": {}
 }

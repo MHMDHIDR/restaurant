@@ -12,7 +12,6 @@ import useDocumentTitle from '../../hooks/useDocumentTitle'
 
 import { API_URL } from '../../data/constants'
 import { validPassword } from '../../utils/validForm'
-import useAxios from '../../hooks/useAxios'
 import useAuth from '../../hooks/useAuth'
 
 const ResetPassword = () => {

@@ -11,7 +11,6 @@ import useEventListener from '../../hooks/useEventListener'
 import useDocumentTitle from '../../hooks/useDocumentTitle'
 
 import { API_URL } from '../../data/constants'
-import useAxios from '../../hooks/useAxios'
 import useAuth from '../../hooks/useAuth'
 
 const ForgotDataFromLocalStorage =
