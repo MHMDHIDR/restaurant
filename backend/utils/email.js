@@ -26,7 +26,35 @@ const email = asyncHandler(async ({ name, subject, from, to, msg }) => {
     subject,
     from: `"${name}" <${from}>`,
     to,
-    html: msg
+    html: `
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+      <section style="background-color: #f1b08e; padding: 10px;">
+        <a href="https://mhmdhidr-restaurant.netlify.app">
+          <img src="https://mhmdhidr-restaurant.netlify.app/assets/img/icons/logo.svg"
+            alt="logo"
+            width="150" height="150">
+        </a>
+        <h1 style="text-align: center;font-family: 'Montserrat', sans-serif;">${subject}</h1>
+        
+        <pre style="font-family: 'Montserrat', sans-serif;">${msg}</pre>
+
+        <!-- footer -->
+        <div style="background-color: #f1b08e; padding: 20px;">
+          <p>
+            <a href="https://mhmdhidr-restaurant.netlify.app">
+              <img src="https://mhmdhidr-restaurant.netlify.app/assets/img/icons/logo.svg"
+                alt="logo"
+                width="150" height="150">
+            </a>
+          </p>
+          <p style="text-align: center; font-weight: bold;font-family: 'Montserrat', sans-serif;">
+            All rights reserved.
+          </p>
+        </div>
+      </section>
+    `
   })
 
   return emailResponse

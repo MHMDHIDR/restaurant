@@ -157,13 +157,13 @@ const Login = () => {
                 <div className='flex gap-6 justify-evenly'>
                   <Link
                     to='/auth/join'
-                    className='mx-auto text-center text-orange-700 underline-hover dark:text-orange-800 w-fit'
+                    className='mx-auto text-center text-orange-700 underline-hover dark:text-orange-800 sm:dark:text-orange-500 w-fit'
                   >
                     تسجيل حساب جديد
                   </Link>
                   <Link
                     to='/auth/forgot'
-                    className='mx-auto text-center text-orange-700 underline-hover dark:text-orange-800 w-fit'
+                    className='mx-auto text-center text-orange-700 underline-hover dark:text-orange-800 sm:dark:text-orange-500 w-fit'
                   >
                     نسيت كلمة المرور
                   </Link>

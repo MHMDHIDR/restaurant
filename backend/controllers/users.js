@@ -180,12 +180,31 @@ export const forgotPass = asyncHandler(async (req, res) => {
       subject: 'Reset Password',
       msg: `
         <h1>You have requested to reset your password</h1>
-        <p>
-          Please <a href="${resetLink}" target="_blank">Click Here</a>
-          to reset your password, OR use the following link to reset your password: ${resetLink}
+        <style>
+          .reset__link {
+            text-decoration: none !important;
+            color: unset !important;
+          }
+          .reset__btn {
+            transition: transform 200ms ease !important;
+            background-color: transparent !important;
+            border: 2px solid white !important;
+            padding: 8px !important;
+            border-radius: 6px !important;
+            color: white !important;
+          }
+          .reset__btn:hover {
+            cursor: pointer !important;
+            color: #c65400 !important
+            border-color: #c65400 !important;
+            transform: scale(1.1);
+          }
+        </style>
+        <p>Please <a href="${resetLink}" target="_blank" class="reset__link"><button class="reset__btn">Click Here</button></a> to reset your password,
+OR use the following link to reset your password: ${resetLink}
 
-          <small>If you did not request this, please ignore this email and your password will remain unchanged.</small>
-          <small>Note: This link will expire in 1 hour</small>
+<small>If you did not request this, please ignore this email and your password will remain unchanged.</small>
+<small>Note: This link will expire in 1 hour</small>
         </p>
       `
     }
