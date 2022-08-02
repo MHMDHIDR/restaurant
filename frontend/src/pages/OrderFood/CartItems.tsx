@@ -35,7 +35,7 @@ const CartItems: any = () => {
               alt={removeSlug(item?.cHeading)}
               width='128'
               height='128'
-              className='object-cover w-32 h-32 p-1 mx-auto border border-gray-400 min-w-fit min-h-fit aspect-square dark:border-gray-300 rounded-xl'
+              className='object-cover w-32 h-32 sm:min-w-fit sm:min-h-fit max-w-[8rem] max-h-[8rem] p-1 mx-auto border border-gray-400 aspect-square dark:border-gray-300 rounded-xl'
             />
 
             {/* Product Details */}

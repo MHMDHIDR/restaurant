@@ -225,7 +225,7 @@ const OrderFood = () => {
                     required
                   />
                   <span className={`form__label`}>
-                    اسمك الكريم &nbsp;
+                    الاســـــــــــــــــم &nbsp;
                     <strong className='text-xl leading-4 text-red-600'>*</strong>
                   </span>
                   <span

@@ -24,13 +24,11 @@ const Nav = () => {
     const nav = document.querySelector('.nav')
     const hideNavClass = '-translate-y-[1000px]'
 
-    if (!isIOSDevice) {
-      lastScrollY < window.scrollY
-        ? nav?.classList.add(hideNavClass)
-        : nav?.classList.remove(hideNavClass)
+    lastScrollY < window.scrollY
+      ? nav?.classList.add(hideNavClass)
+      : nav?.classList.remove(hideNavClass)
 
-      lastScrollY = window.scrollY
-    }
+    lastScrollY = window.scrollY
   })
 
   const { items } = useContext(CartContext)
@@ -39,7 +37,7 @@ const Nav = () => {
     <div className='fixed inset-0 bottom-auto z-[9999] w-full transition-transform duration-300 nav ltr'>
       <nav
         className={`flex flex-wrap items-center justify-between px-5 xl:px-10 lg:px-20 py-1 bg-gray-300 bg-opacity-90 dark:bg-neutral-900 dark:bg-opacity-90 shadow-xl backdrop-blur-sm saturate-[180%] transition-all${
-          isIOSDevice ? ' standalone:pt-10' : ''
+          isIOSDevice ? ' standalone:pt-[2.3rem]' : ''
         }`}
       >
         <Link aria-label='App Logo' title='App Logo' to='/'>

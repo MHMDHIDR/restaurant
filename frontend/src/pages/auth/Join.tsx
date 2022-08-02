@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import Axios from 'axios'
+// import { GoogleLoginButton } from 'ts-react-google-login-component'
 
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
@@ -33,6 +34,14 @@ const Join = () => {
       ? navigate('/')
       : null
   }, [isAuth, userType, navigate])
+
+  // const responseGoogle = (googleUser: gapi.auth.GoogleUser) => {
+  //   const id_token = googleUser.getAuthResponse(true).id_token
+  //   const googleId = googleUser.getId()
+
+  //   console.log({ googleId })
+  //   console.log({ accessToken: id_token })
+  // }
 
   const handleJoin = async (e: { preventDefault: () => void }) => {
     e.preventDefault()
@@ -152,12 +161,23 @@ const Join = () => {
                   أو
                 </strong>
 
-                <Link
-                  to='/auth/login'
-                  className='mx-auto text-center text-orange-700 underline-hover dark:text-orange-800 sm:dark:text-orange-500 w-fit'
-                >
-                  تسجيل الدخول
-                </Link>
+                <div className='flex gap-6 justify-evenly'>
+                  {/* use google signup */}
+                  {/* #authWithGoogle */}
+                  {/* <div id='joinWithGoogle'>
+                    <GoogleLoginButton
+                      responseHandler={responseGoogle}
+                      clientConfig={{ client_id: process.env.GOOGLE_AUTH_CLIENT_ID }}
+                    />
+                  </div> */}
+
+                  <Link
+                    to='/auth/login'
+                    className='mx-auto text-center text-orange-700 underline-hover dark:text-orange-800 sm:dark:text-orange-500 w-fit'
+                  >
+                    تسجيل الدخول
+                  </Link>
+                </div>
               </div>
             </form>
           </div>
