@@ -1167,11 +1167,6 @@ to-regex-range@^5.0.1:
   dependencies:
     is-number "^7.0.0"
 
-ts-react-google-login-component@^1.1.9:
-  version "1.1.9"
-  resolved "https://registry.yarnpkg.com/ts-react-google-login-component/-/ts-react-google-login-component-1.1.9.tgz#529b9694d5bc2d0ebdd1b16d72dc39a752a01bd4"
-  integrity sha512-1Qu10q+LrXUvpFChyKfveIWB+iDQSYTvFvcgPDNJUiwSqqlLoZRXDS3TuHjOG/eZhhy3f3YxzidabluKh2/rjw==
-
 typescript@^4.6.4:
   version "4.7.4"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.7.4.tgz#1a88596d1cf47d59507a1bcdfb5b9dfe4d488235"

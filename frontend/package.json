@@ -23,8 +23,7 @@
     "embla-carousel-react": "^7.0.0-rc05",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.3.0",
-    "ts-react-google-login-component": "^1.1.9"
+    "react-router-dom": "^6.3.0"
   },
   "devDependencies": {
     "@types/node": "^18.6.1",
