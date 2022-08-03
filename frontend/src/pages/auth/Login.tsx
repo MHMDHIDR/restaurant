@@ -97,6 +97,7 @@ const Login = () => {
       <section className='py-12 my-8'>
         <div className='container mx-auto'>
           <Notification sendStatus={loggedInStatus} sendStatusMsg={loginMsg} />
+
           <h3
             className='mx-0 mt-4 mb-12 text-2xl text-center md:text-3xl'
             data-section='login'
