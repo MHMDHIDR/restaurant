@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import Axios from 'axios'
+import { GoogleLogin } from '@react-oauth/google'
 
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
@@ -155,6 +156,16 @@ const Login = () => {
                 </strong>
 
                 <div className='flex gap-6 justify-evenly'>
+                  <GoogleLogin
+                    onSuccess={credentialResponse => {
+                      console.log(credentialResponse)
+                    }}
+                    onError={() => {
+                      console.log('Login Failed')
+                    }}
+                    // useOneTap
+                  />
+
                   <Link
                     to='/auth/join'
                     className='mx-auto text-center text-orange-700 underline-hover dark:text-orange-800 sm:dark:text-orange-500 w-fit'
