@@ -58,7 +58,7 @@ const Footer = () => {
           </div>
           <div className='flex flex-wrap flex-1 w-full gap-14 sm:w-auto justify-evenly'>
             <div>
-              <h3 className='mb-3 text-lg font-bold'>مقترحات ستنال على اعجابك</h3>
+              <h3 className='mb-3 text-lg font-bold'>مقترحات لــك</h3>
               <ul className='space-y-2'>
                 {!suggestedItems || suggestedItems.length === 0 ? (
                   <li>

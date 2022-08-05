@@ -152,7 +152,7 @@ const Join = () => {
                   أو
                 </strong>
 
-                <div className='flex gap-6 justify-evenly'>
+                <div className='flex sm:flex-col sm:gap-y-12 items-center gap-x-6 justify-evenly'>
                   {/* use google signup */}
                   {/* id='authWithGoogle'  */}
 

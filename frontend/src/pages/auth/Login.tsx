@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import Axios from 'axios'
-import { GoogleLogin } from '@react-oauth/google'
 
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
@@ -91,6 +90,10 @@ const Login = () => {
     }
   }
 
+  const responseGoogle = (response: any) => {
+    console.log(response)
+  }
+
   // if done loading (NOT Loading) then show the login form
   return !loading ? (
     <>
@@ -155,23 +158,17 @@ const Login = () => {
                   أو
                 </strong>
 
-                <div className='flex gap-6 justify-evenly'>
-                  <GoogleLogin
-                    onSuccess={credentialResponse => {
-                      console.log(credentialResponse)
-                    }}
-                    onError={() => {
-                      console.log('Login Failed')
-                    }}
-                    // useOneTap
-                  />
-
+                <div className='flex sm:flex-col sm:gap-y-12 items-center gap-x-6 justify-evenly'>
                   <Link
                     to='/auth/join'
                     className='mx-auto text-center text-orange-700 underline-hover dark:text-orange-800 sm:dark:text-orange-500 w-fit'
                   >
                     تسجيل حساب جديد
                   </Link>
+
+                  {/* Login with Google process.env.GOOGLE_CLIENT_ID */}
+                  <div id='loginWithGoogle'></div>
+
                   <Link
                     to='/auth/forgot'
                     className='mx-auto text-center text-orange-700 underline-hover dark:text-orange-800 sm:dark:text-orange-500 w-fit'
