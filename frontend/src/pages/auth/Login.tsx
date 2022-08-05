@@ -11,6 +11,9 @@ import useEventListener from '../../hooks/useEventListener'
 import useDocumentTitle from '../../hooks/useDocumentTitle'
 import useAuth from '../../hooks/useAuth'
 
+import GoogleLogin from 'react-google-login'
+import { gapi } from 'gapi-script'
+
 const LoginDataFromLocalStorage =
   'LoginData' in localStorage && JSON.parse(localStorage.getItem('LoginData'))
 
@@ -90,6 +93,60 @@ const Login = () => {
     }
   }
 
+  useEffect(() => {
+    function start() {
+      gapi.client.init({
+        clientId: process.env.GOOGLE_CLIENT_ID,
+        scope: 'profile email'
+      })
+    }
+
+    gapi.load('client:auth2', start)
+  }, [])
+
+  const [loginData, setLoginData] = useState(
+    localStorage.getItem('loginData')
+      ? JSON.parse(localStorage.getItem('loginData'))
+      : null
+  )
+
+  const handleGoogleFailure = (result: any) => {
+    console.log(result)
+  }
+
+  const handleGoogleLogin = async ({ tokenId }: { tokenId: any }) => {
+    console.log(tokenId)
+
+    try {
+      const loginUser = await Axios.post(`${API_URL}/users/googleLogin`, {
+        tokenId
+      })
+      //getting response from backend
+      const { data } = loginUser
+
+      setLoggedInStatus(data.LoggedIn)
+
+      if (data.LoggedIn === 0) {
+        return setLoginMsg(data?.message)
+      }
+
+      const { name, email, picture } = data
+
+      localStorage.setItem('googleLoginData', JSON.stringify({ name, email, picture }))
+
+      localStorage.setItem('loginData', JSON.stringify(data))
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  const handleGoogleLogout = () => {
+    localStorage.removeItem('googleLoginData')
+    setLoginData(null)
+  }
+
+  console.log(loginData)
+
   // if done loading (NOT Loading) then show the login form
   return !loading ? (
     <>
@@ -162,8 +219,18 @@ const Login = () => {
                     تسجيل حساب جديد
                   </Link>
 
-                  {/* Login with Google process.env.GOOGLE_CLIENT_ID */}
-                  <div id='loginWithGoogle'></div>
+                  {/* Login with Google process.env.GOOGLE_CLIENT_ID 
+                  
+                  */}
+                  <div id='loginWithGoogle'>
+                    <GoogleLogin
+                      clientId={process.env.GOOGLE_CLIENT_ID}
+                      buttonText='Log in with Google'
+                      onSuccess={handleGoogleLogin}
+                      onFailure={handleGoogleFailure}
+                      cookiePolicy={'single_host_origin'}
+                    ></GoogleLogin>
+                  </div>
 
                   <Link
                     to='/auth/forgot'

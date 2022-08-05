@@ -6,7 +6,9 @@ import UserModel from '../models/user-model.js'
 import { v4 as uuidv4 } from 'uuid'
 import email from '../utils/email.js'
 import { APP_URL } from '../data/constants.js'
-import passport from 'passport'
+import OAuth2Client from 'google-auth-library'
+
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
 
 export const joinUser = asyncHandler(async (req, res) => {
   const { userFullName, userEmail, userTel, userPassword } = req.body
@@ -259,11 +261,11 @@ export const resetPass = asyncHandler(async (req, res) => {
       to: user.userEmail,
       subject: 'Your Password Has been Reset',
       msg: `
-        <h1>Your password has been rest succefully</h1>
-        <br />
-        <p>
-          If you did not reset your password, please contact us as soon as possible, otherwise this email is just for notifying you for the change that happened, no need to reply to this email.</small>
-        </p>
+      <h1>Your password has been rest succefully</h1>
+      <br />
+      <p>
+      If you did not reset your password, please contact us as soon as possible, otherwise this email is just for notifying you for the change that happened, no need to reply to this email.</small>
+      </p>
       `
     }
 
@@ -290,6 +292,18 @@ export const resetPass = asyncHandler(async (req, res) => {
       message: 'عفواً، ليس لديك حساب مسجل معنا'
     })
   }
+})
+
+export const googleLogin = asyncHandler(async (req, res) => {
+  const { tokenId } = req.body
+  const ticket = await client.verifyIdToken({
+    idToken: tokenId,
+    audience: process.env.GOOGLE_CLIENT_ID
+  })
+  const { name, email, picture } = ticket.getPayload()
+  upsert(users, { name, email, picture })
+  res.status(201)
+  res.json({ name, email, picture })
 })
 
 const generateToken = id => jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '30d' })

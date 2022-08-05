@@ -12,11 +12,7 @@ import {
   updateUser,
   forgotPass,
   resetPass,
-  googleLoginSuccess,
-  googleLoginFailed,
-  googleLogout,
-  googleAuth,
-  googleCallback
+  googleLogin
 } from '../controllers/users.js'
 
 const router = express.Router()
@@ -29,5 +25,6 @@ router.delete('/:userId', deleteUser)
 router.patch('/:userId', updateUser)
 router.post('/forgotpass', forgotPass)
 router.post('/resetpass', resetPass)
+router.post('/googleLogin', googleLogin)
 
 export default router
