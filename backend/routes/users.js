@@ -2,6 +2,7 @@ import express from 'express'
 import paginatedResults from '../middleware/paginatedResults.js'
 import UserModel from '../models/user-model.js'
 import protect from '../middleware/authMiddleware.js'
+
 import {
   joinUser,
   loginUser,
@@ -10,7 +11,12 @@ import {
   deleteUser,
   updateUser,
   forgotPass,
-  resetPass
+  resetPass,
+  googleLoginSuccess,
+  googleLoginFailed,
+  googleLogout,
+  googleAuth,
+  googleCallback
 } from '../controllers/users.js'
 
 const router = express.Router()

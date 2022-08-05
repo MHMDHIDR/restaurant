@@ -90,10 +90,6 @@ const Login = () => {
     }
   }
 
-  const responseGoogle = (response: any) => {
-    console.log(response)
-  }
-
   // if done loading (NOT Loading) then show the login form
   return !loading ? (
     <>

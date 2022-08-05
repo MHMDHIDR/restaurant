@@ -6,6 +6,7 @@ import UserModel from '../models/user-model.js'
 import { v4 as uuidv4 } from 'uuid'
 import email from '../utils/email.js'
 import { APP_URL } from '../data/constants.js'
+import passport from 'passport'
 
 export const joinUser = asyncHandler(async (req, res) => {
   const { userFullName, userEmail, userTel, userPassword } = req.body
