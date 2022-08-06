@@ -68,7 +68,9 @@ export const loginUser = asyncHandler(async (req, res) => {
   } else if (user && (await bcrypt.compare(userPassword, user.userPassword))) {
     res.status(200).json({
       LoggedIn: 1,
-      message: 'تم تسجيل الدخول بنجاح، جار تحويلك الى لوحة التحكم',
+      message: `تم تسجيل الدخول بنجاح، جار تحويلك الى ${
+        user.userAccountType === 'admin' ? 'لوحة التحكم' : 'الصفحة الرئيسية'
+      }`,
       _id: user.id,
       userAccountType: user.userAccountType,
       userEmail: user.userEmail,
@@ -80,6 +82,57 @@ export const loginUser = asyncHandler(async (req, res) => {
       LoggedIn: 0,
       message: 'البيانات المدخلة غير صحيحة'
     })
+  }
+})
+
+export const googleLogin = asyncHandler(async (req, res) => {
+  const { tokenId } = req.body
+  const ticket = await client.verifyIdToken({
+    idToken: tokenId,
+    audience: process.env.GOOGLE_CLIENT_ID
+  })
+
+  const users = []
+  function upsert(array, item) {
+    const i = array.findIndex(_item => _item.email === item.email)
+    if (i > -1) array[i] = item
+    else array.push(item)
+  }
+  const { name, email } = ticket.getPayload()
+  upsert(users, { name, email })
+
+  // Check for user by using his/her email
+  const user = await UserModel.findOne({ userEmail: email })
+
+  if (user) {
+    res.status(200).json({
+      LoggedIn: 1,
+      message: `تم تسجيل الدخول بنجاح، جار تحويلك الى ${
+        user.userAccountType === 'admin' ? 'لوحة التحكم' : 'الصفحة الرئيسية'
+      }`,
+      _id: user.id,
+      userAccountType: user.userAccountType,
+      userEmail: user.userEmail,
+      userTel: user.userTel,
+      token: generateToken(user._id)
+    })
+  } else if (!user) {
+    // Create user
+    const newUser = await UserModel.create({
+      userFullName: userEmail.split('@')[0],
+      userEmail
+    })
+
+    if (newUser) {
+      res.status(201).json({
+        _id: user.id,
+        token: generateToken(user._id),
+        LoggedIn: 1,
+        message: 'تم تسجيل الدخول بنجاح، جار تحويلك الى الصفحة الرئيسية',
+        userAccountType: 'user',
+        userEmail: email
+      })
+    }
   }
 })
 
@@ -292,27 +345,6 @@ export const resetPass = asyncHandler(async (req, res) => {
       message: 'عفواً، ليس لديك حساب مسجل معنا'
     })
   }
-})
-
-export const googleLogin = asyncHandler(async (req, res) => {
-  const { tokenId } = req.body
-  const ticket = await client.verifyIdToken({
-    idToken: tokenId,
-    audience: process.env.GOOGLE_CLIENT_ID
-  })
-
-  const users = []
-  function upsert(array, item) {
-    const i = array.findIndex(_item => _item.email === item.email)
-    if (i > -1) array[i] = item
-    else array.push(item)
-  }
-
-  const { name, email, picture } = ticket.getPayload()
-
-  upsert(users, { name, email, picture })
-
-  res.status(201).json({ name, email, picture })
 })
 
 const generateToken = id => jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '30d' })

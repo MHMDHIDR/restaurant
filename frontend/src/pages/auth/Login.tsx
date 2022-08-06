@@ -94,6 +94,7 @@ const Login = () => {
     }
   }
 
+  //this useEffect is for google login
   useEffect(() => {
     function start() {
       gapi.client.init({
@@ -105,48 +106,25 @@ const Login = () => {
     gapi.load('client:auth2', start)
   }, [])
 
-  const [loginData, setLoginData] = useState(
-    localStorage.getItem('loginData')
-      ? JSON.parse(localStorage.getItem('loginData'))
-      : null
-  )
-
-  const handleGoogleFailure = (result: any) => {
-    console.log(result)
-  }
-
   const handleGoogleLogin = async ({ tokenId }: { tokenId: any }) => {
-    console.log(jwtDecode(tokenId))
-
     try {
       const loginUser = await Axios.post(`${API_URL}/users/googleLogin`, {
         tokenId
       })
       //getting response from backend
       const { data } = loginUser
+      const { userAccountType, userEmail, LoggedIn, message } = data
+      setLoggedInStatus(LoggedIn)
 
-      setLoggedInStatus(data.LoggedIn)
-
-      if (data.LoggedIn === 0) {
-        return setLoginMsg(data?.message)
+      if (LoggedIn === 0) {
+        setLoginMsg(message)
       }
 
-      const { name, email, picture } = data
-
-      localStorage.setItem('googleLoginData', JSON.stringify({ name, email, picture }))
-
-      localStorage.setItem('loginData', JSON.stringify(data))
+      localStorage.setItem('user', JSON.stringify({ userAccountType, userEmail }))
     } catch (err) {
       console.error(err)
     }
   }
-
-  const handleGoogleLogout = () => {
-    localStorage.removeItem('googleLoginData')
-    setLoginData(null)
-  }
-
-  console.log(loginData)
 
   // if done loading (NOT Loading) then show the login form
   return !loading ? (
@@ -228,7 +206,9 @@ const Login = () => {
                       clientId={process.env.GOOGLE_CLIENT_ID}
                       buttonText='Log in with Google'
                       onSuccess={handleGoogleLogin}
-                      onFailure={handleGoogleFailure}
+                      onFailure={(result: any) => {
+                        console.log(result)
+                      }}
                       cookiePolicy={'single_host_origin'}
                     ></GoogleLogin>
                   </div>
