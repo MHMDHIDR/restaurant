@@ -6,7 +6,7 @@ import UserModel from '../models/user-model.js'
 import { v4 as uuidv4 } from 'uuid'
 import email from '../utils/email.js'
 import { APP_URL } from '../data/constants.js'
-import OAuth2Client from 'google-auth-library'
+import { OAuth2Client } from 'google-auth-library'
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
 
@@ -300,10 +300,19 @@ export const googleLogin = asyncHandler(async (req, res) => {
     idToken: tokenId,
     audience: process.env.GOOGLE_CLIENT_ID
   })
+
+  const users = []
+  function upsert(array, item) {
+    const i = array.findIndex(_item => _item.email === item.email)
+    if (i > -1) array[i] = item
+    else array.push(item)
+  }
+
   const { name, email, picture } = ticket.getPayload()
+
   upsert(users, { name, email, picture })
-  res.status(201)
-  res.json({ name, email, picture })
+
+  res.status(201).json({ name, email, picture })
 })
 
 const generateToken = id => jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '30d' })
