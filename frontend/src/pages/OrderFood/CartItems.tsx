@@ -35,15 +35,15 @@ const CartItems: any = () => {
               alt={removeSlug(item?.cHeading)}
               width='128'
               height='128'
-              className='object-cover w-32 h-32 sm:min-w-fit sm:min-h-fit max-w-[8rem] max-h-[8rem] p-1 mx-auto border border-gray-400 aspect-square dark:border-gray-300 rounded-xl'
+              className='object-cover w-32 h-32 max-w-[10rem] max-h-[10rem] p-1 mx-auto border border-gray-400 aspect-square dark:border-gray-300 rounded-xl'
             />
 
             {/* Product Details */}
             <div
               className={`
-            flex flex-col gap-2 space-y-3 select-none
-            ${!hasToppings && 'xl:col-start-2 xl:col-end-4'}
-          `}
+              flex flex-col gap-2 space-y-3 select-none
+              ${!hasToppings && 'xl:col-start-2 xl:col-end-4'}
+            `}
             >
               <h2 className='text-lg font-semibold text-center underline underline-offset-8'>
                 {removeSlug(item?.cHeading)}

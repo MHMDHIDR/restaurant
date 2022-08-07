@@ -144,7 +144,7 @@ const ForgotPassword = () => {
                   أو
                 </strong>
 
-                <div className='flex sm:flex-col sm:gap-y-12 items-center gap-x-6 justify-evenly'>
+                <div className='flex sm:gap-y-12 items-center gap-x-6 justify-evenly'>
                   <Link
                     to='/auth/join'
                     className='mx-auto text-center text-orange-700 underline-hover dark:text-orange-800 sm:dark:text-orange-500 w-fit'

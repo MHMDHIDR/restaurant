@@ -103,10 +103,10 @@ const Login = () => {
     gapi.load('client:auth2', start)
   }, [])
 
-  const handleGoogleLogin = async ({ tokenId }: { tokenId: any }) => {
+  const handleGoogleLogin = async (googleData: any) => {
     try {
       const loginUser = await Axios.post(`${API_URL}/users/googleLogin`, {
-        tokenId
+        tokenId: googleData.tokenId
       })
       const { data } = loginUser
       const { LoggedIn, _id, userAccountType, userEmail, token, message } = data
@@ -192,32 +192,32 @@ const Login = () => {
                   )}
                 </button>
 
+                <div>
+                  <strong className='block mx-auto my-8 text-orange-800 dark:text-orange-600 w-fit'>
+                    أو تسجيل الدخول عن طريق حسابك في جوجل
+                  </strong>
+                  <GoogleLogin
+                    clientId={process.env.GOOGLE_CLIENT_ID}
+                    buttonText='Log in with Google'
+                    onSuccess={handleGoogleLogin}
+                    onFailure={(result: any) => {
+                      console.log(result)
+                    }}
+                    cookiePolicy={'single_host_origin'}
+                  />
+                </div>
+
                 <strong className='block mx-auto my-8 text-orange-800 dark:text-orange-600 w-fit'>
                   أو
                 </strong>
 
-                <div className='flex sm:flex-col sm:gap-y-12 items-center gap-x-6 justify-evenly'>
+                <div className='flex sm:gap-y-12 items-center gap-x-6 justify-evenly'>
                   <Link
                     to='/auth/join'
                     className='mx-auto text-center text-orange-700 underline-hover dark:text-orange-800 sm:dark:text-orange-500 w-fit'
                   >
                     تسجيل حساب جديد
                   </Link>
-
-                  {/* Login with Google process.env.GOOGLE_CLIENT_ID 
-                  
-                  */}
-                  <div id='loginWithGoogle'>
-                    <GoogleLogin
-                      clientId={process.env.GOOGLE_CLIENT_ID}
-                      buttonText='Log in with Google'
-                      onSuccess={handleGoogleLogin}
-                      onFailure={(result: any) => {
-                        console.log(result)
-                      }}
-                      cookiePolicy={'single_host_origin'}
-                    ></GoogleLogin>
-                  </div>
 
                   <Link
                     to='/auth/forgot'

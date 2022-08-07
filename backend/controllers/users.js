@@ -104,17 +104,12 @@ export const googleLogin = asyncHandler(async (req, res) => {
   // Check for user by using his/her email
   const user = await UserModel.findOne({ userEmail: email })
 
-  if (user && user.userAccountAction === 'block') {
-    res.status(403).json({
-      LoggedIn: 0,
-      message: 'حسابك مغلق حاليا، يرجى التواصل مع الادارة'
-    })
-  } else if (user) {
+  if (user) {
     //if user exists
     res.status(200).json({
       LoggedIn: 1,
       message: `تم تسجيل الدخول بنجاح، جار تحويلك الى ${
-        //if user is admin navigate to dashboard else navigate to homepage
+        //if user is admin navigate to dashboard else navigate to home page
         user.userAccountType === 'admin' ? 'لوحة التحكم' : 'الصفحة الرئيسية'
       }`,
       _id: user.id,
@@ -126,16 +121,18 @@ export const googleLogin = asyncHandler(async (req, res) => {
   } else if (!user) {
     //if the user does not exist Create user
     const newUser = await UserModel.create({
-      userFullName: userEmail.split('@')[0],
-      userEmail
+      userFullName: email.split('@')[0],
+      userEmail: email,
+      userTel: 'N/A',
+      userPassword: 'N/A'
     })
 
     if (newUser) {
       //if user is created successfully
       res.status(201).json({
-        _id: user.id,
-        userEmail: user.email,
-        token: generateToken(user._id),
+        _id: newUser.id,
+        userEmail: newUser.email,
+        token: generateToken(newUser._id),
         LoggedIn: 1,
         message: 'تم تسجيل الدخول بنجاح، جار تحويلك الى الصفحة الرئيسية',
         userAccountType: 'user'
