@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import Axios from 'axios'
-import jwtDecode from 'jwt-decode'
 
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
@@ -66,20 +65,18 @@ const Login = () => {
       })
       //getting response from backend
       const { data } = loginUser
+      const { LoggedIn, _id, userAccountType, userEmail, token, message } = data
+      setLoggedInStatus(LoggedIn)
 
-      setLoggedInStatus(data.LoggedIn)
-
-      if (data.LoggedIn === 0) {
-        return setLoginMsg(data?.message)
+      if (LoggedIn === 0) {
+        return setLoginMsg(message)
       }
 
-      const { _id, userAccountType, userEmail, userTel, token } = data
-
       //if user is logged in
-      setLoginMsg(data?.message)
+      setLoginMsg(message)
       localStorage.setItem(
         'user',
-        JSON.stringify({ _id, userAccountType, userEmail, userTel, token })
+        JSON.stringify({ _id, userAccountType, userEmail, token })
       )
 
       redirect
@@ -88,7 +85,7 @@ const Login = () => {
         ? navigate('/dashboard')
         : navigate('/')
     } catch ({ response }) {
-      setLoginMsg(response?.data?.message)
+      setLoginMsg(response?.message)
     } finally {
       setIsSendingLoginForm(false)
     }
@@ -111,18 +108,27 @@ const Login = () => {
       const loginUser = await Axios.post(`${API_URL}/users/googleLogin`, {
         tokenId
       })
-      //getting response from backend
       const { data } = loginUser
-      const { userAccountType, userEmail, LoggedIn, message } = data
+      const { LoggedIn, _id, userAccountType, userEmail, token, message } = data
       setLoggedInStatus(LoggedIn)
 
       if (LoggedIn === 0) {
-        setLoginMsg(message)
+        return setLoginMsg(message)
       }
+      //else if user is logged in
+      setLoginMsg(message)
+      localStorage.setItem(
+        'user',
+        JSON.stringify({ _id, userAccountType, userEmail, token })
+      )
 
-      localStorage.setItem('user', JSON.stringify({ userAccountType, userEmail }))
-    } catch (err) {
-      console.error(err)
+      redirect
+        ? navigate(`/${redirect}`)
+        : userAccountType === 'admin'
+        ? navigate('/dashboard')
+        : navigate('/')
+    } catch ({ response }) {
+      setLoginMsg(response?.message)
     }
   }
 
