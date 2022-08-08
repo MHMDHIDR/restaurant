@@ -13,7 +13,7 @@ const MyLink = ({ children, to = `/`, className }: MyLinkProps) => {
 
   return pathname === '/' ? (
     <Link
-      to={`#/${to}`}
+      to={`/#${to}`}
       className={className ? className : 'underline-hover'}
       data-scroll={to}
       onClick={e => {

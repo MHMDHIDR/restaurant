@@ -1,4 +1,4 @@
-import { Suspense, lazy } from 'react'
+import { Suspense, lazy, useEffect } from 'react'
 
 //Loading Page
 import { LoadingPage } from '../components/Loading'
