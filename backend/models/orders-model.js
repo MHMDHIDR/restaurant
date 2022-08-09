@@ -22,6 +22,12 @@ const orderStatus = {
   default: 'pending'
 }
 
+const reqDate = {
+  type: Date,
+  default: Date.now,
+  required: true
+}
+
 const OrderSchema = new mongoose.Schema(
   {
     orderId: reqString,
@@ -38,19 +44,7 @@ const OrderSchema = new mongoose.Schema(
     grandPrice: reqNumber,
     paymentData: reqObject,
     orderStatus,
-    orderDate: {
-      type: String,
-      required: true,
-      default: new Date().toLocaleDateString('ar-EG', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric',
-        second: 'numeric'
-      })
-    }
+    orderDate: reqDate
   },
   //Collection Name
   { collection: 'restaurant_orders' }

@@ -4,7 +4,7 @@ import OrdersModel from '../models/orders-model.js'
 import { v4 as uuidv4 } from 'uuid'
 import email from '../utils/email.js'
 
-export const getOrders = asyncHandler(async (req, res) => {
+export const getOrders = asyncHandler(async (_req, res) => {
   res.json(res.paginatedResults)
 })
 

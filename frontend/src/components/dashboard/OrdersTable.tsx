@@ -7,6 +7,7 @@ import useEventListener from '../../hooks/useEventListener'
 
 import goTo from '../../utils/goTo'
 import { toggleCSSclasses } from '../../utils/toggleCSSclasses'
+import { createLocaleDateString } from '../../utils/convertDate'
 
 import { API_URL } from '../../data/constants'
 
@@ -228,12 +229,12 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
           ordersData?.response?.length > 0 ? (
             <>
               {/* filter by email ordersByUserEmail === JSON.parse(localStorage.getItem('user')).userEmail */}
-              {ordersByUserEmail === true ? (
+              {ordersByUserEmail ? (
                 //show only orders by user email
 
                 //FILTER by email
                 ordersData?.response?.filter(
-                  order =>
+                  (order: { userEmail: any }) =>
                     order.userEmail === JSON.parse(localStorage.getItem('user')).userEmail
                 ).length > 0 ? ( //means there is at least one order by the current user email
                   ordersData?.response
@@ -251,8 +252,7 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
                         <td className='px-1 py-2 min-w-[10rem]'>{order.personName}</td>
                         <td className='px-1 py-2 min-w-[6rem]'>{order.userEmail}</td>
                         <td className='text-right min-w-[13rem] px-1 py-2'>
-                          <p>التاريخ: {order.orderDate.split(',')[0]}</p>
-                          <p>الوقت: {order.orderDate.split(',')[1]}</p>
+                          <p>{createLocaleDateString(order.orderDate)}</p>
                         </td>
                         <td className='px-1 py-2'>{order.personPhone}</td>
                         <td className='px-1 py-2 min-w-[30rem]'>
@@ -295,15 +295,9 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
                                     </span>
                                   </div>
                                   <div className='flex flex-col gap-6'>
-                                    {inSeletedToppings.map(
-                                      id =>
-                                        id
-                                          .map((id: string) => id.slice(0, -2))
-                                          ?.includes(item.cItemId) && (
-                                          <h3 key={idx}>الاضافات</h3>
-                                        )
-                                    )}
-
+                                    {inSeletedToppings
+                                      .map(id => id.slice(0, -2))
+                                      ?.includes(item.cItemId) && <h3>الاضافات</h3>}
                                     {item?.cToppings?.map(
                                       ({
                                         toppingId,
@@ -311,10 +305,7 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
                                         toppingPrice,
                                         toppingQuantity
                                       }) =>
-                                        // toppingId
-                                        inSeletedToppings.map(id =>
-                                          id.map((id: string) => id?.includes(toppingId))
-                                        ) && (
+                                        inSeletedToppings[idx]?.includes(toppingId) && (
                                           <div key={toppingId} className='flex gap-4'>
                                             <span className='px-2 text-orange-900 bg-orange-200 rounded-lg'>
                                               ✅ &nbsp; {toppingName}
@@ -431,7 +422,7 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
                 )
               ) : (
                 //Show all orders
-                ordersData?.response?.map((order, idx) => (
+                ordersData?.response?.map((order: any, idx: number) => (
                   <tr
                     key={order._id}
                     className='transition-colors even:bg-neutral-300 odd:bg-neutral-200 dark:even:bg-neutral-700 dark:odd:bg-neutral-600'
@@ -440,8 +431,7 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
                     <td className='px-1 py-2 min-w-[10rem]'>{order.personName}</td>
                     <td className='px-1 py-2 min-w-[6rem]'>{order.userEmail}</td>
                     <td className='text-right min-w-[13rem] px-1 py-2'>
-                      <p>التاريخ: {order.orderDate.split(',')[0]}</p>
-                      <p>الوقت: {order.orderDate.split(',')[1]}</p>
+                      <p>{createLocaleDateString(order.orderDate)}</p>
                     </td>
                     <td className='px-1 py-2'>{order.personPhone}</td>
                     <td className='px-1 py-2 min-w-[30rem]'>
@@ -621,13 +611,15 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
                   className='my-2 md:text-2xl text-red-600 font-[600] py-2 px-1'
                   data-form-msg
                 >
-                  لم يتم العثور على طلبات بعد، يمكنك العودة للوحة التحكم بالضغط على
+                  {ordersByUserEmail
+                    ? 'لم يتم العثور على طلبات بعد، يمكنك إنشاء طلب جديد'
+                    : 'لم يتم العثور على طلبات بعد، يمكنك العودة للوحة التحكم بالضغط على'}
                 </p>
                 <Link
-                  to={goTo('dashboard')}
+                  to={ordersByUserEmail ? `/view` : `/dashboard`}
                   className='min-w-[7rem] bg-blue-500 hover:bg-blue-600 text-white py-1.5 text-lg px-6 rounded-md'
                 >
-                  لوحة التحكم
+                  {ordersByUserEmail ? 'تصفح المنتجات' : 'لوحة التحكم'}
                 </Link>
               </td>
               <td />

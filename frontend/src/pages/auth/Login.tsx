@@ -178,14 +178,14 @@ const Login = () => {
 
               <div className='flex flex-col gap-6 text-center border-none form__group ltr'>
                 <button
-                  className={`w-48 mx-auto px-12 py-3 text-white uppercase bg-orange-700 rounded-lg hover:bg-orange-800 scale-100 transition-all`}
+                  className={`w-fit mx-auto px-12 py-3 text-white uppercase bg-orange-700 rounded-lg hover:bg-orange-800 scale-100 transition-all rtl`}
                   type='submit'
                   id='submitBtn'
                 >
-                  {isSendingLoginForm && isSendingLoginForm ? (
+                  {isSendingLoginForm ? (
                     <>
                       <LoadingSpinner />
-                      جارِ تسجيل الدخول...
+                      &nbsp; جارِ تسجيل الدخول...
                     </>
                   ) : (
                     'تسجيل الدخول'
