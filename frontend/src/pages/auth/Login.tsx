@@ -144,7 +144,7 @@ const Login = () => {
             className='mx-0 mt-4 mb-12 text-2xl text-center md:text-3xl'
             data-section='login'
           >
-            تسجيل الدخول للوحة التحكم
+            تسجيل الدخول
           </h3>
           <div className='max-w-6xl mx-auto'>
             <form className='mt-32' onSubmit={sendLoginForm}>
