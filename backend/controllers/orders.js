@@ -2,6 +2,7 @@ import mongoose from 'mongoose'
 import asyncHandler from 'express-async-handler'
 import OrdersModel from '../models/orders-model.js'
 import { v4 as uuidv4 } from 'uuid'
+import email from '../utils/email.js'
 
 export const getOrders = asyncHandler(async (req, res) => {
   res.json(res.paginatedResults)
@@ -58,7 +59,7 @@ export const addOrder = asyncHandler(async (req, res) => {
 //this route for accepting or rejcting an order from dashboard
 export const updateOrder = asyncHandler(async (req, res) => {
   const _id = req.params.orderId
-  const { orderStatus } = req.body
+  const { orderStatus, orderEmail } = req.body
 
   //if not valid _id then return error message
   if (!mongoose.Types.ObjectId.isValid(_id)) {
@@ -67,7 +68,7 @@ export const updateOrder = asyncHandler(async (req, res) => {
 
   //else update the order status
   try {
-    await OrdersModel.findByIdAndUpdate(
+    const orderUpdated = await OrdersModel.findByIdAndUpdate(
       _id,
       {
         orderStatus
@@ -75,10 +76,37 @@ export const updateOrder = asyncHandler(async (req, res) => {
       { new: true }
     )
 
-    res.status(200).json({
-      message: 'Order Status Updated Successfully',
-      OrderStatusUpdated: 1
-    })
+    //if order updated then send email to user
+    if (orderUpdated) {
+      const emailData = {
+        from: 'mr.hamood277@gmail.com',
+        to: orderEmail,
+        subject: `Order is ${orderStatus}ed`,
+        msg: `
+        <h1>Your Order at Restaurant is ${orderStatus}ed ${
+          orderStatus === 'accept' ? '✅ 😃' : '❌ 😢'
+        }</h1>
+        <p>
+          This is an email is to let you know that your order has been ${orderStatus}ed.
+          <small>If you have any queries please contact us at Mr.hamood277@gmail.com</small>
+        </p>
+      `
+      }
+
+      const { accepted, rejected } = await email(emailData)
+
+      if (accepted.length > 0) {
+        res.status(200).json({
+          message: 'Order Status Updated Successfully',
+          OrderStatusUpdated: 1
+        })
+      } else if (rejected.length > 0) {
+        res.status(200).json({
+          message: 'Error: Order Did NOT Update',
+          OrderStatusUpdated: 1
+        })
+      }
+    }
   } catch (error) {
     res.status(404).json({ message: error.message })
   }

@@ -178,7 +178,9 @@ const DashboardUsers = () => {
 
       <section className='py-12 my-8 dashboard'>
         <div className='container mx-auto'>
-          <h3 className='mx-0 mt-4 mb-12 text-2xl text-center md:text-3xl'>المدراء</h3>
+          <h3 className='mx-0 mt-4 mb-12 text-2xl text-center md:text-3xl'>
+            قائمة المستخدمين
+          </h3>
 
           <table className='table w-full text-center'>
             <thead className='text-white bg-orange-800'>

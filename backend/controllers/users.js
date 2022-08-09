@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 import asyncHandler from 'express-async-handler'
-import Types from 'mongoose'
+import mongoose from 'mongoose'
 import UserModel from '../models/user-model.js'
 import { v4 as uuidv4 } from 'uuid'
 import email from '../utils/email.js'
@@ -178,7 +178,7 @@ export const updateUser = asyncHandler(async (req, res) => {
   const { userAccountAction } = req.body
 
   //if not valid id then return error message
-  if (!Types.ObjectId.isValid(userId)) {
+  if (!mongoose.Types.ObjectId.isValid(userId)) {
     return res.json({ message: `Sorry, No User with this ID => ${userId}` })
   }
 

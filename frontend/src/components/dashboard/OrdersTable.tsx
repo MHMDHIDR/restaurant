@@ -25,8 +25,7 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
 
   const [acceptOrderStatus, setAcceptOrderStatus] = useState()
   const [deleteOrderStatus, setDeleteOrderStatus] = useState()
-  const [orderId, setOrderId] = useState()
-  const [orderStatus, setOrderStatus] = useState()
+  const [orderInfo, setOrderInfo] = useState({ id: '', status: '', email: '' })
   const [ordersData, setOrdersData] = useState<any>()
   const [orderItemsIds, setOrderItemsIds] = useState([])
   const [orderToppingsId, setOrderToppingsId] = useState([])
@@ -71,8 +70,11 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
       e.target.id === 'rejectOrder' ||
       e.target.id === 'deleteOrder'
     ) {
-      setOrderId(e.target.dataset.id)
-      setOrderStatus(e.target.dataset.status)
+      setOrderInfo({
+        id: e.target.dataset.id,
+        status: e.target.dataset.status,
+        email: e.target.dataset.email
+      })
       //show modal
       modalLoading.classList.remove('hidden')
     }
@@ -80,7 +82,7 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
     if (e.target.id === 'cancel') {
       modalLoading.classList.add('hidden')
     } else if (e.target.id === 'confirm') {
-      handleOrder(orderId, orderStatus)
+      handleOrder(orderInfo)
     } else if (e.target.dataset.orderContentArrow) {
       toggleCSSclasses(
         [e.target.parentElement.nextElementSibling.classList.contains('ordered-items')],
@@ -97,12 +99,16 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
     }
   })
 
-  const handleOrder = async (orderId: string, orderStatus: string) => {
+  const handleOrder = async (orderInfo: {
+    id: string
+    status: string
+    email: string
+  }) => {
     //delete order
-    if (orderStatus === 'delete') {
+    if (orderInfo.status === 'delete') {
       try {
         //You need to name the body {data} so it can be recognized in (.delete) method
-        const response = await Axios.delete(`${API_URL}/orders/${orderId}`)
+        const response = await Axios.delete(`${API_URL}/orders/${orderInfo.id}`)
         const { orderDeleted } = response.data
 
         setDeleteOrderStatus(orderDeleted)
@@ -119,10 +125,11 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
     //else accept or reject order
     // using FormData to send constructed data
     const formData = new FormData()
-    formData.append('orderStatus', orderStatus)
+    formData.append('orderStatus', orderInfo.status)
+    formData.append('orderEmail', orderInfo.email)
 
     try {
-      const response = await Axios.patch(`${API_URL}/orders/${orderId}`, formData)
+      const response = await Axios.patch(`${API_URL}/orders/${orderInfo.id}`, formData)
       const { OrderStatusUpdated } = response.data
 
       setAcceptOrderStatus(OrderStatusUpdated)
@@ -142,9 +149,9 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
           status={Success}
           classes='text-2xl'
           msg={
-            orderStatus === 'accept'
+            orderInfo.status === 'accept'
               ? `😄    تمت الموافقة على الطلب    🎉`
-              : orderStatus === 'delete'
+              : orderInfo.status === 'delete'
               ? '🗑    تم حذف الطلب بنجاح    ❌'
               : `❗️    تم رفض الطلب بنجاح    😔`
           }
@@ -166,10 +173,18 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
         modalHidden='hidden'
         classes='txt-blue text-center'
         msg={`هل أنت متأكد من ${
-          orderStatus === 'accept' ? 'الموافقة' : orderStatus === 'delete' ? 'حذف' : 'رفض'
+          orderInfo.status === 'accept'
+            ? 'الموافقة'
+            : orderInfo.status === 'delete'
+            ? 'حذف'
+            : 'رفض'
         } هذا الطلب؟ لا يمكن التراجع عن هذا القرار`}
         ctaConfirmBtns={[
-          orderStatus === 'accept' ? 'موافق' : orderStatus === 'delete' ? 'حذف' : 'رفض',
+          orderInfo.status === 'accept'
+            ? 'موافق'
+            : orderInfo.status === 'delete'
+            ? 'حذف'
+            : 'رفض',
           'الغاء'
         ]}
       />
@@ -212,7 +227,7 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
                         order.userEmail ===
                         JSON.parse(localStorage.getItem('user')).userEmail
                     )
-                    .map((order, idx) => (
+                    .map((order: any, idx: number) => (
                       <tr
                         key={order._id}
                         className='transition-colors even:bg-neutral-300 odd:bg-neutral-200 dark:even:bg-neutral-700 dark:odd:bg-neutral-600'
@@ -345,19 +360,19 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
                           <td>
                             {order.orderStatus === 'pending' ? (
                               <>
-                                <AcceptBtn id={order._id} />
-                                <RejectBtn id={order._id} />
-                                <DeleteBtn id={order._id} />
+                                <AcceptBtn id={order._id} email={order.userEmail} />
+                                <RejectBtn id={order._id} email={order.userEmail} />
+                                <DeleteBtn id={order._id} email={order.userEmail} />
                               </>
                             ) : order.orderStatus === 'accept' ? (
                               <>
-                                <RejectBtn id={order._id} />
-                                <DeleteBtn id={order._id} />
+                                <RejectBtn id={order._id} email={order.userEmail} />
+                                <DeleteBtn id={order._id} email={order.userEmail} />
                               </>
                             ) : order.orderStatus === 'reject' ? (
                               <>
-                                <AcceptBtn id={order._id} />
-                                <DeleteBtn id={order._id} />
+                                <AcceptBtn id={order._id} email={order.userEmail} />
+                                <DeleteBtn id={order._id} email={order.userEmail} />
                               </>
                             ) : (
                               <span>لا يوجد إجراء</span>
@@ -523,19 +538,19 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
                     <td>
                       {order.orderStatus === 'pending' ? (
                         <>
-                          <AcceptBtn id={order._id} />
-                          <RejectBtn id={order._id} />
-                          <DeleteBtn id={order._id} />
+                          <AcceptBtn id={order._id} email={order.userEmail} />
+                          <RejectBtn id={order._id} email={order.userEmail} />
+                          <DeleteBtn id={order._id} email={order.userEmail} />
                         </>
                       ) : order.orderStatus === 'accept' ? (
                         <>
-                          <RejectBtn id={order._id} />
-                          <DeleteBtn id={order._id} />
+                          <RejectBtn id={order._id} email={order.userEmail} />
+                          <DeleteBtn id={order._id} email={order.userEmail} />
                         </>
                       ) : order.orderStatus === 'reject' ? (
                         <>
-                          <AcceptBtn id={order._id} />
-                          <DeleteBtn id={order._id} />
+                          <AcceptBtn id={order._id} email={order.userEmail} />
+                          <DeleteBtn id={order._id} email={order.userEmail} />
                         </>
                       ) : (
                         <span>لا يوجد إجراء</span>
@@ -600,11 +615,12 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
   )
 }
 
-const AcceptBtn = ({ id }) => (
+const AcceptBtn = ({ id, email }) => (
   <button
     id='acceptOrder'
     data-id={id}
     data-status='accept'
+    data-email={email}
     className='m-1 px-2 py-2 text-sm text-white bg-green-600 rounded-md hover:bg-green-700 min-w-[7rem] relative text-center overflow-hidden'
     data-tooltip='موافقة الطلب'
   >
@@ -615,11 +631,12 @@ const AcceptBtn = ({ id }) => (
   </button>
 )
 
-const RejectBtn = ({ id }) => (
+const RejectBtn = ({ id, email }) => (
   <button
     id='rejectOrder'
     data-id={id}
     data-status='reject'
+    data-email={email}
     className='m-1 px-2 py-2 text-sm text-white bg-gray-600 rounded-md hover:bg-gray-700 min-w-[7rem] relative text-center overflow-hidden border'
     data-tooltip='رفض الطلب'
   >
@@ -630,11 +647,12 @@ const RejectBtn = ({ id }) => (
   </button>
 )
 
-const DeleteBtn = ({ id }) => (
+const DeleteBtn = ({ id, email }) => (
   <button
     id='deleteOrder'
     data-id={id}
     data-status='delete'
+    data-email={email}
     className='m-1 px-2 py-2 text-sm text-white bg-red-600 rounded-md hover:bg-red-700 min-w-[7rem] relative text-center overflow-hidden'
     data-tooltip='حذف الطلب'
   >
