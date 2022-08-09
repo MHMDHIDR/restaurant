@@ -32,11 +32,6 @@ const Modal = ({
     setTimeout(() => window.location.assign(redirectLink), redirectTime)
   }
 
-  if (!modalHidden.includes('hidden')) {
-    // if hidden property is there then add overflow-hidden to body
-    document.body.classList.add('overflow-hidden')
-  }
-
   return (
     <section
       id='modal'
