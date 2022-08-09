@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import useAxios from '../../hooks/useAxios'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useLocation } from 'react-router-dom'
 import Axios from 'axios'
 
 import useEventListener from '../../hooks/useEventListener'
@@ -19,6 +19,8 @@ import Divider from '../Divider'
 
 const OrdersTable = ({ ordersByUserEmail = false }) => {
   let { pageNum }: any = useParams()
+  const { pathname } = useLocation()
+  const redirectPath = pathname.includes('dashboard/orders') ? 'orders' : 'my-orders'
 
   const pageNumber = !pageNum || pageNum < 1 || isNaN(pageNum) ? 1 : parseInt(pageNum)
   const itemsPerPage = 5
@@ -159,14 +161,14 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
               ? '🗑    تم حذف الطلب بنجاح    ❌'
               : `❗️    تم رفض الطلب بنجاح    😔`
           }
-          redirectLink={goTo('orders')}
+          redirectLink={goTo(redirectPath)}
           redirectTime={4000}
         />
       ) : acceptOrderStatus === 0 ? (
         <Modal
           status={Error}
           msg={`عفواً! خطأ ما!`}
-          redirectLink={goTo('orders')}
+          redirectLink={goTo(redirectPath)}
           redirectTime={4000}
         />
       ) : null}
