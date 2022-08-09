@@ -44,19 +44,7 @@ const FoodSchema = new mongoose.Schema(
     foodToppings: foodToppingsType,
     foodTags: typeArray,
     createdAt: reqDate,
-    updatedAt: {
-      type: String,
-      required: true,
-      default: new Date().toLocaleDateString('ar-EG', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric',
-        second: 'numeric'
-      })
-    }
+    updatedAt: reqDate
   },
   //Collection Name
   { collection: 'restaurant_food' }

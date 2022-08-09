@@ -164,7 +164,7 @@ const EditFood = () => {
             formData
           )
 
-          const { foodUpdated, message } = response.data
+          const { foodUpdated } = response.data
 
           setUpdatedFoodStatus(foodUpdated)
           //Remove waiting modal

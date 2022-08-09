@@ -147,7 +147,6 @@ export const updateFood = asyncHandler(async (req, res) => {
   const toppings = foodToppings && JSON.parse(foodToppings)
   const tags = JSON.parse(foodTags)
   const { foodId } = req.params
-  const updatedAt = Date.now()
 
   //if the user has uploaded a new image
   if (req.files) {
@@ -220,7 +219,7 @@ export const updateFood = asyncHandler(async (req, res) => {
                     foodDesc,
                     foodToppings: toppings,
                     foodTags: tags,
-                    updatedAt
+                    updatedAt: Date.now()
                   },
                   { new: true }
                 )
@@ -256,7 +255,7 @@ export const updateFood = asyncHandler(async (req, res) => {
         foodDesc,
         foodToppings: toppings,
         foodTags: tags,
-        updatedAt
+        updatedAt: Date.now()
       })
 
       res.json({

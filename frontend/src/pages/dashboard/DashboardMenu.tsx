@@ -37,7 +37,7 @@ const DashboardMenu = () => {
 
   const { ...response } = useAxios({
     method: 'get',
-    url: `/foods/${pageNumber}/${itemsPerPage}`
+    url: `/foods/${pageNumber}/${itemsPerPage}?updatedAt=-1`
   })
 
   useEffect(() => {
@@ -174,7 +174,7 @@ const DashboardMenu = () => {
                           ر.ق
                         </span>
                       </td>
-                      <td className='px-1 py-2 min-w-[10rem]'>
+                      <td className='px-1 py-2 min-w-[16rem]'>
                         {createLocaleDateString(item.updatedAt)}
                       </td>
                       <td className='px-1 py-2 min-w-[11rem]'>
