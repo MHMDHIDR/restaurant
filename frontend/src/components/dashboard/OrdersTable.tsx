@@ -255,7 +255,7 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
                           </span>
 
                           <div className='max-h-screen overflow-hidden transition-all duration-300 ordered-items'>
-                            {order?.orderItems?.map(item => (
+                            {order?.orderItems?.map((item, idx) => (
                               <div key={item.cItemId}>
                                 <div className='flex flex-col gap-4'>
                                   <div className='flex flex-col items-start gap-2'>
@@ -280,9 +280,15 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
                                     </span>
                                   </div>
                                   <div className='flex flex-col gap-6'>
-                                    {inSeletedToppings
-                                      .map(id => id.slice(0, -2))
-                                      ?.includes(item.cItemId) && <h3>الاضافات</h3>}
+                                    {inSeletedToppings.map(
+                                      id =>
+                                        id
+                                          .map((id: string) => id.slice(0, -2))
+                                          ?.includes(item.cItemId) && (
+                                          <h3 key={idx}>الاضافات</h3>
+                                        )
+                                    )}
+
                                     {item?.cToppings?.map(
                                       ({
                                         toppingId,
@@ -290,7 +296,10 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
                                         toppingPrice,
                                         toppingQuantity
                                       }) =>
-                                        inSeletedToppings[idx]?.includes(toppingId) && (
+                                        // toppingId
+                                        inSeletedToppings.map(id =>
+                                          id.map((id: string) => id?.includes(toppingId))
+                                        ) && (
                                           <div key={toppingId} className='flex gap-4'>
                                             <span className='px-2 text-orange-900 bg-orange-200 rounded-lg'>
                                               ✅ &nbsp; {toppingName}
