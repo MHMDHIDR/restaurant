@@ -36,7 +36,7 @@ const Nav = () => {
     <div className='fixed inset-0 bottom-auto z-[9999] w-full transition-transform duration-300 nav ltr'>
       <nav
         className={`flex flex-wrap items-center justify-between px-5 xl:px-10 lg:px-20 py-1 bg-gray-300 bg-opacity-90 dark:bg-neutral-900 dark:bg-opacity-90 shadow-xl backdrop-blur-sm saturate-[180%] transition-all${
-          navigator.userAgent.includes('iPhone') ? 'standalone:pt-[2.3rem]' : ''
+          navigator.userAgent.includes('iPhone') ? ' standalone:pt-10' : ''
         }`}
       >
         <Link aria-label='App Logo' title='App Logo' to='/'>
@@ -53,7 +53,7 @@ const Nav = () => {
         {/* Nav toggler */}
         <input
           className={`absolute w-10 h-10 opacity-0 cursor-pointer xl:pointer-events-none right-5 lg:right-20 top-1 peer group ${
-            navigator.userAgent.includes('iPhone') ? 'standalone:top-10' : ''
+            navigator.userAgent.includes('iPhone') ? ' standalone:top-10' : ''
           }`}
           type='checkbox'
           aria-label='Navigation Menu'

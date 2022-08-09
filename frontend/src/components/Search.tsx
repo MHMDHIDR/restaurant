@@ -24,7 +24,7 @@ const Search = () => {
   }
 
   return (
-    <form method='post' className='relative z-20 w-full' onSubmit={handleSearch}>
+    <form method='post' className='relative z-20 w-full px-2' onSubmit={handleSearch}>
       <input
         type='search'
         id='search'
