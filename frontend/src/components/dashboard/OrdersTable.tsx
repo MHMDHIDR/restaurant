@@ -29,6 +29,7 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
   const [ordersData, setOrdersData] = useState<any>()
   const [orderItemsIds, setOrderItemsIds] = useState([])
   const [orderToppingsId, setOrderToppingsId] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
 
   const modalLoading = document.querySelector('#modal')
 
@@ -129,6 +130,7 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
     formData.append('orderEmail', orderInfo.email)
 
     try {
+      setIsLoading(true)
       const response = await Axios.patch(`${API_URL}/orders/${orderInfo.id}`, formData)
       const { OrderStatusUpdated } = response.data
 
@@ -139,6 +141,8 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
       }, 300)
     } catch (err) {
       console.error(err)
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -168,26 +172,35 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
       ) : null}
 
       {/* Confirm Box */}
-      <Modal
-        status={Loading}
-        modalHidden='hidden'
-        classes='txt-blue text-center'
-        msg={`هل أنت متأكد من ${
-          orderInfo.status === 'accept'
-            ? 'الموافقة'
-            : orderInfo.status === 'delete'
-            ? 'حذف'
-            : 'رفض'
-        } هذا الطلب؟ لا يمكن التراجع عن هذا القرار`}
-        ctaConfirmBtns={[
-          orderInfo.status === 'accept'
-            ? 'موافق'
-            : orderInfo.status === 'delete'
-            ? 'حذف'
-            : 'رفض',
-          'الغاء'
-        ]}
-      />
+      {isLoading ? (
+        <Modal
+          status={Loading}
+          classes='txt-blue text-center'
+          msg={`جار تحديث حالة الطلب...`}
+        />
+      ) : (
+        <Modal
+          status={Loading}
+          modalHidden='hidden'
+          classes='txt-blue text-center'
+          msg={`هل أنت متأكد من ${
+            orderInfo.status === 'accept'
+              ? 'الموافقة'
+              : orderInfo.status === 'delete'
+              ? 'حذف'
+              : 'رفض'
+          } هذا الطلب؟ لا يمكن التراجع عن هذا القرار`}
+          ctaConfirmBtns={[
+            orderInfo.status === 'accept'
+              ? 'موافق'
+              : orderInfo.status === 'delete'
+              ? 'حذف'
+              : 'رفض',
+            'الغاء'
+          ]}
+        />
+      )}
+
       <table className='table w-full text-center border-collapse table-auto'>
         <thead className='text-white bg-orange-800'>
           <tr>
