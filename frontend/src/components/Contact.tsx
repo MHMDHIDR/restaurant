@@ -93,7 +93,7 @@ const Contact = () => {
                   onChange={e => setSubject(e.target.value)}
                   required
                 />
-                <span className='form__label'>الموضــــــوع</span>
+                <span className='form__label'>الموضــــــــــــوع</span>
               </label>
 
               <label htmlFor='email' className='form__group'>

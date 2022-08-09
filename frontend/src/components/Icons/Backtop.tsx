@@ -1,7 +1,7 @@
 import { toggleCSSclasses } from '../../utils/toggleCSSclasses'
 
 const Backtop = ({ color = 'orange' }) => {
-  const backTop = document.querySelector('.back__top')
+  const backTop = document.getElementById('back__top')
   const ScrollLimit = 400
 
   if (backTop !== null) {
@@ -21,11 +21,27 @@ const Backtop = ({ color = 'orange' }) => {
 
   return (
     <button
-      className={`back__top pointer-events-none cursor-pointer bg-${color}-700 hover:bg-${color}-800 fixed right-[3%] h-10 w-10 border-2 border-solid border-${color}-100 rounded-md z-50 overflow-hidden transition-all back__top after:content-["⬆"] after:block after:text-center after:text-lg after:mt-1 after:transition-[margin] hover:after:mt-0.5 opacity-0 bottom-1/2 pointer-events-none`}
-      name='backtop'
-      aria-label='backtop'
-      title='الذهاب للأعلى'
-    />
+      type='button'
+      data-mdb-ripple='true'
+      data-mdb-ripple-color='light'
+      className='group fixed right-[3%] opacity-0 bottom-1/2 dark:shadow-orange-600 inline-block p-3 bg-orange-600 text-white font-medium text-xs leading-tight uppercase rounded-full shadow-md hover:bg-orange-700 hover:shadow-lg focus:bg-orange-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-orange-800 active:shadow-lg transition duration-150 ease-in-out'
+      id='back__top'
+    >
+      <svg
+        aria-hidden='true'
+        focusable='false'
+        className='w-4 h-4 group-hover:-translate-y-1 transition-transform'
+        role='button'
+        xmlns='http://www.w3.org/2000/svg'
+        viewBox='0 0 448 512'
+      >
+        <title>الذهاب للأعلى</title>
+        <path
+          fill='currentColor'
+          d='M34.9 289.5l-22.2-22.2c-9.4-9.4-9.4-24.6 0-33.9L207 39c9.4-9.4 24.6-9.4 33.9 0l194.3 194.3c9.4 9.4 9.4 24.6 0 33.9L413 289.4c-9.5 9.5-25 9.3-34.3-.4L264 168.6V456c0 13.3-10.7 24-24 24h-32c-13.3 0-24-10.7-24-24V168.6L69.2 289.1c-9.3 9.8-24.8 10-34.3.4z'
+        ></path>
+      </svg>
+    </button>
   )
 }
 
