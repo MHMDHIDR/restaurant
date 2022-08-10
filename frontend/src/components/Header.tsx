@@ -5,6 +5,8 @@ import Search from './Search'
 import Nav from './Nav'
 import ScrollDown from './ScrollDown'
 
+import Typewriter from 'typewriter-effect/dist/core'
+
 const Header = () => {
   const [data, setData] = useState<{ appTagline: string } | any>()
 
@@ -18,6 +20,12 @@ const Header = () => {
       setData(response)
     }
   }, [response])
+
+  new Typewriter(document.getElementById('typewriter'), {
+    strings: data?.appTagline,
+    autoStart: true,
+    loop: true
+  })
 
   return (
     <header
@@ -42,15 +50,13 @@ const Header = () => {
               width={150}
               height={150}
             />
-            <h1 className='max-w-xs px-2 text-lg font-bold leading-loose text-center text-white select-none sm:max-w-fit xl:text-3xl sm:text-xl md:text-4xl rtl'>
-              <span className='inline-flex h-20 pt-2 overflow-x-hidden animate-type sm:whitespace-nowrap'>
-                {data ? data.appTagline : 'نحن الأفضل، كنا ولازلنا وسنبقى كذلك...للأبد'}
-              </span>
-              <span className='box-border inline-block w-1 h-10 ml-2 -mb-2 bg-white md:-mb-4 md:h-16 animate-cursor'></span>
+            <h1 className='max-w-xs px-2 text-lg leading-loose text-center text-white select-none sm:max-w-fit xl:text-3xl sm:text-xl md:text-4xl rtl'>
+              <span
+                className='inline-flex h-20 pt-2 overflow-x-hidden animate-type sm:whitespace-nowrap'
+                id='typewriter'
+              ></span>
             </h1>
-
             <Search />
-
             <ScrollDown />
           </main>
         </div>

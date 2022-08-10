@@ -93,7 +93,6 @@
 }
 :root {
   --drkModeToggleSize: clamp(4.7em, 7vw, 6em);
-  --typewriterSpeed: 6s;
 }
 
 [data-tooltip] {
@@ -217,23 +216,6 @@ input[type='search']::-webkit-search-results-decoration {
   stroke-dasharray: 260.752190248px, 260.752190248px;
   stroke-dashoffset: 260.752190248px;
   animation: status-icon-circle 2s linear both infinite;
-}
-
-.cursor::after {
-  content: '';
-  @apply block absolute w-1 h-full bg-white animate-cursor will-change-[opacity];
-}
-
-@keyframes cursor {
-  0%,
-  40% {
-    opacity: 1;
-  }
-
-  60%,
-  100% {
-    opacity: 0;
-  }
 }
 
 @keyframes status-icon-circle {
