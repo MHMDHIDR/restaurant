@@ -52,7 +52,7 @@ const Header = () => {
             />
             <h1 className='max-w-xs px-2 text-lg leading-loose text-center text-white select-none sm:max-w-fit xl:text-3xl sm:text-xl md:text-4xl rtl'>
               <span
-                className='inline-flex h-20 pt-2 overflow-x-hidden animate-type sm:whitespace-nowrap'
+                className='inline-block h-20 my-4 overflow-x-hidden sm:whitespace-nowrap'
                 id='typewriter'
               ></span>
             </h1>
