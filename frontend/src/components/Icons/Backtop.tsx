@@ -21,11 +21,9 @@ const Backtop = ({ color = 'orange' }) => {
 
   return (
     <button
-      type='button'
-      data-mdb-ripple='true'
-      data-mdb-ripple-color='light'
-      className='group fixed right-[3%] opacity-0 bottom-1/2 dark:shadow-orange-600 inline-block p-3 bg-orange-600 text-white font-medium text-xs leading-tight uppercase rounded-full shadow-md hover:bg-orange-700 hover:shadow-lg focus:bg-orange-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-orange-800 active:shadow-lg transition duration-150 ease-in-out'
       id='back__top'
+      type='button'
+      className={`group fixed right-[3%] dark:shadow-orange-600 p-3 bg-${color}-600 hover:bg-${color}-700 text-white rounded-full transition-all shadow-md hover:shadow-lg focus:bg-${color}-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-orange-800 active:shadow-lg opacity-0 pointer-events-none`}
     >
       <svg
         aria-hidden='true'
