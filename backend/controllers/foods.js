@@ -209,7 +209,7 @@ export const updateFood = asyncHandler(async (req, res) => {
                 await FoodsModel.findByIdAndUpdate(
                   foodId,
                   {
-                    foodImgs: foodImgs.map((img, index) => ({
+                    foodImgs: foodImgs.map((_img, index) => ({
                       foodImgDisplayName: foodImgDisplayName[index],
                       foodImgDisplayPath: foodImgDisplayPath[index]
                     })),
