@@ -1,4 +1,4 @@
-const ScrollToSection = e => {
+const ScrollToSection = (e: any) => {
   const target = e.target
 
   if (target.hasAttribute('data-scroll')) {
