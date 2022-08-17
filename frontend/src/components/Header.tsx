@@ -22,7 +22,7 @@ const Header = () => {
   }, [response])
 
   new Typewriter(document.getElementById('typewriter'), {
-    strings: data?.appTagline,
+    strings: data?.appTagline || `نحن الأفضل، وسنبقى كذلك ... إلى الأبد 😄 🤍`,
     autoStart: true,
     loop: true
   })
@@ -65,7 +65,7 @@ const Header = () => {
       {/* Wavey saprator svg */}
       <div className='absolute min-w-full overflow-hidden -bottom-1'>
         <svg
-          data-name='Layer 1'
+          data-name='Wavey saprator'
           xmlns='http://www.w3.org/2000/svg'
           viewBox='0 0 1200 120'
           preserveAspectRatio='none'
