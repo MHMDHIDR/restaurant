@@ -1,5 +1,7 @@
 import { useState, useEffect, useContext } from 'react'
 import { Link } from 'react-router-dom'
+import { motion } from 'framer-motion'
+
 import { CartContext } from '../Contexts/CartContext'
 
 import useAxios from '../hooks/useAxios'
@@ -24,7 +26,6 @@ const NewFood = () => {
   const [data, setData] = useState<any>()
 
   const { ...response } = useAxios({
-    method: 'get',
     url: '/foods/1/7?category=foods'
   })
 
@@ -37,14 +38,26 @@ const NewFood = () => {
   const { items } = useContext(CartContext)
 
   return (
-    <section id='new' className='py-12 my-8 new'>
+    <section id='new' className='py-12 my-8 new overflow-x-hidden'>
       <div className='container mx-auto text-center'>
         <h2 className='mx-0 mt-4 mb-12 text-2xl text-center md:text-3xl'>
           الوجبات الجديدة
         </h2>
         {data && data?.response?.length > 0 ? (
-          data?.response?.map((item: dataItemProps) => (
-            <div className='odd:ltr' key={item._id}>
+          data?.response?.map((item: dataItemProps, idx: number) => (
+            <motion.div
+              className='odd:ltr'
+              key={item._id}
+              initial={
+                idx % 2 === 0 ? { x: '50vw', opacity: 0 } : { x: '-50vw', opacity: 0 }
+              }
+              whileInView={{ x: 0, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{
+                type: 'spring',
+                duration: 3
+              }}
+            >
               <Card
                 cItemId={item._id}
                 cHeading={
@@ -83,7 +96,7 @@ const NewFood = () => {
                   )
                 }
               />
-            </div>
+            </motion.div>
           ))
         ) : !data?.response ||
           data?.response === null ||

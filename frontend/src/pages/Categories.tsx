@@ -1,4 +1,5 @@
 import { Suspense, lazy } from 'react'
+
 import useDocumentTitle from '../hooks/useDocumentTitle'
 
 import { LoadingCard } from '../components/Loading'

@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
-import useAxios from '../../hooks/useAxios'
 import { Link, useParams } from 'react-router-dom'
 import Axios from 'axios'
 
+import useAxios from '../../hooks/useAxios'
 import useDocumentTitle from '../../hooks/useDocumentTitle'
 import useEventListener from '../../hooks/useEventListener'
 
@@ -15,9 +15,14 @@ import abstractText from '../../utils/abstractText'
 import { removeSlug } from '../../utils/slug'
 import goTo from '../../utils/goTo'
 import { createLocaleDateString } from '../../utils/convertDate'
+import scrollToView from '../../utils/scrollToView'
 
 const DashboardMenu = () => {
   useDocumentTitle('Menu')
+
+  useEffect(() => {
+    scrollToView()
+  }, [])
 
   let { pageNum }: any = useParams()
 
@@ -36,7 +41,6 @@ const DashboardMenu = () => {
       : process.env.API_URL
 
   const { ...response } = useAxios({
-    method: 'get',
     url: `/foods/${pageNumber}/${itemsPerPage}?updatedAt=-1`
   })
 

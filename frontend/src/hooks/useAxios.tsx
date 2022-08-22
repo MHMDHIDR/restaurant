@@ -8,6 +8,8 @@ export type responseTypes = {
   itemsCount: number
   CategoryList: string[]
   _id: string
+  websiteLogoDisplayPath: string
+  websiteLogoDisplayName: string
   heroBg: string[]
   appName: string
   appDesc: string
@@ -19,7 +21,7 @@ export type responseTypes = {
 
 Axios.defaults.baseURL = API_URL
 
-const useAxios = ({ url, method, body = null, headers = null }) => {
+const useAxios = ({ url, method = 'get', body = null, headers = null }) => {
   const [response, setResponse] = useState<responseTypes | null>(null)
   const [error, setError] = useState<{
     error: any

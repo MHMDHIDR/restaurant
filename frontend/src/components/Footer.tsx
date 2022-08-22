@@ -11,6 +11,7 @@ import Backtop from './Icons/Backtop'
 import { WhatsApp, Twitter, Instagram } from './Icons/Socials'
 
 interface settingsProps {
+  websiteLogoDisplayPath: string
   appDesc: string
   whatsAppNumber: string
   instagramAccount: string
@@ -42,13 +43,18 @@ const Footer = () => {
       <div className='container mx-auto'>
         <div className='flex flex-col flex-wrap items-center justify-around gap-6 py-4 pb-20 sm:flex-row'>
           <div className='flex flex-wrap items-center justify-center flex-1 sm:flex-nowrap'>
-            <Link
-              aria-label='App Logo'
-              title='App Logo'
-              to='/'
-              className='p-1.5 xl:p-3 transition-colors bg-orange-400 rounded-lg dark:bg-orange-600 opacity-80 hover:opacity-100'
-            >
-              <Logo width='10 md:w-14' height='10 md:h-14' />
+            <Link aria-label='App Logo' title='App Logo' to='/'>
+              {settings?.websiteLogoDisplayPath ? (
+                <img
+                  src={settings.websiteLogoDisplayPath}
+                  width='50'
+                  height='50'
+                  className='w-10 md:w-14 h-10 md:h-14 rounded-2xl opacity-50 hover:opacity-70 hover:scale-105 transition-transform'
+                  alt='Website Logo'
+                />
+              ) : (
+                <Logo width='10 md:w-14' height='10 md:h-14' />
+              )}
             </Link>
             <p className='w-full mr-4 leading-10'>
               {settings
@@ -77,6 +83,7 @@ const Footer = () => {
                 )}
               </ul>
             </div>
+            {/* Links */}
             <div>
               <h3 className='mb-3 text-lg font-bold'>روابـــــط</h3>
               <ul className='space-y-2'>

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+
 import useAxios from '../hooks/useAxios'
 
 import { LoadingCard } from './Loading'
@@ -16,17 +17,14 @@ const FetchCategories = () => {
   const ITEMS_COUNT = 0 // if items count is == 0 then it will fetch everything in food category
 
   const foods = useAxios({
-    method: 'get',
     url: `/foods/1/${ITEMS_COUNT}?category=foods`
   })
 
   const drinks = useAxios({
-    method: 'get',
     url: `/foods/1/${ITEMS_COUNT}?category=drinks`
   })
 
   const sweets = useAxios({
-    method: 'get',
     url: `/foods/1/${ITEMS_COUNT}?category=sweets`
   })
 

@@ -7,18 +7,20 @@ import ScrollDown from './ScrollDown'
 
 import Typewriter from 'typewriter-effect/dist/core'
 
+interface headerProps {
+  appTagline: string
+  websiteLogoDisplayPath: string
+}
+
 const Header = () => {
-  const [data, setData] = useState<{ appTagline: string } | any>()
+  const [data, setData] = useState<headerProps>()
 
   const { response } = useAxios({
-    method: 'get',
     url: '/settings'
   })
 
   useEffect(() => {
-    if (response !== null) {
-      setData(response)
-    }
+    if (response !== null) setData(response)
   }, [response])
 
   new Typewriter(document.getElementById('typewriter'), {
@@ -43,13 +45,24 @@ const Header = () => {
           {/* Search form and main hero */}
           <main className='flex flex-col items-center justify-center min-h-screen'>
             {/* logo */}
-            <img
-              src='/assets/img/icons/logo.svg'
-              alt='logo'
-              className='mb-12 w-32 md:w-60 h-32 md:h-60'
-              width={150}
-              height={150}
-            />
+            {data?.websiteLogoDisplayPath ? (
+              <img
+                src={data.websiteLogoDisplayPath}
+                width='50'
+                height='50'
+                className='mb-12 w-32 md:w-60 h-32 md:h-60 rounded-2xl opacity-30'
+                alt='Website Logo'
+              />
+            ) : (
+              <img
+                src='/assets/img/icons/logo.svg'
+                alt='logo'
+                className='mb-12 w-32 md:w-60 h-32 md:h-60'
+                width={150}
+                height={150}
+              />
+            )}
+
             <h1 className='max-w-xs px-2 text-lg leading-loose text-center text-white select-none sm:max-w-fit xl:text-3xl sm:text-xl md:text-4xl rtl'>
               <span
                 className='inline-block h-20 my-4 overflow-x-hidden sm:whitespace-nowrap'

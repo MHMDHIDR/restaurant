@@ -5,8 +5,10 @@ import sharp from 'sharp'
 import AWS from 'aws-sdk'
 
 const s3 = new AWS.S3({
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+  }
 })
 
 export const addFood = asyncHandler(async (req, res) => {
@@ -37,7 +39,7 @@ export const addFood = asyncHandler(async (req, res) => {
     })
   )
 
-  const food = await FoodsModel.create({
+  await FoodsModel.create({
     foodName,
     foodPrice,
     category,
@@ -186,7 +188,7 @@ export const updateFood = asyncHandler(async (req, res) => {
     foodImgs.map((img, index) => {
       sharp(img.data)
         .resize(600)
-        .jpeg({ mozjpeg: true, quality: 50 })
+        .webp({ lossless: true })
         .toBuffer()
         .then(newWebpImg => {
           //changing the old jpg image buffer to new webp buffer

@@ -29,10 +29,11 @@ const About = () => {
   const [data, setData] = useState<responseTypes>()
   const [categoryList, setCategoryList] = useState([])
   const [loading, setLoading] = useState(false)
+  const [websiteLogo, setWebsiteLogo] = useState<any>('')
+  const [preview, setPreview] = useState<any>()
 
   //fetching description data
   const { response } = useAxios({
-    method: 'get',
     url: '/settings'
   })
 
@@ -84,6 +85,27 @@ const About = () => {
     setCategoryList(list)
   }
 
+  const updateLogoImg = (e: any) => {
+    const LogoFile = e.target.files[0]
+
+    if (LogoFile) {
+      setWebsiteLogo(LogoFile)
+    }
+  }
+
+  useEffect(() => {
+    // if there's an image
+    if (websiteLogo) {
+      const reader = new FileReader()
+
+      reader.onloadend = () => setPreview(reader.result)
+
+      reader.readAsDataURL(websiteLogo)
+    } else {
+      setPreview(null)
+    }
+  }, [websiteLogo])
+
   const handleUpdate = async (e: { preventDefault: () => void }) => {
     e.preventDefault()
 
@@ -95,8 +117,13 @@ const About = () => {
     const currentInstagramAccount = instagramAccount || data?.instagramAccount
     const currentTwitterAccount = twitterAccount || data?.twitterAccount
     const currentCategoryList = categoryList || data?.appTagline
+    const prevSettingImgPath = data?.websiteLogoDisplayPath
+    const prevSettingImgName = data?.websiteLogoDisplayName
 
     const formData = new FormData()
+    formData.append('prevLogoImgPath', prevSettingImgPath)
+    formData.append('prevLogoImgName', prevSettingImgName)
+    formData.append('websiteLogo', websiteLogo)
     formData.append('appName', currentAppName)
     formData.append('appDesc', currentAppDesc)
     formData.append('appTagline', currentAppTagline)
@@ -164,6 +191,26 @@ const About = () => {
           {/* Description Form */}
           <form id='descForm' onSubmit={handleUpdate}>
             <h3 className='mx-0 mt-4 mb-12 text-lg text-center'>اسم الموقع</h3>
+            <label
+              htmlFor='logoImg'
+              className='flex flex-wrap items-center justify-center gap-5 cursor-pointer md:justify-between mb-10'
+            >
+              <img
+                src={preview === null ? data?.websiteLogoDisplayPath : preview}
+                alt='Website Logo'
+                width={144}
+                height={144}
+                className='w-36 h-36 rounded-2xl p-1 border border-gray-400'
+              />
+              <input
+                type='file'
+                name='logoImg'
+                id='logoImg'
+                className='py-6 font-semibold text-white uppercase bg-orange-800 hover:bg-orange-900 rounded-lg cursor-pointer px-28 '
+                accept='image/*'
+                onChange={updateLogoImg}
+              />
+            </label>
             <label htmlFor='appName' className='form__group'>
               <input
                 name='appName'

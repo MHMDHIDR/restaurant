@@ -15,11 +15,16 @@ import FileUpload from '../../../components/FileUpload'
 
 import { createSlug } from '../../../utils/slug'
 import goTo from '../../../utils/goTo'
+import scrollToView from '../../../utils/scrollToView'
 
 import { API_URL } from '../../../data/constants'
 
 const AddFood = () => {
   useDocumentTitle('Add Food or Drink')
+
+  useEffect(() => {
+    scrollToView()
+  }, [])
 
   //Form States
   const [foodName, setFoodName] = useState('')
@@ -47,7 +52,6 @@ const AddFood = () => {
 
   //fetching categories
   const { response } = useAxios({
-    method: 'get',
     url: '/settings'
   })
 

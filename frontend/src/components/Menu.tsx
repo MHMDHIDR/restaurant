@@ -9,7 +9,6 @@ const Menu = () => {
   const [food, setFood] = useState<{ itemsCount: any } | any>('')
 
   const { ...response } = useAxios({
-    method: 'get',
     url: `/foods/0/0?category=foods&createdAt=1`
   })
 

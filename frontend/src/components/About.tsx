@@ -5,7 +5,6 @@ const About = () => {
   const [data, setData] = useState<string | any>()
 
   const { response } = useAxios({
-    method: 'get',
     url: '/settings'
   })
 

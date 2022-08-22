@@ -15,6 +15,8 @@ const typeString = {
 
 const SettingsSchema = new mongoose.Schema(
   {
+    websiteLogoDisplayPath: reqString,
+    websiteLogoDisplayName: reqString,
     appName: reqString,
     appDesc: reqString,
     appTagline: reqString,

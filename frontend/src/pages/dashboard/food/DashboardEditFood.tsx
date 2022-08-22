@@ -17,9 +17,14 @@ import FileUpload from '../../../components/FileUpload'
 
 import { removeSlug, createSlug } from '../../../utils/slug'
 import goTo from '../../../utils/goTo'
+import scrollToView from '../../../utils/scrollToView'
 
 const EditFood = () => {
   useDocumentTitle('Edit Food')
+
+  useEffect(() => {
+    scrollToView()
+  }, [])
 
   const [delFoodName, setDelFoodName] = useState('')
   const [action, setAction] = useState('')
@@ -60,13 +65,11 @@ const EditFood = () => {
   const { foodId } = useParams()
 
   const foodData = useAxios({
-    method: 'get',
     url: `/foods/1/1/${foodId}`
   })
 
   //fetching categories
   const categories = useAxios({
-    method: 'get',
     url: '/settings'
   })
 

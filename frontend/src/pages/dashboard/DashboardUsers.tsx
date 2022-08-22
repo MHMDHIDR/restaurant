@@ -35,7 +35,6 @@ const DashboardUsers = () => {
 
   //get users data only if the admin is authenticated and logged in
   const { ...response } = useAxios({
-    method: 'get',
     url: `/users/all/${pageNumber}/${itemsPerPage}`
   })
 

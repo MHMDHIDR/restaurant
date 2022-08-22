@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { CartContext } from '../Contexts/CartContext'
 import ThemeToggler from './ThemeToggler'
@@ -9,6 +9,7 @@ import menuToggler from '../utils/menuToggler'
 import MyLink from './MyLink'
 
 import useEventListener from '../hooks/useEventListener'
+import useAxios from '../hooks/useAxios'
 
 const Nav = () => {
   const handleLogout = () => {
@@ -16,6 +17,16 @@ const Nav = () => {
 
     window.location.href = '/'
   }
+
+  const [websiteLogoDisplayPath, setWebsiteLogoDisplayPath] = useState('')
+
+  const { response } = useAxios({
+    url: '/settings'
+  })
+
+  useEffect(() => {
+    if (response !== null) setWebsiteLogoDisplayPath(response.websiteLogoDisplayPath)
+  }, [response])
 
   let lastScrollY = window.scrollY
 
@@ -40,7 +51,17 @@ const Nav = () => {
         }`}
       >
         <Link aria-label='App Logo' title='App Logo' to='/'>
-          <Logo width='10 xl:w-14' height='10 xl:h-14' />
+          {websiteLogoDisplayPath ? (
+            <img
+              src={websiteLogoDisplayPath}
+              width='50'
+              height='50'
+              className='w-10 xl:w-14 h-10 xl:h-14 rounded-2xl opacity-70'
+              alt='Website Logo'
+            />
+          ) : (
+            <Logo width='10 xl:w-14' height='10 xl:h-14' />
+          )}
         </Link>
 
         <ThemeToggler />

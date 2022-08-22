@@ -1,5 +1,7 @@
 import { useState, useEffect, useContext, Suspense, lazy } from 'react'
 import { Link, useParams, useLocation } from 'react-router-dom'
+import { motion } from 'framer-motion'
+
 import { CartContext } from '../Contexts/CartContext'
 
 import useAxios from '../hooks/useAxios'
@@ -18,11 +20,11 @@ const Footer = lazy(() => import('../components/Footer'))
 const Pagination = lazy(() => import('../components/Pagination'))
 
 const ViewFood = () => {
+  useDocumentTitle('View Foods')
+
   useEffect(() => {
     scrollToView()
   }, [])
-
-  useDocumentTitle('View Foods')
 
   let { pageNum, foodId }: any = useParams()
 
@@ -48,7 +50,6 @@ const ViewFood = () => {
 
   //if there's food id then fetch with food id, otherwise fetch everything
   const { error, ...response } = useAxios({
-    method: 'get',
     url: foodId
       ? `/foods/1/1/${foodId}`
       : category
@@ -71,7 +72,7 @@ const ViewFood = () => {
       </Suspense>
       <section id='viewFood' className='py-12 my-8'>
         <div className='container mx-auto'>
-          <h2 className='text-xl text-center mb-28 md:text-2xl xl:text-4xl'>
+          <h2 className='text-xl text-center mb-28 md:text-2xl font-bold'>
             {!data?.response?.length
               ? //single food item (Title)
                 data?.response && (
@@ -86,50 +87,60 @@ const ViewFood = () => {
             // if data.length gives a number that means there are Multiple food items
             data?.response?.length > 0 ? (
               <Suspense fallback={<LoadingCard />}>
-                {data?.response?.map((item: dataProps) => (
+                {data?.response?.map((item: dataProps, idx: number) => (
                   // View Multiple (Many) food items
-                  <Card
+                  <motion.div
                     key={item._id}
-                    cItemId={item._id}
-                    cHeading={
-                      <Link to={`/view/item/${item._id}`}>
-                        {removeSlug(abstractText(item.foodName, 70))}
-                      </Link>
-                    }
-                    cPrice={item.foodPrice}
-                    cDesc={abstractText(item.foodDesc, 120)}
-                    cTags={item?.foodTags}
-                    cToppings={item.foodToppings}
-                    cImg={item.foodImgs}
-                    cImgAlt={item.foodName}
-                    cCtaLabel={
-                      //add to cart button, if item is already in cart then disable the button
-                      items.find(
-                        (itemInCart: { cItemId: string }) =>
-                          itemInCart.cItemId === item._id
-                      ) ? (
-                        <div className='relative rtl m-2 min-w-[7.5rem] text-white py-1.5 px-6 rounded-lg bg-red-800 hover:bg-red-700'>
-                          <span className='py-0.5 px-1 pr-1.5 bg-gray-100 rounded-md absolute right-1 top-1 pointer-events-none'>
-                            ❌
-                          </span>
-                          &nbsp;&nbsp;
-                          <span className='mr-4 text-center pointer-events-none'>
-                            إحذف من السلة
-                          </span>
-                        </div>
-                      ) : (
-                        <div className='relative rtl m-2 min-w-[7.5rem] text-white py-1.5 px-6 rounded-lg bg-green-800 hover:bg-green-700'>
-                          <span className='py-0.5 px-1 pr-1.5 bg-gray-100 rounded-md absolute right-1 top-1 pointer-events-none'>
-                            🛒
-                          </span>
-                          &nbsp;&nbsp;
-                          <span className='mr-4 text-center pointer-events-none'>
-                            أضف إلى السلة
-                          </span>
-                        </div>
-                      )
-                    }
-                  />
+                    initial={{ x: '50vw', opacity: 0 }}
+                    whileInView={{ x: 0, opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{
+                      type: 'spring',
+                      duration: 3
+                    }}
+                  >
+                    <Card
+                      cItemId={item._id}
+                      cHeading={
+                        <Link to={`/view/item/${item._id}`}>
+                          {removeSlug(abstractText(item.foodName, 70))}
+                        </Link>
+                      }
+                      cPrice={item.foodPrice}
+                      cDesc={abstractText(item.foodDesc, 120)}
+                      cTags={item?.foodTags}
+                      cToppings={item.foodToppings}
+                      cImg={item.foodImgs}
+                      cImgAlt={item.foodName}
+                      cCtaLabel={
+                        //add to cart button, if item is already in cart then disable the button
+                        items.find(
+                          (itemInCart: { cItemId: string }) =>
+                            itemInCart.cItemId === item._id
+                        ) ? (
+                          <div className='relative rtl m-2 min-w-[7.5rem] text-white py-1.5 px-6 rounded-lg bg-red-800 hover:bg-red-700'>
+                            <span className='py-0.5 px-1 pr-1.5 bg-gray-100 rounded-md absolute right-1 top-1 pointer-events-none'>
+                              ❌
+                            </span>
+                            &nbsp;&nbsp;
+                            <span className='mr-4 text-center pointer-events-none'>
+                              إحذف من السلة
+                            </span>
+                          </div>
+                        ) : (
+                          <div className='relative rtl m-2 min-w-[7.5rem] text-white py-1.5 px-6 rounded-lg bg-green-800 hover:bg-green-700'>
+                            <span className='py-0.5 px-1 pr-1.5 bg-gray-100 rounded-md absolute right-1 top-1 pointer-events-none'>
+                              🛒
+                            </span>
+                            &nbsp;&nbsp;
+                            <span className='mr-4 text-center pointer-events-none'>
+                              أضف إلى السلة
+                            </span>
+                          </div>
+                        )
+                      }
+                    />
+                  </motion.div>
                 ))}
 
                 <Pagination

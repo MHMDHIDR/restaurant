@@ -21,7 +21,6 @@ const SearchContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [searchFor, setSearchFor] = useState('foods')
 
   const { error, loading, ...response } = useAxios({
-    method: 'get',
     url: `/${searchFor}/0/0?category=${foodCategory}`
   })
 

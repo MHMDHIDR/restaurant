@@ -14,7 +14,6 @@ const useAuth = () => {
 
   //get user data using token if the user is logged-in and token is saved in localStorage then I'll get the current user data from the database
   const { loading, ...response } = useAxios({
-    method: 'get',
     url: `/users`,
     headers: USER ? JSON.stringify({ Authorization: `Bearer ${USER.token}` }) : null
   })

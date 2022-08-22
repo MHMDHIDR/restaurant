@@ -29,7 +29,6 @@ const DashboardHome = () => {
   const currentUser = useAxios({ method: 'get', url: `/users/all/1/1/${USER?._id}` })
   const menu = useAxios({ method: 'get', url: `/foods/0/0` })
   const orders = useAxios({
-    method: 'get',
     url: `/orders/0/0`,
     headers: USER ? JSON.stringify({ Authorization: `Bearer ${USER.token}` }) : null
   })

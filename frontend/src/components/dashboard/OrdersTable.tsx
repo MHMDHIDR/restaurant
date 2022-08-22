@@ -8,6 +8,7 @@ import useEventListener from '../../hooks/useEventListener'
 import goTo from '../../utils/goTo'
 import { toggleCSSclasses } from '../../utils/toggleCSSclasses'
 import { createLocaleDateString } from '../../utils/convertDate'
+import scrollToView from '../../utils/scrollToView'
 
 import { API_URL } from '../../data/constants'
 
@@ -19,6 +20,9 @@ import Pagination from '../Pagination'
 import Divider from '../Divider'
 
 const OrdersTable = ({ ordersByUserEmail = false }) => {
+  useEffect(() => {
+    scrollToView()
+  }, [])
   let { pageNum }: any = useParams()
   const { pathname } = useLocation()
   const redirectPath = pathname.includes('dashboard/orders') ? 'orders' : 'my-orders'
@@ -39,7 +43,6 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
   const USER = JSON.parse(localStorage.getItem('user'))
 
   const { ...response } = useAxios({
-    method: 'get',
     url: `/orders/${pageNumber}/${itemsPerPage}?orderDate=-1`,
     headers: USER ? JSON.stringify({ Authorization: `Bearer ${USER.token}` }) : null
   })
