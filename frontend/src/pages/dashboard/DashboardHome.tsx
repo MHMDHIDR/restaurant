@@ -55,52 +55,64 @@ const DashboardHome = () => {
     <LoadingPage />
   ) : (
     <Suspense fallback={<LoadingPage />}>
-      <section className='overflow-x-auto'>
+      <section className='overflow-x-auto h-screen'>
         <DashboardSidebar />
         <DashboardNav />
         <div className='container mx-auto'>
-          <h3 className='mx-0 mt-32 mb-5 text-2xl text-center'>لوحة التحكم</h3>
-          <div className='flex flex-wrap justify-center gap-4 md:justify-between'>
-            <Link
-              to={goTo('orders')}
-              className='inline-flex flex-col items-center justify-center p-4 space-y-4 text-white bg-orange-800 hover:bg-orange-700 rounded-xl'
-            >
-              <img
-                loading='lazy'
-                src='/assets/img/icons/orders.svg'
-                alt='menu slider img'
-                className='w-40 h-24'
-              />
-              <h3>الطلبات</h3>
-              <span className='text-lg font-bold'>عدد الطلبات {ordersCount}</span>
-            </Link>
+          <h3 className='mx-0 mt-32 mb-20 text-2xl text-center'>لوحة التحكم</h3>
+          <div
+            className={`flex justify-center gap-4 flex-wrap${
+              userType === 'cashier' ? ' md:justify-center' : ' md:justify-between'
+            }`}
+          >
+            {/* Orders */}
+            {(userType === 'admin' || userType === 'cashier') && (
+              <Link
+                to={goTo('orders')}
+                className='inline-flex flex-col items-center justify-center p-4 space-y-4 text-white bg-orange-800 hover:bg-orange-700 rounded-xl'
+              >
+                <img
+                  loading='lazy'
+                  src='/assets/img/icons/orders.svg'
+                  alt='menu slider img'
+                  className='w-40 h-24'
+                />
+                <h3>الطلبات</h3>
+                <span className='text-lg font-bold'>عدد الطلبات {ordersCount}</span>
+              </Link>
+            )}
 
-            <Link
-              to={goTo('menu')}
-              className='inline-flex flex-col items-center justify-center px-2 py-4 space-y-4 text-white bg-orange-800 hover:bg-orange-700 rounded-xl'
-            >
-              <img
-                loading='lazy'
-                src='/assets/img/icons/menu.svg'
-                alt='menu slider img'
-                className='w-40 h-24'
-              />
-              <h3>القائمة</h3>
-              <span className='text-lg font-bold'>عدد الوجبات {menuCount}</span>
-            </Link>
+            {/* Menu  &  Add Items*/}
+            {userType === 'admin' && (
+              <>
+                <Link
+                  to={goTo('menu')}
+                  className='inline-flex flex-col items-center justify-center px-2 py-4 space-y-4 text-white bg-orange-800 hover:bg-orange-700 rounded-xl'
+                >
+                  <img
+                    loading='lazy'
+                    src='/assets/img/icons/menu.svg'
+                    alt='menu slider img'
+                    className='w-40 h-24'
+                  />
+                  <h3>القائمة</h3>
+                  <span className='text-lg font-bold'>عدد الوجبات {menuCount}</span>
+                </Link>
 
-            <Link
-              to={goTo('add-food')}
-              className='inline-flex flex-col items-center justify-center px-2 py-4 space-y-4 text-white bg-orange-800 hover:bg-orange-700 rounded-xl'
-            >
-              <img
-                loading='lazy'
-                src='/assets/img/icons/add_food.svg'
-                alt='menu slider img'
-                className='w-40 h-24'
-              />
-              <h3>إضافة وجبة أو مشروب</h3>
-            </Link>
+                <Link
+                  to={goTo('add-food')}
+                  className='inline-flex flex-col items-center justify-center px-2 py-4 space-y-4 text-white bg-orange-800 hover:bg-orange-700 rounded-xl'
+                >
+                  <img
+                    loading='lazy'
+                    src='/assets/img/icons/add_food.svg'
+                    alt='menu slider img'
+                    className='w-40 h-24'
+                  />
+                  <h3>إضافة وجبة أو مشروب</h3>
+                </Link>
+              </>
+            )}
           </div>
         </div>
 

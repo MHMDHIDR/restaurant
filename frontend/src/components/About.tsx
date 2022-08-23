@@ -4,9 +4,7 @@ import useAxios from '../hooks/useAxios'
 const About = () => {
   const [data, setData] = useState<string | any>()
 
-  const { response } = useAxios({
-    url: '/settings'
-  })
+  const { response } = useAxios({ url: '/settings' })
 
   useEffect(() => {
     if (response !== null) {

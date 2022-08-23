@@ -15,9 +15,7 @@ interface headerProps {
 const Header = () => {
   const [data, setData] = useState<headerProps>()
 
-  const { response } = useAxios({
-    url: '/settings'
-  })
+  const { response } = useAxios({ url: '/settings' })
 
   useEffect(() => {
     if (response !== null) setData(response)

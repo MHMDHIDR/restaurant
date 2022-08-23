@@ -43,7 +43,7 @@ export const joinUser = asyncHandler(async (req, res) => {
       tel: user.tel,
       token: generateToken(user._id),
       userAdded: 1,
-      message: 'تم تسجيل المستخدم بنجاح، يمكنك تسجيل الدخول الان'
+      message: 'تم التسجيل بنجاح 👍🏼 يمكنك تسجيل الدخول الآن'
     })
   } else {
     res.status(400).json({

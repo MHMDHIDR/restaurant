@@ -33,9 +33,7 @@ const About = () => {
   const [preview, setPreview] = useState<any>()
 
   //fetching description data
-  const { response } = useAxios({
-    url: '/settings'
-  })
+  const { response } = useAxios({ url: '/settings' })
 
   useEffect(() => {
     if (response !== null) {

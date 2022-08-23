@@ -25,9 +25,7 @@ interface dataItemProps {
 const NewFood = () => {
   const [data, setData] = useState<any>()
 
-  const { ...response } = useAxios({
-    url: '/foods/1/7?category=foods'
-  })
+  const { ...response } = useAxios({ url: '/foods/1/7?category=foods' })
 
   useEffect(() => {
     if (response.response !== null) {

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, Key } from 'react'
 import { Link } from 'react-router-dom'
 import { DotButton, PrevButton, NextButton } from './EmblaCarouselButtons'
 import useEmblaCarousel, { EmblaOptionsType } from 'embla-carousel-react'
@@ -53,12 +53,10 @@ const EmblaCarousel = ({ slides, media, smallView = false }) => {
   const HEADER_BG_IMG = '/assets/img/header-bg-1.webp' // or using data.heroBg
 
   return (
-    <div dir='ltr'>
+    <div dir={`ltr`}>
       {/* Big Menu View */}
       <div
-        className={`w-full relative p-1 rounded-xl cursor-grab bg-center before:absolute before:bg-gray-100 before:dark:bg-gray-600 before:inset-0 before:bg-opacity-[.85] before:dark:bg-opacity-[.85] before:rounded-xl before:transition-colors ${
-          smallView ? 'h-[19.3rem]' : 'h-auto'
-        }`}
+        className={`w-full relative p-1 rounded-xl cursor-grab bg-center before:absolute before:bg-gray-100 before:dark:bg-gray-600 before:inset-0 before:bg-opacity-[.85] before:dark:bg-opacity-[.85] before:rounded-xl before:transition-colors`}
         style={{ backgroundImage: `url(${HEADER_BG_IMG})` }}
       >
         <div className='w-full overflow-hidden' ref={mainViewportRef}>
@@ -125,7 +123,7 @@ const EmblaCarousel = ({ slides, media, smallView = false }) => {
         <div className='relative w-full p-2 transition-colors bg-gray-100 dark:bg-gray-600 rounded-xl'>
           <div className='w-full overflow-hidden' ref={thumbViewportRef}>
             <div className={`flex justify-between cursor-default select-none`}>
-              {slides.map(index => (
+              {slides.map((index: number) => (
                 <Thumb
                   onClick={() => onThumbClick(index)}
                   selected={index === selectedIndex}

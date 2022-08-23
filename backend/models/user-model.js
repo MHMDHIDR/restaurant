@@ -18,7 +18,7 @@ const userAccountStatus = {
 
 const userAccountType = {
   ...reqString,
-  enum: ['admin', 'user'],
+  enum: ['admin', 'cashier', 'user'],
   default: 'user'
 }
 

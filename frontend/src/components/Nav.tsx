@@ -20,9 +20,7 @@ const Nav = () => {
 
   const [websiteLogoDisplayPath, setWebsiteLogoDisplayPath] = useState('')
 
-  const { response } = useAxios({
-    url: '/settings'
-  })
+  const { response } = useAxios({ url: '/settings' })
 
   useEffect(() => {
     if (response !== null) setWebsiteLogoDisplayPath(response.websiteLogoDisplayPath)

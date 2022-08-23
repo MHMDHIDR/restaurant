@@ -8,9 +8,7 @@ const Menu = () => {
   const SLIDES_IN_MENU = 10
   const [food, setFood] = useState<{ itemsCount: any } | any>('')
 
-  const { ...response } = useAxios({
-    url: `/foods/0/0?category=foods&createdAt=1`
-  })
+  const { ...response } = useAxios({ url: `/foods/0/0?category=foods&createdAt=1` })
 
   useEffect(() => {
     if (response.response !== null) {

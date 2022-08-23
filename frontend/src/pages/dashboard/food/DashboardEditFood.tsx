@@ -64,14 +64,10 @@ const EditFood = () => {
 
   const { foodId } = useParams()
 
-  const foodData = useAxios({
-    url: `/foods/1/1/${foodId}`
-  })
+  const foodData = useAxios({ url: `/foods/1/1/${foodId}` })
 
   //fetching categories
-  const categories = useAxios({
-    url: '/settings'
-  })
+  const categories = useAxios({ url: '/settings' })
 
   useEffect(() => {
     if (foodData?.response?.response !== null && categories?.response !== null) {

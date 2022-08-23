@@ -51,9 +51,7 @@ const AddFood = () => {
   const modalLoading = document.querySelector('#modal')
 
   //fetching categories
-  const { response } = useAxios({
-    url: '/settings'
-  })
+  const { response } = useAxios({ url: '/settings' })
 
   useEffect(() => {
     if (response !== null) {

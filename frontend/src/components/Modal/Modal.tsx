@@ -73,6 +73,8 @@ const Modal = ({
                 ]
                 const confirmColor = btn.includes('حظر')
                   ? 'neutral'
+                  : btn.includes('كاشير')
+                  ? 'orange'
                   : conditions.some(btnTxt => btn.includes(btnTxt))
                   ? 'green'
                   : 'red'

@@ -210,7 +210,7 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
       <table className='table w-full text-center border-collapse table-auto'>
         <thead className='text-white bg-orange-800'>
           <tr>
-            <th className='max-w-[0.25rem] px-1 py-2 '>م.</th>
+            <th className='min-w-[0.5rem] px-1 py-2 '>م.</th>
             <th className='px-1 py-2 min-w-[10rem]'>اسم الشخص</th>
             <th className='px-1 py-2 min-w-[7rem]'>البريد الالكتروني للمستخدم</th>
             <th className='px-1 py-2'>تاريخ و وقت الطلب</th>
@@ -221,7 +221,7 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
             <th className='px-1 py-2'>رقم الطلب</th>
             <th className='px-1 py-2 min-w-[6rem]'>وسلة الدفع</th>
             <th className='px-1 py-2'>حالة الطلب</th>
-            {JSON.parse(localStorage.getItem('user')).userAccountType === 'admin' && (
+            {(USER.userAccountType === 'admin' || USER.userAccountType === 'cashier') && (
               <th className='px-1 py-2'>الاجراء</th>
             )}
           </tr>
@@ -237,21 +237,18 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
 
                 //FILTER by email
                 ordersData?.response?.filter(
-                  (order: { userEmail: any }) =>
-                    order.userEmail === JSON.parse(localStorage.getItem('user')).userEmail
+                  (order: { userEmail: any }) => order.userEmail === USER.userEmail
                 ).length > 0 ? ( //means there is at least one order by the current user email
                   ordersData?.response
                     ?.filter(
-                      (order: { userEmail: string }) =>
-                        order.userEmail ===
-                        JSON.parse(localStorage.getItem('user')).userEmail
+                      (order: { userEmail: string }) => order.userEmail === USER.userEmail
                     )
                     .map((order: any, idx: number) => (
                       <tr
                         key={order._id}
                         className='transition-colors even:bg-neutral-300 odd:bg-neutral-200 dark:even:bg-neutral-700 dark:odd:bg-neutral-600'
                       >
-                        <td className='px-1 py-2 max-w-[0.25rem]'>{idx + 1}</td>
+                        <td className='min-w-[0.5rem] px-1 py-2'>{idx + 1}</td>
                         <td className='px-1 py-2 min-w-[10rem]'>{order.personName}</td>
                         <td className='px-1 py-2 min-w-[6rem]'>{order.userEmail}</td>
                         <td className='text-right min-w-[13rem] px-1 py-2'>
@@ -373,8 +370,7 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
                             ? 'تمت الموافقة'
                             : 'تم الرفض'}
                         </td>
-                        {JSON.parse(localStorage.getItem('user')).userAccountType ===
-                          'admin' && (
+                        {USER.userAccountType === 'admin' && (
                           <td>
                             {order.orderStatus === 'pending' ? (
                               <>

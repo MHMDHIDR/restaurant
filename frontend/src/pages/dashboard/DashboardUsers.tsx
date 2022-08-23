@@ -15,6 +15,13 @@ import Modal from '../../components/Modal/Modal'
 import { Success, Error, Loading } from '../../components/Icons/Status'
 import { LoadingSpinner } from '../../components/Loading'
 import Pagination from '../../components/Pagination'
+import NavMenu from '../../components/NavMenu'
+
+enum userAccountTypeProps {
+  ADMIN,
+  CASHIER,
+  USER
+}
 
 const DashboardUsers = () => {
   useDocumentTitle('Users')
@@ -28,15 +35,13 @@ const DashboardUsers = () => {
   const [userAccountAction, setUserAccountAction] = useState()
   const [userName, setUserName] = useState('')
   const [deleteUserStatus, setDeleteUserStatus] = useState()
-  const [serUpdated, setUserUpdated] = useState()
+  const [userUpdated, setUserUpdated] = useState()
   const [data, setData] = useState<any>('')
 
   const modalLoading = document.querySelector('#modal')
 
   //get users data only if the admin is authenticated and logged in
-  const { ...response } = useAxios({
-    url: `/users/all/${pageNumber}/${itemsPerPage}`
-  })
+  const { ...response } = useAxios({ url: `/users/all/${pageNumber}/${itemsPerPage}` })
 
   useEffect(() => {
     if (response.response !== null) {
@@ -49,8 +54,9 @@ const DashboardUsers = () => {
       e.target.id === 'deleteUser' ||
       e.target.id === 'blockUser' ||
       e.target.id === 'activateUser' ||
-      e.target.id === 'user' ||
-      e.target.id === 'admin'
+      e.target.id === 'admin' ||
+      e.target.id === 'cashier' ||
+      e.target.id === 'user'
     ) {
       setUserId(e.target.dataset.id)
       setUserName(e.target.dataset.name)
@@ -66,7 +72,7 @@ const DashboardUsers = () => {
     }
   })
 
-  const handleUser = async (userId, userAccountAction) => {
+  const handleUser = async (userId: string, userAccountAction: string) => {
     if (userAccountAction === 'delete') {
       try {
         //You need to name the body {data} so it can be recognized in (.delete) method
@@ -119,7 +125,7 @@ const DashboardUsers = () => {
           redirectLink={goTo('users')}
           redirectTime={3000}
         />
-      ) : serUpdated === 1 ? (
+      ) : userUpdated === 1 ? (
         <Modal
           status={Success}
           msg={`تم${
@@ -129,6 +135,8 @@ const DashboardUsers = () => {
               ? `🎉 تفعيل 😄 ${userName}`
               : userAccountAction === 'admin'
               ? `🎉 تحويل ${userName} إلى مدير 😎`
+              : userAccountAction === 'cashier'
+              ? `🎉 تحويل ${userName} إلى كاشير 😎`
               : userAccountAction === 'user'
               ? `❗️ تحويل ${userName}  إلى مستخدم 😎`
               : null
@@ -136,7 +144,7 @@ const DashboardUsers = () => {
           redirectLink={goTo('users')}
           redirectTime={3000}
         />
-      ) : serUpdated === 0 ? (
+      ) : userUpdated === 0 ? (
         <Modal
           status={Error}
           msg={`حدث خطأ ما أثناء تحديث ${userName}!`}
@@ -152,15 +160,17 @@ const DashboardUsers = () => {
         classes='txt-blue text-center'
         msg={`هل أنت متأكد من ${
           userAccountAction === 'block'
-            ? 'حظر'
+            ? `حظر ${userName}`
             : userAccountAction === 'active'
-            ? 'تفعيل'
+            ? `تفعيل ${userName}`
             : userAccountAction === 'admin'
-            ? 'تحويل الى مدير'
+            ? `تحويل ${userName} الى مدير`
+            : userAccountAction === 'cashier'
+            ? `تحويل ${userName} الى كاشير`
             : userAccountAction === 'user'
-            ? 'تحويل الى مستخدم'
+            ? `تحويل ${userName} الى مستخدم`
             : 'الغاء'
-        } ${userName} لا يمكن التراجع عن هذا القرار`}
+        } لا يمكن التراجع عن هذا القرار`}
         ctaConfirmBtns={[
           userAccountAction === 'block'
             ? 'حظر'
@@ -168,6 +178,8 @@ const DashboardUsers = () => {
             ? 'تفعيل'
             : userAccountAction === 'admin'
             ? 'تحويل الى مدير'
+            : userAccountAction === 'cashier'
+            ? 'تحويل الى كاشير'
             : userAccountAction === 'user'
             ? 'تحويل الى مستخدم'
             : 'حذف',
@@ -207,7 +219,9 @@ const DashboardUsers = () => {
                       <td
                         className={`px-1 py-2 font-bold${
                           item.userAccountType === 'admin'
-                            ? ' text-orange-600 dark:text-orange-400 font-bold'
+                            ? ' text-red-700 dark:text-red-400 font-bold'
+                            : item.userAccountType === 'cashier'
+                            ? ' text-orange-500 dark:text-orange-400 font-bold'
                             : ' text-gray-800 dark:text-gray-300'
                         }`}
                       >
@@ -215,11 +229,17 @@ const DashboardUsers = () => {
                           data-tooltip={
                             item.userAccountType === 'admin'
                               ? 'المدير يملك صلاحية الدخول على لوحة التحكم، فعليه يستطيع إدارة الموقع من خلالها'
+                              : item.userAccountType === 'cashier'
+                              ? 'الكاشير يملك صلاحية الدخول للوحة التحكم والوصول لصفحة الطلبات مع إمكانية الموافقة أو رفض الطلب'
                               : 'المستخدم العادي يملك صلاحية الدخول على حسابه ورؤية الطلبات الخاصة به فقط'
                           }
                           className='w-40'
                         >
-                          {item.userAccountType === 'admin' ? 'مدير' : 'مستخدم عادي'}
+                          {item.userAccountType === 'admin'
+                            ? 'مدير'
+                            : item.userAccountType === 'cashier'
+                            ? 'كاشير'
+                            : 'مستخدم عادي'}
                         </span>
                       </td>
                       <td
@@ -232,22 +252,23 @@ const DashboardUsers = () => {
                         <span
                           data-tooltip={
                             item.userAccountStatus === 'block'
-                              ? 'المستخدم المحظور لا يملك صلاحية للدخول على حسابه فعليه لا يملك صلاحية الدخول للوحة التحكم'
-                              : 'المستخدم المفعل يملك صلاحية الدخول على حسابه فعليه  يستطيع الدخول للوحة التحكم، وإدارة الموقع من خلالها'
+                              ? 'المحظور لا يملك صلاحية للدخول على النظام'
+                              : 'المفعل يملك صلاحية الدخول على حسابه فعليه يستطيع الدخول للنظام وعمل الاجراء الذي يتناسب مع صلاحياته'
                           }
                         >
                           {item.userAccountStatus === 'block'
-                            ? 'المستخدم محظور\u00A0\u00A0\u00A0❌'
-                            : 'المستخدم مفعل\u00A0\u00A0\u00A0✅'}
+                            ? '❌\u00A0\u00A0\u00A0محظور'
+                            : '✅\u00A0\u00A0\u00A0مفعل'}
                         </span>
                       </td>
                       <td className='flex flex-wrap items-center justify-center gap-3 px-1 py-2'>
                         {idx === 0 ? (
+                          //first admin account doesn't have to get deleted or blocked from others hence no action provided
                           <span className='text-gray-600 select-none dark:text-gray-200'>
                             لا يوجد إجراء
                           </span>
                         ) : (
-                          <>
+                          <NavMenu>
                             {/* UserStatus Buttons */}
                             {item.userAccountStatus === 'block' ? (
                               <button
@@ -275,27 +296,74 @@ const DashboardUsers = () => {
 
                             {/* UserType Buttons */}
                             {item.userAccountType === 'admin' ? (
-                              <button
-                                id='user'
-                                data-id={item._id}
-                                data-name={item.userFullName}
-                                data-action='user'
-                                className='py-1 px-2 text-white bg-green-600 border-2 rounded-md hover:bg-green-700 min-w-[6.5rem]'
-                                data-tooltip='تحويل الى مستخدم عادي'
-                              >
-                                تحويل لمستخدم
-                              </button>
+                              <>
+                                <button
+                                  id='user'
+                                  data-id={item._id}
+                                  data-name={item.userFullName}
+                                  data-action='user'
+                                  className='py-1 px-2 text-white bg-green-600 border-2 rounded-md hover:bg-green-700 min-w-[6.5rem]'
+                                  data-tooltip='تحويل الى مستخدم عادي'
+                                >
+                                  تحويل لمستخدم
+                                </button>
+                                <button
+                                  id='user'
+                                  data-id={item._id}
+                                  data-name={item.userFullName}
+                                  data-action='cashier'
+                                  className='py-1 px-2 text-white bg-orange-600 border-2 rounded-md hover:bg-orange-700 min-w-[6.5rem]'
+                                  data-tooltip='تحويل الى لكاشير'
+                                >
+                                  تحويل لكاشير
+                                </button>
+                              </>
+                            ) : item.userAccountType === 'cashier' ? (
+                              <>
+                                <button
+                                  id='admin'
+                                  data-id={item._id}
+                                  data-name={item.userFullName}
+                                  data-action='admin'
+                                  className='py-1 px-2 text-white bg-green-600 border-2 rounded-md hover:bg-green-700 min-w-[6.5rem]'
+                                  data-tooltip='تحول الى مدير'
+                                >
+                                  تحول لمدير
+                                </button>
+                                <button
+                                  id='user'
+                                  data-id={item._id}
+                                  data-name={item.userFullName}
+                                  data-action='user'
+                                  className='py-1 px-2 text-white bg-green-600 border-2 rounded-md hover:bg-green-700 min-w-[6.5rem]'
+                                  data-tooltip='تحويل الى مستخدم عادي'
+                                >
+                                  تحويل لمستخدم
+                                </button>
+                              </>
                             ) : (
-                              <button
-                                id='admin'
-                                data-id={item._id}
-                                data-name={item.userFullName}
-                                data-action='admin'
-                                className='py-1 px-2 text-white bg-green-600 border-2 rounded-md hover:bg-green-700 min-w-[6.5rem]'
-                                data-tooltip='تحول الى مدير'
-                              >
-                                تحول لمدير
-                              </button>
+                              <>
+                                <button
+                                  id='admin'
+                                  data-id={item._id}
+                                  data-name={item.userFullName}
+                                  data-action='admin'
+                                  className='py-1 px-2 text-white bg-green-600 border-2 rounded-md hover:bg-green-700 min-w-[6.5rem]'
+                                  data-tooltip='تحول الى مدير'
+                                >
+                                  تحول لمدير
+                                </button>
+                                <button
+                                  id='user'
+                                  data-id={item._id}
+                                  data-name={item.userFullName}
+                                  data-action='cashier'
+                                  className='py-1 px-2 text-white bg-orange-600 border-2 rounded-md hover:bg-orange-700 min-w-[6.5rem]'
+                                  data-tooltip='تحويل الى لكاشير'
+                                >
+                                  تحويل لكاشير
+                                </button>
+                              </>
                             )}
 
                             {/* Delete Button */}
@@ -309,7 +377,7 @@ const DashboardUsers = () => {
                             >
                               حذف
                             </button>
-                          </>
+                          </NavMenu>
                         )}
                       </td>
                     </tr>
