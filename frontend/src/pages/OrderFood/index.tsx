@@ -35,7 +35,7 @@ const OrderFood = () => {
   //global variables
   const MAX_CHARACTERS = 100
 
-  const { items, grandPrice } = useContext(CartContext)
+  const { items, grandPrice, setGrandPrice } = useContext(CartContext)
   const { checkedToppings } = useContext(ToppingsContext)
 
   //Form States
@@ -79,6 +79,10 @@ const OrderFood = () => {
     )
   }, [personName, personPhone, personAddress, personNotes])
 
+  useEffect(() => {
+    setGrandPrice(grandPriceRef?.current?.textContent || grandPrice)
+  }, [grandPriceRef?.current?.textContent, grandPrice])
+
   const handleCollectOrder = async (e: { preventDefault: () => void }) => {
     e.preventDefault()
 
@@ -114,7 +118,7 @@ const OrderFood = () => {
     formData.append('personNotes', personNotes)
     formData.append('checkedToppings', JSON.stringify(checkedToppings))
     formData.append('foodItems', JSON.stringify(items))
-    formData.append('grandPrice', grandPriceRef?.current?.textContent || grandPrice)
+    formData.append('grandPrice', grandPrice)
     formData.append('paymentData', JSON.stringify(paymentData))
 
     try {
@@ -138,6 +142,7 @@ const OrderFood = () => {
   return (
     <>
       <Header />
+
       <section id='orderFood' className='py-12 my-8'>
         {orderFoodStatus === 1 ? (
           <Modal
@@ -159,11 +164,11 @@ const OrderFood = () => {
           showPaymentModal === true && (
             <Modal
               status={Loading}
-              msg={`يمكنك الدفع بإستخدام إحدى الوسائل أدناه:`}
+              msg={`سيتم الدفع بالعملة (دولار أمريكي) وذلك بعد تحويل الإجمالي: ${grandPrice} ر.ق، سيتم دفع = ${grandPrice} دولار أمريكي لدفع بأحد الوسائل التالية:`}
               extraComponents={
                 PaymentButton ? (
                   <PaymentButton
-                    value={grandPriceRef?.current?.textContent || grandPrice}
+                    value={grandPrice}
                     onSuccess={(paymentData: any) => {
                       setShowPaymentModal(false)
                       handleSaveOrder(paymentData)
@@ -389,6 +394,7 @@ const OrderFood = () => {
           )}
         </div>
       </section>
+
       <Footer />
     </>
   )

@@ -10,7 +10,9 @@ const PaymentButton = ({ value, onSuccess }) => {
   const createOrder = (
     _: any,
     actions: {
-      order: { create: (arg0: { purchase_units: { amount: { value: any } }[] }) => any }
+      order: {
+        create: (arg: { purchase_units: { amount: { value: number } }[] }) => any
+      }
     }
   ) => actions.order.create({ purchase_units: [{ amount: { value } }] })
 
@@ -20,7 +22,7 @@ const PaymentButton = ({ value, onSuccess }) => {
     return data
   }
 
-  const onCancel = () => alert('cancelled Payment')
+  const onCancel = () => alert('تم الغاء الدفع')
 
   const onError = (error: any) => console.error('some error happened=> ', error)
 
@@ -30,7 +32,7 @@ const PaymentButton = ({ value, onSuccess }) => {
         data: any,
         actions: {
           order: {
-            create: (arg0: { purchase_units: { amount: { value: any } }[] }) => any
+            create: (arg: { purchase_units: { amount: { value: number } }[] }) => any
           }
         }
       ) => createOrder(data, actions)}
