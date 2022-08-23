@@ -193,7 +193,7 @@ const About = () => {
 
           {/* Description Form */}
           <form id='descForm' onSubmit={handleUpdate}>
-            <h3 className='mx-0 mt-4 mb-12 text-lg text-center'>اسم الموقع</h3>
+            <h3 className='mx-0 mt-4 mb-12 text-lg text-center'>العلامة التجارية</h3>
             <label
               htmlFor='logoImg'
               className='flex flex-wrap items-center justify-center gap-5 cursor-pointer md:justify-between mb-10'

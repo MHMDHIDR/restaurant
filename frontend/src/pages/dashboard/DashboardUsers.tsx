@@ -205,7 +205,7 @@ const DashboardUsers = () => {
                 <th className='px-1 py-2'>البريد الالكتروني</th>
                 <th className='px-1 py-2'>نوع المستخدم</th>
                 <th className='px-1 py-2'>حالة المستخدم</th>
-                <th className='px-1 py-2'>الاجراء</th>
+                <th className='px-1 py-2'>الإجراءات</th>
               </tr>
             </thead>
 
@@ -257,8 +257,8 @@ const DashboardUsers = () => {
                         <span
                           data-tooltip={
                             item.userAccountStatus === 'block'
-                              ? 'المحظور لا يملك صلاحية للدخول على النظام'
-                              : 'المفعل يملك صلاحية الدخول على حسابه فعليه يستطيع الدخول للنظام وعمل الاجراء الذي يتناسب مع صلاحياته'
+                              ? 'المستخدم المحظور لا يملك صلاحية للدخول على النظام'
+                              : 'المستخدم المفعل يملك صلاحية الدخول على حسابه فعليه يستطيع الدخول للنظام وعمل الاجراء الذي يتناسب مع صلاحياته'
                           }
                         >
                           {item.userAccountStatus === 'block'

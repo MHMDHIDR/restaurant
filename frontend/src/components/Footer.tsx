@@ -11,6 +11,7 @@ import Backtop from './Icons/Backtop'
 import { WhatsApp, Twitter, Instagram } from './Icons/Socials'
 
 interface settingsProps {
+  appName: string
   websiteLogoDisplayPath: string
   appDesc: string
   whatsAppNumber: string
@@ -126,7 +127,8 @@ const Footer = () => {
 
         <div className='flex items-center justify-around gap-6 py-4'>
           <p className='font-[600] text-center px-2 sm:px-0 leading-loose'>
-            موقع Restaurant لطلب الوجبات والأطعمة اللذيذة - جميع الحقوق محفوظة &copy; 2021
+            موقع {settings?.appName} لطلب الوجبات والأطعمة اللذيذة - جميع الحقوق محفوظة
+            &copy; 2021
           </p>
         </div>
       </div>

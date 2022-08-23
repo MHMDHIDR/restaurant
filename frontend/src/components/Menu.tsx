@@ -34,7 +34,7 @@ const Menu = () => {
     food.map(({ _id, foodImgs, foodName, foodPrice }) =>
       media.push({
         foodId: _id,
-        foodImgDisplayPath: foodImgs[0].foodImgDisplayPath,
+        foodImgDisplayPath: foodImgs[0]?.foodImgDisplayPath,
         foodName,
         foodPrice
       })
