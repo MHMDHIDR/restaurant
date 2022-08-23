@@ -11,6 +11,8 @@ const DashboardSidebar = () => {
     setTop(menuTogglerRef?.current?.getBoundingClientRect().top)
   }, [])
 
+  const USER = JSON.parse(localStorage.getItem('user'))
+
   return (
     <aside>
       <>
@@ -24,11 +26,10 @@ const DashboardSidebar = () => {
         <label
           data-tooltip='القائمة'
           htmlFor='menuToggler'
-          className={`block z-20 w-10 h-10 transition-all translate-x-0 bg-orange-700 border-2 border-r-0 border-gray-800 cursor-pointer hover:bg-orange-800 dark:border-white translate-y-36 sm:translate-y-36 peer-checked:-translate-x-56${
+          className={`block z-20 w-10 h-10 transition-all translate-x-0 bg-orange-700 border-2 border-r-0 border-gray-800 cursor-pointer hover:bg-orange-800 dark:border-white translate-y-36 sm:translate-y-36 peer-checked:-translate-x-56 ${
             top < 100 &&
-            ` after:content-[attr(tooltip)] after:bottom-[calc(var(--top)*2)] after:mt-2 before:dark:border-t-transparent before:border-t-transparent before:border-b-gray-800 before:dark:border-b-gray-300 before:top-[var(--bottom)]`
-          }
-          `}
+            `after:content-[attr(tooltip)] after:bottom-[calc(var(--top)*2)] after:mt-2 before:dark:border-t-transparent before:border-t-transparent before:border-b-gray-800 before:dark:border-b-gray-300 before:top-[var(--bottom)]`
+          }`}
           style={{ margin: '0' }}
           ref={menuTogglerRef}
         >
@@ -68,66 +69,74 @@ const DashboardSidebar = () => {
               لوحة التحكم
             </NavLink>
           </li>
-          <li className='hover:bg-orange-700'>
-            <NavLink
-              end
-              to={goTo('orders')}
-              className={({ isActive }) =>
-                !isActive ? 'dashboard__nav' : 'dashboard__nav isActive'
-              }
-              onClick={() => menuToggler()}
-            >
-              الطلبات
-            </NavLink>
-          </li>
-          <li className='hover:bg-orange-700'>
-            <NavLink
-              end
-              to={goTo('menu')}
-              className={({ isActive }) =>
-                !isActive ? 'dashboard__nav' : 'dashboard__nav isActive'
-              }
-              onClick={() => menuToggler()}
-            >
-              قائمة الوجبات
-            </NavLink>
-          </li>
-          <li className='hover:bg-orange-700'>
-            <NavLink
-              end
-              to={goTo('add-food')}
-              className={({ isActive }) =>
-                !isActive ? 'dashboard__nav' : 'dashboard__nav isActive'
-              }
-              onClick={() => menuToggler()}
-            >
-              إضافة وجبة
-            </NavLink>
-          </li>
-          <li className='hover:bg-orange-700'>
-            <NavLink
-              end
-              to={goTo('settings')}
-              className={({ isActive }) =>
-                !isActive ? 'dashboard__nav' : 'dashboard__nav isActive'
-              }
-              onClick={() => menuToggler()}
-            >
-              إعدادات الموقع
-            </NavLink>
-          </li>
-          <li className='hover:bg-orange-700'>
-            <NavLink
-              end
-              to={goTo('users')}
-              className={({ isActive }) =>
-                !isActive ? 'dashboard__nav' : 'dashboard__nav isActive'
-              }
-              onClick={() => menuToggler()}
-            >
-              المستخدمين
-            </NavLink>
-          </li>
+          {USER?.userAccountType === 'admin' ? (
+            <>
+              <li className='hover:bg-orange-700'>
+                <NavLink
+                  end
+                  to={goTo('menu')}
+                  className={({ isActive }) =>
+                    !isActive ? 'dashboard__nav' : 'dashboard__nav isActive'
+                  }
+                  onClick={() => menuToggler()}
+                >
+                  قائمة الوجبات
+                </NavLink>
+              </li>
+              <li className='hover:bg-orange-700'>
+                <NavLink
+                  end
+                  to={goTo('add-food')}
+                  className={({ isActive }) =>
+                    !isActive ? 'dashboard__nav' : 'dashboard__nav isActive'
+                  }
+                  onClick={() => menuToggler()}
+                >
+                  إضافة وجبة
+                </NavLink>
+              </li>
+              <li className='hover:bg-orange-700'>
+                <NavLink
+                  end
+                  to={goTo('settings')}
+                  className={({ isActive }) =>
+                    !isActive ? 'dashboard__nav' : 'dashboard__nav isActive'
+                  }
+                  onClick={() => menuToggler()}
+                >
+                  إعدادات الموقع
+                </NavLink>
+              </li>
+              <li className='hover:bg-orange-700'>
+                <NavLink
+                  end
+                  to={goTo('users')}
+                  className={({ isActive }) =>
+                    !isActive ? 'dashboard__nav' : 'dashboard__nav isActive'
+                  }
+                  onClick={() => menuToggler()}
+                >
+                  المستخدمين
+                </NavLink>
+              </li>
+            </>
+          ) : (
+            (USER?.userAccountType === 'admin' ||
+              USER?.userAccountType === 'cashier') && (
+              <li className='hover:bg-orange-700'>
+                <NavLink
+                  end
+                  to={goTo('orders')}
+                  className={({ isActive }) =>
+                    !isActive ? 'dashboard__nav' : 'dashboard__nav isActive'
+                  }
+                  onClick={() => menuToggler()}
+                >
+                  الطلبات
+                </NavLink>
+              </li>
+            )
+          )}
         </ul>
       </>
     </aside>

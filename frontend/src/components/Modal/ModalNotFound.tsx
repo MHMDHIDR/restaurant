@@ -2,11 +2,13 @@ import Modal from './Modal'
 import { Error } from '../Icons/Status'
 
 const ModalNotFound = ({
-  msg = `نعتذر على الازعاج، لكن يبدو أن الصفحة التي تبحث عنها غير متواجدة! أو أنك أخطأت في كتابة اسم الصفحة! للعودة للصفحة الرئيسية إضغط الزر أدناه`,
   // status prop type react element
-  status = Error
+  status = Error,
+  btnLink = '/',
+  btnName = 'الصفحة الرئيسية',
+  msg = `نعتذر على الازعاج، لكن يبدو أن الصفحة التي تبحث عنها غير متواجدة! أو أنك أخطأت في كتابة اسم الصفحة! للعودة الى ${btnName} إضغط الزر أدناه`
 }) => {
-  return <Modal status={status} msg={msg} btnName='الصفحة الرئيسية' btnLink='/' />
+  return <Modal status={status} msg={msg} btnName={btnName} btnLink={btnLink} />
 }
 
 export default ModalNotFound

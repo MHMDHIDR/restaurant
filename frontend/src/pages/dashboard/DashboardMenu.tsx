@@ -16,6 +16,7 @@ import { removeSlug } from '../../utils/slug'
 import goTo from '../../utils/goTo'
 import { createLocaleDateString } from '../../utils/convertDate'
 import scrollToView from '../../utils/scrollToView'
+import ModalNotFound from '../../components/Modal/ModalNotFound'
 
 const DashboardMenu = () => {
   useDocumentTitle('Menu')
@@ -33,6 +34,8 @@ const DashboardMenu = () => {
   const [delFoodName, setDelFoodName] = useState('')
   const [deleteFoodStatus, setDeleteFoodStatus] = useState()
   const [data, setData] = useState<any>('')
+
+  const USER = JSON.parse(localStorage.getItem('user'))
 
   const modalLoading = document.querySelector('#modal')
   const API_URL =
@@ -95,7 +98,9 @@ const DashboardMenu = () => {
     }
   }
 
-  return (
+  return USER?.userAccountType !== 'admin' ? (
+    <ModalNotFound btnLink='/dashboard' btnName='لوحة التحكم' />
+  ) : (
     <>
       {deleteFoodStatus === 1 ? (
         <Modal

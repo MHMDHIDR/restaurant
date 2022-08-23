@@ -16,6 +16,7 @@ import { Success, Error, Loading } from '../../components/Icons/Status'
 import { LoadingSpinner } from '../../components/Loading'
 import Pagination from '../../components/Pagination'
 import NavMenu from '../../components/NavMenu'
+import ModalNotFound from '../../components/Modal/ModalNotFound'
 
 enum userAccountTypeProps {
   ADMIN,
@@ -37,6 +38,8 @@ const DashboardUsers = () => {
   const [deleteUserStatus, setDeleteUserStatus] = useState()
   const [userUpdated, setUserUpdated] = useState()
   const [data, setData] = useState<any>('')
+
+  const USER = JSON.parse(localStorage.getItem('user'))
 
   const modalLoading = document.querySelector('#modal')
 
@@ -109,7 +112,9 @@ const DashboardUsers = () => {
     }
   }
 
-  return (
+  return USER?.userAccountType !== 'admin' ? (
+    <ModalNotFound btnLink='/dashboard' btnName='لوحة التحكم' />
+  ) : (
     <>
       {deleteUserStatus === 1 ? (
         <Modal

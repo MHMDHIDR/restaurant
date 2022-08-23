@@ -370,7 +370,8 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
                             ? 'تمت الموافقة'
                             : 'تم الرفض'}
                         </td>
-                        {USER.userAccountType === 'admin' && (
+                        {(USER.userAccountType === 'admin' ||
+                          USER.userAccountType === 'cashier') && (
                           <td>
                             {order.orderStatus === 'pending' ? (
                               <>

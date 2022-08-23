@@ -24,19 +24,16 @@ const useAuth = () => {
       setUserType('')
     }
 
-    if (response.response !== null) {
-      if (
-        response.response.userAccountType === 'admin' &&
-        response.response._id === USER._id
-      ) {
+    if (response.response !== null && response.response._id === USER._id) {
+      if (response.response.userAccountType === 'admin') {
         setIsAuth(true)
-        setUserType('admin')
-      } else if (
-        response.response.userAccountType === 'user' &&
-        response.response._id === USER._id
-      ) {
+        setUserType(response.response.userAccountType)
+      } else if (response.response.userAccountType === 'cashier') {
         setIsAuth(true)
-        setUserType('user')
+        setUserType(response.response.userAccountType)
+      } else if (response.response.userAccountType === 'user') {
+        setIsAuth(true)
+        setUserType(response.response.userAccountType)
       }
     }
 
