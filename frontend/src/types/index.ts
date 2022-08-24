@@ -39,10 +39,6 @@ export interface FileUploadProps {
   onFileRemove(fileUrl: string, fileName: string): void
 }
 
-export interface AddTagsProps {
-  inputId: string
-}
-
 export interface cardProps {
   cItemId: string
   cHeading: any

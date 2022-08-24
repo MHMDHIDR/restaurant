@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom'
 import { useContext } from 'react'
 
 import { CartContext } from '../Contexts/CartContext'
-import { CartProps } from '../Contexts/CartContext'
 import { ToppingsContext } from '../Contexts/ToppingsContext'
 import TagIcon from './Icons/TagIcon'
 import EmblaCarousel from './Embla/EmblaCarousel'
@@ -10,7 +9,7 @@ import EmblaCarousel from './Embla/EmblaCarousel'
 import { removeSlug } from '../utils/slug'
 
 import Logo from './Icons/Logo'
-import { cardProps } from '../types'
+import { cardProps, CartProps } from '../types'
 
 const Card = ({
   cItemId,

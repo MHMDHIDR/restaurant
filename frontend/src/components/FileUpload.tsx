@@ -1,7 +1,8 @@
 import { Key, useContext } from 'react'
 import { useLocation } from 'react-router-dom'
 import { FileUploadContext } from '../Contexts/FileUploadContext'
-import { FileUploadProps } from '../Contexts/FileUploadContext'
+
+import { FileUploadProps } from '../types'
 
 const FileUpload = ({ data }) => {
   const { file, fileURLs, onFileRemove, onFileAdd } =
