@@ -131,7 +131,10 @@ const Nav = () => {
             </li>
             {'user' in localStorage ? (
               <li className='flex gap-3'>
-                <NavMenu label={`مرحباً ${USER.userFullName}`} isOptions={false}>
+                <NavMenu
+                  label={`مرحباً عزيزي${USER.userFullName || ''}`}
+                  isOptions={false}
+                >
                   {(USER?.userAccountType === 'admin' ||
                     USER?.userAccountType === 'cashier') && (
                     <Link
