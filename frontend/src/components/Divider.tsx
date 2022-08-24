@@ -1,8 +1,4 @@
-interface DividerProps {
-  thickness?: number
-  style?: 'dashed'
-  marginY?: number
-}
+import { DividerProps } from '../types'
 
 const Divider = ({ thickness = 0, style = 'dashed', marginY = 14 }: DividerProps) => (
   <hr

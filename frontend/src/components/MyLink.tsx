@@ -1,12 +1,7 @@
 import { Link, useLocation } from 'react-router-dom'
 import scrollTo from '../utils/scrollToSection'
 import menuToggler from '../utils/menuToggler'
-
-interface MyLinkProps {
-  children: React.ReactNode
-  to?: string
-  className?: string
-}
+import { MyLinkProps } from '../types'
 
 const MyLink = ({ children, to = `/`, className }: MyLinkProps) => {
   const { pathname } = useLocation()

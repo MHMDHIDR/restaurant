@@ -12,6 +12,7 @@ import { removeSlug } from '../utils/slug'
 
 import { LoadingCard } from '../components/Loading'
 import scrollToView from '../utils/scrollToView'
+import { viewFoodDataProps } from '../types'
 
 const ModalNotFound = lazy(() => import('../components/Modal/ModalNotFound'))
 const Card = lazy(() => import('../components/Card'))
@@ -34,17 +35,6 @@ const ViewFood = () => {
 
   const pageNumber = !pageNum || pageNum < 1 || isNaN(pageNum) ? 1 : parseInt(pageNum)
   const itemsPerPage = 5
-
-  interface dataProps {
-    _id: string
-    foodName: string
-    foodPrice: number
-    foodDesc: string
-    foodTags: string[]
-    foodToppings: string[]
-    foodImgs: string
-    length: number
-  }
 
   const [data, setData] = useState<any>()
 
@@ -87,7 +77,7 @@ const ViewFood = () => {
             // if data.length gives a number that means there are Multiple food items
             data?.response?.length > 0 ? (
               <Suspense fallback={<LoadingCard />}>
-                {data?.response?.map((item: dataProps, idx: number) => (
+                {data?.response?.map((item: viewFoodDataProps, idx: number) => (
                   // View Multiple (Many) food items
                   <motion.div
                     key={item._id}

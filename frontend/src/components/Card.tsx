@@ -10,19 +10,7 @@ import EmblaCarousel from './Embla/EmblaCarousel'
 import { removeSlug } from '../utils/slug'
 
 import Logo from './Icons/Logo'
-
-interface cardProps {
-  cItemId: string
-  cHeading: any
-  cDesc: string
-  cTags: string[]
-  cToppings: Array<any>
-  cCtaLabel: any
-  cCtaLink?: string
-  cImg?: any
-  cImgAlt?: string
-  cPrice: number
-}
+import { cardProps } from '../types'
 
 const Card = ({
   cItemId,

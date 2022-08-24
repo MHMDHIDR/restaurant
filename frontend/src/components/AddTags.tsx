@@ -1,11 +1,8 @@
 import { useContext } from 'react'
 import { TagsContext } from '../Contexts/TagsContext'
 import { TagsProps } from '../Contexts/TagsContext'
+import { AddTagsProps } from '../types'
 import TagIcon from './Icons/TagIcon'
-
-interface AddTagsProps {
-  inputId: string
-}
 
 const AddTags = ({ inputId }: AddTagsProps) => {
   const { tags, removeTags, addTag } = useContext<TagsProps>(TagsContext)

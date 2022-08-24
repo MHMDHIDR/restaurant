@@ -1,12 +1,6 @@
 import { useState } from 'react'
+import { NavMenuPros } from '../types'
 import abstractText from '../utils/abstractText'
-
-interface NavMenuPros {
-  children: React.ReactNode
-  isOptions?: boolean
-  label?: string
-  className?: string
-}
 
 const NavMenu: React.FC<NavMenuPros> = ({
   children,

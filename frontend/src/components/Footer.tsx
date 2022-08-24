@@ -9,15 +9,7 @@ import MyLink from './MyLink'
 import Logo from './Icons/Logo'
 import Backtop from './Icons/Backtop'
 import { WhatsApp, Twitter, Instagram } from './Icons/Socials'
-
-interface settingsProps {
-  appName: string
-  websiteLogoDisplayPath: string
-  appDesc: string
-  whatsAppNumber: string
-  instagramAccount: string
-  twitterAccount: string
-}
+import { settingsProps } from '../types'
 
 const Footer = () => {
   const [settings, setSettings] = useState<settingsProps | any>()

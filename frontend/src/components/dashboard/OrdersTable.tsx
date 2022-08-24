@@ -76,6 +76,7 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
     if (
       e.target.id === 'acceptOrder' ||
       e.target.id === 'rejectOrder' ||
+      e.target.id === 'editOrder' ||
       e.target.id === 'deleteOrder'
     ) {
       setOrderInfo({
@@ -379,16 +380,19 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
                                 <>
                                   <AcceptBtn id={order._id} email={order.userEmail} />
                                   <RejectBtn id={order._id} email={order.userEmail} />
+                                  <EditBtn id={order._id} />
                                   <DeleteBtn id={order._id} email={order.userEmail} />
                                 </>
                               ) : order.orderStatus === 'accept' ? (
                                 <>
                                   <RejectBtn id={order._id} email={order.userEmail} />
+                                  <EditBtn id={order._id} />
                                   <DeleteBtn id={order._id} email={order.userEmail} />
                                 </>
                               ) : order.orderStatus === 'reject' ? (
                                 <>
                                   <AcceptBtn id={order._id} email={order.userEmail} />
+                                  <EditBtn id={order._id} />
                                   <DeleteBtn id={order._id} email={order.userEmail} />
                                 </>
                               ) : (
@@ -452,7 +456,7 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
                       </span>
 
                       <div className='max-h-screen overflow-hidden transition-all duration-300 ordered-items'>
-                        {order?.orderItems?.map(item => (
+                        {order?.orderItems?.map((item: any) => (
                           <div key={item.cItemId}>
                             <div className='flex flex-col gap-4'>
                               <div className='flex flex-col items-start gap-2'>
@@ -558,16 +562,19 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
                           <>
                             <AcceptBtn id={order._id} email={order.userEmail} />
                             <RejectBtn id={order._id} email={order.userEmail} />
+                            <EditBtn id={order._id} />
                             <DeleteBtn id={order._id} email={order.userEmail} />
                           </>
                         ) : order.orderStatus === 'accept' ? (
                           <>
                             <RejectBtn id={order._id} email={order.userEmail} />
+                            <EditBtn id={order._id} />
                             <DeleteBtn id={order._id} email={order.userEmail} />
                           </>
                         ) : order.orderStatus === 'reject' ? (
                           <>
                             <AcceptBtn id={order._id} email={order.userEmail} />
+                            <EditBtn id={order._id} />
                             <DeleteBtn id={order._id} email={order.userEmail} />
                           </>
                         ) : (
@@ -645,11 +652,25 @@ const AcceptBtn = ({ id, email }) => (
     className='m-1 px-2 py-2 text-sm text-white bg-green-600 rounded-md hover:bg-green-700 min-w-[7rem] relative text-center overflow-hidden'
     data-tooltip='موافقة الطلب'
   >
-    <span className='py-0.5 px-1 md:pl-1 md:pr-2 bg-green-300 rounded-md absolute right-2 top-1.5 pointer-events-none'>
+    <span className='py-0.5 px-1 md:pl-1 bg-green-300 rounded-md absolute right-2 top-1.5 pointer-events-none'>
       &#9989;
     </span>
     <span className='mr-4 pointer-events-none'>موافقة</span>
   </button>
+)
+
+const EditBtn = ({ id }) => (
+  <Link
+    to={`/dashboard/edit-order/${id}`}
+    id='editOrder'
+    className='m-1 px-2 py-2 text-sm text-white bg-gray-600 rounded-md hover:bg-gray-700 min-w-[7rem] relative text-center overflow-hidden border'
+    data-tooltip='تعديل الطلب'
+  >
+    <span className='py-0.5 px-1 md:pl-1 bg-gray-300 rounded-md absolute right-2 top-1.5 pointer-events-none'>
+      &#9997;
+    </span>
+    <span className='mr-4 pointer-events-none'>تعديل</span>
+  </Link>
 )
 
 const RejectBtn = ({ id, email }) => (
@@ -661,7 +682,7 @@ const RejectBtn = ({ id, email }) => (
     className='m-1 px-2 py-2 text-sm text-white bg-gray-600 rounded-md hover:bg-gray-700 min-w-[7rem] relative text-center overflow-hidden border'
     data-tooltip='رفض الطلب'
   >
-    <span className='py-0.5 px-1 md:pl-1 md:pr-2 bg-gray-300 rounded-md absolute right-2 top-1.5 pointer-events-none'>
+    <span className='py-0.5 px-1 md:pl-1 bg-gray-300 rounded-md absolute right-2 top-1.5 pointer-events-none'>
       &#10060;
     </span>
     <span className='mr-4 pointer-events-none'>رفض</span>
@@ -677,7 +698,7 @@ const DeleteBtn = ({ id, email }) => (
     className='m-1 px-2 py-2 text-sm text-white bg-red-600 rounded-md hover:bg-red-700 min-w-[7rem] relative text-center overflow-hidden'
     data-tooltip='حذف الطلب'
   >
-    <span className='py-0.5 px-1 md:pl-1 md:pr-2 bg-red-200 rounded-md absolute right-2 top-1.5 pointer-events-none'>
+    <span className='py-0.5 px-1 md:pl-1 bg-red-200 rounded-md absolute right-2 top-1.5 pointer-events-none'>
       &#128465;
     </span>
     <span className='mr-4 pointer-events-none'>حذف</span>

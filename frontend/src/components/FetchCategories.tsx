@@ -2,13 +2,9 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
 import useAxios from '../hooks/useAxios'
+import { ImgsProps } from '../types'
 
 import { LoadingCard } from './Loading'
-
-interface ImgsProps {
-  length: number
-  foodImgs?: string[]
-}
 
 const FetchCategories = () => {
   const [foodImgs, setFoodImgs] = useState<ImgsProps>()

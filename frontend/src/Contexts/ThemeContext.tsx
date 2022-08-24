@@ -1,10 +1,5 @@
 import React, { useState, createContext } from 'react'
-
-interface ThemeProps {
-  isDark: boolean
-  setIsDark: (isDark: boolean) => void
-  getLocalStorageTheme: () => boolean
-}
+import { ThemeProps } from '../types'
 
 export const ThemeContext = createContext<ThemeProps>({} as ThemeProps)
 

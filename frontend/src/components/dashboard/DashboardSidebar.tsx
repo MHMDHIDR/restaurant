@@ -1,5 +1,6 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, Children } from 'react'
 import { NavLink } from 'react-router-dom'
+import { UserProps } from '../../types'
 
 import goTo from '../../utils/goTo'
 import menuToggler from '../../utils/menuToggler'
@@ -11,7 +12,7 @@ const DashboardSidebar = () => {
     setTop(menuTogglerRef?.current?.getBoundingClientRect().top)
   }, [])
 
-  const USER = JSON.parse(localStorage.getItem('user'))
+  const USER: UserProps = JSON.parse(localStorage.getItem('user'))
 
   return (
     <aside>
@@ -57,84 +58,18 @@ const DashboardSidebar = () => {
           className='fixed z-10 flex flex-col w-56 h-full pt-24 overflow-x-hidden overflow-y-auto transition-all translate-x-full bg-orange-800 shadow-inner dashboard__sidebar sm:pt-20 peer-checked:translate-x-0'
           id='menu'
         >
-          <li className='hover:bg-orange-700'>
-            <NavLink
-              end
-              to={goTo('dashboard')}
-              className={({ isActive }) =>
-                !isActive ? 'dashboard__nav' : 'dashboard__nav isActive'
-              }
-              onClick={() => menuToggler()}
-            >
-              لوحة التحكم
-            </NavLink>
-          </li>
+          <SideBarLink to={'dashboard'}>لوحة التحكم</SideBarLink>
           {USER?.userAccountType === 'admin' ? (
             <>
-              <li className='hover:bg-orange-700'>
-                <NavLink
-                  end
-                  to={goTo('menu')}
-                  className={({ isActive }) =>
-                    !isActive ? 'dashboard__nav' : 'dashboard__nav isActive'
-                  }
-                  onClick={() => menuToggler()}
-                >
-                  قائمة الوجبات
-                </NavLink>
-              </li>
-              <li className='hover:bg-orange-700'>
-                <NavLink
-                  end
-                  to={goTo('add-food')}
-                  className={({ isActive }) =>
-                    !isActive ? 'dashboard__nav' : 'dashboard__nav isActive'
-                  }
-                  onClick={() => menuToggler()}
-                >
-                  إضافة وجبة
-                </NavLink>
-              </li>
-              <li className='hover:bg-orange-700'>
-                <NavLink
-                  end
-                  to={goTo('settings')}
-                  className={({ isActive }) =>
-                    !isActive ? 'dashboard__nav' : 'dashboard__nav isActive'
-                  }
-                  onClick={() => menuToggler()}
-                >
-                  إعدادات الموقع
-                </NavLink>
-              </li>
-              <li className='hover:bg-orange-700'>
-                <NavLink
-                  end
-                  to={goTo('users')}
-                  className={({ isActive }) =>
-                    !isActive ? 'dashboard__nav' : 'dashboard__nav isActive'
-                  }
-                  onClick={() => menuToggler()}
-                >
-                  المستخدمين
-                </NavLink>
-              </li>
+              <SideBarLink to={'menu'}>قائمة الوجبات</SideBarLink>
+              <SideBarLink to={'orders'}>الطلبات</SideBarLink>
+              <SideBarLink to={'add-food'}>إضافة وجبة</SideBarLink>
+              <SideBarLink to={'settings'}>إعدادات الموقع</SideBarLink>
+              <SideBarLink to={'users'}>المستخدمين</SideBarLink>
             </>
           ) : (
-            (USER?.userAccountType === 'admin' ||
-              USER?.userAccountType === 'cashier') && (
-              <li className='hover:bg-orange-700'>
-                <NavLink
-                  end
-                  to={goTo('orders')}
-                  className={({ isActive }) =>
-                    !isActive ? 'dashboard__nav' : 'dashboard__nav isActive'
-                  }
-                  onClick={() => menuToggler()}
-                >
-                  الطلبات
-                </NavLink>
-              </li>
+            USER?.userAccountType === 'cashier' && (
+              <SideBarLink to={'orders'}>الطلبات</SideBarLink>
             )
           )}
         </ul>
@@ -142,5 +77,20 @@ const DashboardSidebar = () => {
     </aside>
   )
 }
+
+const SideBarLink = ({ to, children }) => (
+  <li className='hover:bg-orange-700'>
+    <NavLink
+      end
+      to={goTo(to)}
+      className={({ isActive }) =>
+        !isActive ? 'dashboard__nav' : 'dashboard__nav isActive'
+      }
+      onClick={() => menuToggler()}
+    >
+      {children}
+    </NavLink>
+  </li>
+)
 
 export default DashboardSidebar

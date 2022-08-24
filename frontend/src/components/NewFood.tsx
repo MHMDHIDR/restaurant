@@ -11,16 +11,7 @@ import { removeSlug } from '../utils/slug'
 
 import Card from './Card'
 import { LoadingCard } from './Loading'
-
-interface dataItemProps {
-  _id: string
-  foodPrice: number
-  foodDesc: string
-  foodTags: string[]
-  foodToppings: string[]
-  foodImgs: string[]
-  foodName: string
-}
+import { dataItemProps } from '../types'
 
 const NewFood = () => {
   const [data, setData] = useState<any>()

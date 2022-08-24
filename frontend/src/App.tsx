@@ -12,6 +12,7 @@ import ModalNotFound from './components/Modal/ModalNotFound'
 
 //Loading Page
 import { LoadingPage } from './components/Loading'
+import DashboardOrdersEdit from './pages/dashboard/orders/DashboardOrdersEdit'
 
 //user pages
 const Home = lazy(() => import('./pages/Home'))
@@ -29,7 +30,7 @@ const ResetPassword = lazy(() => import('./pages/auth/ResetPassword'))
 
 //dashboard pages
 const DashboardHome = lazy<any>(() => import('./pages/dashboard/DashboardHome'))
-const DashboardOrders = lazy(() => import('./pages/dashboard/DashboardOrders'))
+const DashboardOrders = lazy(() => import('./pages/dashboard/orders/DashboardOrders'))
 const DashboardMenu = lazy(() => import('./pages/dashboard/DashboardMenu'))
 const DashboardAddFood = lazy(() => import('./pages/dashboard/food/DashboardAddFood'))
 const DashboardEditFood = lazy(() => import('./pages/dashboard/food/DashboardEditFood'))
@@ -84,13 +85,19 @@ const App: React.FC = () => (
                       <Route path='orders' element={<DashboardOrders />}>
                         <Route path=':pageNum' element={<DashboardOrders />} />
                       </Route>
-                      <Route path='menu' element={<DashboardMenu />} />
-                      <Route path='menu/:pageNum' element={<DashboardMenu />} />
+                      <Route
+                        path='edit-order/:orderId'
+                        element={<DashboardOrdersEdit />}
+                      />
+                      <Route path='menu' element={<DashboardMenu />}>
+                        <Route path=':pageNum' element={<DashboardMenu />} />
+                      </Route>
                       <Route path='add-food' element={<DashboardAddFood />} />
                       <Route path='edit-food/:foodId' element={<DashboardEditFood />} />
                       <Route path='settings' element={<DashboardAppSettings />} />
-                      <Route path='users' element={<DashboardUsers />} />
-                      <Route path='users/:pageNum' element={<DashboardUsers />} />
+                      <Route path='users' element={<DashboardUsers />}>
+                        <Route path=' :pageNum' element={<DashboardUsers />} />
+                      </Route>
                     </Route>
                     <Route path='*' element={<ModalNotFound />} />
                   </Routes>

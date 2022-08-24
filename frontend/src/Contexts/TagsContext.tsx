@@ -1,28 +1,5 @@
 import { useState, createContext } from 'react'
-
-export interface TagsProps {
-  tags: string[]
-  setTags: (tags: string[]) => void
-  removeTags: (index: number) => void
-  addTag: (e: React.KeyboardEvent<HTMLInputElement>) => void
-  saveSelectedTags: (id: number, tags: string[]) => void
-  removeSelectedTags: (id: number) => void
-  selectedTags: { id: string; tags: string[] }[]
-}
-
-interface AddTagsProps {
-  key: string
-  preventDefault: () => void
-  target: { value: string }
-}
-
-interface removeSelectedTagsProps {
-  id: string
-}
-
-interface saveSelectedTagsProps extends removeSelectedTagsProps {
-  tags: string[]
-}
+import { AddTagsProps, TagsProps } from '../types'
 
 export const TagsContext = createContext({} as TagsProps)
 
@@ -34,7 +11,7 @@ const TagsContextProvider = ({ children }: { children: React.ReactNode }) => {
     setTags([...tags.filter((_, index) => index !== indexToRemove)])
   }
 
-  const addTag = (e: AddTagsProps) => {
+  const addTag = (e: AddTagsProps | React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault()
       setTags([...tags, e.target.value])

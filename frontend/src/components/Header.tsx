@@ -6,11 +6,7 @@ import Nav from './Nav'
 import ScrollDown from './ScrollDown'
 
 import Typewriter from 'typewriter-effect/dist/core'
-
-interface headerProps {
-  appTagline: string
-  websiteLogoDisplayPath: string
-}
+import { headerProps } from '../types'
 
 const Header = () => {
   const [data, setData] = useState<headerProps>()

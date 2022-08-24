@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import useAxios from '../../hooks/useAxios'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import Axios from 'axios'
 
 import useDocumentTitle from '../../hooks/useDocumentTitle'
@@ -17,12 +17,6 @@ import { LoadingSpinner } from '../../components/Loading'
 import Pagination from '../../components/Pagination'
 import NavMenu from '../../components/NavMenu'
 import ModalNotFound from '../../components/Modal/ModalNotFound'
-
-enum userAccountTypeProps {
-  ADMIN,
-  CASHIER,
-  USER
-}
 
 const DashboardUsers = () => {
   useDocumentTitle('Users')
@@ -417,6 +411,12 @@ const DashboardUsers = () => {
                     <p className='my-2 md:text-2xl text-red-600 dark:text-red-400 font-[600] py-2 px-1'>
                       عفواً، لم يتم العثور على مستخدمين
                     </p>
+                    <Link
+                      to='dashboard'
+                      className='w-fit mx-auto bg-orange-700 hover:bg-orange-800 text-white py-1.5 text-lg px-6 rounded-md'
+                    >
+                      العودة للوحة التحكم
+                    </Link>
                   </td>
                   <td />
                 </tr>

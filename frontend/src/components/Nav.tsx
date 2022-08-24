@@ -11,14 +11,7 @@ import MyLink from './MyLink'
 import useEventListener from '../hooks/useEventListener'
 import useAxios from '../hooks/useAxios'
 import NavMenu from './NavMenu'
-
-interface UserProps {
-  token: string
-  userAccountType: string
-  userEmail: string
-  userFullName: string
-  _id: string
-}
+import { UserProps } from '../types'
 
 const Nav = () => {
   const handleLogout = () => {

@@ -2,17 +2,7 @@ import { Link } from 'react-router-dom'
 import Arrow from './Icons/Arrow'
 import scrollToView from '../utils/scrollToView'
 import { Key } from 'react'
-
-interface PaginationProps {
-  routeName: string
-  pageNum: number
-  numberOfPages: number[]
-  count: number
-  foodId?: string
-  itemsPerPage?: number
-  category?: string
-  loaction?: string
-}
+import { PaginationProps } from '../types'
 
 const Pagination = ({
   routeName,
