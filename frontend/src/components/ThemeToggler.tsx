@@ -44,10 +44,9 @@ const DarkmodeToggle = () => {
       title={`Switch to ${isDark === true ? 'Light' : 'Dark'} Mode`}
     >
       <input
-        className='absolute w-0 h-0 opacity-0 theme-toggler peer'
+        className='absolute w-6 h-6 sm:w-12 sm:h-12 opacity-0 theme-toggler peer pointer-events-none'
         type='checkbox'
         data-theme='toggler'
-        style={{ width: '50px', height: '50px', cursor: 'pointer' }}
         defaultChecked={isDark}
         onChange={handleToggle}
         aria-label='Dark Mode Toggler Checkbox'

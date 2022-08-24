@@ -266,7 +266,7 @@ const DashboardUsers = () => {
                             : '✅\u00A0\u00A0\u00A0مفعل'}
                         </span>
                       </td>
-                      <td className='flex flex-wrap items-center justify-center gap-3 px-1 py-2'>
+                      <td className='px-1 py-2'>
                         {idx === 0 ? (
                           //first admin account doesn't have to get deleted or blocked from others hence no action provided
                           <span className='text-gray-600 select-none dark:text-gray-200'>
@@ -388,6 +388,7 @@ const DashboardUsers = () => {
                     </tr>
                   ))}
 
+                  {/* Pagination */}
                   <tr>
                     <td colSpan={100}>
                       <Pagination

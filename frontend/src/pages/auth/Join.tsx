@@ -132,16 +132,16 @@ const Join = () => {
                 <span className='form__label'>كلمــة المــــــرور</span>
               </label>
 
-              <div className='flex flex-col gap-6 text-center border-none form__group ltr'>
+              <div className='flex flex-col gap-6 text-center border-none form__group'>
                 <button
-                  className={`w-48 mx-auto px-12 py-3 text-white uppercase bg-orange-700 rounded-lg hover:bg-orange-800 scale-100 transition-all`}
+                  className={`w-fit mx-auto px-12 py-3 text-white uppercase bg-orange-700 rounded-lg hover:bg-orange-800 scale-100 transition-all`}
                   type='submit'
                   id='submitBtn'
                 >
                   {isSendingJoinForm && isSendingJoinForm ? (
                     <>
                       <LoadingSpinner />
-                      جارِ التسجيل...
+                      &nbsp;جارِ التسجيل...
                     </>
                   ) : (
                     'تسجيل'

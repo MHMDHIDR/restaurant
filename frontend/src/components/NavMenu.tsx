@@ -1,25 +1,41 @@
 import { useState } from 'react'
 
-const NavMenu = ({ children, label = 'اختر الاجراء' }) => {
+interface NavMenuPros {
+  children: React.ReactNode
+  isOptions?: boolean
+  label?: string
+  className?: string
+}
+
+const NavMenu: React.FC<NavMenuPros> = ({
+  children,
+  isOptions = true,
+  label = 'الاجراء',
+  className
+}) => {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
     <div
-      className='relative px-3 py-2 text-sm leading-relaxed transition-colors duration-150 bg-white dark:bg-gray-700 border border-gray-400 rounded-lg dropdown:block focus:outline-none hover:border-gray-600 focus:shadow-outline focus:border-gray-900 cursor-pointer'
+      className={`relative mx-auto px-3 py-2 text-sm leading-relaxed transition-colors duration-150 bg-white dark:bg-gray-700 border border-gray-400 rounded-lg dropdown:block focus:outline-none hover:border-gray-600 focus:shadow-outline focus:border-gray-900 cursor-pointer${
+        isOptions ? ' 3xl:max-w-fit' : ''
+      }`}
       role='menuitem'
       aria-haspopup='true'
       onClick={() => setIsOpen(!isOpen)}
     >
-      <div className='flex items-center'>
-        <svg
-          className='w-4 h-4 text-gray-500 dark:text-white fill-current'
-          viewBox='0 0 20 20'
-          aria-hidden='true'
-        >
-          <path d='M3 3a1 1 0 000 2h11a1 1 0 100-2H3zM3 7a1 1 0 000 2h5a1 1 0 000-2H3zM3 11a1 1 0 100 2h4a1 1 0 100-2H3zM13 16a1 1 0 102 0v-5.586l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 101.414 1.414L13 10.414V16z'></path>
-        </svg>
+      <div className='flex items-center justify-center'>
+        {isOptions && (
+          <svg
+            className='w-4 h-4 text-gray-500 dark:text-white fill-current'
+            viewBox='0 0 20 20'
+            aria-hidden='true'
+          >
+            <path d='M3 3a1 1 0 000 2h11a1 1 0 100-2H3zM3 7a1 1 0 000 2h5a1 1 0 000-2H3zM3 11a1 1 0 100 2h4a1 1 0 100-2H3zM13 16a1 1 0 102 0v-5.586l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 101.414 1.414L13 10.414V16z'></path>
+          </svg>
+        )}
 
-        <span className='px-2 text-gray-800 dark:text-white'>{label}</span>
+        <span className='px-2 text-gray-800 dark:text-white select-none'>{label}</span>
         <svg
           className='w-4 h-4 text-gray-500 dark:text-white fill-current'
           viewBox='0 0 20 20'
@@ -33,9 +49,9 @@ const NavMenu = ({ children, label = 'اختر الاجراء' }) => {
         </svg>
       </div>
       <ul
-        className={`absolute flex flex-col gap-2 left-0 min-w-fit p-1 mt-3 text-sm bg-white dark:bg-gray-700 border border-gray-100 dark:border-gray-700 z-[1000] rounded-lg shadow-l${
+        className={`absolute flex flex-col gap-2 left-1/2 -translate-x-1/2 min-w-max p-1 mt-4 text-sm bg-white dark:bg-gray-700 border border-gray-100 dark:border-gray-700 z-[1000] rounded-lg shadow-l${
           !isOpen && ' hidden'
-        }`}
+        }${className ? ' ' + className : ''}`}
         aria-label='submenu'
       >
         {children}

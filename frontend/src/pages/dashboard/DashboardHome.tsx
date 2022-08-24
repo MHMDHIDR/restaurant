@@ -59,7 +59,7 @@ const DashboardHome = () => {
         <DashboardSidebar />
         <DashboardNav />
         <div className='container mx-auto'>
-          <h3 className='mx-0 mt-32 mb-20 text-2xl text-center'>لوحة التحكم</h3>
+          <h1 className='mx-0 mt-32 mb-20 text-2xl text-center'>لوحة التحكم</h1>
           <div
             className={`flex justify-center gap-4 flex-wrap${
               userType === 'cashier' ? ' md:justify-center' : ' md:justify-between'

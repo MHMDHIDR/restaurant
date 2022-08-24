@@ -10,6 +10,15 @@ import MyLink from './MyLink'
 
 import useEventListener from '../hooks/useEventListener'
 import useAxios from '../hooks/useAxios'
+import NavMenu from './NavMenu'
+
+interface UserProps {
+  token: string
+  userAccountType: string
+  userEmail: string
+  userFullName: string
+  _id: string
+}
 
 const Nav = () => {
   const handleLogout = () => {
@@ -19,7 +28,7 @@ const Nav = () => {
   }
 
   const [websiteLogoDisplayPath, setWebsiteLogoDisplayPath] = useState('')
-  const USER = JSON.parse(localStorage.getItem('user'))
+  const USER: UserProps = JSON.parse(localStorage.getItem('user'))
 
   const { response } = useAxios({ url: '/settings' })
 
@@ -122,34 +131,36 @@ const Nav = () => {
             </li>
             {'user' in localStorage ? (
               <li className='flex gap-3'>
-                {(USER?.userAccountType === 'admin' ||
-                  USER?.userAccountType === 'cashier') && (
+                <NavMenu label={`مرحباً ${USER.userFullName}`} isOptions={false}>
+                  {(USER?.userAccountType === 'admin' ||
+                    USER?.userAccountType === 'cashier') && (
+                    <Link
+                      to='/dashboard'
+                      className='px-3 py-1 text-white transition-colors bg-gray-800 border-2 rounded-lg hover:bg-gray-700 xl:border-0 text-sm select-none text-center'
+                    >
+                      لوحة التحكم
+                    </Link>
+                  )}
                   <Link
-                    to='/dashboard'
-                    className='px-3 py-0.5 text-white transition-colors bg-gray-800 border-2 rounded-lg hover:bg-gray-700 xl:border-0 text-sm'
+                    to='/my-orders'
+                    className='px-3 py-1 text-white transition-colors bg-gray-800 border-2 rounded-lg hover:bg-gray-700 xl:border-0 text-sm select-none text-center'
                   >
-                    لوحة التحكم
+                    طلباتي
                   </Link>
-                )}
-                <Link
-                  to='/my-orders'
-                  className='px-3 py-0.5 text-white transition-colors bg-gray-800 border-2 rounded-lg hover:bg-gray-700 xl:border-0 text-sm'
-                >
-                  طلباتي
-                </Link>
-                <Link
-                  to='/#'
-                  className='px-3 py-0.5 text-white transition-colors bg-red-700 border-2 rounded-lg hover:bg-red-600 xl:border-0 text-sm'
-                  onClick={handleLogout}
-                >
-                  تسجيل الخروج
-                </Link>
+                  <Link
+                    to='/#'
+                    className='px-3 py-1 text-white transition-colors bg-red-700 border-2 rounded-lg hover:bg-red-600 xl:border-0 text-sm select-none text-center'
+                    onClick={handleLogout}
+                  >
+                    تسجيل الخروج
+                  </Link>
+                </NavMenu>
               </li>
             ) : (
               <li>
                 <Link
                   to='/auth/login'
-                  className='px-3 py-0.5 text-white transition-colors bg-gray-800 border-2 rounded-lg hover:bg-gray-700 xl:border-0 text-sm'
+                  className='px-3 py-1 text-white transition-colors bg-gray-800 border-2 rounded-lg hover:bg-gray-700 xl:border-0 text-sm select-none text-center'
                 >
                   تسجيل الدخول
                 </Link>

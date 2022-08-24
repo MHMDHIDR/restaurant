@@ -65,7 +65,8 @@ const Login = () => {
       })
       //getting response from backend
       const { data } = loginUser
-      const { LoggedIn, _id, userAccountType, userEmail, token, message } = data
+      const { LoggedIn, _id, userAccountType, userFullName, userEmail, token, message } =
+        data
       setLoggedInStatus(LoggedIn)
 
       if (LoggedIn === 0) {
@@ -76,7 +77,7 @@ const Login = () => {
       setLoginMsg(message)
       localStorage.setItem(
         'user',
-        JSON.stringify({ _id, userAccountType, userEmail, token })
+        JSON.stringify({ _id, userAccountType, userFullName, userEmail, token })
       )
 
       redirect
@@ -109,7 +110,8 @@ const Login = () => {
         tokenId: googleData.tokenId
       })
       const { data } = loginUser
-      const { LoggedIn, _id, userAccountType, userEmail, token, message } = data
+      const { LoggedIn, _id, userAccountType, userFullName, userEmail, token, message } =
+        data
       setLoggedInStatus(LoggedIn)
 
       if (LoggedIn === 0) {
@@ -119,7 +121,7 @@ const Login = () => {
       setLoginMsg(message)
       localStorage.setItem(
         'user',
-        JSON.stringify({ _id, userAccountType, userEmail, token })
+        JSON.stringify({ _id, userAccountType, userFullName, userEmail, token })
       )
 
       redirect

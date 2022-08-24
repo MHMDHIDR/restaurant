@@ -73,6 +73,7 @@ export const loginUser = asyncHandler(async (req, res) => {
       }`,
       _id: user.id,
       userAccountType: user.userAccountType,
+      userFullName: user.userFullName,
       userEmail: user.userEmail,
       userTel: user.userTel,
       token: generateToken(user._id)
@@ -114,6 +115,7 @@ export const googleLogin = asyncHandler(async (req, res) => {
       }`,
       _id: user.id,
       userAccountType: user.userAccountType,
+      userFullName: user.userFullName,
       userEmail: user.userEmail,
       userTel: user.userTel,
       token: generateToken(user._id)
@@ -131,6 +133,7 @@ export const googleLogin = asyncHandler(async (req, res) => {
       //if user is created successfully
       res.status(201).json({
         _id: newUser.id,
+        userFullName: newUser.userFullName,
         userEmail: newUser.email,
         token: generateToken(newUser._id),
         LoggedIn: 1,
