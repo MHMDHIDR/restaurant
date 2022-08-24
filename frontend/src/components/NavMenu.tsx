@@ -52,7 +52,7 @@ const NavMenu: React.FC<NavMenuPros> = ({
         </svg>
       </div>
       <ul
-        className={`absolute flex flex-col gap-2 left-1/2 -translate-x-1/2 min-w-max p-1 mt-4 text-sm bg-white dark:bg-gray-700 border border-gray-100 dark:border-gray-700 z-[1000] rounded-lg shadow-l${
+        className={`absolute flex flex-col gap-1.5 left-1/2 -translate-x-1/2 min-w-max p-1 mt-4 text-sm bg-white dark:bg-gray-700 border border-gray-100 dark:border-gray-700 z-[1000] rounded-lg shadow-l${
           !isOpen && ' hidden'
         }${className ? ' ' + className : ''}`}
         aria-label='submenu'

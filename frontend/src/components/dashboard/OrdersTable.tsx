@@ -374,25 +374,27 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
                         {(USER.userAccountType === 'admin' ||
                           USER.userAccountType === 'cashier') && (
                           <td>
-                            {order.orderStatus === 'pending' ? (
-                              <>
-                                <AcceptBtn id={order._id} email={order.userEmail} />
-                                <RejectBtn id={order._id} email={order.userEmail} />
-                                <DeleteBtn id={order._id} email={order.userEmail} />
-                              </>
-                            ) : order.orderStatus === 'accept' ? (
-                              <>
-                                <RejectBtn id={order._id} email={order.userEmail} />
-                                <DeleteBtn id={order._id} email={order.userEmail} />
-                              </>
-                            ) : order.orderStatus === 'reject' ? (
-                              <>
-                                <AcceptBtn id={order._id} email={order.userEmail} />
-                                <DeleteBtn id={order._id} email={order.userEmail} />
-                              </>
-                            ) : (
-                              <span>لا يوجد إجراء</span>
-                            )}
+                            <NavMenu>
+                              {order.orderStatus === 'pending' ? (
+                                <>
+                                  <AcceptBtn id={order._id} email={order.userEmail} />
+                                  <RejectBtn id={order._id} email={order.userEmail} />
+                                  <DeleteBtn id={order._id} email={order.userEmail} />
+                                </>
+                              ) : order.orderStatus === 'accept' ? (
+                                <>
+                                  <RejectBtn id={order._id} email={order.userEmail} />
+                                  <DeleteBtn id={order._id} email={order.userEmail} />
+                                </>
+                              ) : order.orderStatus === 'reject' ? (
+                                <>
+                                  <AcceptBtn id={order._id} email={order.userEmail} />
+                                  <DeleteBtn id={order._id} email={order.userEmail} />
+                                </>
+                              ) : (
+                                <span>لا يوجد إجراء</span>
+                              )}
+                            </NavMenu>
                           </td>
                         )}
                       </tr>
