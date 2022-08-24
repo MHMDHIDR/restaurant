@@ -18,6 +18,7 @@ import { PayPal } from '../Icons/Payments'
 import { LoadingSpinner } from '../Loading'
 import Pagination from '../Pagination'
 import Divider from '../Divider'
+import NavMenu from '../NavMenu'
 
 const OrdersTable = ({ ordersByUserEmail = false }) => {
   useEffect(() => {
@@ -550,25 +551,27 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
                         : 'تم الرفض'}
                     </td>
                     <td>
-                      {order.orderStatus === 'pending' ? (
-                        <>
-                          <AcceptBtn id={order._id} email={order.userEmail} />
-                          <RejectBtn id={order._id} email={order.userEmail} />
-                          <DeleteBtn id={order._id} email={order.userEmail} />
-                        </>
-                      ) : order.orderStatus === 'accept' ? (
-                        <>
-                          <RejectBtn id={order._id} email={order.userEmail} />
-                          <DeleteBtn id={order._id} email={order.userEmail} />
-                        </>
-                      ) : order.orderStatus === 'reject' ? (
-                        <>
-                          <AcceptBtn id={order._id} email={order.userEmail} />
-                          <DeleteBtn id={order._id} email={order.userEmail} />
-                        </>
-                      ) : (
-                        <span>لا يوجد إجراء</span>
-                      )}
+                      <NavMenu>
+                        {order.orderStatus === 'pending' ? (
+                          <>
+                            <AcceptBtn id={order._id} email={order.userEmail} />
+                            <RejectBtn id={order._id} email={order.userEmail} />
+                            <DeleteBtn id={order._id} email={order.userEmail} />
+                          </>
+                        ) : order.orderStatus === 'accept' ? (
+                          <>
+                            <RejectBtn id={order._id} email={order.userEmail} />
+                            <DeleteBtn id={order._id} email={order.userEmail} />
+                          </>
+                        ) : order.orderStatus === 'reject' ? (
+                          <>
+                            <AcceptBtn id={order._id} email={order.userEmail} />
+                            <DeleteBtn id={order._id} email={order.userEmail} />
+                          </>
+                        ) : (
+                          <span>لا يوجد إجراء</span>
+                        )}
+                      </NavMenu>
                     </td>
                   </tr>
                 ))

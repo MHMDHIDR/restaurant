@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import abstractText from '../utils/abstractText'
 
 interface NavMenuPros {
   children: React.ReactNode
@@ -17,7 +18,7 @@ const NavMenu: React.FC<NavMenuPros> = ({
 
   return (
     <div
-      className={`relative mx-auto px-3 py-2 text-sm leading-relaxed transition-colors duration-150 bg-white dark:bg-gray-700 border border-gray-400 rounded-lg dropdown:block focus:outline-none hover:border-gray-600 focus:shadow-outline focus:border-gray-900 cursor-pointer${
+      className={`relative sm:mx-auto mx-2 px-3 py-2 text-sm leading-relaxed transition-colors duration-150 bg-white dark:bg-gray-700 border border-gray-400 rounded-lg dropdown:block focus:outline-none hover:border-gray-600 focus:shadow-outline focus:border-gray-900 cursor-pointer${
         isOptions ? ' 3xl:max-w-fit' : ''
       }`}
       role='menuitem'
@@ -35,7 +36,9 @@ const NavMenu: React.FC<NavMenuPros> = ({
           </svg>
         )}
 
-        <span className='px-2 text-gray-800 dark:text-white select-none'>{label}</span>
+        <span className='px-2 text-gray-800 dark:text-white select-none text-center'>
+          {abstractText(label, 30)}
+        </span>
         <svg
           className='w-4 h-4 text-gray-500 dark:text-white fill-current'
           viewBox='0 0 20 20'

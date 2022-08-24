@@ -109,7 +109,7 @@
 [data-tooltip]::after {
   /* data-tooltip box */
   content: attr(data-tooltip);
-  @apply right-0 z-50 w-min max-w-min min-w-[calc(100%+5rem)] text-center p-2 duration-[var(--duration)] text-sm text-white bg-gray-800 dark:bg-gray-300 dark:text-black dark:border-2 dark:border-gray-800 shadow-lg bottom-[calc(var(--bottom)*1.65)] rounded-md;
+  @apply right-0 z-50 w-min max-w-min min-w-[calc(100%+5rem)] text-center p-2 duration-[var(--duration)] text-sm text-white font-thin bg-gray-800 dark:bg-gray-300 dark:text-black dark:border-2 dark:border-gray-800 shadow-lg bottom-[calc(var(--bottom)*1.65)] rounded-md;
 }
 
 [data-tooltip]::before {

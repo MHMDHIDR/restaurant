@@ -17,6 +17,7 @@ import goTo from '../../utils/goTo'
 import { createLocaleDateString } from '../../utils/convertDate'
 import scrollToView from '../../utils/scrollToView'
 import ModalNotFound from '../../components/Modal/ModalNotFound'
+import NavMenu from '../../components/NavMenu'
 
 const DashboardMenu = () => {
   useDocumentTitle('Menu')
@@ -154,7 +155,7 @@ const DashboardMenu = () => {
                       key={item._id}
                       className='transition-colors even:bg-gray-200 odd:bg-gray-300 dark:even:bg-gray-600 dark:odd:bg-gray-700'
                     >
-                      <td className='px-1 py-2'>{idx + 1}</td>
+                      <td className='px-1 py-2 font-bold'>{idx + 1}</td>
                       <td className='px-1 py-2 pr-3 min-w-[5rem]'>
                         <img
                           loading='lazy'
@@ -186,22 +187,24 @@ const DashboardMenu = () => {
                       <td className='px-1 py-2 min-w-[16rem]'>
                         {createLocaleDateString(item.updatedAt)}
                       </td>
-                      <td className='px-1 py-2 min-w-[11rem]'>
-                        <Link
-                          to={goTo(`edit-food/${item._id}`)}
-                          className='px-4 py-1 text-white bg-green-600 rounded-md hover:bg-green-700'
-                        >
-                          تعديل
-                        </Link>
-                        <button
-                          id='deleteFood'
-                          data-id={item._id}
-                          data-name={item.foodName}
-                          data-imgname={JSON.stringify(item.foodImgs)}
-                          className='px-4 py-2 m-2 text-white bg-red-600 rounded-md hover:bg-red-700'
-                        >
-                          حذف
-                        </button>
+                      <td className='px-1 py-2'>
+                        <NavMenu>
+                          <Link
+                            to={goTo(`edit-food/${item._id}`)}
+                            className='px-4 py-1 mx-2 text-white bg-green-600 rounded-md hover:bg-green-700'
+                          >
+                            تعديل
+                          </Link>
+                          <button
+                            id='deleteFood'
+                            data-id={item._id}
+                            data-name={item.foodName}
+                            data-imgname={JSON.stringify(item.foodImgs)}
+                            className='px-4 py-1 mx-2 text-white bg-red-600 rounded-md hover:bg-red-700'
+                          >
+                            حذف
+                          </button>
+                        </NavMenu>
                       </td>
                     </tr>
                   ))}
