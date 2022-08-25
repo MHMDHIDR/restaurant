@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, ChangeEvent } from 'react'
-import useAxios, { responseTypes } from '../../hooks/useAxios'
+import useAxios from '../../hooks/useAxios'
 import Axios from 'axios'
 
 import useDocumentTitle from '../../hooks/useDocumentTitle'
@@ -10,6 +10,7 @@ import Modal from '../../components/Modal/Modal'
 import { Success, Error, Loading } from '../../components/Icons/Status'
 import { LoadingSpinner } from '../../components/Loading'
 import ModalNotFound from '../../components/Modal/ModalNotFound'
+import { responseTypes } from '../../types'
 
 const About = () => {
   useDocumentTitle('App Settings')
