@@ -210,7 +210,11 @@ const DashboardOrdersEdit = () => {
               <h2 className='inline-block mb-20 text-3xl font-bold'>
                 تعديل تفاصيل طلب ({ordersData.personName})
               </h2>
-              <CartItems ordersData={ordersData?.orderItems} />
+
+              <CartItems
+                orderItems={ordersData?.orderItems}
+                orderToppings={ordersData?.orderToppings}
+              />
 
               <form method='POST' onSubmit={handleCollectOrder}>
                 <label htmlFor='name' className={`form__group`}>

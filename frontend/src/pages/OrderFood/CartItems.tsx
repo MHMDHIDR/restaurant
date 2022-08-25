@@ -6,21 +6,29 @@ import { removeSlug } from '../../utils/slug'
 
 import Divider from '../../components/Divider'
 
-const CartItems: any = ({ ordersData }) => {
+const CartItems: any = ({ orderItems, orderToppings }) => {
   const { items } = useContext(CartContext)
 
-  //if ordersData defined in dashboard
-  return ordersData?.length > 0 ? (
-    <Items orderItems={ordersData} />
+  //if orderItems defined in dashboard
+  return orderItems?.length > 0 ? (
+    <Items orderItems={orderItems} orderToppings={orderToppings} />
   ) : (
     <Items orderItems={items} />
   )
 }
 
-const Items = ({ orderItems }) => {
+const Items = ({
+  orderItems,
+  orderToppings
+}: {
+  orderItems: any
+  orderToppings?: any
+}) => {
   const { handleToppingChecked, checkedToppings } = useContext(ToppingsContext)
   const { items, setItems, removeFromCart, setGrandPrice } = useContext(CartContext)
   const MAX_QUANTITY = 100
+
+  console.log(orderItems)
 
   return orderItems?.map((item: any) => {
     const hasToppings = typeof item?.cToppings[0]?.toppingName === 'string'
@@ -28,13 +36,13 @@ const Items = ({ orderItems }) => {
       <div key={item.cItemId}>
         <div
           className={`grid items-center
-                  grid-cols-1
-                  lg:grid-cols-2
-                  xl:grid-cols-3
-                  2xl:grid-cols-4
-                  gap-y-10
-                  gap-x-5
-                `}
+            grid-cols-1
+            lg:grid-cols-2
+            xl:grid-cols-3
+            2xl:grid-cols-4
+            gap-y-10
+            gap-x-5
+          `}
         >
           {/* Product Image */}
           <img
@@ -48,10 +56,9 @@ const Items = ({ orderItems }) => {
 
           {/* Product Details */}
           <div
-            className={`
-                    flex flex-col gap-2 space-y-3 select-none
-                    ${!hasToppings && 'xl:col-start-2 xl:col-end-4'}
-                  `}
+            className={`flex flex-col gap-2 space-y-3 select-none ${
+              !hasToppings && 'xl:col-start-2 xl:col-end-4'
+            }`}
           >
             <h2 className='text-lg font-semibold text-center underline underline-offset-8'>
               {removeSlug(item?.cHeading)}
@@ -78,9 +85,17 @@ const Items = ({ orderItems }) => {
                         value={toppingName}
                         className='cursor-pointer min-w-[1.5rem] min-h-[1.5rem]'
                         onChange={() => handleToppingChecked(toppingId, toppingPrice)}
-                        defaultChecked={checkedToppings.find(
-                          topping => topping.toppingId === toppingId
-                        )}
+                        defaultChecked={
+                          orderToppings
+                            ? orderToppings?.find(
+                                (topping: { toppingId: string }) =>
+                                  topping.toppingId === toppingId
+                              )
+                            : checkedToppings.find(
+                                (topping: { toppingId: string }) =>
+                                  topping.toppingId === toppingId
+                              )
+                        }
                       />
                       <label
                         htmlFor={toppingId}
@@ -177,21 +192,37 @@ const Items = ({ orderItems }) => {
                             acc +
                             item.cPrice * item.cQuantity +
                             //calculate all items checked toppings prices * all items checked toppings quantities
-                            checkedToppings.reduce(
-                              (acc, curr) =>
-                                curr.toppingId.slice(0, -2) === item.cItemId
-                                  ? acc +
-                                    parseInt(curr.toppingPrice) *
-                                      item.cToppings.reduce(
-                                        (acc, curr2) =>
-                                          curr2.toppingId === curr.toppingId
-                                            ? curr2.toppingQuantity
-                                            : acc,
-                                        0
-                                      )
-                                  : acc,
-                              0
-                            ),
+                            (orderToppings
+                              ? orderToppings.reduce(
+                                  (acc, curr) =>
+                                    curr.toppingId.slice(0, -2) === item.cItemId
+                                      ? acc +
+                                        parseInt(curr.toppingPrice) *
+                                          item.cToppings.reduce(
+                                            (acc, curr2) =>
+                                              curr2.toppingId === curr.toppingId
+                                                ? curr2.toppingQuantity
+                                                : acc,
+                                            0
+                                          )
+                                      : acc,
+                                  0
+                                )
+                              : checkedToppings.reduce(
+                                  (acc, curr) =>
+                                    curr.toppingId.slice(0, -2) === item.cItemId
+                                      ? acc +
+                                        parseInt(curr.toppingPrice) *
+                                          item.cToppings.reduce(
+                                            (acc, curr2) =>
+                                              curr2.toppingId === curr.toppingId
+                                                ? curr2.toppingQuantity
+                                                : acc,
+                                            0
+                                          )
+                                      : acc,
+                                  0
+                                )),
                           0
                         )
                       )
@@ -214,21 +245,37 @@ const Items = ({ orderItems }) => {
                           acc +
                           item.cPrice * item.cQuantity +
                           //calculate all items checked toppings prices * all items checked toppings quantities
-                          checkedToppings.reduce(
-                            (acc, curr) =>
-                              curr.toppingId.slice(0, -2) === item.cItemId
-                                ? acc +
-                                  parseInt(curr.toppingPrice) *
-                                    item.cToppings.reduce(
-                                      (acc, curr2) =>
-                                        curr2.toppingId === curr.toppingId
-                                          ? curr2.toppingQuantity
-                                          : acc,
-                                      0
-                                    )
-                                : acc,
-                            0
-                          ),
+                          (orderToppings
+                            ? orderToppings.reduce(
+                                (acc, curr) =>
+                                  curr.toppingId.slice(0, -2) === item.cItemId
+                                    ? acc +
+                                      parseInt(curr.toppingPrice) *
+                                        item.cToppings.reduce(
+                                          (acc, curr2) =>
+                                            curr2.toppingId === curr.toppingId
+                                              ? curr2.toppingQuantity
+                                              : acc,
+                                          0
+                                        )
+                                    : acc,
+                                0
+                              )
+                            : checkedToppings.reduce(
+                                (acc, curr) =>
+                                  curr.toppingId.slice(0, -2) === item.cItemId
+                                    ? acc +
+                                      parseInt(curr.toppingPrice) *
+                                        item.cToppings.reduce(
+                                          (acc, curr2) =>
+                                            curr2.toppingId === curr.toppingId
+                                              ? curr2.toppingQuantity
+                                              : acc,
+                                          0
+                                        )
+                                    : acc,
+                                0
+                              )),
                         0
                       )
                     )
@@ -244,8 +291,7 @@ const Items = ({ orderItems }) => {
           <span
             className={`p-3 mx-auto text-sm text-green-800 bg-green-300 border border-green-800 rounded-md select-none w-fit xl:col-start-1 xl:col-end-3 ${
               !hasToppings && 'xl:row-start-2 xl:row-end-3'
-            }
-                `}
+            }`}
           >
             <span>سعر الوجبة مع حساب الإضافات والكمية للإضافات والوجبة :&nbsp;</span>
             <strong className='text-lg'>
@@ -253,21 +299,37 @@ const Items = ({ orderItems }) => {
                 //calculate the item price * item quantity
                 item.cPrice * item.cQuantity +
                   //calculate the item toppings price * item toppings quantity
-                  checkedToppings.reduce(
-                    (acc, curr) =>
-                      curr.toppingId.slice(0, -2) === item.cItemId
-                        ? acc +
-                          parseInt(curr.toppingPrice) *
-                            item.cToppings.reduce(
-                              (acc, curr2) =>
-                                curr2.toppingId === curr.toppingId
-                                  ? curr2.toppingQuantity
-                                  : acc,
-                              0
-                            )
-                        : acc,
-                    0
-                  )
+                  (orderToppings
+                    ? orderToppings?.reduce(
+                        (acc, curr) =>
+                          curr.toppingId.slice(0, -2) === item.cItemId
+                            ? acc +
+                              parseInt(curr.toppingPrice) *
+                                item.cToppings.reduce(
+                                  (acc, curr2) =>
+                                    curr2.toppingId === curr.toppingId
+                                      ? curr2.toppingQuantity
+                                      : acc,
+                                  0
+                                )
+                            : acc,
+                        0
+                      )
+                    : checkedToppings.reduce(
+                        (acc, curr) =>
+                          curr.toppingId.slice(0, -2) === item.cItemId
+                            ? acc +
+                              parseInt(curr.toppingPrice) *
+                                item.cToppings.reduce(
+                                  (acc, curr2) =>
+                                    curr2.toppingId === curr.toppingId
+                                      ? curr2.toppingQuantity
+                                      : acc,
+                                  0
+                                )
+                            : acc,
+                        0
+                      ))
               }
             </strong>
             &nbsp;ر.ق
