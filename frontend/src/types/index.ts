@@ -52,6 +52,25 @@ export interface cardProps {
   cPrice: number
 }
 
+export type responseTypes = {
+  orderItems: any
+  orderToppings: any
+  userAccountType: string
+  response: Array<any> | null | any
+  itemsCount: number
+  CategoryList: string[]
+  _id: string
+  websiteLogoDisplayPath: string
+  websiteLogoDisplayName: string
+  heroBg: string[]
+  appName: string
+  appDesc: string
+  appTagline: string
+  instagramAccount: string
+  twitterAccount: string
+  whatsAppNumber: string
+}
+
 export interface DividerProps {
   thickness?: number
   style?: 'dashed'

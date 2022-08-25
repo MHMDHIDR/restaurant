@@ -1,23 +1,7 @@
 import { useEffect, useState } from 'react'
 import Axios from 'axios'
 import { API_URL } from '../data/constants'
-
-export type responseTypes = {
-  userAccountType: string
-  response: Array<any> | null | any
-  itemsCount: number
-  CategoryList: string[]
-  _id: string
-  websiteLogoDisplayPath: string
-  websiteLogoDisplayName: string
-  heroBg: string[]
-  appName: string
-  appDesc: string
-  appTagline: string
-  instagramAccount: string
-  twitterAccount: string
-  whatsAppNumber: string
-}
+import { responseTypes } from '../types'
 
 Axios.defaults.baseURL = API_URL
 
