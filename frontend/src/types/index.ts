@@ -26,7 +26,9 @@ export interface CartProps {
   addToCart: any
   removeFromCart: any
   setGrandPrice: any
-  grandPrice: any
+  grandPrice: number
+  orderItemsGrandPrice: number
+  setOrderItemsGrandPrice: any
 }
 
 export interface orderProps {

@@ -81,8 +81,8 @@ const OrderFood = () => {
   }, [personName, personPhone, personAddress, personNotes])
 
   useEffect(() => {
-    setGrandPrice(grandPriceRef?.current?.textContent || grandPrice)
-  }, [grandPriceRef?.current?.textContent, grandPrice])
+    setGrandPrice(parseInt(grandPriceRef?.current?.textContent) || grandPrice)
+  }, [parseInt(grandPriceRef?.current?.textContent), grandPrice])
 
   const handleCollectOrder = async (e: { preventDefault: () => void }) => {
     e.preventDefault()
@@ -119,7 +119,7 @@ const OrderFood = () => {
     formData.append('personNotes', personNotes)
     formData.append('checkedToppings', JSON.stringify(checkedToppings))
     formData.append('foodItems', JSON.stringify(items))
-    formData.append('grandPrice', grandPrice)
+    formData.append('grandPrice', grandPriceRef?.current?.textContent)
     formData.append('paymentData', JSON.stringify(paymentData))
 
     try {
@@ -326,7 +326,6 @@ const OrderFood = () => {
                       (acc, item) =>
                         acc +
                         item.cPrice * item.cQuantity +
-                        //calculate all items checked toppings prices * all items checked toppings quantities
                         checkedToppings.reduce(
                           (acc: number, curr: selectedToppingsProps) =>
                             curr.toppingId.slice(0, -2) === item.cItemId

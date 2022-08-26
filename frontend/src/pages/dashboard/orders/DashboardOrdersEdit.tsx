@@ -24,7 +24,7 @@ const DashboardOrdersEdit = () => {
 
   useDocumentTitle(
     `${
-      (ordersData && 'Edit ' + ordersData?.personName + ' Order Details') ||
+      (ordersData && 'Edit (' + ordersData?.personName + ') Order Details') ||
       'Edit Order Details'
     } `
   )
@@ -35,8 +35,8 @@ const DashboardOrdersEdit = () => {
 
   const USER = JSON.parse(localStorage.getItem('user'))
 
-  const { grandPrice, setGrandPrice } = useContext(CartContext)
   const { orderItemToppings, setOrderItemToppings } = useContext(ToppingsContext)
+  const { orderItemsGrandPrice, setOrderItemsGrandPrice } = useContext(CartContext)
 
   //global variables
   const MAX_CHARACTERS = 100
@@ -74,8 +74,10 @@ const DashboardOrdersEdit = () => {
   }, [response.response])
 
   useEffect(() => {
-    setGrandPrice(grandPriceRef?.current?.textContent || grandPrice)
-  }, [grandPriceRef?.current?.textContent, grandPrice])
+    setOrderItemsGrandPrice(
+      parseInt(grandPriceRef?.current?.textContent) || orderItemsGrandPrice
+    )
+  }, [grandPriceRef?.current?.textContent, orderItemsGrandPrice])
 
   const handleCollectOrder = async (e: { preventDefault: () => void }) => {
     e.preventDefault()
@@ -104,8 +106,8 @@ const DashboardOrdersEdit = () => {
     formData.append('personAddress', personAddress)
     formData.append('personNotes', personNotes)
     formData.append('checkedToppings', JSON.stringify(orderItemToppings))
-    // formData.append('foodItems', JSON.stringify(items))
-    formData.append('grandPrice', grandPrice)
+    formData.append('foodItems', JSON.stringify(ordersData?.orderItems))
+    formData.append('grandPrice', grandPriceRef?.current?.textContent)
 
     try {
       const response = await Axios.post(`${API_URL}/orders`, formData)
@@ -264,7 +266,6 @@ const DashboardOrdersEdit = () => {
                       (acc, item) =>
                         acc +
                         item.cPrice * item.cQuantity +
-                        //calculate all items checked toppings prices * all items checked toppings quantities
                         orderItemToppings.reduce(
                           (acc: number, curr: selectedToppingsProps) =>
                             curr.toppingId.slice(0, -2) === item.cItemId
