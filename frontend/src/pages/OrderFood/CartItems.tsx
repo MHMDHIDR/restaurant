@@ -5,6 +5,7 @@ import { ToppingsContext } from '../../Contexts/ToppingsContext'
 import { removeSlug } from '../../utils/slug'
 
 import Divider from '../../components/Divider'
+import { selectedToppingsProps } from '../../types'
 
 const CartItems: any = ({ orderItems, orderToppings }) => {
   const { items } = useContext(CartContext)
@@ -326,21 +327,12 @@ const Items = ({
               {item.cPrice * item.cQuantity +
                 (orderToppings
                   ? orderItemToppings?.reduce(
-                      (
-                        acc: number,
-                        curr: { toppingId: string | any[]; toppingPrice: string }
-                      ) =>
+                      (acc: number, curr: selectedToppingsProps) =>
                         curr.toppingId.slice(0, -2) === item.cItemId
                           ? acc +
-                            parseInt(curr.toppingPrice) *
+                            curr.toppingPrice *
                               item.cToppings.reduce(
-                                (
-                                  acc: any,
-                                  curr2: {
-                                    toppingId: string | any[]
-                                    toppingQuantity: any
-                                  }
-                                ) =>
+                                (acc: number, curr2: selectedToppingsProps) =>
                                   curr2.toppingId === curr.toppingId
                                     ? curr2.toppingQuantity
                                     : acc,

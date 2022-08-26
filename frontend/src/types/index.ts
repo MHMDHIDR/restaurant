@@ -26,9 +26,49 @@ export interface CartProps {
   addToCart: any
   removeFromCart: any
   setGrandPrice: any
-  setOrderDetails: any
-  orderDetails: any
   grandPrice: any
+}
+
+export interface orderProps {
+  grandPrice: number
+  orderDate: string
+  orderId: string
+  orderItems: {
+    cDesc: string
+    cHeading: string
+    cImg: {
+      foodImgDisplayName: string
+      foodImgDisplayPath: string
+    }[]
+    cItemId: string
+    cPrice: number
+    cQuantity: number
+    cToppings: {
+      toppingId: string
+      toppingPrice: number
+    }[]
+  }[]
+  orderStatus: string
+  orderToppings: {
+    toppingId: string
+    toppingPrice: number
+  }[]
+  paymentData: {
+    accelerated: boolean
+    billingToken?: string
+    facilitatorAccessToken: string
+    orderID: string
+    payerID: string
+    paymentID: string
+    paymentSource: string
+  }
+  personAddress: string
+  personName: string
+  personNotes: string
+  personPhone: string
+  userEmail: string
+  userId: string
+  _id: string
 }
 
 export interface FileUploadProps {
@@ -189,4 +229,10 @@ export interface viewFoodDataProps {
   foodToppings: string[]
   foodImgs: string
   length: number
+}
+
+export interface selectedToppingsProps {
+  toppingId: string
+  toppingQuantity: number
+  toppingPrice: number
 }

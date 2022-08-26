@@ -8,7 +8,6 @@ export const CartContext = createContext({} as CartProps)
 
 const CartContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [items, setItems] = useState(cartFromLocalStorage)
-  const [orderDetails, setOrderDetails] = useState()
   const [grandPrice, setGrandPrice] = useState<number>()
   const { checkedToppings, setCheckedToppings } = useContext(ToppingsContext)
 
@@ -62,8 +61,6 @@ const CartContextProvider = ({ children }: { children: React.ReactNode }) => {
         setItems,
         addToCart,
         removeFromCart,
-        setOrderDetails,
-        orderDetails,
         grandPrice,
         setGrandPrice
       }}

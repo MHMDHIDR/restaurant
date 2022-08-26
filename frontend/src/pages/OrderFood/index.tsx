@@ -19,6 +19,7 @@ import { Success, Loading } from '../../components/Icons/Status'
 import { LoadingSpinner } from '../../components/Loading'
 import CartItems from './CartItems'
 import PaymentButton from './PaymentButton'
+import { selectedToppingsProps } from '../../types'
 
 const formDataFromLocalStorage =
   'formDataCart' in localStorage && JSON.parse(localStorage.getItem('formDataCart'))
@@ -321,32 +322,28 @@ const OrderFood = () => {
                 <span className='inline-block px-3 py-1 my-4 text-xl text-green-800 bg-green-300 border border-green-800 rounded-md select-none'>
                   السعر الاجمالي:&nbsp;
                   <strong ref={grandPriceRef}>
-                    {
-                      //calculate grand price
-                      //calculate all items prices * all items quantities
-                      items.reduce(
-                        (acc, item) =>
-                          acc +
-                          item.cPrice * item.cQuantity +
-                          //calculate all items checked toppings prices * all items checked toppings quantities
-                          checkedToppings.reduce(
-                            (acc, curr) =>
-                              curr.toppingId.slice(0, -2) === item.cItemId
-                                ? acc +
-                                  parseInt(curr.toppingPrice) *
-                                    item.cToppings.reduce(
-                                      (acc, curr2) =>
-                                        curr2.toppingId === curr.toppingId
-                                          ? curr2.toppingQuantity
-                                          : acc,
-                                      0
-                                    )
-                                : acc,
-                            0
-                          ),
-                        0
-                      )
-                    }
+                    {items.reduce(
+                      (acc, item) =>
+                        acc +
+                        item.cPrice * item.cQuantity +
+                        //calculate all items checked toppings prices * all items checked toppings quantities
+                        checkedToppings.reduce(
+                          (acc: number, curr: selectedToppingsProps) =>
+                            curr.toppingId.slice(0, -2) === item.cItemId
+                              ? acc +
+                                curr.toppingPrice *
+                                  item.cToppings.reduce(
+                                    (acc: number, curr2: selectedToppingsProps) =>
+                                      curr2.toppingId === curr.toppingId
+                                        ? curr2.toppingQuantity
+                                        : acc,
+                                    0
+                                  )
+                              : acc,
+                          0
+                        ),
+                      0
+                    )}
                   </strong>
                   &nbsp; ر.ق
                 </span>

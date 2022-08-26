@@ -41,10 +41,13 @@ export const addFood = asyncHandler(async (req, res) => {
 
   await FoodsModel.create({
     foodName,
-    foodPrice,
+    foodPrice: parseInt(foodPrice),
     category,
     foodDesc,
-    foodToppings: toppings,
+    foodToppings: {
+      toppingName: toppings.toppingName,
+      toppingPrice: parseInt(toppings.toppingPrice)
+    },
     foodTags: tags,
     foodImgs: foodImgUrls.map(({ foodImgDisplayName, foodImgDisplayPath }) => {
       return {

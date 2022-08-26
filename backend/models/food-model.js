@@ -10,8 +10,9 @@ const typeString = {
   type: String
 }
 
-const typeNumber = {
-  type: Number
+const reqNumber = {
+  type: Number,
+  required: true
 }
 
 const typeArray = {
@@ -23,7 +24,7 @@ const foodToppingsType = {
   default: [
     {
       toppingName: typeString,
-      toppingPrice: typeNumber
+      toppingPrice: reqNumber
     }
   ]
 }
@@ -38,7 +39,7 @@ const FoodSchema = new mongoose.Schema(
   {
     foodImgs: typeArray,
     foodName: reqString,
-    foodPrice: reqString,
+    foodPrice: reqNumber,
     category: reqString,
     foodDesc: reqString,
     foodToppings: foodToppingsType,

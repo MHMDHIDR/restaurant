@@ -17,9 +17,17 @@ import { Success } from '../../../components/Icons/Status'
 import { LoadingCard, LoadingSpinner } from '../../../components/Loading'
 import CartItems from '../../OrderFood/CartItems'
 import useAxios from '../../../hooks/useAxios'
+import { orderProps, selectedToppingsProps } from '../../../types'
 
 const DashboardOrdersEdit = () => {
-  useDocumentTitle('Cart Items')
+  const [ordersData, setOrdersData] = useState<orderProps>(null)
+
+  useDocumentTitle(
+    `${
+      (ordersData && 'Edit ' + ordersData?.personName + ' Order Details') ||
+      'Edit Order Details'
+    } `
+  )
 
   useEffect(() => {
     scrollToView()
@@ -27,16 +35,11 @@ const DashboardOrdersEdit = () => {
 
   const USER = JSON.parse(localStorage.getItem('user'))
 
-  const { items, grandPrice, setGrandPrice } = useContext(CartContext)
-  const { checkedToppings, orderItemToppings, setOrderItemToppings } =
-    useContext(ToppingsContext)
-
-  useEffect(() => setOrderItemToppings(ordersData?.orderToppings), [])
+  const { grandPrice, setGrandPrice } = useContext(CartContext)
+  const { orderItemToppings, setOrderItemToppings } = useContext(ToppingsContext)
 
   //global variables
   const MAX_CHARACTERS = 100
-
-  const [ordersData, setOrdersData] = useState<any>()
 
   //Form States
   const [userId, setUserId] = useState('')
@@ -64,6 +67,7 @@ const DashboardOrdersEdit = () => {
   useEffect(() => {
     if (response.response !== null) {
       setOrdersData(response.response.response)
+      setOrderItemToppings(response.response.response?.orderToppings)
       setUserId(response.response.response?.userId)
       setUserEmail(response.response.response?.userEmail)
     }
@@ -100,7 +104,7 @@ const DashboardOrdersEdit = () => {
     formData.append('personAddress', personAddress)
     formData.append('personNotes', personNotes)
     formData.append('checkedToppings', JSON.stringify(orderItemToppings))
-    formData.append('foodItems', JSON.stringify(items))
+    // formData.append('foodItems', JSON.stringify(items))
     formData.append('grandPrice', grandPrice)
 
     try {
@@ -138,7 +142,7 @@ const DashboardOrdersEdit = () => {
 
               <CartItems
                 orderItems={ordersData?.orderItems}
-                orderToppings={ordersData?.orderToppings}
+                orderToppings={orderItemToppings}
               />
 
               <form method='POST' onSubmit={handleCollectOrder}>
@@ -256,18 +260,18 @@ const DashboardOrdersEdit = () => {
                 <span className='inline-block px-3 py-1 my-4 text-xl text-green-800 bg-green-300 border border-green-800 rounded-md select-none'>
                   السعر الاجمالي:&nbsp;
                   <strong ref={grandPriceRef}>
-                    {items.reduce(
+                    {ordersData?.orderItems.reduce(
                       (acc, item) =>
                         acc +
                         item.cPrice * item.cQuantity +
                         //calculate all items checked toppings prices * all items checked toppings quantities
-                        checkedToppings.reduce(
-                          (acc, curr) =>
+                        orderItemToppings.reduce(
+                          (acc: number, curr: selectedToppingsProps) =>
                             curr.toppingId.slice(0, -2) === item.cItemId
                               ? acc +
-                                parseInt(curr.toppingPrice) *
+                                curr.toppingPrice *
                                   item.cToppings.reduce(
-                                    (acc, curr2) =>
+                                    (acc: number, curr2: selectedToppingsProps) =>
                                       curr2.toppingId === curr.toppingId
                                         ? curr2.toppingQuantity
                                         : acc,
