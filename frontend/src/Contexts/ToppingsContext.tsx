@@ -1,9 +1,9 @@
 import { createContext, useState, useEffect } from 'react'
 export const ToppingsContext = createContext({
-  handleToppingChecked: (toppingId: string, toppingPrice: number) => {},
+  handleToppingChecked: (_toppingId: string, _toppingPrice: number): void => {},
   checkedToppings: [],
   setCheckedToppings: (
-    checkedToppings: { toppingId: string; toppingPrice: string }[]
+    _checkedToppings: { toppingId: string; toppingPrice: string }[]
   ) => {}
 })
 

@@ -24,7 +24,8 @@ const Items = ({
   orderItems: any
   orderToppings?: any
 }) => {
-  const { handleToppingChecked, checkedToppings } = useContext(ToppingsContext)
+  const { handleToppingChecked, checkedToppings, setCheckedToppings } =
+    useContext(ToppingsContext)
   const { items, setItems, removeFromCart, setGrandPrice } = useContext(CartContext)
 
   const [orderItemQuantity, setOrderItemQuantity] = useState(0)
@@ -312,14 +313,23 @@ const Items = ({
             <span>سعر الوجبة مع حساب الإضافات والكمية للإضافات والوجبة :&nbsp;</span>
             <strong className='text-lg'>
               {item.cPrice * item.cQuantity +
-                (orderToppings
+                (orderItems
                   ? orderToppings?.reduce(
-                      (acc, curr) =>
+                      (
+                        acc: number,
+                        curr: { toppingId: string | any[]; toppingPrice: string }
+                      ) =>
                         curr.toppingId.slice(0, -2) === item.cItemId
                           ? acc +
                             parseInt(curr.toppingPrice) *
                               item.cToppings.reduce(
-                                (acc, curr2) =>
+                                (
+                                  acc: any,
+                                  curr2: {
+                                    toppingId: string | any[]
+                                    toppingQuantity: any
+                                  }
+                                ) =>
                                   curr2.toppingId === curr.toppingId
                                     ? curr2.toppingQuantity
                                     : acc,

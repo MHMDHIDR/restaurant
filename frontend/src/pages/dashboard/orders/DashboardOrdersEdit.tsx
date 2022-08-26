@@ -1,6 +1,5 @@
 import { useParams } from 'react-router-dom'
 import { useContext, useState, useRef, useEffect } from 'react'
-import { Link, useLocation } from 'react-router-dom'
 import Axios from 'axios'
 
 import { CartContext } from '../../../Contexts/CartContext'
@@ -14,15 +13,13 @@ import scrollToView from '../../../utils/scrollToView'
 import { API_URL } from '../../../data/constants'
 
 import Modal from '../../../components/Modal/Modal'
-import { Success, Loading } from '../../../components/Icons/Status'
+import { Success } from '../../../components/Icons/Status'
 import { LoadingCard, LoadingSpinner } from '../../../components/Loading'
 import CartItems from '../../OrderFood/CartItems'
-import PaymentButton from '../../OrderFood/PaymentButton'
 import useAxios from '../../../hooks/useAxios'
 
 const DashboardOrdersEdit = () => {
   useDocumentTitle('Cart Items')
-  const { pathname } = useLocation()
 
   useEffect(() => {
     scrollToView()
@@ -37,8 +34,6 @@ const DashboardOrdersEdit = () => {
   const { checkedToppings } = useContext(ToppingsContext)
 
   const [ordersData, setOrdersData] = useState<any>()
-  const [orderItemsIds, setOrderItemsIds] = useState([])
-  const [orderToppingsId, setOrderToppingsId] = useState([])
 
   //Form States
   const [userId, setUserId] = useState('')
@@ -49,8 +44,6 @@ const DashboardOrdersEdit = () => {
   const [personNotes, setPersonNotes] = useState('')
   const [orderFoodStatus, setOrderFoodStatus] = useState(0)
   const [responseMsg, setResponseMsg] = useState('')
-  const [showLoginRegisterModal, setShowLoginRegisterModal] = useState(false)
-  const [showPaymentModal, setShowPaymentModal] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
   //Declaring Referenced Element
@@ -68,13 +61,6 @@ const DashboardOrdersEdit = () => {
   useEffect(() => {
     if (response.response !== null) {
       setOrdersData(response.response.response)
-      setOrderItemsIds(
-        response.response.response.orderItems?.map(({ cItemId }) => cItemId)
-      )
-      setOrderToppingsId(
-        response.response.response.orderToppings?.length > 0 &&
-          response.response.response.orderToppings.map(({ toppingId }) => toppingId)
-      )
       setUserId(response.response.response?.userId)
       setUserEmail(response.response.response?.userEmail)
     }
@@ -129,7 +115,7 @@ const DashboardOrdersEdit = () => {
   return (
     <>
       <section id='orderFood' className='py-12 my-8'>
-        {orderFoodStatus === 1 ? (
+        {orderFoodStatus === 1 && (
           <Modal
             status={Success}
             msg={responseMsg}
@@ -138,40 +124,6 @@ const DashboardOrdersEdit = () => {
             redirectLink='/view'
             redirectTime={10000}
           />
-        ) : showLoginRegisterModal === true ? (
-          <Modal
-            status={Loading}
-            msg={`يجب عليك تسجيل الدخول أو عمل حساب جديد أولا وذلك للطلب`}
-            btnName='تسجيل دخول'
-            btnLink={`/auth/login${pathname}`}
-          />
-        ) : (
-          showPaymentModal === true && (
-            <Modal
-              status={Loading}
-              msg={`سيتم الدفع بالعملة (دولار أمريكي) وذلك بعد تحويل الإجمالي: ${grandPrice} ر.ق، سيتم دفع = ${grandPrice} دولار أمريكي لدفع بأحد الوسائل التالية:`}
-              extraComponents={
-                PaymentButton ? (
-                  <PaymentButton
-                    value={grandPrice}
-                    onSuccess={(paymentData: any) => {
-                      setShowPaymentModal(false)
-                      handleSaveOrder(paymentData)
-                    }}
-                    // onError={() => {
-                    //   setShowPaymentModal(false)
-                    //   setOrderFoodStatus(0)
-                    //   setResponseMsg('حدث خطأ أثناء الدفع')
-                    // }}
-                  />
-                ) : (
-                  <LoadingSpinner />
-                )
-              }
-              btnName='رجوع'
-              btnLink={`order-food`}
-            />
-          )
         )}
 
         <div className='container mx-auto text-center'>
@@ -301,32 +253,28 @@ const DashboardOrdersEdit = () => {
                 <span className='inline-block px-3 py-1 my-4 text-xl text-green-800 bg-green-300 border border-green-800 rounded-md select-none'>
                   السعر الاجمالي:&nbsp;
                   <strong ref={grandPriceRef}>
-                    {
-                      //calculate grand price
-                      //calculate all items prices * all items quantities
-                      items.reduce(
-                        (acc, item) =>
-                          acc +
-                          item.cPrice * item.cQuantity +
-                          //calculate all items checked toppings prices * all items checked toppings quantities
-                          checkedToppings.reduce(
-                            (acc, curr) =>
-                              curr.toppingId.slice(0, -2) === item.cItemId
-                                ? acc +
-                                  parseInt(curr.toppingPrice) *
-                                    item.cToppings.reduce(
-                                      (acc, curr2) =>
-                                        curr2.toppingId === curr.toppingId
-                                          ? curr2.toppingQuantity
-                                          : acc,
-                                      0
-                                    )
-                                : acc,
-                            0
-                          ),
-                        0
-                      )
-                    }
+                    {items.reduce(
+                      (acc, item) =>
+                        acc +
+                        item.cPrice * item.cQuantity +
+                        //calculate all items checked toppings prices * all items checked toppings quantities
+                        checkedToppings.reduce(
+                          (acc, curr) =>
+                            curr.toppingId.slice(0, -2) === item.cItemId
+                              ? acc +
+                                parseInt(curr.toppingPrice) *
+                                  item.cToppings.reduce(
+                                    (acc, curr2) =>
+                                      curr2.toppingId === curr.toppingId
+                                        ? curr2.toppingQuantity
+                                        : acc,
+                                    0
+                                  )
+                              : acc,
+                          0
+                        ),
+                      0
+                    )}
                   </strong>
                   &nbsp; ر.ق
                 </span>
