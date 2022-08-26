@@ -20,9 +20,6 @@ import CartItems from '../../OrderFood/CartItems'
 import PaymentButton from '../../OrderFood/PaymentButton'
 import useAxios from '../../../hooks/useAxios'
 
-const formDataFromLocalStorage =
-  'formDataCart' in localStorage && JSON.parse(localStorage.getItem('formDataCart'))
-
 const DashboardOrdersEdit = () => {
   useDocumentTitle('Cart Items')
   const { pathname } = useLocation()
@@ -31,35 +28,17 @@ const DashboardOrdersEdit = () => {
     scrollToView()
   }, [])
 
-  const [ordersData, setOrdersData] = useState<any>()
-  const [orderItemsIds, setOrderItemsIds] = useState([])
-  const [orderToppingsId, setOrderToppingsId] = useState([])
-
   const USER = JSON.parse(localStorage.getItem('user'))
-
-  const { ...response } = useAxios({
-    url: `/orders/1/1/${useParams().orderId}`,
-    headers: USER ? JSON.stringify({ Authorization: `Bearer ${USER.token}` }) : null
-  })
-
-  useEffect(() => {
-    if (response.response !== null) {
-      setOrdersData(response.response.response)
-      setOrderItemsIds(
-        response.response.response.orderItems?.map(({ cItemId }) => cItemId)
-      )
-      setOrderToppingsId(
-        response.response.response.orderToppings?.length > 0 &&
-          response.response.response.orderToppings.map(({ toppingId }) => toppingId)
-      )
-    }
-  }, [response.response])
 
   //global variables
   const MAX_CHARACTERS = 100
 
   const { items, grandPrice, setGrandPrice } = useContext(CartContext)
   const { checkedToppings } = useContext(ToppingsContext)
+
+  const [ordersData, setOrdersData] = useState<any>()
+  const [orderItemsIds, setOrderItemsIds] = useState([])
+  const [orderToppingsId, setOrderToppingsId] = useState([])
 
   //Form States
   const [userId, setUserId] = useState('')
@@ -81,20 +60,25 @@ const DashboardOrdersEdit = () => {
   const formErr = useRef<HTMLParagraphElement>(null)
   const grandPriceRef = useRef<HTMLElement>(null)
 
-  useEffect(() => {
-    setUserId(JSON.parse(localStorage.getItem('user'))?._id)
-    setUserEmail(JSON.parse(localStorage.getItem('user'))?.userEmail)
+  const { ...response } = useAxios({
+    url: `/orders/1/1/${useParams().orderId}`,
+    headers: USER ? JSON.stringify({ Authorization: `Bearer ${USER.token}` }) : null
+  })
 
-    localStorage.setItem(
-      'formDataCart',
-      JSON.stringify({
-        personName,
-        personPhone,
-        personAddress,
-        personNotes
-      })
-    )
-  }, [personName, personPhone, personAddress, personNotes])
+  useEffect(() => {
+    if (response.response !== null) {
+      setOrdersData(response.response.response)
+      setOrderItemsIds(
+        response.response.response.orderItems?.map(({ cItemId }) => cItemId)
+      )
+      setOrderToppingsId(
+        response.response.response.orderToppings?.length > 0 &&
+          response.response.response.orderToppings.map(({ toppingId }) => toppingId)
+      )
+      setUserId(response.response.response?.userId)
+      setUserEmail(response.response.response?.userEmail)
+    }
+  }, [response.response])
 
   useEffect(() => {
     setGrandPrice(grandPriceRef?.current?.textContent || grandPrice)
@@ -111,14 +95,6 @@ const DashboardOrdersEdit = () => {
       personAddressErr.current.textContent === ''
     ) {
       formErr.current.textContent = ''
-
-      //if there's No user in localStorage then show modal to login or register else collect order
-      if (JSON.parse(localStorage.getItem('user'))) {
-        setShowLoginRegisterModal(false)
-        setShowPaymentModal(true)
-      } else {
-        setShowLoginRegisterModal(true)
-      }
     } else {
       formErr.current.textContent = 'الرجاء إدخال البيانات المطلوبة بشكل صحيح'
     }
@@ -145,12 +121,6 @@ const DashboardOrdersEdit = () => {
 
       setOrderFoodStatus(orderAdded)
       setResponseMsg(message)
-
-      //remove all items from cart
-      if (orderAdded) {
-        const cartItems = ['restCartItems', 'restCheckedToppings', 'formDataCart']
-        cartItems.forEach(item => localStorage.removeItem(item))
-      }
     } catch (err) {
       console.error(err)
     }
@@ -223,7 +193,7 @@ const DashboardOrdersEdit = () => {
                     id='name'
                     name='name'
                     type='text'
-                    defaultValue={personName}
+                    defaultValue={personName || ordersData.personName}
                     onChange={e => setPersonName(e.target.value.trim())}
                     onKeyUp={e => {
                       const target = e.target.value.trim()
