@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { CartContext } from '../../Contexts/CartContext'
 import { ToppingsContext } from '../../Contexts/ToppingsContext'
 
@@ -24,16 +24,23 @@ const Items = ({
   orderItems: any
   orderToppings?: any
 }) => {
-  const { handleToppingChecked, checkedToppings, setCheckedToppings } =
-    useContext(ToppingsContext)
-  const { items, setItems, removeFromCart, setGrandPrice } = useContext(CartContext)
+  const {
+    handleToppingChecked,
+    checkedToppings,
+    handleOrderItemToppingChecked,
+    orderItemToppings,
+    setOrderItemToppings
+  } = useContext(ToppingsContext)
+  useEffect(() => setOrderItemToppings(orderToppings), [])
 
+  const { items, setItems, removeFromCart, setGrandPrice } = useContext(CartContext)
   const [orderItemQuantity, setOrderItemQuantity] = useState(0)
 
   const MAX_QUANTITY = 100
 
   return orderItems?.map((item: any) => {
     const hasToppings = typeof item?.cToppings[0]?.toppingName === 'string'
+
     return (
       <div key={item.cItemId}>
         <div
@@ -86,10 +93,14 @@ const Items = ({
                         id={toppingId}
                         value={toppingName}
                         className='cursor-pointer min-w-[1.5rem] min-h-[1.5rem]'
-                        onChange={() => handleToppingChecked(toppingId, toppingPrice)}
+                        onChange={() =>
+                          orderToppings
+                            ? handleOrderItemToppingChecked(toppingId, toppingPrice)
+                            : handleToppingChecked(toppingId, toppingPrice)
+                        }
                         defaultChecked={
                           orderToppings
-                            ? orderToppings?.find(
+                            ? orderItemToppings?.find(
                                 (topping: { toppingId: string }) =>
                                   topping.toppingId === toppingId
                               )
@@ -127,7 +138,7 @@ const Items = ({
                         className='quantity-btn number-hover'
                         onClick={() => {
                           if (orderToppings) {
-                            orderItems.map(item => {
+                            orderItems.map((item: any) => {
                               if (
                                 topping.toppingQuantity < MAX_QUANTITY &&
                                 item.cItemId === toppingId.slice(0, -1)
@@ -139,7 +150,7 @@ const Items = ({
                             })
                           } else if (topping.toppingQuantity < MAX_QUANTITY) {
                             setItems(
-                              items.map(item => {
+                              items.map((item: any) => {
                                 if (item.cItemId === toppingId.slice(0, -1)) {
                                   topping.toppingQuantity++
                                 }
@@ -313,8 +324,8 @@ const Items = ({
             <span>سعر الوجبة مع حساب الإضافات والكمية للإضافات والوجبة :&nbsp;</span>
             <strong className='text-lg'>
               {item.cPrice * item.cQuantity +
-                (orderItems
-                  ? orderToppings?.reduce(
+                (orderToppings
+                  ? orderItemToppings?.reduce(
                       (
                         acc: number,
                         curr: { toppingId: string | any[]; toppingPrice: string }

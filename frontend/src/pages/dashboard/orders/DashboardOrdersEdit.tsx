@@ -27,11 +27,14 @@ const DashboardOrdersEdit = () => {
 
   const USER = JSON.parse(localStorage.getItem('user'))
 
+  const { items, grandPrice, setGrandPrice } = useContext(CartContext)
+  const { checkedToppings, orderItemToppings, setOrderItemToppings } =
+    useContext(ToppingsContext)
+
+  useEffect(() => setOrderItemToppings(ordersData?.orderToppings), [])
+
   //global variables
   const MAX_CHARACTERS = 100
-
-  const { items, grandPrice, setGrandPrice } = useContext(CartContext)
-  const { checkedToppings } = useContext(ToppingsContext)
 
   const [ordersData, setOrdersData] = useState<any>()
 
@@ -80,13 +83,14 @@ const DashboardOrdersEdit = () => {
       personPhoneErr.current.textContent === '' &&
       personAddressErr.current.textContent === ''
     ) {
+      handleSaveOrder()
       formErr.current.textContent = ''
     } else {
       formErr.current.textContent = 'الرجاء إدخال البيانات المطلوبة بشكل صحيح'
     }
   }
 
-  const handleSaveOrder = async (paymentData: any) => {
+  const handleSaveOrder = async () => {
     //using FormData to send constructed data
     const formData = new FormData()
     formData.append('userId', userId)
@@ -95,10 +99,9 @@ const DashboardOrdersEdit = () => {
     formData.append('personPhone', personPhone)
     formData.append('personAddress', personAddress)
     formData.append('personNotes', personNotes)
-    formData.append('checkedToppings', JSON.stringify(checkedToppings))
+    formData.append('checkedToppings', JSON.stringify(orderItemToppings))
     formData.append('foodItems', JSON.stringify(items))
     formData.append('grandPrice', grandPrice)
-    formData.append('paymentData', JSON.stringify(paymentData))
 
     try {
       const response = await Axios.post(`${API_URL}/orders`, formData)
@@ -176,7 +179,7 @@ const DashboardOrdersEdit = () => {
                     id='phoneNumber'
                     name='phoneNumber'
                     type='tel'
-                    defaultValue={personPhone}
+                    defaultValue={personPhone || ordersData.personPhone}
                     onChange={e => setPersonPhone(e.target.value.trim())}
                     onKeyUp={e => {
                       const target = e.target.value.trim()
@@ -209,7 +212,7 @@ const DashboardOrdersEdit = () => {
                     id='Address'
                     name='Address'
                     type='text'
-                    defaultValue={personAddress}
+                    defaultValue={personAddress || ordersData.personAddress}
                     onChange={e => setPersonAddress(e.target.value.trim())}
                     onKeyUp={e => {
                       const target = e.target.value.trim()
@@ -237,7 +240,7 @@ const DashboardOrdersEdit = () => {
                     className={`form__input`}
                     id='message'
                     name='message'
-                    defaultValue={personNotes}
+                    defaultValue={personNotes || ordersData.personNotes}
                     maxLength={MAX_CHARACTERS * 2}
                     onChange={e => setPersonNotes(e.target.value.trim())}
                   ></textarea>
