@@ -19,11 +19,13 @@ import { LoadingSpinner } from '../Loading'
 import Pagination from '../Pagination'
 import Divider from '../Divider'
 import NavMenu from '../NavMenu'
+import { AcceptBtn, DeleteBtn, EditBtn, RejectBtn } from './OrdersTableActions'
 
 const OrdersTable = ({ ordersByUserEmail = false }) => {
   useEffect(() => {
     scrollToView()
   }, [])
+
   let { pageNum }: any = useParams()
   const { pathname } = useLocation()
   const redirectPath = pathname.includes('dashboard/orders') ? 'orders' : 'my-orders'
@@ -253,7 +255,7 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
                         <td className='min-w-[0.5rem] px-1 py-2'>{idx + 1}</td>
                         <td className='px-1 py-2 min-w-[10rem]'>{order.personName}</td>
                         <td className='px-1 py-2 min-w-[6rem]'>{order.userEmail}</td>
-                        <td className='text-right min-w-[13rem] px-1 py-2'>
+                        <td className='text-center min-w-[13rem] px-1 py-2'>
                           <p>{createLocaleDateString(order.orderDate)}</p>
                         </td>
                         <td className='px-1 py-2'>{order.personPhone}</td>
@@ -437,7 +439,7 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
                     <td className='px-1 py-2 max-w-[0.25rem]'>{idx + 1}</td>
                     <td className='px-1 py-2 min-w-[10rem]'>{order.personName}</td>
                     <td className='px-1 py-2 min-w-[6rem]'>{order.userEmail}</td>
-                    <td className='text-right min-w-[13rem] px-1 py-2'>
+                    <td className='text-center min-w-[13rem] px-1 py-2'>
                       <p>{createLocaleDateString(order.orderDate)}</p>
                     </td>
                     <td className='px-1 py-2'>{order.personPhone}</td>
@@ -642,67 +644,5 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
     </>
   )
 }
-
-const AcceptBtn = ({ id, email }) => (
-  <button
-    id='acceptOrder'
-    data-id={id}
-    data-status='accept'
-    data-email={email}
-    className='m-1 px-2 py-2 text-sm text-white bg-green-600 rounded-md hover:bg-green-700 min-w-[7rem] relative text-center overflow-hidden'
-    data-tooltip='موافقة الطلب'
-  >
-    <span className='py-0.5 px-1 md:pl-1 bg-green-300 rounded-md absolute right-2 top-1.5 pointer-events-none'>
-      &#9989;
-    </span>
-    <span className='mr-4 pointer-events-none'>موافقة</span>
-  </button>
-)
-
-const EditBtn = ({ id }) => (
-  <Link
-    to={`/dashboard/edit-order/${id}`}
-    id='editOrder'
-    className='m-1 px-2 py-2 text-sm text-white bg-gray-600 rounded-md hover:bg-gray-700 min-w-[7rem] relative text-center overflow-hidden border'
-    data-tooltip='تعديل الطلب'
-  >
-    <span className='py-0.5 px-1 md:pl-1 bg-gray-300 rounded-md absolute right-2 top-1.5 pointer-events-none'>
-      &#9997;
-    </span>
-    <span className='mr-4 pointer-events-none'>تعديل</span>
-  </Link>
-)
-
-const RejectBtn = ({ id, email }) => (
-  <button
-    id='rejectOrder'
-    data-id={id}
-    data-status='reject'
-    data-email={email}
-    className='m-1 px-2 py-2 text-sm text-white bg-gray-600 rounded-md hover:bg-gray-700 min-w-[7rem] relative text-center overflow-hidden border'
-    data-tooltip='رفض الطلب'
-  >
-    <span className='py-0.5 px-1 md:pl-1 bg-gray-300 rounded-md absolute right-2 top-1.5 pointer-events-none'>
-      &#10060;
-    </span>
-    <span className='mr-4 pointer-events-none'>رفض</span>
-  </button>
-)
-
-const DeleteBtn = ({ id, email }) => (
-  <button
-    id='deleteOrder'
-    data-id={id}
-    data-status='delete'
-    data-email={email}
-    className='m-1 px-2 py-2 text-sm text-white bg-red-600 rounded-md hover:bg-red-700 min-w-[7rem] relative text-center overflow-hidden'
-    data-tooltip='حذف الطلب'
-  >
-    <span className='py-0.5 px-1 md:pl-1 bg-red-200 rounded-md absolute right-2 top-1.5 pointer-events-none'>
-      &#128465;
-    </span>
-    <span className='mr-4 pointer-events-none'>حذف</span>
-  </button>
-)
 
 export default OrdersTable
