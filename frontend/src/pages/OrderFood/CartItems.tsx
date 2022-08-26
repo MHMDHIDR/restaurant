@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { CartContext } from '../../Contexts/CartContext'
 import { ToppingsContext } from '../../Contexts/ToppingsContext'
 
@@ -26,9 +26,10 @@ const Items = ({
 }) => {
   const { handleToppingChecked, checkedToppings } = useContext(ToppingsContext)
   const { items, setItems, removeFromCart, setGrandPrice } = useContext(CartContext)
-  const MAX_QUANTITY = 100
 
-  console.log(orderItems)
+  const [orderItemQuantity, setOrderItemQuantity] = useState(0)
+
+  const MAX_QUANTITY = 100
 
   return orderItems?.map((item: any) => {
     const hasToppings = typeof item?.cToppings[0]?.toppingName === 'string'
@@ -67,7 +68,7 @@ const Items = ({
           </div>
 
           {/* Product Toppings and it's Quantity */}
-          {typeof item?.cToppings[0].toppingName === 'string' && (
+          {hasToppings && (
             <div className='flex items-center justify-around gap-y-10 xl:gap-x-5 sm:flex-row'>
               <div className='flex flex-col gap-2 text-lg select-none md:items-start'>
                 <h2 className='text-center ltr'>الإضافات</h2>
@@ -116,38 +117,52 @@ const Items = ({
 
               <div className='flex flex-col items-center gap-2 text-lg select-none'>
                 <h2 className='text-center ltr'>كمية الإضافات</h2>
-                {item?.cToppings?.map((topping: any, idx: number) => {
+                {item?.cToppings.map((topping: any, idx: number) => {
                   const toppingId = item.cItemId + idx
+                  const newOrderItemsQuantity = topping.toppingQuantity
+
                   return (
                     <div key={toppingId} className='flex gap-1 select-none'>
                       <button
                         className='quantity-btn number-hover'
-                        onClick={
-                          //onClick function to increase the quantity of topping to the specific item in the cart
-                          () => {
-                            if (topping.toppingQuantity < MAX_QUANTITY) {
-                              setItems(
-                                items.map(item => {
-                                  if (item.cItemId === toppingId.slice(0, -1)) {
-                                    topping.toppingQuantity++
-                                  }
-                                  return item
-                                })
-                              )
-                            }
+                        onClick={() => {
+                          if (orderToppings) {
+                            orderItems.map(item => {
+                              if (item.cItemId === toppingId.slice(0, -1)) {
+                                topping.toppingQuantity++
+                                setOrderItemQuantity(topping.toppingQuantity)
+                              }
+                              return item
+                            })
+                          } else if (topping.toppingQuantity < MAX_QUANTITY) {
+                            setItems(
+                              items.map(item => {
+                                if (item.cItemId === toppingId.slice(0, -1)) {
+                                  topping.toppingQuantity++
+                                }
+                                return item
+                              })
+                            )
                           }
-                        }
+                        }}
                       >
                         +
                       </button>
                       <span className='text-lg font-bold quantity-btn'>
-                        {topping.toppingQuantity}
+                        {orderToppings ? newOrderItemsQuantity : topping.toppingQuantity}
                       </span>
                       <button
                         className='quantity-btn number-hover'
-                        //onClick function to Decrement the quantity of topping to the specific item in the cart
                         onClick={() => {
-                          if (topping.toppingQuantity > 1) {
+                          if (orderToppings) {
+                            orderItems.map((item: any) => {
+                              if (item.cItemId === toppingId.slice(0, -1)) {
+                                topping.toppingQuantity--
+                                setOrderItemQuantity(topping.toppingQuantity)
+                              }
+                              return item
+                            })
+                          } else if (topping.toppingQuantity > 1) {
                             setItems(
                               items.map(item => {
                                 if (item.cItemId === toppingId.slice(0, -1)) {
@@ -180,55 +195,51 @@ const Items = ({
             <div className='flex gap-2 select-none justify-evenly'>
               <button
                 className='quantity-btn number-hover'
-                onClick={
-                  //Increment items quantity
-                  () => {
-                    if (item.cQuantity < MAX_QUANTITY) {
-                      item.cQuantity++
-                      setItems([...items])
-                      setGrandPrice(
-                        items.reduce(
-                          (acc, item) =>
-                            acc +
-                            item.cPrice * item.cQuantity +
-                            //calculate all items checked toppings prices * all items checked toppings quantities
-                            (orderToppings
-                              ? orderToppings.reduce(
-                                  (acc, curr) =>
-                                    curr.toppingId.slice(0, -2) === item.cItemId
-                                      ? acc +
-                                        parseInt(curr.toppingPrice) *
-                                          item.cToppings.reduce(
-                                            (acc, curr2) =>
-                                              curr2.toppingId === curr.toppingId
-                                                ? curr2.toppingQuantity
-                                                : acc,
-                                            0
-                                          )
-                                      : acc,
-                                  0
-                                )
-                              : checkedToppings.reduce(
-                                  (acc, curr) =>
-                                    curr.toppingId.slice(0, -2) === item.cItemId
-                                      ? acc +
-                                        parseInt(curr.toppingPrice) *
-                                          item.cToppings.reduce(
-                                            (acc, curr2) =>
-                                              curr2.toppingId === curr.toppingId
-                                                ? curr2.toppingQuantity
-                                                : acc,
-                                            0
-                                          )
-                                      : acc,
-                                  0
-                                )),
-                          0
-                        )
+                onClick={() => {
+                  if (item.cQuantity < MAX_QUANTITY) {
+                    item.cQuantity++
+                    setItems([...items])
+                    setGrandPrice(
+                      items.reduce(
+                        (acc, item) =>
+                          acc +
+                          item.cPrice * item.cQuantity +
+                          (orderToppings
+                            ? orderToppings.reduce(
+                                (acc, curr) =>
+                                  curr.toppingId.slice(0, -2) === item.cItemId
+                                    ? acc +
+                                      parseInt(curr.toppingPrice) *
+                                        item.cToppings.reduce(
+                                          (acc, curr2) =>
+                                            curr2.toppingId === curr.toppingId
+                                              ? curr2.toppingQuantity
+                                              : acc,
+                                          0
+                                        )
+                                    : acc,
+                                0
+                              )
+                            : checkedToppings.reduce(
+                                (acc, curr) =>
+                                  curr.toppingId.slice(0, -2) === item.cItemId
+                                    ? acc +
+                                      parseInt(curr.toppingPrice) *
+                                        item.cToppings.reduce(
+                                          (acc, curr2) =>
+                                            curr2.toppingId === curr.toppingId
+                                              ? curr2.toppingQuantity
+                                              : acc,
+                                          0
+                                        )
+                                    : acc,
+                                0
+                              )),
+                        0
                       )
-                    }
+                    )
                   }
-                }
+                }}
               >
                 +
               </button>
@@ -295,42 +306,38 @@ const Items = ({
           >
             <span>سعر الوجبة مع حساب الإضافات والكمية للإضافات والوجبة :&nbsp;</span>
             <strong className='text-lg'>
-              {
-                //calculate the item price * item quantity
-                item.cPrice * item.cQuantity +
-                  //calculate the item toppings price * item toppings quantity
-                  (orderToppings
-                    ? orderToppings?.reduce(
-                        (acc, curr) =>
-                          curr.toppingId.slice(0, -2) === item.cItemId
-                            ? acc +
-                              parseInt(curr.toppingPrice) *
-                                item.cToppings.reduce(
-                                  (acc, curr2) =>
-                                    curr2.toppingId === curr.toppingId
-                                      ? curr2.toppingQuantity
-                                      : acc,
-                                  0
-                                )
-                            : acc,
-                        0
-                      )
-                    : checkedToppings.reduce(
-                        (acc, curr) =>
-                          curr.toppingId.slice(0, -2) === item.cItemId
-                            ? acc +
-                              parseInt(curr.toppingPrice) *
-                                item.cToppings.reduce(
-                                  (acc, curr2) =>
-                                    curr2.toppingId === curr.toppingId
-                                      ? curr2.toppingQuantity
-                                      : acc,
-                                  0
-                                )
-                            : acc,
-                        0
-                      ))
-              }
+              {item.cPrice * item.cQuantity +
+                (orderToppings
+                  ? orderToppings?.reduce(
+                      (acc, curr) =>
+                        curr.toppingId.slice(0, -2) === item.cItemId
+                          ? acc +
+                            parseInt(curr.toppingPrice) *
+                              item.cToppings.reduce(
+                                (acc, curr2) =>
+                                  curr2.toppingId === curr.toppingId
+                                    ? curr2.toppingQuantity
+                                    : acc,
+                                0
+                              )
+                          : acc,
+                      0
+                    )
+                  : checkedToppings.reduce(
+                      (acc, curr) =>
+                        curr.toppingId.slice(0, -2) === item.cItemId
+                          ? acc +
+                            parseInt(curr.toppingPrice) *
+                              item.cToppings.reduce(
+                                (acc, curr2) =>
+                                  curr2.toppingId === curr.toppingId
+                                    ? curr2.toppingQuantity
+                                    : acc,
+                                0
+                              )
+                          : acc,
+                      0
+                    ))}
             </strong>
             &nbsp;ر.ق
           </span>
