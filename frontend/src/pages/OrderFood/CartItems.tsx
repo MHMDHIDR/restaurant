@@ -119,7 +119,6 @@ const Items = ({
                 <h2 className='text-center ltr'>كمية الإضافات</h2>
                 {item?.cToppings.map((topping: any, idx: number) => {
                   const toppingId = item.cItemId + idx
-                  const newOrderItemsQuantity = topping.toppingQuantity
 
                   return (
                     <div key={toppingId} className='flex gap-1 select-none'>
@@ -128,7 +127,10 @@ const Items = ({
                         onClick={() => {
                           if (orderToppings) {
                             orderItems.map(item => {
-                              if (item.cItemId === toppingId.slice(0, -1)) {
+                              if (
+                                topping.toppingQuantity < MAX_QUANTITY &&
+                                item.cItemId === toppingId.slice(0, -1)
+                              ) {
                                 topping.toppingQuantity++
                                 setOrderItemQuantity(topping.toppingQuantity)
                               }
@@ -149,14 +151,17 @@ const Items = ({
                         +
                       </button>
                       <span className='text-lg font-bold quantity-btn'>
-                        {orderToppings ? newOrderItemsQuantity : topping.toppingQuantity}
+                        {topping.toppingQuantity}
                       </span>
                       <button
                         className='quantity-btn number-hover'
                         onClick={() => {
                           if (orderToppings) {
                             orderItems.map((item: any) => {
-                              if (item.cItemId === toppingId.slice(0, -1)) {
+                              if (
+                                topping.toppingQuantity > 1 &&
+                                item.cItemId === toppingId.slice(0, -1)
+                              ) {
                                 topping.toppingQuantity--
                                 setOrderItemQuantity(topping.toppingQuantity)
                               }
@@ -347,7 +352,11 @@ const Items = ({
             className={`relative rtl m-2 min-w-[7.5rem] text-white py-1.5 px-6 rounded-lg bg-red-800 hover:bg-red-700 xl:col-start-3 xl:col-end-5`}
             onClick={() => {
               if (
-                window.confirm(`هل أنت متأكد من حذف (${item.cHeading}) من سلة الطلبات؟`)
+                window.confirm(
+                  `هل أنت متأكد من حذف (${item.cHeading}) من ${
+                    orderItems ? 'الطلب' : 'سلة الطلبات'
+                  }؟`
+                )
               ) {
                 removeFromCart(item.cItemId)
               }
@@ -357,7 +366,9 @@ const Items = ({
               ❌
             </span>
             &nbsp;&nbsp;
-            <span className='mr-4 text-sm pointer-events-none'>إحذف من السلة</span>
+            <span className='mr-4 text-sm pointer-events-none'>
+              {orderItems ? 'حذف الطلب' : 'إحذف من السلة'}
+            </span>
           </button>
         </div>
         <Divider />
