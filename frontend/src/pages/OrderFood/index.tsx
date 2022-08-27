@@ -20,6 +20,7 @@ import { LoadingSpinner } from '../../components/Loading'
 import CartItems from './CartItems'
 import PaymentButton from './PaymentButton'
 import { selectedToppingsProps } from '../../types'
+import NoItems from '../../components/NoItems'
 
 const formDataFromLocalStorage =
   'formDataCart' in localStorage && JSON.parse(localStorage.getItem('formDataCart'))
@@ -366,27 +367,12 @@ const OrderFood = () => {
               </form>
             </>
           ) : (
-            <div className='flex flex-col items-center justify-center gap-6 my-10'>
-              <p className='max-w-lg my-2 text-lg font-bold leading-10 tracking-wider text-red-500'>
-                عفواً! لم يتم العثور على وجبات أو مشروبات في سلة
-                الطلبات&nbsp;&nbsp;😥&nbsp;يمكنك تصفح المطعم وإضافة وجبات أو مشروبات جديدة
-                إلى سلة الطلبات
-              </p>
-              <div className='flex gap-3'>
-                <Link
-                  to='/view'
-                  className='px-3 py-1 text-orange-800 transition-colors bg-orange-100 border border-orange-700 rounded hover:bg-orange-200'
-                >
-                  تصفح الوجبات
-                </Link>
-                <Link
-                  to='/categories'
-                  className='px-3 py-1 text-orange-800 transition-colors bg-orange-100 border border-orange-700 rounded hover:bg-orange-200'
-                >
-                  تصفح التصنيفات
-                </Link>
-              </div>
-            </div>
+            <NoItems
+              links={[
+                { to: `../view`, label: 'تصفح الوجبات' },
+                { to: `../categories`, label: 'تصفح التصنيفات' }
+              ]}
+            />
           )}
         </div>
       </section>

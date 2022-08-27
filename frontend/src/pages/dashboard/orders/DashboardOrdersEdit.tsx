@@ -1,5 +1,5 @@
 import { useContext, useState, useRef, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import Axios from 'axios'
 
 import { ToppingsContext } from '../../../Contexts/ToppingsContext'
@@ -19,6 +19,7 @@ import useAxios from '../../../hooks/useAxios'
 import { selectedToppingsProps } from '../../../types'
 import goTo from '../../../utils/goTo'
 import abstractText from '../../../utils/abstractText'
+import NoItems from '../../../components/NoItems'
 
 const DashboardOrdersEdit = () => {
   const { orderItemToppings, setOrderItemToppings } = useContext(ToppingsContext)
@@ -68,7 +69,6 @@ const DashboardOrdersEdit = () => {
 
   useEffect(() => {
     setOrderItemsGrandPrice(grandPriceRef?.current?.textContent || orderItemsGrandPrice)
-    console.log('rerended')
   }, [grandPriceRef?.current?.textContent, orderItemsGrandPrice])
 
   const handleCollectOrder = async (e: { preventDefault: () => void }) => {
@@ -153,10 +153,20 @@ const DashboardOrdersEdit = () => {
               تعديل تفاصيل طلب ({abstractText(ordersData.personName, 40)})
             </h2>
 
-            <CartItems
-              orderItems={ordersData?.orderItems}
-              orderToppings={orderItemToppings}
-            />
+            {ordersData.orderItems.length > 0 ? (
+              <CartItems
+                orderItems={ordersData?.orderItems}
+                orderToppings={orderItemToppings}
+              />
+            ) : (
+              <NoItems
+                msg={`عفواً! لم يتم العثور على وجبات أو مشروبات في الطلبات الخاصة بـ ${ordersData.personName} 😥 يمكنك العودة لصفحة الطلبات وحذف الطلب، أو الرجوع للوحة التحكم`}
+                links={[
+                  { to: `orders`, label: 'تصفح الطلبات' },
+                  { to: `dashboard`, label: 'لوحة التحكم' }
+                ]}
+              />
+            )}
 
             <p className='text-center text-green-700 dark:text-green-400 text-xl font-bold my-10 select-none'>
               لا تنسى الضغط على زر تحديث أسفل الصفحة لتحديث بيانات الطلب
@@ -276,8 +286,9 @@ const DashboardOrdersEdit = () => {
               <span className='inline-block px-3 py-1 my-4 text-xl text-green-800 bg-green-300 border border-green-800 rounded-md select-none'>
                 السعر الاجمالي:&nbsp;
                 <strong ref={grandPriceRef}>
-                  {ordersData?.orderItems?.map(
-                    (item: any) =>
+                  {ordersData?.orderItems?.reduce(
+                    (acc, item: any) =>
+                      acc +
                       item.cPrice * item.cQuantity +
                       orderItemToppings?.reduce(
                         (acc: number, curr: selectedToppingsProps) =>
@@ -293,7 +304,8 @@ const DashboardOrdersEdit = () => {
                                 )
                             : acc,
                         0
-                      )
+                      ),
+                    0
                   )}
                 </strong>
                 &nbsp; ر.ق

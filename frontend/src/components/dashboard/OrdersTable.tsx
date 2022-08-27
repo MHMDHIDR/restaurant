@@ -21,6 +21,8 @@ import Divider from '../Divider'
 import NavMenu from '../NavMenu'
 import { AcceptBtn, DeleteBtn, EditBtn, RejectBtn } from './OrdersTableActions'
 
+import { cardProps } from '../../types'
+
 const OrdersTable = ({ ordersByUserEmail = false }) => {
   useEffect(() => {
     scrollToView()
@@ -272,65 +274,74 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
                           </span>
 
                           <div className='max-h-screen overflow-hidden transition-all duration-300 ordered-items'>
-                            {order?.orderItems?.map((item, idx) => (
-                              <div key={item.cItemId}>
-                                <div className='flex flex-col gap-4'>
-                                  <div className='flex flex-col items-start gap-2'>
-                                    <div className='flex items-center w-full gap-4'>
-                                      <img
-                                        loading='lazy'
-                                        src={item.cImg[0].foodImgDisplayPath}
-                                        alt={item.cHeading}
-                                        width='50'
-                                        height='50'
-                                        className='object-cover rounded-lg shadow-md w-14 h-14'
-                                      />
-                                      <div className='flex flex-col items-start'>
-                                        <span>اسم الطلب: {item.cHeading}</span>
-                                        <span>الكمية: {item.cQuantity}</span>
+                            {order?.orderItems.length === 0 ? (
+                              <p className='max-w-lg my-2 text-lg font-bold leading-10 tracking-wider text-red-500'>
+                                عفواً! لا يوجد تفاصيل خاصة بهذا الطلب
+                              </p>
+                            ) : (
+                              order?.orderItems?.map((item: cardProps, idx: number) => (
+                                <div key={item.cItemId}>
+                                  <div className='flex flex-col gap-4'>
+                                    <div className='flex flex-col items-start gap-2'>
+                                      <div className='flex items-center w-full gap-4'>
+                                        <img
+                                          loading='lazy'
+                                          src={item.cImg[0].foodImgDisplayPath}
+                                          alt={item.cHeading}
+                                          width='50'
+                                          height='50'
+                                          className='object-cover rounded-lg shadow-md w-14 h-14'
+                                        />
+                                        <div className='flex flex-col items-start'>
+                                          <span>اسم الطلب: {item.cHeading}</span>
+                                          <span>الكمية: {item.cQuantity}</span>
+                                        </div>
                                       </div>
-                                    </div>
 
-                                    <span className='inline-block px-2 py-2 text-green-800 bg-green-300 rounded-xl bg-opacity-80'>
-                                      السعر على حسب الكميات: &nbsp;
-                                      <strong>{item.cPrice * item.cQuantity}</strong> ر.ق
-                                    </span>
+                                      <span className='inline-block px-2 py-2 text-green-800 bg-green-300 rounded-xl bg-opacity-80'>
+                                        السعر على حسب الكميات: &nbsp;
+                                        <strong>
+                                          {item.cPrice * item.cQuantity}
+                                        </strong>{' '}
+                                        ر.ق
+                                      </span>
+                                    </div>
+                                    <div className='flex flex-col gap-6'>
+                                      {inSeletedToppings
+                                        .map(id => id.slice(0, -2))
+                                        ?.includes(item.cItemId) && <h3>الاضافات</h3>}
+                                      {item?.cToppings?.map(
+                                        ({
+                                          toppingId,
+                                          toppingName,
+                                          toppingPrice,
+                                          toppingQuantity
+                                        }) =>
+                                          inSeletedToppings[idx]?.includes(toppingId) && (
+                                            <div key={toppingId} className='flex gap-4'>
+                                              <span className='px-2 text-orange-900 bg-orange-200 rounded-lg'>
+                                                ✅ &nbsp; {toppingName}
+                                              </span>
+                                              <span className='px-2 text-orange-900 bg-orange-200 rounded-lg'>
+                                                سعر الوحدة {toppingPrice}
+                                              </span>
+                                              <span className='px-2 text-orange-900 bg-orange-200 rounded-lg'>
+                                                الكمية المطلوبة {toppingQuantity}
+                                              </span>
+                                              <span className='px-2 text-green-900 bg-green-200 rounded-lg'>
+                                                السعر حسب الكمية:{' '}
+                                                {toppingPrice * toppingQuantity} ر.ق
+                                              </span>
+                                              <hr />
+                                            </div>
+                                          )
+                                      )}
+                                    </div>
                                   </div>
-                                  <div className='flex flex-col gap-6'>
-                                    {inSeletedToppings
-                                      .map(id => id.slice(0, -2))
-                                      ?.includes(item.cItemId) && <h3>الاضافات</h3>}
-                                    {item?.cToppings?.map(
-                                      ({
-                                        toppingId,
-                                        toppingName,
-                                        toppingPrice,
-                                        toppingQuantity
-                                      }) =>
-                                        inSeletedToppings[idx]?.includes(toppingId) && (
-                                          <div key={toppingId} className='flex gap-4'>
-                                            <span className='px-2 text-orange-900 bg-orange-200 rounded-lg'>
-                                              ✅ &nbsp; {toppingName}
-                                            </span>
-                                            <span className='px-2 text-orange-900 bg-orange-200 rounded-lg'>
-                                              سعر الوحدة {toppingPrice}
-                                            </span>
-                                            <span className='px-2 text-orange-900 bg-orange-200 rounded-lg'>
-                                              الكمية المطلوبة {toppingQuantity}
-                                            </span>
-                                            <span className='px-2 text-green-900 bg-green-200 rounded-lg'>
-                                              السعر حسب الكمية:{' '}
-                                              {toppingPrice * toppingQuantity} ر.ق
-                                            </span>
-                                            <hr />
-                                          </div>
-                                        )
-                                    )}
-                                  </div>
+                                  <Divider marginY={2} thickness={0.5} />
                                 </div>
-                                <Divider marginY={2} thickness={0.5} />
-                              </div>
-                            ))}
+                              ))
+                            )}
                           </div>
                         </td>
                         <td className='px-1 py-2'>

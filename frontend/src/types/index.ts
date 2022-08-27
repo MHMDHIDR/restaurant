@@ -96,6 +96,7 @@ export interface cardProps {
   cImg?: any
   cImgAlt?: string
   cPrice: number
+  cQuantity: number
 }
 
 export type responseTypes = {
@@ -241,4 +242,12 @@ export interface selectedToppingsProps {
   toppingId: string
   toppingQuantity: number
   toppingPrice: number
+}
+
+export interface NoItemsProps {
+  msg?: string
+  links: {
+    to: string
+    label: string
+  }[]
 }
