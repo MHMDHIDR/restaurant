@@ -81,8 +81,8 @@ const OrderFood = () => {
   }, [personName, personPhone, personAddress, personNotes])
 
   useEffect(() => {
-    setGrandPrice(parseInt(grandPriceRef?.current?.textContent) || grandPrice)
-  }, [parseInt(grandPriceRef?.current?.textContent), grandPrice])
+    setGrandPrice(grandPriceRef?.current?.textContent || grandPrice)
+  }, [grandPriceRef?.current?.textContent, grandPrice])
 
   const handleCollectOrder = async (e: { preventDefault: () => void }) => {
     e.preventDefault()

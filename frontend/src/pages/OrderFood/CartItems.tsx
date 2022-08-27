@@ -1,29 +1,39 @@
 import { useContext, useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
+
 import { CartContext } from '../../Contexts/CartContext'
 import { ToppingsContext } from '../../Contexts/ToppingsContext'
+import { DashboardOrderContext } from '../../Contexts/DashboardOrderContext'
 
 import { removeSlug } from '../../utils/slug'
 
 import Divider from '../../components/Divider'
-import { selectedToppingsProps } from '../../types'
+import { selectedToppingsProps, UserProps } from '../../types'
 
 const CartItems: any = ({ orderItems, orderToppings }) => {
   const { items } = useContext(CartContext)
+  const isDashboard = useLocation().pathname.includes('/dashboard')
 
   //if orderItems defined in dashboard
-  return orderItems?.length > 0 ? (
-    <Items orderItems={orderItems} orderToppings={orderToppings} />
-  ) : (
-    <Items orderItems={items} />
-  )
+  return isDashboard ? (
+    <Items
+      orderItems={orderItems}
+      orderToppings={orderToppings}
+      isDashboard={isDashboard}
+    />
+  ) : !isDashboard ? (
+    <Items orderItems={items} isDashboard={isDashboard} />
+  ) : null
 }
 
 const Items = ({
   orderItems,
-  orderToppings
+  orderToppings,
+  isDashboard
 }: {
   orderItems: any
   orderToppings?: any
+  isDashboard: boolean
 }) => {
   const {
     handleToppingChecked,
@@ -35,6 +45,7 @@ const Items = ({
   useEffect(() => setOrderItemToppings(orderToppings), [])
 
   const { items, setItems, removeFromCart, setGrandPrice } = useContext(CartContext)
+  const { removeOrderFromItems } = useContext(DashboardOrderContext)
   const [orderItemQuantity, setOrderItemQuantity] = useState(0)
 
   const MAX_QUANTITY = 100
@@ -367,11 +378,13 @@ const Items = ({
               if (
                 window.confirm(
                   `هل أنت متأكد من حذف (${item.cHeading}) من ${
-                    orderItems ? 'الطلب' : 'سلة الطلبات'
+                    isDashboard ? 'الطلب' : 'سلة الطلبات'
                   }؟`
                 )
               ) {
-                removeFromCart(item.cItemId)
+                isDashboard
+                  ? removeOrderFromItems(item.cItemId)
+                  : removeFromCart(item.cItemId)
               }
             }}
           >
@@ -380,7 +393,7 @@ const Items = ({
             </span>
             &nbsp;&nbsp;
             <span className='mr-4 text-sm pointer-events-none'>
-              {orderItems ? 'حذف الطلب' : 'إحذف من السلة'}
+              {isDashboard ? 'حذف الطلب' : 'إحذف من السلة'}
             </span>
           </button>
         </div>

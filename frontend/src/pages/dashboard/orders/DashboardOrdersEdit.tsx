@@ -1,9 +1,10 @@
-import { useParams } from 'react-router-dom'
 import { useContext, useState, useRef, useEffect } from 'react'
+import { useParams } from 'react-router-dom'
 import Axios from 'axios'
 
 import { CartContext } from '../../../Contexts/CartContext'
 import { ToppingsContext } from '../../../Contexts/ToppingsContext'
+import { DashboardOrderContext } from '../../../Contexts/DashboardOrderContext'
 
 import useDocumentTitle from '../../../hooks/useDocumentTitle'
 
@@ -13,18 +14,23 @@ import scrollToView from '../../../utils/scrollToView'
 import { API_URL } from '../../../data/constants'
 
 import Modal from '../../../components/Modal/Modal'
-import { Success } from '../../../components/Icons/Status'
+import { Success, Error, Loading } from '../../../components/Icons/Status'
 import { LoadingCard, LoadingSpinner } from '../../../components/Loading'
 import CartItems from '../../OrderFood/CartItems'
 import useAxios from '../../../hooks/useAxios'
-import { orderProps, selectedToppingsProps } from '../../../types'
+import { selectedToppingsProps } from '../../../types'
+import goTo from '../../../utils/goTo'
+import abstractText from '../../../utils/abstractText'
 
 const DashboardOrdersEdit = () => {
-  const [ordersData, setOrdersData] = useState<orderProps>(null)
+  const { orderItemToppings, setOrderItemToppings } = useContext(ToppingsContext)
+  const { ordersData, setOrdersData, orderItemsGrandPrice, setOrderItemsGrandPrice } =
+    useContext(DashboardOrderContext)
 
   useDocumentTitle(
     `${
-      (ordersData && 'Edit (' + ordersData?.personName + ') Order Details') ||
+      (ordersData &&
+        'Edit (' + abstractText(ordersData.personName, 20) + ') Order Details') ||
       'Edit Order Details'
     } `
   )
@@ -33,24 +39,26 @@ const DashboardOrdersEdit = () => {
     scrollToView()
   }, [])
 
-  const USER = JSON.parse(localStorage.getItem('user'))
+  useEffect(() => {
+    setOrdersData({})
+    setOrderItemsGrandPrice(grandPriceRef?.current?.textContent || orderItemsGrandPrice)
+  }, [])
 
-  const { orderItemToppings, setOrderItemToppings } = useContext(ToppingsContext)
-  const { orderItemsGrandPrice, setOrderItemsGrandPrice } = useContext(CartContext)
+  const USER = JSON.parse(localStorage.getItem('user'))
 
   //global variables
   const MAX_CHARACTERS = 100
+  const ORDER_ID = useParams().orderId
 
   //Form States
-  const [userId, setUserId] = useState('')
-  const [userEmail, setUserEmail] = useState('')
-  const [personName, setPersonName] = useState('')
-  const [personPhone, setPersonPhone] = useState('')
-  const [personAddress, setPersonAddress] = useState('')
-  const [personNotes, setPersonNotes] = useState('')
-  const [orderFoodStatus, setOrderFoodStatus] = useState(0)
-  const [responseMsg, setResponseMsg] = useState('')
+  const [personName, setPersonName] = useState(ordersData?.personName)
+  const [personPhone, setPersonPhone] = useState(ordersData?.personPhone)
+  const [personAddress, setPersonAddress] = useState(ordersData?.personAddress)
+  const [personNotes, setPersonNotes] = useState(ordersData?.personNotes)
+  const [orderUpdated, setOrderUpdated] = useState()
   const [isLoading, setIsLoading] = useState(false)
+
+  const modalLoading = document.querySelector('#modal')
 
   //Declaring Referenced Element
   const personNameErr = useRef<HTMLSpanElement>(null)
@@ -60,7 +68,7 @@ const DashboardOrdersEdit = () => {
   const grandPriceRef = useRef<HTMLElement>(null)
 
   const { ...response } = useAxios({
-    url: `/orders/1/1/${useParams().orderId}`,
+    url: `/orders/1/1/${ORDER_ID}`,
     headers: USER ? JSON.stringify({ Authorization: `Bearer ${USER.token}` }) : null
   })
 
@@ -68,16 +76,8 @@ const DashboardOrdersEdit = () => {
     if (response.response !== null) {
       setOrdersData(response.response.response)
       setOrderItemToppings(response.response.response?.orderToppings)
-      setUserId(response.response.response?.userId)
-      setUserEmail(response.response.response?.userEmail)
     }
   }, [response.response])
-
-  useEffect(() => {
-    setOrderItemsGrandPrice(
-      parseInt(grandPriceRef?.current?.textContent) || orderItemsGrandPrice
-    )
-  }, [grandPriceRef?.current?.textContent, orderItemsGrandPrice])
 
   const handleCollectOrder = async (e: { preventDefault: () => void }) => {
     e.preventDefault()
@@ -89,6 +89,8 @@ const DashboardOrdersEdit = () => {
       personPhoneErr.current.textContent === '' &&
       personAddressErr.current.textContent === ''
     ) {
+      //show modal
+      modalLoading?.classList.remove('hidden')
       handleSaveOrder()
       formErr.current.textContent = ''
     } else {
@@ -99,53 +101,75 @@ const DashboardOrdersEdit = () => {
   const handleSaveOrder = async () => {
     //using FormData to send constructed data
     const formData = new FormData()
-    formData.append('userId', userId)
-    formData.append('userEmail', userEmail)
-    formData.append('personName', personName)
-    formData.append('personPhone', personPhone)
-    formData.append('personAddress', personAddress)
-    formData.append('personNotes', personNotes)
+    formData.append('personName', personName || ordersData?.personName)
+    formData.append('personPhone', personPhone || ordersData?.personPhone)
+    formData.append('personAddress', personAddress || ordersData?.personAddress)
+    formData.append('personNotes', personNotes || ordersData?.personNotes)
     formData.append('checkedToppings', JSON.stringify(orderItemToppings))
     formData.append('foodItems', JSON.stringify(ordersData?.orderItems))
     formData.append('grandPrice', grandPriceRef?.current?.textContent)
 
     try {
-      const response = await Axios.post(`${API_URL}/orders`, formData)
-      const { orderAdded, message } = response.data
-      setIsLoading(false)
+      setIsLoading(true)
+      const response = await Axios.patch(`${API_URL}/orders/${ORDER_ID}`, formData)
+      const { OrderStatusUpdated } = response.data
 
-      setOrderFoodStatus(orderAdded)
-      setResponseMsg(message)
+      setOrderUpdated(OrderStatusUpdated)
+      //Remove waiting modal
+      setTimeout(() => {
+        modalLoading?.classList.add('hidden')
+      }, 300)
     } catch (err) {
       console.error(err)
+    } finally {
+      setIsLoading(false)
     }
   }
 
   return (
     <>
       <section id='orderFood' className='py-12 my-8'>
-        {orderFoodStatus === 1 && (
+        {isLoading ? (
+          <Modal
+            status={Loading}
+            classes='txt-blue text-center'
+            msg={`جار تحديث حالة الطلب...`}
+          />
+        ) : orderUpdated === 1 ? (
           <Modal
             status={Success}
-            msg={responseMsg}
-            btnName='قائمة الوجبات'
-            btnLink='/view'
-            redirectLink='/view'
-            redirectTime={10000}
+            msg={`تم تحديث بيانات الطلب بنجاح`}
+            btnName='قائمة الطلبات'
+            btnLink={goTo(`orders`)}
+            // redirectLink={goTo(`orders`)}
+            // redirectTime={10000}
           />
+        ) : (
+          orderUpdated === 0 && (
+            <Modal
+              status={Error}
+              msg={`عفواً! خطأ ما!`}
+              // redirectLink={goTo(`orders`)}
+              // redirectTime={4000}
+            />
+          )
         )}
 
         <div className='container mx-auto text-center'>
           {ordersData ? (
             <>
               <h2 className='inline-block mb-20 text-3xl font-bold'>
-                تعديل تفاصيل طلب ({ordersData.personName})
+                تعديل تفاصيل طلب ({abstractText(ordersData.personName, 40)})
               </h2>
 
               <CartItems
                 orderItems={ordersData?.orderItems}
                 orderToppings={orderItemToppings}
               />
+
+              <p className='text-center text-green-700 dark:text-green-400 text-xl font-bold my-10 select-none'>
+                لا تنسى الضغط على زر تحديث أسفل الصفحة لتحديث بيانات الطلب
+              </p>
 
               <form method='POST' onSubmit={handleCollectOrder}>
                 <label htmlFor='name' className={`form__group`}>
@@ -262,7 +286,7 @@ const DashboardOrdersEdit = () => {
                 <span className='inline-block px-3 py-1 my-4 text-xl text-green-800 bg-green-300 border border-green-800 rounded-md select-none'>
                   السعر الاجمالي:&nbsp;
                   <strong ref={grandPriceRef}>
-                    {ordersData?.orderItems.reduce(
+                    {ordersData?.orderItems?.reduce(
                       (acc, item) =>
                         acc +
                         item.cPrice * item.cQuantity +
@@ -296,10 +320,10 @@ const DashboardOrdersEdit = () => {
                     {isLoading && isLoading ? (
                       <>
                         <LoadingSpinner />
-                        جارِ تأكيد بيانات الطلب...
+                        جارِ تحديث بيانات الطلب...
                       </>
                     ) : (
-                      'تأكيد البيانات'
+                      'تحديث البيانات'
                     )}
                   </button>
                 </div>

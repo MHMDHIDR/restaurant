@@ -59,7 +59,17 @@ export const addOrder = asyncHandler(async (req, res) => {
 //this route for accepting or rejcting an order from dashboard
 export const updateOrder = asyncHandler(async (req, res) => {
   const _id = req.params.orderId
-  const { orderStatus, orderEmail } = req.body
+  const { orderEmail } = req.body
+  const {
+    personName,
+    personPhone,
+    personAddress,
+    personNotes,
+    foodItems,
+    checkedToppings,
+    grandPrice,
+    orderStatus
+  } = req.body
 
   //if not valid _id then return error message
   if (!mongoose.Types.ObjectId.isValid(_id)) {
@@ -68,13 +78,22 @@ export const updateOrder = asyncHandler(async (req, res) => {
 
   //else update the order status
   try {
-    const orderUpdated = await OrdersModel.findByIdAndUpdate(
-      _id,
-      {
-        orderStatus
-      },
-      { new: true }
-    )
+    const orderUpdated = personName
+      ? await OrdersModel.findByIdAndUpdate(
+          //update all order data
+          _id,
+          {
+            personName,
+            personPhone,
+            personAddress,
+            personNotes,
+            orderItems: JSON.parse(foodItems),
+            orderToppings: JSON.parse(checkedToppings),
+            grandPrice
+          },
+          { new: true }
+        )
+      : await OrdersModel.findByIdAndUpdate(_id, { orderStatus }, { new: true }) //only update the order status
 
     //if order updated then send email to user
     if (orderUpdated) {

@@ -27,50 +27,54 @@ export interface CartProps {
   removeFromCart: any
   setGrandPrice: any
   grandPrice: number
-  orderItemsGrandPrice: number
-  setOrderItemsGrandPrice: any
 }
 
 export interface orderProps {
-  grandPrice: number
-  orderDate: string
-  orderId: string
-  orderItems: {
-    cDesc: string
-    cHeading: string
-    cImg: {
-      foodImgDisplayName: string
-      foodImgDisplayPath: string
+  ordersData: {
+    grandPrice: number
+    orderDate: string
+    orderId: string
+    orderItems: {
+      cDesc: string
+      cHeading: string
+      cImg: {
+        foodImgDisplayName: string
+        foodImgDisplayPath: string
+      }[]
+      cItemId: string
+      cPrice: number
+      cQuantity: number
+      cToppings: {
+        toppingId: string
+        toppingPrice: number
+      }[]
     }[]
-    cItemId: string
-    cPrice: number
-    cQuantity: number
-    cToppings: {
+    orderStatus: string
+    orderToppings: {
       toppingId: string
       toppingPrice: number
     }[]
-  }[]
-  orderStatus: string
-  orderToppings: {
-    toppingId: string
-    toppingPrice: number
-  }[]
-  paymentData: {
-    accelerated: boolean
-    billingToken?: string
-    facilitatorAccessToken: string
-    orderID: string
-    payerID: string
-    paymentID: string
-    paymentSource: string
+    paymentData: {
+      accelerated: boolean
+      billingToken?: string
+      facilitatorAccessToken: string
+      orderID: string
+      payerID: string
+      paymentID: string
+      paymentSource: string
+    }
+    personAddress: string
+    personName: string
+    personNotes: string
+    personPhone: string
+    userEmail: string
+    userId: string
+    _id: string
   }
-  personAddress: string
-  personName: string
-  personNotes: string
-  personPhone: string
-  userEmail: string
-  userId: string
-  _id: string
+  setOrdersData: any
+  removeOrderFromItems: any
+  orderItemsGrandPrice: number
+  setOrderItemsGrandPrice: any
 }
 
 export interface FileUploadProps {

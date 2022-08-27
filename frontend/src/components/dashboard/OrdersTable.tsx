@@ -33,7 +33,7 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
   const pageNumber = !pageNum || pageNum < 1 || isNaN(pageNum) ? 1 : parseInt(pageNum)
   const itemsPerPage = 5
 
-  const [acceptOrderStatus, setAcceptOrderStatus] = useState()
+  const [orderUpdated, setOrderUpdated] = useState()
   const [deleteOrderStatus, setDeleteOrderStatus] = useState()
   const [orderInfo, setOrderInfo] = useState({ id: '', status: '', email: '' })
   const [ordersData, setOrdersData] = useState<any>()
@@ -144,7 +144,7 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
       const response = await Axios.patch(`${API_URL}/orders/${orderInfo.id}`, formData)
       const { OrderStatusUpdated } = response.data
 
-      setAcceptOrderStatus(OrderStatusUpdated)
+      setOrderUpdated(OrderStatusUpdated)
       //Remove waiting modal
       setTimeout(() => {
         modalLoading.classList.add('hidden')
@@ -158,7 +158,7 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
 
   return (
     <>
-      {acceptOrderStatus === 1 || deleteOrderStatus === 1 ? (
+      {orderUpdated === 1 || deleteOrderStatus === 1 ? (
         <Modal
           status={Success}
           classes='text-2xl'
@@ -172,7 +172,7 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
           redirectLink={goTo(redirectPath)}
           redirectTime={4000}
         />
-      ) : acceptOrderStatus === 0 ? (
+      ) : orderUpdated === 0 ? (
         <Modal
           status={Error}
           msg={`عفواً! خطأ ما!`}
@@ -237,9 +237,7 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
             <>
               {/* filter by email ordersByUserEmail === JSON.parse(localStorage.getItem('user')).userEmail */}
               {ordersByUserEmail ? (
-                //show only orders by user email
-
-                //FILTER by email
+                //show only orders by user email ==> FILTER by email
                 ordersData?.response?.filter(
                   (order: { userEmail: any }) => order.userEmail === USER.userEmail
                 ).length > 0 ? ( //means there is at least one order by the current user email
