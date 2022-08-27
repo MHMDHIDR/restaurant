@@ -5,7 +5,7 @@ import Divider from '../Divider'
 
 const InvoicePrint = forwardRef((ordersData, ref) => {
   return (
-    <table className='table w-full text-center border-collapse table-auto' ref={ref}>
+    <table className='table w-full text-center border-collapse table-auto rtl' ref={ref}>
       <thead className='text-white bg-orange-800'>
         <tr>
           <th className='px-1 py-2 min-w-[10rem]'>الإســـــــم</th>
