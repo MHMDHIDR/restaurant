@@ -96,7 +96,7 @@ export interface cardProps {
   cImg?: any
   cImgAlt?: string
   cPrice: number
-  cQuantity: number
+  cQuantity?: number
 }
 
 export type responseTypes = {
