@@ -1,6 +1,5 @@
 import { useRef } from 'react'
 import { Link } from 'react-router-dom'
-import ReactToPrint from 'react-to-print'
 
 export const AcceptBtn = ({ id, email }) => (
   <button
