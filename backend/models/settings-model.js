@@ -12,6 +12,10 @@ const reqArray = {
 const typeString = {
   type: String
 }
+const orderMsg = {
+  Success: typeString,
+  Failure: typeString
+}
 
 const SettingsSchema = new mongoose.Schema(
   {
@@ -24,7 +28,8 @@ const SettingsSchema = new mongoose.Schema(
     instagramAccount: typeString,
     twitterAccount: typeString,
     heroBg: reqArray,
-    CategoryList: reqArray
+    CategoryList: reqArray,
+    orderMsg
   },
   //Collection Name
   { collection: 'restaurant_settings' }

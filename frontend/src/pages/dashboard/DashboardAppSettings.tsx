@@ -11,6 +11,7 @@ import { Success, Error, Loading } from '../../components/Icons/Status'
 import { LoadingSpinner } from '../../components/Loading'
 import ModalNotFound from '../../components/Modal/ModalNotFound'
 import { responseTypes } from '../../types'
+import goTo from '../../utils/goTo'
 
 const About = () => {
   useDocumentTitle('App Settings')
@@ -19,6 +20,8 @@ const About = () => {
   const [appName, setAppName] = useState('')
   const [appDesc, setAppDesc] = useState('')
   const [appTagline, setAppTagline] = useState('')
+  const [orderMsgSuccess, setOrderMsgSuccess] = useState('')
+  const [orderMsgFailure, setOrderMsgFailure] = useState('')
   const [whatsAppNumber, setWhatsAppNumber] = useState('')
   const [instagramAccount, setInstagramAccount] = useState('')
   const [twitterAccount, setTwitterAccount] = useState('')
@@ -56,6 +59,7 @@ const About = () => {
   const appNameErr = useRef<HTMLSpanElement>(null)
   const descErr = useRef<HTMLSpanElement>(null)
   const tagLineErr = useRef<HTMLSpanElement>(null)
+  const orderMsgErr = useRef<HTMLSpanElement>(null)
   const whatsAppNumberErr = useRef<HTMLSpanElement>(null)
   const instagramAccountErr = useRef<HTMLSpanElement>(null)
   const twitterAccountErr = useRef<HTMLSpanElement>(null)
@@ -115,6 +119,8 @@ const About = () => {
     const currentAppName = appName || data?.appName
     const currentAppDesc = appDesc || data?.appDesc
     const currentAppTagline = appTagline || data?.appTagline
+    const currentOrderMsgSuccess = orderMsgSuccess || data?.orderMsg.Success
+    const currentOrderMsgFailure = orderMsgFailure || data?.orderMsg.Failure
     const currentWhatsAppNumber = whatsAppNumber || data?.whatsAppNumber
     const currentInstagramAccount = instagramAccount || data?.instagramAccount
     const currentTwitterAccount = twitterAccount || data?.twitterAccount
@@ -129,6 +135,8 @@ const About = () => {
     formData.append('appName', currentAppName)
     formData.append('appDesc', currentAppDesc)
     formData.append('appTagline', currentAppTagline)
+    formData.append('orderMsgSuccess', currentOrderMsgSuccess)
+    formData.append('orderMsgFailure', currentOrderMsgFailure)
     formData.append('whatsAppNumber', currentWhatsAppNumber)
     formData.append('instagramAccount', currentInstagramAccount)
     formData.append('twitterAccount', currentTwitterAccount)
@@ -175,11 +183,16 @@ const About = () => {
         <Modal
           status={Success}
           msg={settingsUpdatedMsg}
-          redirectLink='./'
+          redirectLink={goTo(`settings`)}
           redirectTime={3500}
         />
       ) : settingsUpdated === 0 ? (
-        <Modal status={Error} msg='حدث خطأ ما أثناء تحديث الإعدادات!' />
+        <Modal
+          status={Error}
+          msg='حدث خطأ ما أثناء تحديث الإعدادات!'
+          redirectLink={goTo(`settings`)}
+          redirectTime={3500}
+        />
       ) : null}
 
       <section className='py-12 my-8 dashboard'>
@@ -301,6 +314,64 @@ const About = () => {
               <span
                 className='inline-block md:text-lg text-red-600 dark:text-red-400 font-[600] pt-2 px-1'
                 ref={tagLineErr}
+              ></span>
+            </label>
+
+            <h3 className='mx-0 mt-4 mb-12 text-lg text-center'>رسالة ما بعد الطلب</h3>
+            <label htmlFor='orderMsg' className='form__group'>
+              <textarea
+                name='orderMsg'
+                id='orderMsg'
+                className='form__input'
+                defaultValue={data && data.orderMsg?.Success}
+                minLength={TAGLINE_MIN_LENGTH}
+                maxLength={TAGLINE_MAX_LENGTH * 3}
+                onChange={e => setOrderMsgSuccess(e.target.value.trim())}
+                onKeyUp={e => {
+                  const target = e.target.value.trim()
+
+                  if (target.length > 0 && target.length < TAGLINE_MIN_LENGTH) {
+                    orderMsgErr.current.textContent = `رسالة ما بعد الطلب قصيرة جداً، يجب أن تتكون الرسالة من يتكون من ${TAGLINE_MIN_LENGTH} حرف على الأقل`
+                  } else if (target.length > TAGLINE_MAX_LENGTH * 3) {
+                    orderMsgErr.current.textContent = `رسالة ما بعد الطلب طويلة جداً! لا يمكن أن تزيد عن ${TAGLINE_MAX_LENGTH} حرف`
+                  } else {
+                    orderMsgErr.current.textContent = ''
+                  }
+                }}
+                required
+              ></textarea>
+              <span className='form__label'>نجاح الطلب</span>
+              <span
+                className='inline-block md:text-lg text-red-600 dark:text-red-400 font-[600] pt-2 px-1'
+                ref={orderMsgErr}
+              ></span>
+            </label>
+            <label htmlFor='orderMsg' className='form__group'>
+              <textarea
+                name='orderMsg'
+                id='orderMsg'
+                className='form__input'
+                defaultValue={data && data.orderMsg?.Failure}
+                minLength={TAGLINE_MIN_LENGTH}
+                maxLength={TAGLINE_MAX_LENGTH * 3}
+                onChange={e => setOrderMsgFailure(e.target.value.trim())}
+                onKeyUp={e => {
+                  const target = e.target.value.trim()
+
+                  if (target.length > 0 && target.length < TAGLINE_MIN_LENGTH) {
+                    orderMsgErr.current.textContent = `رسالة ما بعد الطلب قصيرة جداً، يجب أن تتكون الرسالة من يتكون من ${TAGLINE_MIN_LENGTH} حرف على الأقل`
+                  } else if (target.length > TAGLINE_MAX_LENGTH * 3) {
+                    orderMsgErr.current.textContent = `رسالة ما بعد الطلب طويلة جداً! لا يمكن أن تزيد عن ${TAGLINE_MAX_LENGTH} حرف`
+                  } else {
+                    orderMsgErr.current.textContent = ''
+                  }
+                }}
+                required
+              ></textarea>
+              <span className='form__label'>فشل الطلب</span>
+              <span
+                className='inline-block md:text-lg text-red-600 dark:text-red-400 font-[600] pt-2 px-1'
+                ref={orderMsgErr}
               ></span>
             </label>
 

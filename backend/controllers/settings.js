@@ -16,6 +16,8 @@ export const updateSettings = async (req, res) => {
     appName,
     appDesc,
     appTagline,
+    orderMsgSuccess,
+    orderMsgFailure,
     whatsAppNumber,
     instagramAccount,
     twitterAccount,
@@ -81,6 +83,10 @@ export const updateSettings = async (req, res) => {
             appName,
             appDesc,
             appTagline,
+            orderMsg: {
+              Success: orderMsgSuccess,
+              Failure: orderMsgFailure
+            },
             whatsAppNumber,
             instagramAccount,
             twitterAccount,
@@ -108,6 +114,10 @@ export const updateSettings = async (req, res) => {
         appName,
         appDesc,
         appTagline,
+        orderMsg: {
+          Success: orderMsgSuccess,
+          Failure: orderMsgFailure
+        },
         whatsAppNumber,
         instagramAccount,
         twitterAccount,

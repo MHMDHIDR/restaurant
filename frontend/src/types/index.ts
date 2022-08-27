@@ -99,7 +99,13 @@ export interface cardProps {
   cQuantity?: number
 }
 
-export type responseTypes = {
+export interface orderMsgProps {
+  Success: string
+  Failure: string
+}
+
+export interface responseTypes {
+  orderMsg: orderMsgProps
   orderItems: any
   orderToppings: any
   userAccountType: string

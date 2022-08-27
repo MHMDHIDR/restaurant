@@ -7,7 +7,7 @@ const Modal = ({
   extraComponents,
   status = Loading,
   modalHidden = '',
-  classes = msg.length > 200 ? 'text-justify' : 'text-center',
+  classes = msg.length > 500 ? 'text-justify' : 'text-center',
   redirectLink,
   redirectTime = 2500,
   btnName = '',

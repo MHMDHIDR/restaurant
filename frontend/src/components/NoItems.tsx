@@ -10,8 +10,9 @@ const NoItems = ({ msg, links }: NoItemsProps) => (
         : `عفواً! لم يتم العثور على وجبات أو مشروبات في سلة الطلبات 😥 يمكنك تصفح المطعم وإضافة وجبات أو مشروبات جديدة إلى سلة الطلبات`}
     </p>
     <div className='flex gap-3'>
-      {links?.map((link: { to: string; label: string }) => (
+      {links?.map((link: { to: string; label: string }, idx) => (
         <Link
+          key={idx}
           to={goTo(link.to)}
           className='px-3 py-1 text-orange-800 transition-colors bg-orange-100 border border-orange-700 rounded hover:bg-orange-200'
         >

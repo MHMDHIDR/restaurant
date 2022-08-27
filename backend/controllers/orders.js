@@ -38,21 +38,9 @@ export const addOrder = asyncHandler(async (req, res) => {
     })
 
     await orders.save()
-
-    res.json({
-      message: `
-        شكراً لك على الانتظار، تم طلب الوجبة بنجاح   😄  ✅  سيتم التواصل معك في رقم هاتفك عندما
-        يكون الطلب جاهزاً للتوصيل 📞
-        في هذه الأثناء حاول التجول في باقي المطعم واختر ما يعجبك من قائمة الوجبات    😃
-        جارِ اعادة التحويل...
-      `,
-      orderAdded: 1
-    })
-  } catch (error) {
-    res.json({
-      message: `Sorry! Something went wrong, check the error => 😥: \n ${error}`,
-      orderAdded: 0
-    })
+    res.json({ orderAdded: 1 })
+  } catch ({ message }) {
+    res.json({ message, orderAdded: 0 })
   }
 })
 

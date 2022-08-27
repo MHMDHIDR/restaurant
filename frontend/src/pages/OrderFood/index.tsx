@@ -6,6 +6,7 @@ import { CartContext } from '../../Contexts/CartContext'
 import { ToppingsContext } from '../../Contexts/ToppingsContext'
 
 import useDocumentTitle from '../../hooks/useDocumentTitle'
+import useAxios from '../../hooks/useAxios'
 
 import { validPhone } from '../../utils/validForm'
 import scrollToView from '../../utils/scrollToView'
@@ -19,7 +20,7 @@ import { Success, Loading } from '../../components/Icons/Status'
 import { LoadingSpinner } from '../../components/Loading'
 import CartItems from './CartItems'
 import PaymentButton from './PaymentButton'
-import { selectedToppingsProps } from '../../types'
+import { selectedToppingsProps, orderMsgProps } from '../../types'
 import NoItems from '../../components/NoItems'
 
 const formDataFromLocalStorage =
@@ -54,7 +55,10 @@ const OrderFood = () => {
     formDataFromLocalStorage.personNotes || ''
   )
   const [orderFoodStatus, setOrderFoodStatus] = useState(0)
-  const [responseMsg, setResponseMsg] = useState('')
+  const [responseMsg, setResponseMsg] = useState<orderMsgProps>({
+    Success: '',
+    Failure: ''
+  })
   const [showLoginRegisterModal, setShowLoginRegisterModal] = useState(false)
   const [showPaymentModal, setShowPaymentModal] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -65,6 +69,14 @@ const OrderFood = () => {
   const personAddressErr = useRef<HTMLSpanElement>(null)
   const formErr = useRef<HTMLParagraphElement>(null)
   const grandPriceRef = useRef<HTMLElement>(null)
+
+  const { ...response } = useAxios({ url: '/settings' })
+
+  useEffect(() => {
+    if (response.response !== null) {
+      setResponseMsg(response.response?.orderMsg)
+    }
+  }, [response.response])
 
   useEffect(() => {
     setUserId(JSON.parse(localStorage.getItem('user'))?._id)
@@ -129,7 +141,10 @@ const OrderFood = () => {
       setIsLoading(false)
 
       setOrderFoodStatus(orderAdded)
-      setResponseMsg(message)
+      orderAdded === 0 &&
+        setResponseMsg(msg => {
+          return { ...msg, Failure: msg.Failure + message }
+        })
 
       //remove all items from cart
       if (orderAdded) {
@@ -149,7 +164,7 @@ const OrderFood = () => {
         {orderFoodStatus === 1 ? (
           <Modal
             status={Success}
-            msg={responseMsg}
+            msg={responseMsg.Success}
             btnName='قائمة الوجبات'
             btnLink='/view'
             redirectLink='/view'
