@@ -2,14 +2,12 @@ import { useContext, useState, useRef, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import Axios from 'axios'
 
-import { CartContext } from '../../../Contexts/CartContext'
 import { ToppingsContext } from '../../../Contexts/ToppingsContext'
 import { DashboardOrderContext } from '../../../Contexts/DashboardOrderContext'
 
 import useDocumentTitle from '../../../hooks/useDocumentTitle'
 
 import { validPhone } from '../../../utils/validForm'
-import scrollToView from '../../../utils/scrollToView'
 
 import { API_URL } from '../../../data/constants'
 
@@ -26,20 +24,6 @@ const DashboardOrdersEdit = () => {
   const { orderItemToppings, setOrderItemToppings } = useContext(ToppingsContext)
   const { ordersData, setOrdersData, orderItemsGrandPrice, setOrderItemsGrandPrice } =
     useContext(DashboardOrderContext)
-
-  useDocumentTitle(
-    ordersData
-      ? `تعديل تفاصيل طلب ${abstractText(ordersData.personName, 20)}`
-      : 'تعديل تفاصيل الطلب'
-  )
-
-  useEffect(() => {
-    scrollToView()
-  }, [])
-
-  useEffect(() => {
-    setOrderItemsGrandPrice(grandPriceRef?.current?.textContent || orderItemsGrandPrice)
-  }, [])
 
   const USER = JSON.parse(localStorage.getItem('user'))
 
@@ -64,6 +48,12 @@ const DashboardOrdersEdit = () => {
   const formErr = useRef<HTMLParagraphElement>(null)
   const grandPriceRef = useRef<HTMLElement>(null)
 
+  useDocumentTitle(
+    ordersData
+      ? `تعديل تفاصيل طلب ${abstractText(ordersData.personName, 20)}`
+      : 'تعديل تفاصيل الطلب'
+  )
+
   const { ...response } = useAxios({
     url: `/orders/1/1/${ORDER_ID}`,
     headers: USER ? JSON.stringify({ Authorization: `Bearer ${USER.token}` }) : null
@@ -75,6 +65,11 @@ const DashboardOrdersEdit = () => {
       setOrderItemToppings(response.response.response?.orderToppings)
     }
   }, [response.response])
+
+  useEffect(() => {
+    setOrderItemsGrandPrice(grandPriceRef?.current?.textContent || orderItemsGrandPrice)
+    console.log('rerended')
+  }, [grandPriceRef?.current?.textContent, orderItemsGrandPrice])
 
   const handleCollectOrder = async (e: { preventDefault: () => void }) => {
     e.preventDefault()
@@ -137,16 +132,16 @@ const DashboardOrdersEdit = () => {
           msg={`تم تحديث بيانات الطلب بنجاح`}
           btnName='قائمة الطلبات'
           btnLink={goTo(`orders`)}
-          // redirectLink={goTo(`orders`)}
-          // redirectTime={10000}
+          redirectLink={goTo(`orders`)}
+          redirectTime={10000}
         />
       ) : (
         orderUpdated === 0 && (
           <Modal
             status={Error}
             msg={`عفواً! خطأ ما!`}
-            // redirectLink={goTo(`orders`)}
-            // redirectTime={4000}
+            redirectLink={goTo(`orders`)}
+            redirectTime={4000}
           />
         )
       )}
@@ -284,7 +279,7 @@ const DashboardOrdersEdit = () => {
                   {ordersData?.orderItems?.map(
                     (item: any) =>
                       item.cPrice * item.cQuantity +
-                      orderItemToppings.reduce(
+                      orderItemToppings?.reduce(
                         (acc: number, curr: selectedToppingsProps) =>
                           curr.toppingId.slice(0, -2) === item.cItemId
                             ? acc +

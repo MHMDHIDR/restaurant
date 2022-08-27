@@ -19,7 +19,6 @@ const DashboardOrderContextProvider = ({ children }: { children: React.ReactNode
         )
       }
     })
-    // console.log(ordersData)
     setOrderItemToppings(
       orderItemToppings.filter(
         (topping: { toppingId: string }) => topping.toppingId.slice(0, -2) !== cItemId
