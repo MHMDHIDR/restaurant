@@ -37,7 +37,7 @@ const MyOrders = () => {
     <>
       <Header />
       <section className='container py-12 mx-auto my-8 xl:max-w-full'>
-        <div className='overflow-x-auto 2xl:flex 2xl:flex-col 2xl:items-center 2xl:w-full'>
+        <div className='overflow-x-auto h-screen 2xl:flex 2xl:flex-col 2xl:items-center 2xl:w-full'>
           <h3 className='mx-0 mt-4 mb-12 text-2xl text-center md:text-3xl'>طلباتي</h3>
           <OrdersTable ordersByUserEmail={true} />
         </div>
