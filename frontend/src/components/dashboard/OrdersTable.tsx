@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react'
-import useAxios from '../../hooks/useAxios'
+import { useState, useEffect /*, useCallback, useRef */ } from 'react'
 import { Link, useParams, useLocation } from 'react-router-dom'
 import Axios from 'axios'
+// import { useReactToPrint } from 'react-to-print'
 
 import useEventListener from '../../hooks/useEventListener'
+import useAxios from '../../hooks/useAxios'
 
 import goTo from '../../utils/goTo'
 import { toggleCSSclasses } from '../../utils/toggleCSSclasses'
@@ -28,6 +29,7 @@ import {
 } from './OrdersTableActions'
 
 import { cardProps } from '../../types'
+// import Invoice from './Invoice'
 
 const OrdersTable = ({ ordersByUserEmail = false }) => {
   useEffect(() => {
@@ -87,12 +89,13 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
       e.target.id === 'acceptOrder' ||
       e.target.id === 'rejectOrder' ||
       e.target.id === 'editOrder' ||
+      e.target.id === 'print' ||
       e.target.id === 'deleteOrder'
     ) {
       setOrderInfo({
-        id: e.target.dataset.id,
-        status: e.target.dataset.status,
-        email: e.target.dataset.email
+        id: e?.target?.dataset?.id,
+        status: e?.target?.dataset?.status,
+        email: e?.target?.dataset?.email
       })
       //show modal
       modalLoading.classList.remove('hidden')
@@ -102,7 +105,11 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
       modalLoading.classList.add('hidden')
     } else if (e.target.id === 'confirm') {
       handleOrder(orderInfo)
+      // orderInfo.status === 'print'
+      //   ? console.log(`printing ${orderInfo.id} ...`)
+      //   : handleOrder(orderInfo)
     } else if (e.target.dataset.orderContentArrow) {
+      //showing and hiding order details
       toggleCSSclasses(
         [e.target.parentElement.nextElementSibling.classList.contains('ordered-items')],
         e.target.parentElement.nextElementSibling,
@@ -164,6 +171,45 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
     }
   }
 
+  // const componentRef = useRef(null)
+  // const onBeforeGetContentResolve = useRef(null)
+  // const handleAfterPrint = useCallback(() => {
+  //   console.log('`onAfterPrint` called') // tslint:disable-line no-console
+  // }, [])
+  // const handleBeforePrint = useCallback(() => {
+  //   console.log('`onBeforePrint` called') // tslint:disable-line no-console
+  // }, [])
+  // const handleOnBeforeGetContent = useCallback(() => {
+  //   console.log('`onBeforeGetContent` called') // tslint:disable-line no-console
+  //   setIsLoading(true)
+
+  //   return new Promise<void>(resolve => {
+  //     onBeforeGetContentResolve.current = resolve
+
+  //     setTimeout(() => {
+  //       setIsLoading(false)
+  //       resolve()
+  //     }, 2000)
+  //   })
+  // }, [])
+  // const reactToPrintContent = useCallback(
+  //   () => componentRef.current,
+  //   [componentRef.current]
+  // )
+  // const handlePrint = useReactToPrint({
+  //   content: reactToPrintContent,
+  //   documentTitle: 'AwesomeFileName',
+  //   onBeforeGetContent: handleOnBeforeGetContent,
+  //   onBeforePrint: handleBeforePrint,
+  //   onAfterPrint: handleAfterPrint,
+  //   removeAfterPrint: true
+  // })
+  // useEffect(() => {
+  //   if (typeof onBeforeGetContentResolve.current === 'function') {
+  //     onBeforeGetContentResolve.current()
+  //   }
+  // }, [setIsLoading, onBeforeGetContentResolve.current])
+
   return (
     <>
       {orderUpdated === 1 || deleteOrderStatus === 1 ? (
@@ -194,7 +240,9 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
         <Modal
           status={Loading}
           classes='txt-blue text-center'
-          msg={`جار تحديث حالة الطلب...`}
+          msg={`جار ${
+            orderInfo.status === 'print' ? 'طباعة الطلب' : 'تحديث حالة الطلب...'
+          }`}
         />
       ) : (
         <Modal
@@ -206,21 +254,48 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
               ? 'الموافقة'
               : orderInfo.status === 'delete'
               ? 'حذف'
-              : 'رفض'
+              : // : orderInfo.status === 'print'
+                // ? 'طباعة'
+                'رفض'
           } هذا الطلب؟ لا يمكن التراجع عن هذا القرار`}
           ctaConfirmBtns={[
             orderInfo.status === 'accept'
               ? 'موافق'
               : orderInfo.status === 'delete'
               ? 'حذف'
-              : 'رفض',
+              : // : orderInfo.status === 'print'
+                // ? 'طباعة'
+                'رفض',
             'الغاء'
           ]}
         />
       )}
 
+      {/* <Invoice
+        // ordersData={ordersData?.response?.filter(order => order._id === orderInfo.id)}
+        personName={
+          ordersData?.response?.filter(order => order._id === orderInfo.id)[0]?.personName
+        }
+        userEmail={
+          ordersData?.response?.filter(order => order._id === orderInfo.id)[0]?.userEmail
+        }
+        orderId={
+          ordersData?.response?.filter(order => order._id === orderInfo.id)[0]?.orderId
+        }
+        orderDate={
+          ordersData?.response?.filter(order => order._id === orderInfo.id)[0]?.orderDate
+        }
+        personPhone={
+          ordersData?.response?.filter(order => order._id === orderInfo.id)[0]
+            ?.personPhone
+        }
+        orderItemsIds={orderItemsIds}
+        orderToppingsId={orderToppingsId}
+        forwardedRef={componentRef}
+      /> */}
+
       <table className='table w-full text-center border-collapse table-auto'>
-        <thead className='text-white bg-orange-800'>
+        <thead className='text-white bg-orange-800 rtl'>
           <tr>
             <th className='min-w-[0.5rem] px-1 py-2 '>م.</th>
             <th className='px-1 py-2 min-w-[10rem]'>اسم الشخص</th>
@@ -398,21 +473,21 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
                                   <AcceptBtn id={order._id} email={order.userEmail} />
                                   <RejectBtn id={order._id} email={order.userEmail} />
                                   <EditBtn id={order._id} />
-                                  <InvoiceBtn id={order._id} />
+                                  {/* <InvoiceBtn id={order._id} onClick={handlePrint} /> */}
                                   <DeleteBtn id={order._id} email={order.userEmail} />
                                 </>
                               ) : order.orderStatus === 'accept' ? (
                                 <>
                                   <RejectBtn id={order._id} email={order.userEmail} />
                                   <EditBtn id={order._id} />
-                                  <InvoiceBtn id={order._id} />
+                                  {/* <InvoiceBtn id={order._id} onClick={handlePrint} /> */}
                                   <DeleteBtn id={order._id} email={order.userEmail} />
                                 </>
                               ) : order.orderStatus === 'reject' ? (
                                 <>
                                   <AcceptBtn id={order._id} email={order.userEmail} />
                                   <EditBtn id={order._id} />
-                                  <InvoiceBtn id={order._id} />
+                                  {/* <InvoiceBtn id={order._id} onClick={handlePrint} /> */}
                                   <DeleteBtn id={order._id} email={order.userEmail} />
                                 </>
                               ) : (
@@ -595,14 +670,14 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
                           <>
                             <RejectBtn id={order._id} email={order.userEmail} />
                             <EditBtn id={order._id} />
-                            <InvoiceBtn id={order._id} />
+                            {/* <InvoiceBtn id={order._id} onClick={handlePrint} /> */}
                             <DeleteBtn id={order._id} email={order.userEmail} />
                           </>
                         ) : order.orderStatus === 'reject' ? (
                           <>
                             <AcceptBtn id={order._id} email={order.userEmail} />
                             <EditBtn id={order._id} />
-                            <InvoiceBtn id={order._id} />
+                            {/* <InvoiceBtn id={order._id} onClick={handlePrint} /> */}
                             <DeleteBtn id={order._id} email={order.userEmail} />
                           </>
                         ) : (

@@ -62,6 +62,8 @@ const Modal = ({
                   ? 'neutral'
                   : btn.includes('كاشير')
                   ? 'orange'
+                  : btn.includes('طباعة')
+                  ? 'blue'
                   : conditions.some(btnTxt => btn.includes(btnTxt))
                   ? 'green'
                   : 'red'
