@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import useAxios from '../../hooks/useAxios'
 import { Link, useParams, useLocation } from 'react-router-dom'
 import Axios from 'axios'
@@ -48,8 +48,6 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
   const [orderItemsIds, setOrderItemsIds] = useState([])
   const [orderToppingsId, setOrderToppingsId] = useState([])
   const [isLoading, setIsLoading] = useState(false)
-
-  const componentRef = useRef<HTMLTableElement>(null)
 
   const modalLoading = document.querySelector('#modal')
 
@@ -400,21 +398,21 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
                                   <AcceptBtn id={order._id} email={order.userEmail} />
                                   <RejectBtn id={order._id} email={order.userEmail} />
                                   <EditBtn id={order._id} />
-                                  <InvoiceBtn id={order._id} ordersData={ordersData} />
+                                  <InvoiceBtn id={order._id} />
                                   <DeleteBtn id={order._id} email={order.userEmail} />
                                 </>
                               ) : order.orderStatus === 'accept' ? (
                                 <>
                                   <RejectBtn id={order._id} email={order.userEmail} />
                                   <EditBtn id={order._id} />
-                                  <InvoiceBtn id={order._id} ordersData={ordersData} />
+                                  <InvoiceBtn id={order._id} />
                                   <DeleteBtn id={order._id} email={order.userEmail} />
                                 </>
                               ) : order.orderStatus === 'reject' ? (
                                 <>
                                   <AcceptBtn id={order._id} email={order.userEmail} />
                                   <EditBtn id={order._id} />
-                                  <InvoiceBtn id={order._id} ordersData={ordersData} />
+                                  <InvoiceBtn id={order._id} />
                                   <DeleteBtn id={order._id} email={order.userEmail} />
                                 </>
                               ) : (
@@ -597,14 +595,14 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
                           <>
                             <RejectBtn id={order._id} email={order.userEmail} />
                             <EditBtn id={order._id} />
-                            <InvoiceBtn id={order._id} ordersData={ordersData} />
+                            <InvoiceBtn id={order._id} />
                             <DeleteBtn id={order._id} email={order.userEmail} />
                           </>
                         ) : order.orderStatus === 'reject' ? (
                           <>
                             <AcceptBtn id={order._id} email={order.userEmail} />
                             <EditBtn id={order._id} />
-                            <InvoiceBtn id={order._id} ordersData={ordersData} />
+                            <InvoiceBtn id={order._id} />
                             <DeleteBtn id={order._id} email={order.userEmail} />
                           </>
                         ) : (

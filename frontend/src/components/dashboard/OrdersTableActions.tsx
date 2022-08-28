@@ -1,8 +1,4 @@
 import { Link } from 'react-router-dom'
-import { useRef } from 'react'
-import ReactToPrint from 'react-to-print'
-
-import InvoicePrint from './InvoicePrint'
 
 export const AcceptBtn = ({ id, email }) => (
   <button
@@ -66,29 +62,17 @@ export const DeleteBtn = ({ id, email }) => (
   </button>
 )
 
-export const InvoiceBtn = ({ id, ordersData }) => {
-  const componentRef = useRef(null)
-
-  return (
-    <>
-      <InvoicePrint ref={componentRef} ordersData={ordersData} />
-
-      <ReactToPrint
-        trigger={() => (
-          <button
-            id='printOrder'
-            data-id={id}
-            className='m-1 px-1.5 py-2 text-sm text-white bg-blue-600 rounded-md hover:bg-blue-700 min-w-[5rem] text-center overflow-hidden'
-            data-tooltip='حذف طباعة فاتورة للطلب'
-          >
-            <span className='py-0.5 px-1 bg-blue-200 rounded-md top-1.5 pointer-events-none'>
-              &#128424;
-            </span>
-            <span className='mr-2 pointer-events-none'>طباعة فاتورة</span>
-          </button>
-        )}
-        content={() => componentRef.current}
-      />
-    </>
-  )
-}
+export const InvoiceBtn = ({ id }) => (
+  <button
+    id='print'
+    data-id={id}
+    data-status='print'
+    className='m-1 px-1.5 py-2 text-sm text-white bg-blue-600 rounded-md hover:bg-blue-700 min-w-[5rem] text-center overflow-hidden'
+    data-tooltip='حذف طباعة فاتورة للطلب'
+  >
+    <span className='py-0.5 px-1 bg-blue-200 rounded-md top-1.5 pointer-events-none'>
+      &#128424;
+    </span>
+    <span className='mr-2 pointer-events-none'>طباعة فاتورة</span>
+  </button>
+)
