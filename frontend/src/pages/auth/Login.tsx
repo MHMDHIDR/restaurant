@@ -13,6 +13,7 @@ import useAuth from '../../hooks/useAuth'
 
 import GoogleLogin from 'react-google-login'
 import { gapi } from 'gapi-script'
+import { EyeIconOpen, EyeIconClose } from '../../components/Icons/EyeIcon'
 
 const LoginDataFromLocalStorage =
   'LoginData' in localStorage && JSON.parse(localStorage.getItem('LoginData'))
@@ -24,6 +25,7 @@ const Login = () => {
     LoginDataFromLocalStorage.userEmailOrTel || ''
   )
   const [userPassword, setPassword] = useState('')
+  const [passwordVisible, setPasswordVisible] = useState(false)
   const [loggedInStatus, setLoggedInStatus] = useState()
   const [isSendingLoginForm, setIsSendingLoginForm] = useState(false)
   const [loginMsg, setLoginMsg] = useState('')
@@ -167,14 +169,20 @@ const Login = () => {
 
               <label htmlFor='password' className='form__group'>
                 <input
-                  className='form__input'
+                  className='form__input rtl px-10'
                   id='password'
                   name='password'
-                  type='password'
+                  type={passwordVisible ? 'text' : 'password'}
                   onChange={e => setPassword(e.target.value)}
                   dir='auto'
                   required
                 />
+                <span
+                  className='absolute cursor-pointer px-2 text-xs text-black capitalize transition-all bg-gray-200 select-none left-1 sm:text-sm md:text-lg dark:text-gray-100 dark:bg-gray-800 opacity-60;'
+                  onClick={() => setPasswordVisible(prevState => !prevState)}
+                >
+                  {passwordVisible ? <EyeIconClose /> : <EyeIconOpen />}
+                </span>
                 <span className='form__label'>كلمة المرور</span>
               </label>
 

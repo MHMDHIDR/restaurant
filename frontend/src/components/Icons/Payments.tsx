@@ -1,7 +1,6 @@
 const ICON_SIZE_CLASS =
   'w-[calc(var(--drkModeToggleSize)/2.5)] h-[calc(var(--drkModeToggleSize)/2.5)]'
 
-//PayPal
 export const PayPal = ({ fill = 'gray' }) => (
   <svg
     className={`${ICON_SIZE_CLASS} opacity-60 hover:opacity-100 transition-opacity mx-auto`}
