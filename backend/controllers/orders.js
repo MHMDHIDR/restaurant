@@ -84,7 +84,7 @@ export const updateOrder = asyncHandler(async (req, res) => {
       : await OrdersModel.findByIdAndUpdate(_id, { orderStatus }, { new: true }) //only update the order status
 
     //if order updated then send email to user
-    if (orderUpdated) {
+    if (orderStatus && orderUpdated) {
       const emailData = {
         from: 'mr.hamood277@gmail.com',
         to: orderEmail,
@@ -113,7 +113,18 @@ export const updateOrder = asyncHandler(async (req, res) => {
           OrderStatusUpdated: 1
         })
       }
+    } else if (orderUpdated) {
+      res.status(200).json({
+        message: 'Order Status Updated Successfully',
+        OrderStatusUpdated: 1
+      })
+      return
     }
+
+    res.status(200).json({
+      message: 'Error: Order Did NOT Update',
+      OrderStatusUpdated: 1
+    })
   } catch (error) {
     res.status(404).json({ message: error.message })
   }
