@@ -120,7 +120,7 @@ const Footer = () => {
         <div className='flex items-center justify-around gap-6 py-4'>
           <p className='font-[600] text-center px-2 sm:px-0 leading-loose'>
             موقع {settings?.appName} لطلب الوجبات والأطعمة اللذيذة - جميع الحقوق محفوظة
-            &copy; 2021
+            &copy; 2021 - {new Date().getFullYear()}
           </p>
         </div>
       </div>
