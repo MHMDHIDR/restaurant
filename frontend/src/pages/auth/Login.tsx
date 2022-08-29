@@ -169,7 +169,7 @@ const Login = () => {
 
               <label htmlFor='password' className='form__group'>
                 <input
-                  className='form__input rtl px-10'
+                  className='form__input'
                   id='password'
                   name='password'
                   type={passwordVisible ? 'text' : 'password'}

@@ -11,6 +11,7 @@ import useDocumentTitle from '../../hooks/useDocumentTitle'
 
 import { API_URL } from '../../data/constants'
 import useAuth from '../../hooks/useAuth'
+import { EyeIconClose, EyeIconOpen } from '../../components/Icons/EyeIcon'
 
 const Join = () => {
   useDocumentTitle('Join')
@@ -19,6 +20,7 @@ const Join = () => {
   const [userEmail, setEmail] = useState('')
   const [userTel, setTel] = useState('')
   const [userPassword, setPassword] = useState('')
+  const [passwordVisible, setPasswordVisible] = useState(false)
   const [regStatus, setRegStatus] = useState()
   const [isSendingJoinForm, setIsSendingJoinForm] = useState(false)
   const [errMsg, setErrMsg] = useState('')
@@ -124,11 +126,17 @@ const Join = () => {
                   className='form__input'
                   id='password'
                   name='password'
-                  type='password'
+                  type={passwordVisible ? 'text' : 'password'}
                   onChange={e => setPassword(e.target.value)}
                   dir='auto'
                   required
                 />
+                <span
+                  className='absolute cursor-pointer px-2 text-xs text-black capitalize transition-all bg-gray-200 select-none left-1 sm:text-sm md:text-lg dark:text-gray-100 dark:bg-gray-800 opacity-60;'
+                  onClick={() => setPasswordVisible(prevState => !prevState)}
+                >
+                  {passwordVisible ? <EyeIconClose /> : <EyeIconOpen />}
+                </span>
                 <span className='form__label'>كلمــة المــــــرور</span>
               </label>
 
