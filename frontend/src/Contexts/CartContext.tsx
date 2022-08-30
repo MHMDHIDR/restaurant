@@ -16,12 +16,13 @@ const CartContextProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.setItem('restCartItems', JSON.stringify(items))
   }, [items])
 
-  //add items to card add the details like: cHeading, cImg, cPrice, cDesc, cToppings, cQuantity: 1
+  //add items to card add the details like: cHeading, cImg, cPrice, cCategory, cDesc, cToppings, cQuantity: 1
   const addToCart = (
     cItemId: string,
     cHeading: string,
     cImg: string,
     cPrice: string,
+    cCategory: string,
     cDesc: string,
     cToppings: any[]
   ) => {
@@ -32,6 +33,7 @@ const CartContextProvider = ({ children }: { children: React.ReactNode }) => {
         cHeading,
         cImg,
         cPrice,
+        cCategory,
         cDesc,
         cToppings: cToppings.map((topping, toppingIndex) => {
           return {

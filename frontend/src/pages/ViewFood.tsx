@@ -97,6 +97,7 @@ const ViewFood = () => {
                         </Link>
                       }
                       cPrice={item.foodPrice}
+                      cCategory={item.category}
                       cDesc={abstractText(item.foodDesc, 120)}
                       cTags={item?.foodTags}
                       cToppings={item.foodToppings}
@@ -158,6 +159,7 @@ const ViewFood = () => {
                     </Link>
                   }
                   cPrice={data?.response?.foodPrice}
+                  cCategory={data?.response?.category}
                   cDesc={data?.response?.foodDesc}
                   cTags={data?.response?.foodTags}
                   cToppings={data?.response?.foodToppings}

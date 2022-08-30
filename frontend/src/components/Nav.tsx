@@ -69,7 +69,7 @@ const Nav = () => {
 
         <Link to='/order-food' className='underline-hover'>
           <span className='hidden sm:inline'>سلة الطلبات: </span>
-          <span>{items.length || 0}&nbsp;&nbsp;🛒</span>
+          <span>{items?.length || 0}&nbsp;&nbsp;🛒</span>
         </Link>
 
         {/* Nav toggler */}

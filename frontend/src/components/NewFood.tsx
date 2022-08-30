@@ -11,7 +11,7 @@ import { removeSlug } from '../utils/slug'
 
 import Card from './Card'
 import { LoadingCard } from './Loading'
-import { dataItemProps } from '../types'
+import { viewFoodDataProps } from '../types'
 
 const NewFood = () => {
   const [data, setData] = useState<any>()
@@ -33,7 +33,7 @@ const NewFood = () => {
           الوجبات الجديدة
         </h2>
         {data && data?.response?.length > 0 ? (
-          data?.response?.map((item: dataItemProps, idx: number) => (
+          data?.response?.map((item: viewFoodDataProps, idx: number) => (
             <motion.div
               className='odd:ltr'
               key={item._id}
@@ -55,6 +55,7 @@ const NewFood = () => {
                   </Link>
                 }
                 cPrice={item.foodPrice}
+                cCategory={item.category}
                 cDesc={abstractText(item.foodDesc, 100)}
                 cTags={item?.foodTags}
                 cToppings={item.foodToppings}

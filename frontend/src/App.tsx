@@ -14,6 +14,7 @@ import ModalNotFound from './components/Modal/ModalNotFound'
 //Loading Page
 import { LoadingPage } from './components/Loading'
 import DashboardOrdersEdit from './pages/dashboard/orders/DashboardOrdersEdit'
+import DashboardStatistics from './pages/dashboard/DashboardStatistics'
 
 //user pages
 const Home = lazy(() => import('./pages/Home'))
@@ -50,11 +51,15 @@ const App: React.FC = () => (
                   <Suspense fallback={<LoadingPage />}>
                     <Routes>
                       <Route path='/' element={<Home />} />
+
                       <Route path='categories' element={<Categories />} />
+
                       <Route path='order-food' element={<OrderFood />} />
+
                       <Route path='my-orders' element={<MyOrders />}>
                         <Route path=':pageNum' element={<MyOrders />} />
                       </Route>
+
                       <Route path='search' element={<SearchResults />}>
                         <Route path=':search' element={<SearchResults />} />
                       </Route>
@@ -62,21 +67,24 @@ const App: React.FC = () => (
                       {/* View Routes */}
                       <Route path='view' element={<ViewFood />}>
                         <Route path=':pageNum' element={<ViewFood />} />
+
                         <Route path=':category' element={<ViewFood />}>
                           <Route path=':pageNum' element={<ViewFood />} />
                         </Route>
+
                         <Route path='item' element={<ViewFood />}>
                           <Route path=':foodId' element={<ViewFood />} />
                         </Route>
                       </Route>
 
-                      {/* Authentication */}
-
                       <Route path='auth/join' element={<Join />} />
+
                       <Route path='auth/login' element={<Login />}>
                         <Route path=':redirect' element={<Login />} />
                       </Route>
+
                       <Route path='auth/forgot' element={<ForgotPassword />} />
+
                       <Route path='auth/reset' element={<ResetPassword />}>
                         <Route path=':token' element={<ResetPassword />} />
                       </Route>
@@ -84,20 +92,27 @@ const App: React.FC = () => (
                       {/* Dashboard */}
 
                       <Route path='dashboard' element={<DashboardHome />}>
-                        {/* Food */}
+                        <Route path='stats' element={<DashboardStatistics />} />
+
                         <Route path='orders' element={<DashboardOrders />}>
                           <Route path=':pageNum' element={<DashboardOrders />} />
                         </Route>
+
                         <Route
                           path='edit-order/:orderId'
                           element={<DashboardOrdersEdit />}
                         />
+
                         <Route path='menu' element={<DashboardMenu />}>
                           <Route path=':pageNum' element={<DashboardMenu />} />
                         </Route>
+
                         <Route path='add-food' element={<DashboardAddFood />} />
+
                         <Route path='edit-food/:foodId' element={<DashboardEditFood />} />
+
                         <Route path='settings' element={<DashboardAppSettings />} />
+
                         <Route path='users' element={<DashboardUsers />}>
                           <Route path=' :pageNum' element={<DashboardUsers />} />
                         </Route>

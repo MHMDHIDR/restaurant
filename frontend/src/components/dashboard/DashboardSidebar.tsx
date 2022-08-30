@@ -61,15 +61,19 @@ const DashboardSidebar = () => {
           <SideBarLink to={'dashboard'}>لوحة التحكم</SideBarLink>
           {USER?.userAccountType === 'admin' ? (
             <>
-              <SideBarLink to={'menu'}>قائمة الوجبات</SideBarLink>
               <SideBarLink to={'orders'}>الطلبات</SideBarLink>
+              <SideBarLink to={'stats'}>الإحصائيات</SideBarLink>
+              <SideBarLink to={'menu'}>قائمة الوجبات</SideBarLink>
               <SideBarLink to={'add-food'}>إضافة وجبة</SideBarLink>
-              <SideBarLink to={'settings'}>إعدادات الموقع</SideBarLink>
               <SideBarLink to={'users'}>المستخدمين</SideBarLink>
+              <SideBarLink to={'settings'}>إعدادات الموقع</SideBarLink>
             </>
           ) : (
             USER?.userAccountType === 'cashier' && (
-              <SideBarLink to={'orders'}>الطلبات</SideBarLink>
+              <>
+                <SideBarLink to={'orders'}>الطلبات</SideBarLink>
+                <SideBarLink to={'stats'}>الإحصائيات</SideBarLink>
+              </>
             )
           )}
         </ul>

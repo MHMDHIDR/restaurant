@@ -34,21 +34,23 @@ export interface orderProps {
     grandPrice: number
     orderDate: string
     orderId: string
-    orderItems: {
-      cDesc: string
-      cHeading: string
-      cImg: {
-        foodImgDisplayName: string
-        foodImgDisplayPath: string
-      }[]
-      cItemId: string
-      cPrice: number
-      cQuantity: number
-      cToppings: {
-        toppingId: string
-        toppingPrice: number
-      }[]
-    }[]
+    orderItems: cardProps[]
+    // {
+    //   cDesc: string
+    //   cHeading: string
+    //   cImg: {
+    //     foodImgDisplayName: string
+    //     foodImgDisplayPath: string
+    //   }[]
+    //   cItemId: string
+    //   cPrice: number
+    //   cCategory: string
+    //   cQuantity: number
+    //   cToppings: {
+    //     toppingId: string
+    //     toppingPrice: number
+    //   }[]
+    // }[]
     orderStatus: string
     orderToppings: {
       toppingId: string
@@ -96,6 +98,7 @@ export interface cardProps {
   cImg?: any
   cImgAlt?: string
   cPrice: number
+  cCategory: string
   cQuantity?: number
 }
 
@@ -160,16 +163,6 @@ export interface NavMenuPros {
   isOptions?: boolean
   label?: string
   className?: string
-}
-
-export interface dataItemProps {
-  _id: string
-  foodPrice: number
-  foodDesc: string
-  foodTags: string[]
-  foodToppings: string[]
-  foodImgs: string[]
-  foodName: string
 }
 
 export interface PaginationProps {
@@ -237,6 +230,7 @@ export interface viewFoodDataProps {
   _id: string
   foodName: string
   foodPrice: number
+  category: string
   foodDesc: string
   foodTags: string[]
   foodToppings: string[]

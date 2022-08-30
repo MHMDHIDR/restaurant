@@ -21,7 +21,8 @@ const Card = ({
   cCtaLink,
   cImg = '',
   cImgAlt = 'Food Card',
-  cPrice
+  cPrice,
+  cCategory
 }: cardProps) => {
   const { items, addToCart, removeFromCart } = useContext<CartProps>(CartContext)
   const { handleToppingChecked, checkedToppings } = useContext(ToppingsContext)
@@ -35,7 +36,15 @@ const Card = ({
         removeFromCart(cItemId)
       }
     } else {
-      addToCart(cItemId, cHeading.props.children, cImg, cPrice, cDesc, cToppings)
+      addToCart(
+        cItemId,
+        cHeading.props.children,
+        cImg,
+        cPrice,
+        cCategory,
+        cDesc,
+        cToppings
+      )
     }
   }
 

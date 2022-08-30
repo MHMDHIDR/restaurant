@@ -20,10 +20,10 @@ const DashboardHome = () => {
   //getting user id from local storage
   const USER = JSON.parse(localStorage.getItem('user'))
 
-  const [userStatus, setUserStatus] = useState()
-  const [userType, setUserType] = useState<any>('')
-  const [menuCount, setMenuCount] = useState<any>()
-  const [ordersCount, setOrdersCount] = useState<any>()
+  const [userStatus, setUserStatus] = useState<string>('')
+  const [userType, setUserType] = useState<string>('')
+  const [menuCount, setMenuCount] = useState<number>()
+  const [ordersCount, setOrdersCount] = useState<number>(0)
 
   //if there's food id then fetch with food id, otherwise fetch everything
   const currentUser = useAxios({ method: 'get', url: `/users/all/1/1/${USER?._id}` })
@@ -115,7 +115,6 @@ const DashboardHome = () => {
             )}
           </div>
         </div>
-
         <Outlet />
       </section>
     </Suspense>
