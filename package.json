@@ -30,5 +30,7 @@
   "devDependencies": {
     "concurrently": "^7.1.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "chart.js": "^3.9.1"
+  }
 }

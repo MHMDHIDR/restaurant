@@ -1,5 +1,5 @@
 import { useState, useEffect, Suspense, lazy } from 'react'
-import { Link, Outlet } from 'react-router-dom'
+import { Outlet } from 'react-router-dom'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
 import { Doughnut } from 'react-chartjs-2'
 ChartJS.register(ArcElement, Tooltip, Legend)
@@ -13,8 +13,8 @@ import menuToggler from '../../utils/menuToggler'
 
 import ModalNotFound from '../../components/Modal/ModalNotFound'
 import { LoadingPage } from '../../components/Loading'
+import { cCategory } from '../../types'
 const DashboardNav = lazy(() => import('../../components/dashboard/DashboardNav'))
-const DashboardSidebar = lazy(() => import('../../components/dashboard/DashboardSidebar'))
 
 const DashboardHome = () => {
   useDocumentTitle('Home')
@@ -25,9 +25,7 @@ const DashboardHome = () => {
   const [userStatus, setUserStatus] = useState<string>('')
   const [userType, setUserType] = useState<string>('')
   const [categories, setCategories] = useState<string[]>([''])
-  const [menuCount, setMenuCount] = useState<number>()
-  const [ordersCount, setOrdersCount] = useState<number>(0)
-  const [ordersResponsecCategory, setOrdersResponsecCategory] = useState<string[]>([''])
+  const [ordersBycCategory, setOrdersBycCategory] = useState<cCategory>()
 
   //if there's food id then fetch with food id, otherwise fetch everything
   const currentUser = useAxios({ method: 'get', url: `/users/all/1/1/${USER?._id}` })
@@ -44,12 +42,13 @@ const DashboardHome = () => {
       setUserType(currentUser?.response?.response?.userAccountType)
       //Statistics
       setCategories(getCategories?.response?.CategoryList)
-      setMenuCount(menu?.response?.itemsCount)
-      setOrdersCount(orders?.response?.itemsCount)
-      setOrdersResponsecCategory(
-        orders?.response?.response?.map(
-          ({ orderItems }) => orderItems?.map(({ cCategory }) => cCategory)[0]
-        )
+      setOrdersBycCategory(
+        orders?.response?.response
+          ?.map(({ orderItems }) => orderItems[0])
+          ?.reduce((acc: { [x: string]: any }, cur: { cCategory: string | number }) => {
+            acc[cur.cCategory] = (acc[cur.cCategory] || 0) + 1
+            return acc
+          }, {})
       )
     }
   }, [
@@ -61,10 +60,6 @@ const DashboardHome = () => {
 
   useEventListener('keydown', (e: any) => e.key === 'Escape' && menuToggler())
 
-  let count //?.forEach(x => count[x] + 1)
-
-  console.log(ordersResponsecCategory?.map(x => x))
-
   //check if userStatus is active and the userType is admin
   return !USER?._id ? (
     <ModalNotFound />
@@ -75,8 +70,6 @@ const DashboardHome = () => {
   ) : (
     <Suspense fallback={<LoadingPage />}>
       <section className='overflow-x-auto h-screen'>
-        <DashboardSidebar />
-        <DashboardNav />
         <div className='container mx-auto'>
           <h1 className='mx-0 mt-32 mb-20 text-2xl text-center'>
             عدد الطلبات حسب التصنيف
@@ -86,22 +79,22 @@ const DashboardHome = () => {
             width={100}
             height={50}
             data={{
-              labels: categories?.map(category => category[1]),
+              labels: categories?.map(category => category[1]), //ordersBycCategory && Object.keys(ordersBycCategory)
               datasets: [
                 {
                   label: 'عدد الطلبات حسب التصنيف',
-                  data: [12, 19, 3],
+                  data: ordersBycCategory && Object.values(ordersBycCategory),
                   backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(155, 52, 18, 0.7)',
+                    'rgba(171, 0, 87, 0.2)',
                     'rgba(255, 206, 86, 0.2)'
                   ],
                   borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
+                    'rgba(155, 52, 18, 0.95)',
+                    'rgba(171, 0, 87, 1)',
                     'rgba(255, 206, 86, 1)'
                   ],
-                  borderWidth: 1
+                  borderWidth: 0.5
                 }
               ]
             }}

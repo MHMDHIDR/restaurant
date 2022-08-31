@@ -251,3 +251,9 @@ export interface NoItemsProps {
     label: string
   }[]
 }
+
+export interface cCategory {
+  foods: number
+  drinks: number
+  sweets: number
+}
