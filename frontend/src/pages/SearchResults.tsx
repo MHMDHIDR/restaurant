@@ -55,6 +55,7 @@ const SearchResults: React.FC = () => {
                       </Link>
                     }
                     cPrice={data.foodPrice}
+                    cCategory={data.category}
                     cDesc={abstractText(data.foodDesc, 120)}
                     cTags={data?.foodTags}
                     cToppings={data.foodToppings}
