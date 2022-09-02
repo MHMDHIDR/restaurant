@@ -62,18 +62,18 @@ export const DeleteBtn = ({ id, email }) => (
   </button>
 )
 
-export const InvoiceBtn = ({ id, onClick }) => (
+export const InvoiceBtn = ({ id, email }) => (
   <button
-    id='print'
+    id='invoice'
     data-id={id}
-    data-status='print'
+    data-status='invoice'
+    data-email={email}
     className='m-1 px-1.5 py-2 text-sm text-white bg-blue-600 rounded-md hover:bg-blue-700 min-w-[5rem] text-center overflow-hidden'
-    data-tooltip='طباعة فاتورة للطلب'
-    onClick={onClick}
+    data-tooltip='إنشاء فاتورة للطلب'
   >
     <span className='py-0.5 px-1 bg-blue-200 rounded-md top-1.5 pointer-events-none'>
       &#128424;
     </span>
-    <span className='mr-2 pointer-events-none'>طباعة فاتورة</span>
+    <span className='mr-2 pointer-events-none'>إنشاء فاتورة</span>
   </button>
 )

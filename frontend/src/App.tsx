@@ -32,7 +32,8 @@ const ResetPassword = lazy(() => import('./pages/auth/ResetPassword'))
 
 //dashboard pages
 const DashboardHome = lazy<any>(() => import('./pages/dashboard/DashboardHome'))
-const DashboardOrders = lazy(() => import('./pages/dashboard/orders/DashboardOrders'))
+// const DashboardOrders = lazy(() => import('./pages/dashboard/orders/DashboardOrders'))
+import DashboardOrders from './pages/dashboard/orders/DashboardOrders'
 const DashboardMenu = lazy(() => import('./pages/dashboard/DashboardMenu'))
 const DashboardAddFood = lazy(() => import('./pages/dashboard/food/DashboardAddFood'))
 const DashboardEditFood = lazy(() => import('./pages/dashboard/food/DashboardEditFood'))

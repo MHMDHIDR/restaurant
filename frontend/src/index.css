@@ -99,25 +99,16 @@
   @apply relative inline-block align-middle;
 }
 
-/* [data-tooltip]::after, */
 [data-tooltip]::before {
   --bottom: 1.75rem;
   --duration: 300ms;
-  @apply absolute transition-all ease-in-out scale-50 opacity-0 pointer-events-none min-w-fit;
+  @apply content-[attr(data-tooltip)] absolute right-0 bottom-[calc(var(--bottom)*1.65)] z-50
+  transition-all ease-in-out scale-50 opacity-0 pointer-events-none
+  w-min max-w-min min-w-[calc(100%+5rem)] text-center p-2 duration-[var(--duration)]
+  text-sm text-white font-thin bg-gray-800 dark:bg-gray-300 dark:text-black dark:border-2
+  dark:border-gray-800 shadow-lg rounded-2xl rounded-br-none;
 }
 
-[data-tooltip]::before {
-  /* data-tooltip box */
-  content: attr(data-tooltip);
-  @apply right-0 z-50 w-min max-w-min min-w-[calc(100%+5rem)] text-center p-2 duration-[var(--duration)] text-sm text-white font-thin bg-gray-800 dark:bg-gray-300 dark:text-black dark:border-2 dark:border-gray-800 shadow-lg bottom-[calc(var(--bottom)*1.65)] rounded-full rounded-br-none;
-}
-
-/* [data-tooltip]::after {
-  content: '';
-  @apply z-50 mx-auto border-[.7em] duration-[var(--duration)] border-transparent border-t-gray-800 dark:border-t-gray-300 bottom-[var(--bottom)] -translate-x-1/2 left-[10%] lg:left-1/2;
-} */
-
-/*[data-tooltip]:hover::after,*/
 [data-tooltip]:hover::before {
   @apply scale-100 opacity-100;
 }
