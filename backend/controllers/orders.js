@@ -4,9 +4,6 @@ import OrdersModel from '../models/orders-model.js'
 import { v4 as uuidv4 } from 'uuid'
 import email from '../utils/email.js'
 
-import pdf from 'html-pdf'
-import pdfDocument from '../documents/index.js'
-
 export const getOrders = asyncHandler(async (_req, res) => {
   res.json(res.paginatedResults)
 })
@@ -47,7 +44,6 @@ export const addOrder = asyncHandler(async (req, res) => {
   }
 })
 
-//this route for accepting or rejcting an order from dashboard
 export const updateOrder = asyncHandler(async (req, res) => {
   const _id = req.params.orderId
   const {
@@ -149,23 +145,4 @@ export const deleteOrder = asyncHandler(async (req, res) => {
       orderDeleted: 0
     })
   }
-})
-
-export const createPdf = asyncHandler(async (req, res) => {
-  const { _id } = req.body
-
-  const order = await OrdersModel.findById(_id)
-
-  res.json({ order })
-
-  pdf.create(pdfDocument(order), {}).toFile('result.pdf', err => {
-    if (err) {
-      res.send(Promise.reject())
-    }
-    res.send(Promise.resolve())
-  })
-})
-
-export const fetchPdf = asyncHandler(async (_req, res) => {
-  res.sendFile(`../result.pdf`)
 })
