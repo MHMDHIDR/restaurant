@@ -7,7 +7,7 @@ const email = asyncHandler(async ({ name, subject, from, to, msg }) => {
    * @returns {Promise<any>} JSON
    */
 
-  to = to || process.env.MAILER_EMAIL
+  to = to || ADMIN_EMAIL?.userEmail
   from = from || ADMIN_EMAIL?.userEmail
   name = name || to
 
