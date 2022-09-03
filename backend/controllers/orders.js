@@ -146,3 +146,15 @@ export const deleteOrder = asyncHandler(async (req, res) => {
     })
   }
 })
+
+// export const createPdf = asyncHandler(async (req, res) => {
+//   const { _id } = req.body
+
+//   const order = await OrdersModel.findById(_id)
+
+//   res.json({ orderInfoInvoice: order })
+// })
+
+// export const fetchPdf = asyncHandler(async (_req, res) => {
+//   res.sendFile(`../result.pdf`)
+// })

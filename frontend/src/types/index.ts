@@ -7,7 +7,7 @@ export interface UserProps {
 }
 
 export interface ModalProps {
-  msg: string
+  msg?: string
   extraComponents?: React.ReactNode
   status?: React.ReactNode
   modalHidden?: string
@@ -35,22 +35,6 @@ export interface orderProps {
     orderDate: string
     orderId: string
     orderItems: cardProps[]
-    // {
-    //   cDesc: string
-    //   cHeading: string
-    //   cImg: {
-    //     foodImgDisplayName: string
-    //     foodImgDisplayPath: string
-    //   }[]
-    //   cItemId: string
-    //   cPrice: number
-    //   cCategory: string
-    //   cQuantity: number
-    //   cToppings: {
-    //     toppingId: string
-    //     toppingPrice: number
-    //   }[]
-    // }[]
     orderStatus: string
     orderToppings: {
       toppingId: string
@@ -256,4 +240,11 @@ export interface cCategory {
   foods: number
   drinks: number
   sweets: number
+}
+
+export interface orderInfoProps {
+  order?: Object | null
+  id?: string
+  status: string
+  email: string
 }

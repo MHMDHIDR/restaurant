@@ -2,7 +2,14 @@ import express from 'express'
 import paginatedResults from '../middleware/paginatedResults.js'
 import OrdersModel from '../models/orders-model.js'
 import protect from '../middleware/authMiddleware.js'
-import { addOrder, getOrders, updateOrder, deleteOrder } from '../controllers/orders.js'
+import {
+  getOrders,
+  addOrder,
+  updateOrder,
+  deleteOrder
+  // createPdf
+  // fetchPdf
+} from '../controllers/orders.js'
 
 const router = express.Router()
 
@@ -15,5 +22,8 @@ router.get(
 router.post('/', addOrder)
 router.patch('/:orderId', updateOrder)
 router.delete('/:orderId', deleteOrder)
+
+// router.post('/create-pdf', createPdf)
+// router.get('/fetch-pdf', fetchPdf)
 
 export default router
