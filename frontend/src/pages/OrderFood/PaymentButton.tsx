@@ -11,10 +11,22 @@ const PaymentButton = ({ value, onSuccess }) => {
     _: any,
     actions: {
       order: {
-        create: (arg: { purchase_units: { amount: { value: number } }[] }) => any
+        create: (arg: {
+          purchase_units: { amount: { value: number } }[]
+          application_context: { return_url: string }
+        }) => any
       }
     }
-  ) => actions.order.create({ purchase_units: [{ amount: { value } }] })
+  ) =>
+    actions.order.create({
+      purchase_units: [{ amount: { value } }],
+      application_context: {
+        return_url:
+          process.env.NODE_ENV === 'development'
+            ? 'http://dev.com:3000'
+            : 'https://mhmdhidr-restaurant.netlify.app'
+      }
+    })
 
   const onApprove = async (data: any, actions: { order: { capture: () => any } }) => {
     await actions.order.capture()
