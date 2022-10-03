@@ -181,11 +181,13 @@ const OrderFood = () => {
           showPaymentModal === true && (
             <Modal
               status={Loading}
-              msg={`سيتم الدفع بالعملة (دولار أمريكي) وذلك بعد تحويل الإجمالي: ${grandPrice} ر.ق، سيتم دفع = ${grandPrice} دولار أمريكي لدفع بأحد الوسائل التالية:`}
+              msg={`سيتم الدفع بالعملة (دولار أمريكي) وذلك بعد تحويل الإجمالي: ${grandPrice} ر.ق، سيتم دفع = ${(
+                grandPrice / 3.65
+              ).toFixed(2)} دولار أمريكي لدفع بأحد الوسائل التالية:`}
               extraComponents={
                 PaymentButton ? (
                   <PaymentButton
-                    value={grandPrice}
+                    value={(grandPrice / 3.65).toFixed(2)}
                     onSuccess={(paymentData: any) => {
                       setShowPaymentModal(false)
                       handleSaveOrder(paymentData)
