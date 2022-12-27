@@ -28,9 +28,6 @@
   },
   "homepage": "https://github.com/MHMDHIDR/restaurant#readme",
   "devDependencies": {
-    "concurrently": "^7.1.0"
-  },
-  "dependencies": {
-    "chart.js": "^3.9.1"
+    "concurrently": "^7.6.0"
   }
 }
