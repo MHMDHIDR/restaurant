@@ -62,7 +62,7 @@ export const addFood = asyncHandler(async (req, res) => {
   })
 })
 
-export const getFood = asyncHandler(async (req, res) => {
+export const getFood = asyncHandler(async (_req, res) => {
   res.json(res.paginatedResults)
 })
 
