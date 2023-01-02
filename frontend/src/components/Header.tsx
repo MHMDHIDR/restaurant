@@ -1,10 +1,8 @@
 import { useState, useEffect } from 'react'
 import useAxios from '../hooks/useAxios'
-
 import Search from './Search'
 import Nav from './Nav'
 import ScrollDown from './ScrollDown'
-
 import Typewriter from 'typewriter-effect/dist/core'
 import { headerProps } from '../types'
 

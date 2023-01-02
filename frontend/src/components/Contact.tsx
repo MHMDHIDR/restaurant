@@ -1,11 +1,8 @@
 import { useState } from 'react'
 import Axios from 'axios'
-
 import Notification from './Notification'
 import { LoadingSpinner } from './Loading'
-
 import { validEmail } from '../utils/validForm'
-
 import { API_URL } from '../data/constants'
 
 const Contact = () => {

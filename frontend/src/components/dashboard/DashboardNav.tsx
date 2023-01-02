@@ -2,9 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import ThemeToggler from '../ThemeToggler'
 import Logo from '../Icons/Logo'
-
 import useAxios from '../../hooks/useAxios'
-
 import menuToggler from '../../utils/menuToggler'
 
 const DashboardNav = () => {

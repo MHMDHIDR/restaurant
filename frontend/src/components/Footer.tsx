@@ -1,11 +1,9 @@
 import { Link } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import useAxios from '../hooks/useAxios'
-
 import abstractText from '../utils/abstractText'
 import { removeSlug } from '../utils/slug'
 import MyLink from './MyLink'
-
 import Logo from './Icons/Logo'
 import Backtop from './Icons/Backtop'
 import { WhatsApp, Twitter, Instagram } from './Icons/Socials'

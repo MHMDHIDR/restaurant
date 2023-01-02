@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef, Children } from 'react'
 import { NavLink } from 'react-router-dom'
 import { UserProps } from '../../types'
-
 import goTo from '../../utils/goTo'
 import menuToggler from '../../utils/menuToggler'
 

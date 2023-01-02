@@ -1,14 +1,10 @@
 import { useState, useEffect, useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-
 import { CartContext } from '../Contexts/CartContext'
-
 import useAxios from '../hooks/useAxios'
-
 import abstractText from '../utils/abstractText'
 import { removeSlug } from '../utils/slug'
-
 import Card from './Card'
 import { LoadingCard } from './Loading'
 import { viewFoodDataProps } from '../types'

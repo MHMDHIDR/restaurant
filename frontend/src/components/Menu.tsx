@@ -1,6 +1,5 @@
 import { useState, useEffect, Suspense, lazy } from 'react'
 import useAxios from '../hooks/useAxios'
-
 import { LoadingCard } from './Loading'
 const EmblaCarousel = lazy(() => import('./Embla/EmblaCarousel'))
 

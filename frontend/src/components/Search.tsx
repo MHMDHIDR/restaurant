@@ -1,10 +1,7 @@
 import { useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-
 import { SearchContext } from '../Contexts/SearchContext'
-
 import useEventListener from '../hooks/useEventListener'
-
 import { removeSlug } from '../utils/slug'
 
 const Search = () => {
@@ -31,7 +28,7 @@ const Search = () => {
         className='text-2xl font-[600] p-5 pl-16 sm:pl-28 w-[inherit] text-black outline-orange-400 border border-orange-400 outline-offset-2 rtl bg-neutral-200 dark:bg-neutral-300'
         placeholder='ابحث عن طعامك المفضل'
         onChange={e => (e.target.value.trim() ? setSearch(e.target.value.trim()) : '')}
-        onKeyUp={e => {
+        onKeyUp={(e: any) => {
           const searchValue = e.target.value.trim()
 
           searchValue.length > 0

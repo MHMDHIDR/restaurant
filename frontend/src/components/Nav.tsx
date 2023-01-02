@@ -3,11 +3,8 @@ import { Link } from 'react-router-dom'
 import { CartContext } from '../Contexts/CartContext'
 import ThemeToggler from './ThemeToggler'
 import Logo from './Icons/Logo'
-
 import menuToggler from '../utils/menuToggler'
-
 import MyLink from './MyLink'
-
 import useEventListener from '../hooks/useEventListener'
 import useAxios from '../hooks/useAxios'
 import NavMenu from './NavMenu'
