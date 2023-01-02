@@ -3,10 +3,8 @@ import mongoose from 'mongoose'
 //Mongoose connect using async/await
 const connectDB = () => {
   try {
-    mongoose.connect(process.env.CONNECTION_URL, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    })
+    mongoose.set('strictQuery', false)
+    mongoose.connect(process.env.CONNECTION_URL, {})
   } catch (err) {
     console.error(err.message)
     process.exit(1)
