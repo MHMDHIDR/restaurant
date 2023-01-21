@@ -28,6 +28,7 @@ const DashboardHome = () => {
   //if there's food id then fetch with food id, otherwise fetch everything
   const currentUser = useAxios({ method: 'get', url: `/users/all/1/1/${USER?._id}` })
   const menu = useAxios({ method: 'get', url: `/foods/0/0` })
+
   const orders = useAxios({
     url: `/orders/0/0`,
     headers: USER ? JSON.stringify({ Authorization: `Bearer ${USER.token}` }) : null

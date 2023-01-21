@@ -17,14 +17,14 @@ import {
 
 const router = express.Router()
 
-router.post('/join', joinUser)
-router.post('/login', loginUser)
 router.get('/all/:page/:limit/:itemId?', paginatedResults(UserModel), getAllUsers)
 router.get('/', protect, getUser)
-router.delete('/:userId', deleteUser)
-router.patch('/:userId', updateUser)
+router.post('/join', joinUser)
+router.post('/login', loginUser)
 router.post('/forgotpass', forgotPass)
 router.post('/resetpass', resetPass)
 router.post('/googleLogin', googleLogin)
+router.patch('/:userId', updateUser)
+router.delete('/:userId', deleteUser)
 
 export default router
