@@ -28,8 +28,8 @@ app.use(
   cors({
     origin: [
       `https://mhmdhidr-restaurant.netlify.app`,
-      `http://dev.com:3000`,
-      `http://localhost:3000`
+      `http://dev.com:3001`,
+      `http://localhost:3001`
     ]
   })
 )

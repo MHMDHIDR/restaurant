@@ -48,7 +48,7 @@ const FoodSchema = new mongoose.Schema(
     updatedAt: reqDate
   },
   //Collection Name
-  { collection: 'restaurant_food' }
+  { collection: 'restaurant_foods' }
 )
 
 const WorkModel = connection.model('restaurant', FoodSchema)

@@ -87,7 +87,7 @@ const Card = ({
               ))}
             </ul>
           )}
-          {typeof cToppings[0].toppingName === 'string' && (
+          {typeof cToppings.toppingName === 'string' && (
             // if this item has toppings and it's a string
             <div className='flex flex-col flex-wrap items-start gap-4 rtl'>
               <span>الإضافات:</span>
