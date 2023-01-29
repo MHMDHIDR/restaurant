@@ -115,7 +115,7 @@ const App: React.FC = () => (
                         <Route path='settings' element={<DashboardAppSettings />} />
 
                         <Route path='users' element={<DashboardUsers />}>
-                          <Route path=' :pageNum' element={<DashboardUsers />} />
+                          <Route path=':pageNum' element={<DashboardUsers />} />
                         </Route>
                       </Route>
                       <Route path='*' element={<ModalNotFound />} />

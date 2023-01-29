@@ -24,7 +24,7 @@ const DashboardUsers = () => {
   let { pageNum }: any = useParams()
 
   const pageNumber = !pageNum || pageNum < 1 || isNaN(pageNum) ? 1 : parseInt(pageNum)
-  const itemsPerPage = 10
+  const itemsPerPage = 2
 
   const [userId, setUserId] = useState()
   const [userAccountAction, setUserAccountAction] = useState()

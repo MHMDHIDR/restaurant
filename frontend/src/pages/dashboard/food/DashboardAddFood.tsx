@@ -181,7 +181,7 @@ const AddFood = () => {
                     autoFocus
                     required
                     onChange={e => setFoodName(createSlug(e.target.value.trim()))}
-                    onKeyUp={e => {
+                    onKeyUp={(e: any) => {
                       const target = e.target.value.trim()
 
                       if (target.length > 0 && target.length < 5) {
@@ -211,7 +211,7 @@ const AddFood = () => {
                     max='500'
                     required
                     onChange={e => setFoodPrice(e.target.value.trim())}
-                    onKeyUp={e => {
+                    onKeyUp={(e: any) => {
                       const target = parseInt(e.target.value.trim())
 
                       if (target > 0 && target < 5) {
@@ -261,7 +261,7 @@ const AddFood = () => {
                     className='form__input'
                     required
                     onChange={e => setFoodDesc(e.target.value.trim())}
-                    onKeyUp={e => {
+                    onKeyUp={(e: any) => {
                       const target = e.target.value.trim()
 
                       if (target.length > 0 && target.length < 30) {

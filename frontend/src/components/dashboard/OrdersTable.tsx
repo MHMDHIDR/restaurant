@@ -57,7 +57,6 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
     email: 'string'
   })
   const [ordersData, setOrdersData] = useState<any>()
-  const [siteLogo, setSiteLogo] = useState<string>('')
   const [orderItemsIds, setOrderItemsIds] = useState([])
   const [orderToppingsId, setOrderToppingsId] = useState([])
   const [isLoading, setIsLoading] = useState(false)
@@ -75,7 +74,6 @@ const OrdersTable = ({ ordersByUserEmail = false }) => {
 
   useEffect(() => {
     if (response.response !== null && logo.response !== null) {
-      setSiteLogo(logo.response?.websiteLogoDisplayPath)
       setOrdersData(response.response)
       setOrderItemsIds(
         response.response.response.map(({ orderItems }) =>
