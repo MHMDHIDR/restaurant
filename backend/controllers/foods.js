@@ -17,6 +17,9 @@ export const addFood = asyncHandler(async (req, res) => {
   const tags = JSON.parse(foodTags)
 
   const { foodImg } = req.files
+
+  res.status(200).json(foodImg)
+
   const foodImgs = foodImg && Array.isArray(foodImg) ? foodImg : [foodImg]
   const foodImgNames = foodImgs?.map(img => uuidv4() + img.name.split('.')[0] + '.webp')
 

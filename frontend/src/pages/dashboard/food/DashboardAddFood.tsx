@@ -74,7 +74,10 @@ const AddFood = () => {
       formData.append('foodDesc', foodDesc)
       formData.append('foodToppings', JSON.stringify(toppings))
       formData.append('foodTags', JSON.stringify(tags))
-      file.map(foodImg => formData.append('foodImg', foodImg))
+      file.map(foodImg => {
+        console.log(foodImg)
+        formData.append('foodImg', foodImg)
+      })
 
       if (
         ImgErr.current.textContent === '' &&
