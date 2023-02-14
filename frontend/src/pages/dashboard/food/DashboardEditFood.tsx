@@ -343,7 +343,7 @@ const EditFood = () => {
                       defaultValue={removeSlug(data?.foodName)}
                       autoFocus
                       onChange={e => setFoodName(createSlug(e.target.value.trim()))}
-                      onKeyUp={e => {
+                      onKeyUp={(e: any) => {
                         const target = e.target.value.trim()
 
                         if (target.length > 0 && target.length < 5) {
@@ -372,7 +372,7 @@ const EditFood = () => {
                       min='5'
                       max='500'
                       onChange={e => setFoodPrice(e.target.value.trim())}
-                      onKeyUp={e => {
+                      onKeyUp={(e: any) => {
                         const target = parseInt(e.target.value.trim())
 
                         if (target > 0 && target < 5) {
@@ -423,7 +423,7 @@ const EditFood = () => {
                       minLength={10}
                       maxLength={300}
                       onChange={e => setFoodDesc(e.target.value.trim())}
-                      onKeyUp={e => {
+                      onKeyUp={(e: any) => {
                         const target = e.target.value.trim()
 
                         if (target.length > 0 && target.length < 30) {

@@ -149,25 +149,27 @@ const Items = ({
                       <button
                         className='quantity-btn number-hover'
                         onClick={() => {
-                          topping.toppingQuantity > MAX_QUANTITY
-                            ? setItems(
-                                items.map((item: any) => {
-                                  if (item.cItemId === toppingId.slice(0, -1)) {
-                                    topping.toppingQuantity++
-                                  }
-                                  return item
-                                })
-                              )
-                            : orderItems.map((item: any) => {
-                                if (
-                                  topping.toppingQuantity < MAX_QUANTITY &&
-                                  item.cItemId === toppingId.slice(0, -1)
-                                ) {
+                          if (orderToppings) {
+                            orderItems.map((item: any) => {
+                              if (
+                                topping.toppingQuantity < MAX_QUANTITY &&
+                                item.cItemId === toppingId.slice(0, -1)
+                              ) {
+                                topping.toppingQuantity++
+                                setOrderItemQuantity(topping.toppingQuantity)
+                              }
+                              return item
+                            })
+                          } else if (topping.toppingQuantity < MAX_QUANTITY) {
+                            setItems(
+                              items.map((item: any) => {
+                                if (item.cItemId === toppingId.slice(0, -1)) {
                                   topping.toppingQuantity++
-                                  setOrderItemQuantity(topping.toppingQuantity)
                                 }
                                 return item
                               })
+                            )
+                          }
                         }}
                       >
                         +
