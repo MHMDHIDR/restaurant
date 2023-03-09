@@ -1,12 +1,9 @@
 import { useContext, useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-
 import { CartContext } from '../../Contexts/CartContext'
 import { ToppingsContext } from '../../Contexts/ToppingsContext'
 import { DashboardOrderContext } from '../../Contexts/DashboardOrderContext'
-
 import { removeSlug } from '../../utils/slug'
-
 import Divider from '../../components/Divider'
 import { selectedToppingsProps } from '../../types'
 
