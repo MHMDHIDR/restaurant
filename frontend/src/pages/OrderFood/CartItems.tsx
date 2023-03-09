@@ -8,7 +8,7 @@ import { DashboardOrderContext } from '../../Contexts/DashboardOrderContext'
 import { removeSlug } from '../../utils/slug'
 
 import Divider from '../../components/Divider'
-import { selectedToppingsProps, UserProps } from '../../types'
+import { selectedToppingsProps } from '../../types'
 
 const CartItems: any = ({ orderItems, orderToppings }) => {
   const { items } = useContext(CartContext)
