@@ -235,7 +235,7 @@ const OrderFood = () => {
                     defaultValue={personName}
                     onChange={e => setPersonName(e.target.value.trim())}
                     onKeyUp={e => {
-                      const target = e.target.value.trim()
+                      const target = (e.target as HTMLInputElement).value.trim()
 
                       if (target.length > 0 && target.length < 4) {
                         personNameErr.current.textContent = 'يرجى إدخال إسم بصيغة صحيحة'
@@ -266,7 +266,7 @@ const OrderFood = () => {
                     defaultValue={personPhone}
                     onChange={e => setPersonPhone(e.target.value.trim())}
                     onKeyUp={e => {
-                      const target = e.target.value.trim()
+                      const target = (e.target as HTMLInputElement).value.trim()
 
                       if (
                         (target.length > 0 && target.length < 8) ||
@@ -299,7 +299,7 @@ const OrderFood = () => {
                     defaultValue={personAddress}
                     onChange={e => setPersonAddress(e.target.value.trim())}
                     onKeyUp={e => {
-                      const target = e.target.value.trim()
+                      const target = (e.target as HTMLInputElement).value.trim()
 
                       if (target.length > 0 && target.length < 4) {
                         personAddressErr.current.textContent =
