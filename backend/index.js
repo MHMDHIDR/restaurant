@@ -15,7 +15,7 @@ import contact from './routes/contact.js'
 const app = express()
 
 //PORT
-const PORT = process.env.PORT || 4000
+const PORT = process.env.PORT || 5000
 
 //DON't SHOW EXPRESS IN RESPONSE HEADERS
 app.disable('x-powered-by')

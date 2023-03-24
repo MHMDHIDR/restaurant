@@ -7,7 +7,7 @@ export default defineConfig({
   define: {
     'process.env': {
       NODE_ENV: 'development',
-      API_LOCAL_URL: 'http://dev.com:4000',
+      API_LOCAL_URL: 'http://dev.com:5000',
       API_URL: 'https://mhmdhidr-restaurant.vercel.app',
       EMAIL: 'mr.hamood277@gmail.com',
       PAYPAL_CLIENT_ID:

@@ -182,7 +182,7 @@ const DashboardOrdersEdit = () => {
                   defaultValue={personName || ordersData.personName}
                   onChange={e => setPersonName(e.target.value.trim())}
                   onKeyUp={e => {
-                    const target = e.target.value.trim()
+                    const target = (e.target as HTMLInputElement).value.trim()
 
                     if (target.length > 0 && target.length < 4) {
                       personNameErr.current.textContent = 'يرجى إدخال إسم بصيغة صحيحة'
@@ -213,7 +213,7 @@ const DashboardOrdersEdit = () => {
                   defaultValue={personPhone || ordersData.personPhone}
                   onChange={e => setPersonPhone(e.target.value.trim())}
                   onKeyUp={e => {
-                    const target = e.target.value.trim()
+                    const target = (e.target as HTMLInputElement).value.trim()
 
                     if (
                       (target.length > 0 && target.length < 8) ||
@@ -246,7 +246,7 @@ const DashboardOrdersEdit = () => {
                   defaultValue={personAddress || ordersData.personAddress}
                   onChange={e => setPersonAddress(e.target.value.trim())}
                   onKeyUp={e => {
-                    const target = e.target.value.trim()
+                    const target = (e.target as HTMLInputElement).value.trim()
 
                     if (target.length > 0 && target.length < 4) {
                       personAddressErr.current.textContent = 'يرجى إدخال إسم بصيغة صحيحة'
