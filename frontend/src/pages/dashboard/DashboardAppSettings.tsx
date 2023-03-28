@@ -238,7 +238,7 @@ const About = () => {
                 maxLength={100}
                 onChange={e => setAppName(e.target.value.trim())}
                 onKeyUp={e => {
-                  const target = e.target.value.trim()
+                  const target = (e.target as HTMLInputElement).value.trim()
 
                   if (target.length > 0 && target.length < 10) {
                     appNameErr.current.textContent = `اسم الموقع قصير جداً ولا يوصف الموقع بشكل كافي، الاســـــم يجب يتكون من ${10} حرف على الأقل`
@@ -268,7 +268,7 @@ const About = () => {
                 maxLength={DESC_MAX_LENGTH}
                 onChange={e => setAppDesc(e.target.value.trim())}
                 onKeyUp={e => {
-                  const target = e.target.value.trim()
+                  const target = (e.target as HTMLInputElement).value.trim()
 
                   if (target.length > 0 && target.length < DESC_MIN_LENGTH) {
                     descErr.current.textContent = `وصف الموقع قصير جداً ولا يوصف الموقع بشكل كافي، الوصف يتكون من ${DESC_MIN_LENGTH} حرف على الأقل`
@@ -298,7 +298,7 @@ const About = () => {
                 maxLength={TAGLINE_MAX_LENGTH}
                 onChange={e => setAppTagline(e.target.value.trim())}
                 onKeyUp={e => {
-                  const target = e.target.value.trim()
+                  const target = (e.target as HTMLInputElement).value.trim()
 
                   if (target.length > 0 && target.length < TAGLINE_MIN_LENGTH) {
                     tagLineErr.current.textContent = `شعار الموقع قصير جداً ولا يعبر عن الموقع، الشعار يتكون من ${TAGLINE_MIN_LENGTH} حرف على الأقل`
@@ -328,7 +328,7 @@ const About = () => {
                 maxLength={TAGLINE_MAX_LENGTH * 3}
                 onChange={e => setOrderMsgSuccess(e.target.value.trim())}
                 onKeyUp={e => {
-                  const target = e.target.value.trim()
+                  const target = (e.target as HTMLInputElement).value.trim()
 
                   if (target.length > 0 && target.length < TAGLINE_MIN_LENGTH) {
                     orderMsgErr.current.textContent = `رسالة ما بعد الطلب قصيرة جداً، يجب أن تتكون الرسالة من يتكون من ${TAGLINE_MIN_LENGTH} حرف على الأقل`
@@ -356,7 +356,7 @@ const About = () => {
                 maxLength={TAGLINE_MAX_LENGTH * 3}
                 onChange={e => setOrderMsgFailure(e.target.value.trim())}
                 onKeyUp={e => {
-                  const target = e.target.value.trim()
+                  const target = (e.target as HTMLInputElement).value.trim()
 
                   if (target.length > 0 && target.length < TAGLINE_MIN_LENGTH) {
                     orderMsgErr.current.textContent = `رسالة ما بعد الطلب قصيرة جداً، يجب أن تتكون الرسالة من يتكون من ${TAGLINE_MIN_LENGTH} حرف على الأقل`
@@ -387,7 +387,7 @@ const About = () => {
                 maxLength={8}
                 onChange={e => setWhatsAppNumber(e.target.value.trim())}
                 onKeyUp={e => {
-                  const target = e.target.value.trim()
+                  const target = (e.target as HTMLInputElement).value.trim()
 
                   if (target.length > 0 && target.length < 8) {
                     whatsAppNumberErr.current.textContent = `رقم الوتساب قصير يجب أن يتكون من ٨ أرقام`
@@ -419,7 +419,7 @@ const About = () => {
                 maxLength={TAGLINE_MAX_LENGTH}
                 onChange={e => setInstagramAccount(e.target.value.trim())}
                 onKeyUp={e => {
-                  const target = e.target.value.trim()
+                  const target = (e.target as HTMLInputElement).value.trim()
 
                   if (target.length > 0 && target.length < TAGLINE_MIN_LENGTH) {
                     instagramAccountErr.current.textContent = `رابط حساب الانستقرام قصير جداً يجب أن يتكون من ${TAGLINE_MIN_LENGTH} حرف على الأقل`
@@ -452,7 +452,7 @@ const About = () => {
                 maxLength={TAGLINE_MAX_LENGTH}
                 onChange={e => setTwitterAccount(e.target.value.trim())}
                 onKeyUp={e => {
-                  const target = e.target.value.trim()
+                  const target = (e.target as HTMLInputElement).value.trim()
 
                   if (target.length > 0 && target.length < TAGLINE_MIN_LENGTH) {
                     twitterAccountErr.current.textContent = `رابط حساب التويتر قصير جداً، يجب أن يتكون من ${TAGLINE_MIN_LENGTH} حرف على الأقل`
