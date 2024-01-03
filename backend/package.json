@@ -1,10 +1,6 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "engines": {
-    "node": "14.x",
-    "npm": "8.1.0"
-  },
   "type": "module",
   "description": "Restaurant App to find and order delicious foods, drinks, and sweets",
   "main": "index.js",
